@@ -1,9 +1,11 @@
 using CDCavell.ClassLibrary.Commons.Logging;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Reflection;
 
 namespace is4_cdcavell
 {
@@ -18,6 +20,7 @@ namespace is4_cdcavell
     /// </revision>
     public class Program
     {
+        private static string _assemblyName;
         private static string _environmentName;
         private static Logger _logger;
 
@@ -29,6 +32,7 @@ namespace is4_cdcavell
         public static void Main(string[] args)
         {
             _environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT").ToLower();
+            _assemblyName = Assembly.GetEntryAssembly().GetName().Name;
 
             ServiceCollection serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
@@ -36,7 +40,19 @@ namespace is4_cdcavell
             ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
             _logger = new Logger(serviceProvider.GetService<ILogger<Program>>());
 
-            CreateHostBuilder(args).Build().Run();
+            try
+            {
+                _logger.Information($"{_assemblyName} Started");
+                CreateHostBuilder(args).Build().Run();
+            }
+            catch (Exception e)
+            {
+                _logger.Exception(e, $"{_assemblyName} Exception Error");
+            }
+            finally
+            {
+                _logger.Information($"{_assemblyName} Ended");
+            }
         }
 
         /// <summary>
@@ -47,8 +63,46 @@ namespace is4_cdcavell
         /// <method>CreateHostBuilder(string[] args)</method>
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+                    logging.AddConsole();
+
+                    // Providing an instrumentation key here is required if you're using
+                    // standalone package Microsoft.Extensions.Logging.ApplicationInsights
+                    // or if you want to capture logs from early in the application startup 
+                    // pipeline from Startup.cs or Program.cs itself.
+                    logging.AddApplicationInsights("ikey");
+                    // Adding the filter below to ensure logs of all severity from Program.cs
+                    // is sent to ApplicationInsights.
+                    logging.AddFilter<Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider>
+                                     (typeof(Program).FullName, LogLevel.Trace);
+
+                    // Adding the filter below to ensure logs of all severity from Startup.cs
+                    // is sent to ApplicationInsights.
+                    logging.AddFilter<Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider>
+                                     (typeof(Startup).FullName, LogLevel.Trace);
+
+                    logging.AddEventLog(eventLogSettings =>
+                    {
+                        eventLogSettings.SourceName = _assemblyName;
+                        eventLogSettings.LogName = "Application";
+                    });
+
+                    if (Equals(_environmentName, "development"))
+                        logging.AddDebug();
+                })
+                .ConfigureAppConfiguration((hostContext, configApp) =>
+                {
+                    configApp.AddJsonFile("appsettings.json", optional: true);
+                    configApp.AddJsonFile($"appsettings.{hostContext.HostingEnvironment.EnvironmentName}.json", optional: false);
+                    configApp.AddEnvironmentVariables();
+                    configApp.AddCommandLine(args);
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.UseStaticWebAssets();
                     webBuilder.UseStartup<Startup>();
                 });
 
