@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30517.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlToMarkdown", "Source\Console\XmlToMarkdown\XmlToMarkdown.csproj", "{9BDAE69F-D216-4E8E-A9E1-4BC12055F857}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDCavell.ClassLibrary.Commons", "Source\Libraries\CDCavell.ClassLibrary.Commons\CDCavell.ClassLibrary.Commons.csproj", "{5DD5EF6C-819A-45CC-B9F5-CA9ABC7B50B1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9BDAE69F-D216-4E8E-A9E1-4BC12055F857}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BDAE69F-D216-4E8E-A9E1-4BC12055F857}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BDAE69F-D216-4E8E-A9E1-4BC12055F857}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BDAE69F-D216-4E8E-A9E1-4BC12055F857}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DD5EF6C-819A-45CC-B9F5-CA9ABC7B50B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DD5EF6C-819A-45CC-B9F5-CA9ABC7B50B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DD5EF6C-819A-45CC-B9F5-CA9ABC7B50B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DD5EF6C-819A-45CC-B9F5-CA9ABC7B50B1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C9B6A6F4-719E-4B6D-89F9-24D8F811DFCF}
+	EndGlobalSection
+EndGlobal

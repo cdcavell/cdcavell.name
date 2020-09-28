@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <DocumentationFile>../../../Documentation/Source/$(AssemblyName).xml</DocumentationFile>
+    <Version>1.0.0</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\CDCavell.ClassLibrary.Commons\CDCavell.ClassLibrary.Commons.csproj" />
+  </ItemGroup>
+
+	<Target Name="DeleteXmlToMarkdown" AfterTargets="BeforeBuild" DependsOnTargets="BeforeBuild">
+		<ItemGroup>
+			<_deleteExecFile Include="../../../Documentation/Source/$(TargetFileName)" />
+			<_deleteRuntimeFile Include="../../../Documentation/Source/XmlToMarkdown.runtimeconfig.json" />
+			<_deleteLibraryFile Include="../../../Documentation/Source/CDCavell.ClassLibrary.Commons.dll" />
+			<_deleteTransformFile Include="../../../Documentation/Source/Transform.xsl" />
+		</ItemGroup>
+		<Delete Files="@(_deleteExecFile)" Condition="Exists(@(_deleteExecFile))" />
+		<Delete Files="@(_deleteRuntimeFile)" Condition="Exists(@(_deleteRuntimeFile))" />
+		<Delete Files="@(_deleteLibraryFile)" Condition="Exists(@(_deleteLibraryFile))" />
+		<Delete Files="@(_deleteTransformFile)" Condition="Exists(@(_deleteTransformFile))" />
+	</Target>
+
+	<Target Name="CopyXmlToMarkdown" AfterTargets="AfterBuild" DependsOnTargets="DeleteXmlToMarkdown">
+		<ItemGroup>
+			<_copyExecFile Include="$(TargetDir)$(TargetFileName)" />
+			<_copyRuntimeFile Include="$(TargetDir)XmlToMarkdown.runtimeconfig.json" />
+			<_copyLibraryFile Include="$(TargetDir)CDCavell.ClassLibrary.Commons.dll" />
+			<_copyTransformFile Include="$(ProjectDir)Transform.xsl" />
+		</ItemGroup>
+		<Copy SourceFiles="@(_copyExecFile)" DestinationFolder="../../../Documentation/Source/" />
+		<Copy SourceFiles="@(_copyRuntimeFile)" DestinationFolder="../../../Documentation/Source/" />
+		<Copy SourceFiles="@(_copyLibraryFile)" DestinationFolder="../../../Documentation/Source/" />
+		<Copy SourceFiles="@(_copyTransformFile)" DestinationFolder="../../../Documentation/Source/" />
+	</Target>
+
+</Project>

@@ -1,0 +1,3 @@
+[submodule "Documentation/Source/wiki"]
+	path = Documentation/Source/wiki
+	url = https://github.com/cdcavell/cdcavell.name.wiki.git
