@@ -1,4 +1,5 @@
 using CDCavell.ClassLibrary.Commons.Logging;
+using CDCavell.ClassLibrary.Web.Security;
 using is4_cdcavell.Models.AppSettings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -96,6 +97,8 @@ namespace is4_cdcavell
         /// <method>OnAppStarted()</method>
         public void OnAppStarted()
         {
+            AESGCM.Seed(_configuration);
+
             _logger.Information($"Application Started");
             _logger.Information($"Hosting Environment: {_webHostEnvironment.EnvironmentName}");
         }
