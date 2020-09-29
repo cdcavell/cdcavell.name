@@ -1,4 +1,5 @@
 using CDCavell.ClassLibrary.Commons.Logging;
+using CDCavell.ClassLibrary.Web.Mvc.Fillters;
 using CDCavell.ClassLibrary.Web.Security;
 using is4_cdcavell.Models.AppSettings;
 using Microsoft.AspNetCore.Builder;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
@@ -22,7 +24,7 @@ namespace is4_cdcavell
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 09/28/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 09/29/2020 | Initial build |~ 
     /// </revision>
     public class Startup
     {
@@ -53,6 +55,17 @@ namespace is4_cdcavell
             AppSettings appSettings = new AppSettings();
             _configuration.Bind("AppSettings", appSettings);
             services.AddSingleton(appSettings);
+
+            services.AddMvc();
+            services.AddControllersWithViews();
+
+            // Register IHttpContextAccessor
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            // Register controller fillters
+            services.AddScoped<ControllerActionLogFilter>();
+            services.AddScoped<ControllerActionUserFilter>();
+            services.AddScoped<ControllerActionPageFilter>();
         }
 
         /// <summary>
@@ -77,20 +90,19 @@ namespace is4_cdcavell
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
             });
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            app.UseExceptionHandler("/Home/Error/500");
+            app.UseStatusCodePagesWithRedirects("~/Home/Error/{0}");
+
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseCors();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
-            });
+            //app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
         }
         /// <summary>
         /// Exposed IApplicationLifetime interface method.

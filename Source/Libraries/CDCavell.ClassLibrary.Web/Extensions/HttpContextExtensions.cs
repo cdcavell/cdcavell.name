@@ -13,7 +13,7 @@ namespace Microsoft.AspNetCore.Http
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 09/28/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 09/29/2020 | Initial build |~ 
     /// </revision>
     public static class HttpContextExtensions
     {
@@ -106,7 +106,23 @@ namespace Microsoft.AspNetCore.Http
                 .FirstOrDefault();
 
             if (!string.IsNullOrEmpty(xForwardedForHeader.Key))
-                ipAddress = IPAddress.Parse(xForwardedForHeader.Value);
+            { 
+                if (!string.IsNullOrEmpty(xForwardedForHeader.Value))
+                {
+                    UriHostNameType uriType = Uri.CheckHostName(xForwardedForHeader.Value);
+                    switch (uriType)
+                    {
+                        case UriHostNameType.IPv4:
+                            // strip any port from xForwardedForHeader IP Address
+                            string[] hostParts = xForwardedForHeader.Value.ToString().Split(':');
+                            ipAddress = IPAddress.Parse(hostParts[0]);
+                            break;
+                        case UriHostNameType.IPv6:
+                            ipAddress = IPAddress.Parse(xForwardedForHeader.Value);
+                            break;
+                    }
+                }
+            }
 
             return ipAddress;
         }

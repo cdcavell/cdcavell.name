@@ -1,0 +1,71 @@
+﻿@using CDCavell.ClassLibrary.Web.Mvc.Models
+@using Microsoft.AspNetCore.Hosting
+@inject IWebHostEnvironment host
+
+@model ErrorViewModel
+@{
+    PageViewModel pageModel = (PageViewModel)ViewData["PageViewModel"];
+
+    var StatusCode = Model?.StatusCode;
+    var status = Model?.StatusMessage;
+    var requestId = Model?.RequestId;
+    var exception = (host.EnvironmentName.Equals("Development") || host.EnvironmentName.Equals("Local")) ? Model?.Exception : null;
+}
+
+@{
+    if (exception != null)
+    {
+        ViewData["Title"] = "Exception Error";
+    }
+    else
+    {
+        ViewData["Title"] = "Resource Error";
+    }
+}
+
+<section class="page-section cta">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-9 mx-auto">
+                <div class="cta-inner text-center rounded">
+                    <h2 class="section-heading mb-4">
+                        <span class="section-heading-upper">Status Code: @StatusCode.ToString()</span>
+                        <span class="section-heading-lower">@ViewData["Title"]</span>
+                    </h2>
+                    <p class="mb-0">
+                        @if (status != null)
+                        {
+                            @Html.Raw(status)
+                        }
+                    </p>
+                </div>
+                <p class="request-id">
+                    @if (requestId != null)
+                    {
+                        <span>Request Id: <code>@requestId</code></span>
+                    }
+                </p>
+            </div>
+        </div>
+    </div>
+    @if (exception != null)
+    {
+        <p class="exception">
+            <ul class="exception">
+                <li><b>Exception Message:</b> @exception.Message</li>
+                <li><b>Exception Source:</b> @exception.Source</li>
+                <li><b>Exception StackTrace:</b><br /><span style="white-space: pre-line">@exception.StackTrace</span></li>
+            </ul>
+
+            @if (exception.InnerException != null)
+            {
+                <ul class="exception">
+                    <li><b>Inner Exception Message:</b> @exception.InnerException.Message</li>
+                    <li><b>Inner Exception Source:</b> @exception.InnerException.Source</li>
+                    <li><b>Inner Exception StackTrace:</b><br /><span style="white-space: pre-line">@exception.InnerException.StackTrace</span></li>
+                </ul>
+            }
+        </p>
+    }
+</section>
+
