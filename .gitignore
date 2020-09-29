@@ -16,6 +16,7 @@ Documentation/Source/*.xml
 Documentation/Source/*.xsl
 Documentation/Source/*.dll
 Documentation/Source/*.json
+tempkey.jwk
 
 # Build results
 [Dd]ebug/
