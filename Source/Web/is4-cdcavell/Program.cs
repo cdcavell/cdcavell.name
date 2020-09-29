@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Reflection;
+using System.Threading;
 
 namespace is4_cdcavell
 {
@@ -52,6 +53,8 @@ namespace is4_cdcavell
             finally
             {
                 _logger.Information($"{_assemblyName} Ended");
+                Thread.Sleep(1000);
+                serviceProvider.Dispose();
             }
         }
 
@@ -102,6 +105,8 @@ namespace is4_cdcavell
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.CaptureStartupErrors(true);
+                    webBuilder.UseSetting("detailedErrors", "true");
                     webBuilder.UseStaticWebAssets();
                     webBuilder.UseStartup<Startup>();
                 });

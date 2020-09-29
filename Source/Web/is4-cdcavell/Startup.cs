@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Reflection;
 
 namespace is4_cdcavell
 {
@@ -99,7 +100,7 @@ namespace is4_cdcavell
         {
             AESGCM.Seed(_configuration);
 
-            _logger.Information($"Application Started");
+            _logger.Information($"{Assembly.GetEntryAssembly().GetName().Name} Application Started");
             _logger.Information($"Hosting Environment: {_webHostEnvironment.EnvironmentName}");
         }
 
@@ -109,7 +110,7 @@ namespace is4_cdcavell
         /// <method>OnAppStopping()</method>
         public void OnAppStopping()
         {
-            _logger.Information($"Application Shutdown");
+            _logger.Information($"{Assembly.GetEntryAssembly().GetName().Name} Application Shutdown");
         }
 
         /// <summary>
@@ -118,7 +119,7 @@ namespace is4_cdcavell
         /// <method>OnAppStopped()</method>
         public void OnAppStopped()
         {
-            _logger.Information($"Application Ended");
+            _logger.Information($"{Assembly.GetEntryAssembly().GetName().Name} Application Ended");
         }
     }
 }

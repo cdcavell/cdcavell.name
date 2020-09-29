@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace is4_cdcavell.Models.AppSettings
@@ -16,6 +17,11 @@ namespace is4_cdcavell.Models.AppSettings
     /// </revision>
     public class AppSettings
     {
+        /// <value>string</value>
+        public string AssemblyName 
+        { 
+            get { return Assembly.GetEntryAssembly().GetName().Name; }
+        }
         /// <value>Application</value>
         public Application Application { get; set; }
     }
