@@ -122,7 +122,10 @@ namespace is4_cdcavell
             app.UseIdentityServer();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapDefaultControllerRoute();
+            });
         }
         /// <summary>
         /// Exposed IApplicationLifetime interface method.
