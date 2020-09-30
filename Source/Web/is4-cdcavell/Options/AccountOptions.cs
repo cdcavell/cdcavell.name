@@ -17,14 +17,14 @@ namespace is4_cdcavell.Options
     public class AccountOptions
     {
         /// <value>bool</value>
-        public static bool AllowLocalLogin = true;
+        public static bool AllowLocalLogin = false;
         /// <value>bool</value>
         public static bool AllowRememberLogin = true;
         /// <value>TimeSpan</value>
         public static TimeSpan RememberMeLoginDuration = TimeSpan.FromDays(30);
 
         /// <value>bool</value>
-        public static bool ShowLogoutPrompt = true;
+        public static bool ShowLogoutPrompt = false;
         /// <value>bool</value>
         public static bool AutomaticRedirectAfterSignOut = false;
 
