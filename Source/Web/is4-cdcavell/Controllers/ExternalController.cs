@@ -45,6 +45,10 @@ namespace is4_cdcavell.Controllers
         /// <param name="logger">ILogger&lt;ExternalController&gt;</param>
         /// <param name="webHostEnvironment">IWebHostEnvironment</param>
         /// <param name="httpContextAccessor">IHttpContextAccessor</param>
+        /// <param name="interaction">IIdentityServerInteractionService</param>
+        /// <param name="clientStore">IClientStore</param>
+        /// <param name="events">IEventService</param>
+        /// <param name="users">TestUserStore</param>
         /// <method>
         /// AccountController(
         ///     ILogger&lt;ExternalController&gt; logger, 

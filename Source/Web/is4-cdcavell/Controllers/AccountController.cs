@@ -8,6 +8,7 @@ using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using IdentityServer4.Test;
 using is4_cdcavell.Models.Account;
+using is4_cdcavell.Options;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -47,6 +48,11 @@ namespace is4_cdcavell.Controllers
         /// <param name="logger">ILogger&lt;AccountController&gt;</param>
         /// <param name="webHostEnvironment">IWebHostEnvironment</param>
         /// <param name="httpContextAccessor">IHttpContextAccessor</param>
+        /// <param name="interaction">IIdentityServerInteractionService</param>
+        /// <param name="clientStore">IClientStore</param>
+        /// <param name="schemeProvider">IAuthenticationSchemeProvider</param>
+        /// <param name="events">IEventService</param>
+        /// <param name="users">TestUserStore</param>
         /// <method>
         /// AccountController(
         ///     ILogger&lt;AccountController&gt; logger, 
