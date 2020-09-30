@@ -1,6 +1,7 @@
 using CDCavell.ClassLibrary.Commons.Logging;
 using CDCavell.ClassLibrary.Web.Mvc.Fillters;
 using CDCavell.ClassLibrary.Web.Security;
+using IdentityServer4;
 using is4_cdcavell.Models.AppSettings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,7 +25,7 @@ namespace is4_cdcavell
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 09/29/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 09/30/2020 | Initial build |~ 
     /// </revision>
     public class Startup
     {
@@ -87,7 +88,19 @@ namespace is4_cdcavell
             // not recommended for production - you need to store your key material somewhere secure
             builder.AddDeveloperSigningCredential();
 
-            services.AddAuthentication();
+            services.AddAuthentication()
+                .AddTwitter("Twitter", twitterOptions =>
+                {
+                    twitterOptions.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                    twitterOptions.ConsumerKey = appSettings.Authentication.Twitter.ConsumerAPIKey;
+                    twitterOptions.ConsumerSecret = appSettings.Authentication.Twitter.ConsumerSecret;
+                    twitterOptions.RetrieveUserDetails = true;
+                })
+                .AddFacebook("Facebook", facebookOptions => {
+                    facebookOptions.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                    facebookOptions.AppId = appSettings.Authentication.Facebook.AppId;
+                    facebookOptions.AppSecret = appSettings.Authentication.Facebook.AppSecret;
+                });
         }
 
         /// <summary>
