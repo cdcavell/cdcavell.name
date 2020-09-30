@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using is4_cdcavell.Models.Consent;
 
 namespace is4_cdcavell.Models.Device
 {
@@ -17,7 +14,7 @@ namespace is4_cdcavell.Models.Device
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0 | 09/30/2020 | Initial build |~ 
     /// </revision>
-    public class DeviceAuthorizationViewModel
+    public class DeviceAuthorizationViewModel : ConsentViewModel
     {
         /// <value>string</value>
         public string UserCode { get; set; }

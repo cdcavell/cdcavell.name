@@ -45,18 +45,16 @@ namespace is4_cdcavell.Controllers
         /// <param name="webHostEnvironment">IWebHostEnvironment</param>
         /// <param name="httpContextAccessor">IHttpContextAccessor</param>
         /// <param name="interaction">IIdentityServerInteractionService</param>
-        /// <param name="clientStore">IClientStore</param>
-        /// <param name="schemeProvider">IAuthenticationSchemeProvider</param>
-        /// <param name="events">IEventService</param>
-        /// <param name="users">TestUserStore</param>
+        /// <param name="eventService">IEventService</param>
+        /// <param name="options">IOptions&gt;IdentityServerOptions&lt;</param>
         /// <method>
         /// DeviceController(
         ///     ILogger&lt;DeviceController&gt; logger, 
         ///     IWebHostEnvironment webHostEnvironment, 
         ///     IHttpContextAccessor httpContextAccessor, 
-        ///     IDeviceFlowInteractionService interaction,
-        ///     IEventService eventService,
-        ///     IOptions<IdentityServerOptions> options,
+        ///     IDeviceFlowInteractionService interaction, 
+        ///     IEventService eventService, 
+        ///     IOptions&lt;IdentityServerOptions&gt; options
         /// ) : base(logger, webHostEnvironment, httpContextAccessor)
         /// </method>
         public DeviceController(
@@ -73,6 +71,11 @@ namespace is4_cdcavell.Controllers
             _options = options;
         }
 
+        /// <summary>
+        /// Index Method
+        /// </summary>
+        /// <returns>Task&lt;IActionResult&gt;</returns>
+        /// <method>Index()</method>
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -87,6 +90,11 @@ namespace is4_cdcavell.Controllers
             return View("UserCodeConfirmation", vm);
         }
 
+        /// <summary>
+        /// UserCodeCapture Method
+        /// </summary>
+        /// <returns>Task&lt;IActionResult&gt;</returns>
+        /// <method>UserCodeCapture(string userCode)</method>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UserCodeCapture(string userCode)
@@ -97,6 +105,11 @@ namespace is4_cdcavell.Controllers
             return View("UserCodeConfirmation", vm);
         }
 
+        /// <summary>
+        /// Callback Method
+        /// </summary>
+        /// <returns>Task&lt;IActionResult&gt;</returns>
+        /// <method>Callback(DeviceAuthorizationInputModel model)</method>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Callback(DeviceAuthorizationInputModel model)
@@ -237,6 +250,11 @@ namespace is4_cdcavell.Controllers
             };
         }
 
+        /// <summary>
+        /// CreateScopeViewModel Method
+        /// </summary>
+        /// <returns>ScopeViewModel</returns>
+        /// <method>CreateScopeViewModel(ParsedScopeValue parsedScopeValue, ApiScope apiScope, bool check)</method>
         public ScopeViewModel CreateScopeViewModel(ParsedScopeValue parsedScopeValue, ApiScope apiScope, bool check)
         {
             return new ScopeViewModel
