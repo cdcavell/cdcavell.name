@@ -211,6 +211,74 @@ namespace is4_cdcavell.Controllers
             return View(vm);
         }
 
+        /// <summary>
+        /// Show logout page
+        /// </summary>
+        /// <returns>Task&lt;IActionResult&gt;</returns>
+        /// <method>Logout(string logoutId)</method>
+        [HttpGet]
+        public async Task<IActionResult> Logout(string logoutId)
+        {
+            // build a model so the logout page knows what to display
+            var vm = await BuildLogoutViewModelAsync(logoutId);
+
+            if (vm.ShowLogoutPrompt == false)
+            {
+                // if the request for logout was properly authenticated from IdentityServer, then
+                // we don't need to show the prompt and can just log the user out directly.
+                return await Logout(vm);
+            }
+
+            return View(vm);
+        }
+
+        /// <summary>
+        /// Handle logout page postback
+        /// </summary>
+        /// <returns>Task&lt;IActionResult&gt;</returns>
+        /// <method>Logout(LogoutInputModel model)</method>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout(LogoutInputModel model)
+        {
+            // build a model so the logged out page knows what to display
+            var vm = await BuildLoggedOutViewModelAsync(model.LogoutId);
+
+            if (User?.Identity.IsAuthenticated == true)
+            {
+                // delete local authentication cookie
+                await HttpContext.SignOutAsync();
+
+                // raise the logout event
+                await _events.RaiseAsync(new UserLogoutSuccessEvent(User.GetSubjectId(), User.GetDisplayName()));
+            }
+
+            // check if we need to trigger sign-out at an upstream identity provider
+            if (vm.TriggerExternalSignout)
+            {
+                // build a return URL so the upstream provider will redirect back
+                // to us after the user has logged out. this allows us to then
+                // complete our single sign-out processing.
+                string url = Url.Action("Logout", new { logoutId = vm.LogoutId });
+
+                // this triggers a redirect to the external provider for sign-out
+                return SignOut(new AuthenticationProperties { RedirectUri = url }, vm.ExternalAuthenticationScheme);
+            }
+
+            return View("LoggedOut", vm);
+        }
+
+        /// <summary>
+        /// Handle access denied page
+        /// </summary>
+        /// <returns>Task&lt;IActionResult&gt;</returns>
+        /// <method>AccessDenied()</method>
+        [HttpGet]
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
         /*****************************************/
         /* helper APIs for the AccountController */
         /*****************************************/
