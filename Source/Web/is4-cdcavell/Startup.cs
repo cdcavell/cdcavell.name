@@ -12,7 +12,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 
 namespace is4_cdcavell
 {
@@ -25,7 +28,7 @@ namespace is4_cdcavell
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 09/30/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/01/2020 | Initial build |~ 
     /// </revision>
     public class Startup
     {
@@ -68,6 +71,10 @@ namespace is4_cdcavell
             services.AddScoped<ControllerActionUserFilter>();
             services.AddScoped<ControllerActionPageFilter>();
 
+            // Register RsaKeyService
+            var rsa = new RsaKeyService(_webHostEnvironment, TimeSpan.FromDays(30));
+            services.AddSingleton<RsaKeyService>(provider => rsa);
+
             var builder = services.AddIdentityServer(options =>
             {
                 options.Events.RaiseErrorEvents = true;
@@ -86,7 +93,8 @@ namespace is4_cdcavell
             builder.AddInMemoryClients(Config.Clients);
 
             // not recommended for production - you need to store your key material somewhere secure
-            builder.AddDeveloperSigningCredential();
+            // builder.AddDeveloperSigningCredential();
+            builder.AddValidationKey(rsa.GetKey());
 
             services.AddAuthentication()
                 .AddTwitter("Twitter", twitterOptions =>
