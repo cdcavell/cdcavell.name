@@ -39,12 +39,6 @@
                         }
                     </p>
                 </div>
-                <p class="request-id">
-                    @if (requestId != null)
-                    {
-                        <span>Request Id: <code>@requestId</code></span>
-                    }
-                </p>
             </div>
         </div>
     </div>
@@ -68,4 +62,11 @@
         </p>
     }
 </section>
+
+<p class="request-id">
+    @if (requestId != null)
+    {
+        <span>Request Id: <code>@requestId</code></span>
+    }
+</p>
 

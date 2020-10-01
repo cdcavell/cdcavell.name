@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace is4_cdcavell.Controllers
@@ -14,7 +15,7 @@ namespace is4_cdcavell.Controllers
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 09/29/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/01/2020 | Initial build |~ 
     /// </revision>
     public class HomeController : WebBaseController<HomeController>
     {
@@ -42,7 +43,14 @@ namespace is4_cdcavell.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            return View();
+            if (_webHostEnvironment.IsDevelopment())
+            {
+                // only show in development
+                return View();
+            }
+
+            _logger.Information("Homepage is disabled in production. Returning 404.");
+            return NotFound();
         }
     }
 }
