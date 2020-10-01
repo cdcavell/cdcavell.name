@@ -16,18 +16,28 @@
             CDCavell - IdentityServer4
         </a>
 
-        @if (!string.IsNullOrWhiteSpace(name))
-        {
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item dropdown">
+        <ul class="navbar-nav ml-auto">
+            @if (!string.IsNullOrWhiteSpace(name))
+            {
+                <li class="nav-item dropdown m-auto">
                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">@name <b class="caret"></b></a>
-                    
+
                     <div class="dropdown-menu">
                         <a class="dropdown-item" asp-action="Logout" asp-controller="Account">Logout</a>
                     </div>
-              </li>
-            </ul>
-        }
-    
+                </li>
+            }
+            <li class="nav-item m-auto">
+                <div class="btn-group">
+                    <a href="~/Home/PrivacyPolicy" class="btn-sm btn-secondary ml-4 text-decoration-none">
+                        Privacy Policy
+                    </a>
+                    <a href="~/Home/TermsOfService" class="btn-sm btn-secondary ml-4 text-decoration-none">
+                        Terms of Service
+                    </a>
+                </div>
+            </li>
+        </ul>
+
     </nav>
 </div>
