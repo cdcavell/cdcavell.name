@@ -1,4 +1,5 @@
-﻿using IdentityServer4.Models;
+﻿using IdentityServer4;
+using IdentityServer4.Models;
 using System.Collections.Generic;
 
 namespace is4_cdcavell
@@ -62,8 +63,42 @@ namespace is4_cdcavell
                     PostLogoutRedirectUris = { "https://localhost:44300/signout-callback-oidc" },
 
                     AllowOfflineAccess = true,
-                    AllowedScopes = { "openid", "profile", "scope2" }
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "scope2"
+                    }
                 },
+
+                // OpenID Connect implicit flow client (MVC)
+                new Client
+                {
+                    ClientId = "mvc",
+                    ClientName = "MVC Client",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+
+                    // where to redirect to after login
+                    RedirectUris = new List<string>
+                    { 
+                        "https://localhost:44349/signin-oidc",
+                        "https://cdcavell.name/signin-oidc"
+                    },
+
+                    // where to redirect to after logout
+                    PostLogoutRedirectUris = new List<string>
+                    { 
+                        "https://localhost:44349/signout-callback-oidc",
+                        "https://cdcavell.name/signout-callback-oidc"
+                    },
+
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile
+                    }
+                }
+
             };
     }
 }
