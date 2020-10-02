@@ -18,7 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Libraries\CDCavell.ClassLibrary.Commons\CDCavell.ClassLibrary.Commons.csproj" />
     <ProjectReference Include="..\..\Libraries\CDCavell.ClassLibrary.Web\CDCavell.ClassLibrary.Web.csproj" />
   </ItemGroup>
 

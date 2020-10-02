@@ -1,0 +1,38 @@
+﻿body {
+    height: 100%;
+    width: 100%;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: rgb(245, 245, 245);
+    color: rgb(0, 0, 0);
+}
+
+.body-container {
+    margin-top: 60px;
+    padding-bottom: 40px;
+}
+
+.request-id {
+    position: fixed;
+    bottom: 1px;
+    left: 10px;
+    font-size: small;
+    font-weight: 600;
+}
+
+.loading {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    background-image: url(../img/cdcavell.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    overflow: hidden;
+}
+
+
+

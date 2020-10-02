@@ -137,17 +137,17 @@ namespace is4_cdcavell
             app.UseStatusCodePagesWithRedirects("~/Home/Error/{0}");
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
-
             app.UseRouting();
             app.UseIdentityServer();
             app.UseAuthorization();
 
+            app.UseStaticFiles();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
             });
         }
+
         /// <summary>
         /// Exposed IApplicationLifetime interface method.
         /// </summary>

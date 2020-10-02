@@ -49,8 +49,8 @@ namespace is4_cdcavell.Controllers
                 return View();
             }
 
-            _logger.Information("Homepage is disabled in production. Returning 404.");
-            return NotFound();
+            _logger.Information("Homepage is disabled in production. Redirecting https://cdcavell.name.");
+            return Redirect("https://cdcavell.name");
         }
 
         /// <summary>
