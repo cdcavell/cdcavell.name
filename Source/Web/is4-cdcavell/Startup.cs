@@ -94,7 +94,9 @@ namespace is4_cdcavell
 
             // not recommended for production - you need to store your key material somewhere secure
             // builder.AddDeveloperSigningCredential();
-            builder.AddValidationKey(rsa.GetKey());
+            RsaSecurityKey key = rsa.GetKey();
+            builder.AddValidationKey(key);
+            builder.AddSigningCredential(key, SecurityAlgorithms.RsaSha512);
 
             services.AddAuthentication()
                 .AddTwitter("Twitter", twitterOptions =>
