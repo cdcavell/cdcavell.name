@@ -23,50 +23,39 @@
     }
 }
 
-<section class="page-section cta">
-    <div class="container">
-        <div class="row">
-            <div class="col-xl-9 mx-auto">
-                <div class="cta-inner text-center rounded">
-                    <h2 class="section-heading mb-4">
-                        <span class="section-heading-upper">Status Code: @StatusCode.ToString()</span>
-                        <span class="section-heading-lower">@ViewData["Title"]</span>
-                    </h2>
-                    <p class="mb-0">
-                        @if (status != null)
-                        {
-                            @Html.Raw(status)
-                        }
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-    @if (exception != null)
+<div class="alert alert-danger mb-1" role="alert">
+    <strong>Status Code: @StatusCode.ToString() @ViewData["Title"]</strong>
+    @if (status != null)
     {
-        <p class="exception">
-            <ul class="exception">
-                <li><b>Exception Message:</b> @exception.Message</li>
-                <li><b>Exception Source:</b> @exception.Source</li>
-                <li><b>Exception StackTrace:</b><br /><span style="white-space: pre-line">@exception.StackTrace</span></li>
-            </ul>
-
-            @if (exception.InnerException != null)
-            {
-                <ul class="exception">
-                    <li><b>Inner Exception Message:</b> @exception.InnerException.Message</li>
-                    <li><b>Inner Exception Source:</b> @exception.InnerException.Source</li>
-                    <li><b>Inner Exception StackTrace:</b><br /><span style="white-space: pre-line">@exception.InnerException.StackTrace</span></li>
-                </ul>
-            }
-        </p>
+        <br />@Html.Raw(status)
     }
-</section>
-
-<p class="request-id">
+</div>
+<p class="request-id ml-2 mt-0">
     @if (requestId != null)
     {
         <span>Request Id: <code>@requestId</code></span>
     }
 </p>
+
+@if (exception != null)
+{
+    <br />
+    <p class="exception">
+        <ul class="exception">
+            <li><b>Exception Message:</b> @exception.Message</li>
+            <li><b>Exception Source:</b> @exception.Source</li>
+            <li><b>Exception StackTrace:</b><br /><span style="white-space: pre-line">@exception.StackTrace</span></li>
+        </ul>
+
+        @if (exception.InnerException != null)
+        {
+            <ul class="exception">
+                <li><b>Inner Exception Message:</b> @exception.InnerException.Message</li>
+                <li><b>Inner Exception Source:</b> @exception.InnerException.Source</li>
+                <li><b>Inner Exception StackTrace:</b><br /><span style="white-space: pre-line">@exception.InnerException.StackTrace</span></li>
+            </ul>
+        }
+    </p>
+}
+
 

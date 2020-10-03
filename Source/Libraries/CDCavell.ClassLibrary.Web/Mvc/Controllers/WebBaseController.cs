@@ -91,7 +91,7 @@ namespace CDCavell.ClassLibrary.Web.Mvc.Controllers
         [AllowAnonymous]
         [HttpGet]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error(int id)
+        public virtual IActionResult Error(int id)
         {
             var vm = new ErrorViewModel(id);
 

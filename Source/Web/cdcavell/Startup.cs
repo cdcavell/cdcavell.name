@@ -78,7 +78,7 @@ namespace cdcavell
             })
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, cookieOptions => {
                     cookieOptions.LoginPath = new PathString("/Account/Login/");
-                    cookieOptions.AccessDeniedPath = new PathString("/Account/AccessDenied/");
+                    cookieOptions.AccessDeniedPath = new PathString("/Home/Error/403");
                 })
                 .AddOpenIdConnect("oidc", options =>
                 {

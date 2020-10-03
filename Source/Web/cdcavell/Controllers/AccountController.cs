@@ -102,16 +102,5 @@ namespace cdcavell.Controllers
 
             return RedirectToAction("Index", "Home");
         }
-
-        /// <summary>
-        /// Handle access denied page
-        /// </summary>
-        /// <returns>Task&lt;IActionResult&gt;</returns>
-        /// <method>AccessDenied()</method>
-        [HttpGet]
-        public IActionResult AccessDenied()
-        {
-            return View();
-        }
     }
 }

@@ -24,11 +24,9 @@
     font-weight: bold; }
 
 .request-id {
-    position: fixed;
-    bottom: 1px;
-    left: 10px;
-    font-size: small;
-    font-weight: 600; }
+    font-size: x-small;
+    font-weight: 600;
+}
 
 .background-image {
     position: fixed;

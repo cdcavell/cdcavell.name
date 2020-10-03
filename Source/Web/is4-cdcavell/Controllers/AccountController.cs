@@ -268,17 +268,6 @@ namespace is4_cdcavell.Controllers
             return View("LoggedOut", vm);
         }
 
-        /// <summary>
-        /// Handle access denied page
-        /// </summary>
-        /// <returns>Task&lt;IActionResult&gt;</returns>
-        /// <method>AccessDenied()</method>
-        [HttpGet]
-        public IActionResult AccessDenied()
-        {
-            return View();
-        }
-
         /*****************************************/
         /* helper APIs for the AccountController */
         /*****************************************/

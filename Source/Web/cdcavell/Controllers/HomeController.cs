@@ -1,9 +1,12 @@
 ﻿using CDCavell.ClassLibrary.Web.Mvc.Controllers;
+using CDCavell.ClassLibrary.Web.Mvc.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 namespace cdcavell.Controllers
 {
