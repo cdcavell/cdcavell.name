@@ -9,6 +9,8 @@
 .body-container {
     margin-top: 60px;
     padding-bottom: 40px;
+    right: 0;
+    bottom: 0;
 }
 
 .request-id {
@@ -19,19 +21,17 @@
     font-weight: 600;
 }
 
-.loading {
-    position: absolute;
+.background-image {
+    position: fixed;
     right: 0;
     bottom: 0;
     min-width: 100%;
     min-height: 100%;
-    width: auto;
-    height: auto;
     background-image: url(../img/cdcavell.png);
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
-    overflow: hidden;
+    opacity: 0.09;
 }
 
 
