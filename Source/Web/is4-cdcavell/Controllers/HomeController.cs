@@ -52,29 +52,5 @@ namespace is4_cdcavell.Controllers
             _logger.Information("Homepage is disabled in production. Redirecting https://cdcavell.name.");
             return Redirect("https://cdcavell.name");
         }
-
-        /// <summary>
-        /// Privacy policy
-        /// </summary>
-        /// <returns>IActionResult</returns>
-        /// <method>PrivacyPolicy()</method>
-        [AllowAnonymous]
-        [HttpGet]
-        public IActionResult PrivacyPolicy()
-        {
-            return View();
-        }
-
-        /// <summary>
-        /// Terms of service
-        /// </summary>
-        /// <returns>IActionResult</returns>
-        /// <method>TermsOfService()</method>
-        [AllowAnonymous]
-        [HttpGet]
-        public IActionResult TermsOfService()
-        {
-            return View();
-        }
     }
 }
