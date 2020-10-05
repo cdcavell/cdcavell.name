@@ -12,8 +12,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace cdcavell
 {
@@ -77,17 +80,25 @@ namespace cdcavell
                 options.DefaultChallengeScheme = "oidc";
             })
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, cookieOptions => {
-                    cookieOptions.LoginPath = new PathString("/Account/Login/");
-                    cookieOptions.AccessDeniedPath = new PathString("/Home/Error/403");
+                    cookieOptions.Events.OnRedirectToAccessDenied = context =>
+                    {
+                        context.Response.StatusCode = (int)(HttpStatusCode.Unauthorized);
+                        return Task.CompletedTask;
+                    };
                 })
                 .AddOpenIdConnect("oidc", options =>
                 {
-                    options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme; ;
+                    options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme; 
 
                     options.Authority = appSettings.Authentication.Authority;
                     options.RequireHttpsMetadata = false;
 
                     options.ClientId = appSettings.Authentication.ClientId;
+                    options.ResponseType = OpenIdConnectResponseType.IdToken;
+                    options.Scope.Clear();
+                    options.Scope.Add("openid");
+                    options.Scope.Add("profile");
+                    options.Scope.Add("email");
                     options.SaveTokens = true;
                 });
         }

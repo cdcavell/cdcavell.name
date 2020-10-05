@@ -44,49 +44,6 @@ namespace cdcavell.Controllers
         }
 
         /// <summary>
-        /// Entry point into the login workflow
-        /// </summary>
-        /// <param name="returnUrl">string</param>
-        /// <returns>Task&lt;IActionResult&gt;</returns>
-        /// <method>Login(string returnUrl = null)</method>
-        [HttpGet]
-        public async Task<IActionResult> Login(string returnUrl = null)
-        {
-            if (!User.Identity.IsAuthenticated)
-            {
-                if (string.IsNullOrEmpty(returnUrl) || Url.IsLocalUrl(returnUrl))
-                {
-                    // Clear the existing external cookie to ensure a clean login process
-                    await HttpContext.SignOutAsync();
-
-                    var redirectUrl = Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }, Request.Scheme);
-                    var properties = new AuthenticationProperties { RedirectUri = redirectUrl };
-                    properties.Items[".AuthSceme"] = "oidc";
-                    return Challenge(properties, "oidc");
-                }
-
-                return RedirectToAction("Index", "Home");
-            }
-
-            return Forbid();
-        }
-
-        /// <summary>
-        /// ExternalLoginCallback method
-        /// </summary>
-        /// <param name="ReturnUrl">string</param>
-        /// <returns>IActionResult</returns>
-        /// <method>ExternalLoginCallback(string ReturnUrl)</method>
-        [HttpGet]
-        public IActionResult ExternalLoginCallback(string ReturnUrl)
-        {
-            // see: Custom Requirements - This is maintained in Authorization folder
-            // https://doc.microsoft.com/en-us/archive/msdn-magazine/2017/october/cutting-edge-policy-authorization-in-asp-net-core
-
-            return Redirect(ReturnUrl);
-        }
-
-        /// <summary>
         /// Logout method
         /// </summary>
         /// <returns>IActionResult</returns>

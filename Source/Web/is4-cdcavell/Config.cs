@@ -24,6 +24,7 @@ namespace is4_cdcavell
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
+                new IdentityResources.Email()
             };
 
         /// <value>IEnumerable&lt;ApiScope&gt;</value>
@@ -95,7 +96,8 @@ namespace is4_cdcavell
                     AllowedScopes = new List<string>
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email
                     }
                 }
 

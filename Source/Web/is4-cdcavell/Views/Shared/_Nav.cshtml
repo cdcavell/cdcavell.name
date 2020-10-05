@@ -1,12 +1,9 @@
-@using IdentityServer4.Extensions
 
 @{
-    string name = null;
-    if (!true.Equals(ViewData["signed-out"]))
-    {
-        name = Context.User?.GetDisplayName();
-    }
+    PageViewModel pageModel = (PageViewModel)ViewData["PageViewModel"];
+    UserViewModel userModel = (UserViewModel)ViewData["UserViewModel"];
 }
+
 
 <div class="nav-page">
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
@@ -17,10 +14,10 @@
         </a>
 
         <ul class="navbar-nav ml-auto">
-            @if (!string.IsNullOrWhiteSpace(name))
+            @if (userModel.IsAuthenticated)
             {
                 <li class="nav-item dropdown m-auto">
-                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">@name <b class="caret"></b></a>
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">@userModel.Email <b class="caret"></b></a>
 
                     <div class="dropdown-menu">
                         <a class="dropdown-item" asp-action="Logout" asp-controller="Account">Logout</a>

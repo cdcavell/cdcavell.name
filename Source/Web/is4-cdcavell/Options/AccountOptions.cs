@@ -26,7 +26,7 @@ namespace is4_cdcavell.Options
         /// <value>bool</value>
         public static bool ShowLogoutPrompt = false;
         /// <value>bool</value>
-        public static bool AutomaticRedirectAfterSignOut = false;
+        public static bool AutomaticRedirectAfterSignOut = true;
 
         /// <value>string</value>
         public static string InvalidCredentialsErrorMessage = "Invalid username or password";
