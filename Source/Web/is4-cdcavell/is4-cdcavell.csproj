@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>is4_cdcavell</RootNamespace>
+    <Version>1.0.0</Version>
+	<DocumentationFile>../../../Documentation/Source/$(AssemblyName).xml</DocumentationFile>
+	<UserSecretsId>d3cf6ddf-02cc-4800-b31d-64a3837fc362</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="IdentityServer4" Version="4.1.1" />
+    <PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="3.1.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="3.1.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="3.1.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.8" />
+    <PackageReference Include="Microsoft.Extensions.Logging.ApplicationInsights" Version="2.15.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\CDCavell.ClassLibrary.Web\CDCavell.ClassLibrary.Web.csproj" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<_findDllFile Include="../../../Documentation/Source/XmlToMarkdown.dll" />
+		<_findJsonFile Include="../../../Documentation/Source/XmlToMarkdown.runtimeconfig.json" />
+		<_findLibraryFile Include="../../../Documentation/Source/CDCavell.ClassLibrary.Commons.dll" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="AspIdUsers.db">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
+	<Target Name="BuildXmlToMarkdown" AfterTargets="AfterBuild" DependsOnTargets="AfterBuild" Condition="Exists('@(_findDllFile)') AND Exists('@(_findJsonFile)') AND Exists('@(_findLibraryFile)')">
+		<Exec Command="cd ../../../Documentation/Source/" />
+		<Exec Command="dotnet XmlToMarkdown.dll Transform.xsl" WorkingDirectory="../../../Documentation/Source/" />
+	</Target>
+
+	<Target Name="UpdateWiki" AfterTargets="BuildXmlToMarkdown" DependsOnTargets="BuildXmlToMarkdown" Condition="Exists('@(_findDllFile)')&#xD;&#xA;                 AND Exists('@(_findJsonFile)') &#xD;&#xA;                 AND Exists('@(_findLibraryFile)')">
+		<Exec Command="cd ../../../Documentation/Source/wiki/" />
+		<Exec Command="git add ." WorkingDirectory="../../../Documentation/Source/wiki/" />
+		<Exec Command="git commit -m &quot;Update wiki submodule&quot;" WorkingDirectory="../../../Documentation/Source/wiki/" ContinueOnError="true">
+			<Output TaskParameter="ExitCode" ItemName="ErrorCode" />
+		</Exec>
+		<Exec Command="git push origin master" WorkingDirectory="../../../Documentation/Source/wiki/" Condition="'@(ErrorCode)'=='0'" />
+	</Target>
+
+</Project>
