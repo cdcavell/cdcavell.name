@@ -70,7 +70,8 @@ namespace System
             if (string.IsNullOrEmpty(value))
                 return string.Empty;
 
-            return string.Format(HttpUtility.HtmlEncode(value.Replace("\r", string.Empty).Replace("\n", string.Empty)));
+            string cleanString = HttpUtility.HtmlEncode(value.Replace("\r", string.Empty).Replace("\n", string.Empty));
+            return string.Format(cleanString);
         }
 
         /// <summary>

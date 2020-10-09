@@ -1,18 +1,17 @@
 ﻿using CDCavell.ClassLibrary.Web.Mvc.Controllers;
 using IdentityModel;
-using IdentityServer4;
 using IdentityServer4.Events;
 using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
-using IdentityServer4.Test;
 using is4_cdcavell.Models.Account;
 using is4_cdcavell.Options;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -31,12 +30,13 @@ namespace is4_cdcavell.Controllers
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 09/30/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/08/2020 | Initial build |~ 
     /// </revision>
     [AllowAnonymous]
     public class AccountController : WebBaseController<AccountController>
     {
-        private readonly TestUserStore _users;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IClientStore _clientStore;
         private readonly IAuthenticationSchemeProvider _schemeProvider;
@@ -52,7 +52,8 @@ namespace is4_cdcavell.Controllers
         /// <param name="clientStore">IClientStore</param>
         /// <param name="schemeProvider">IAuthenticationSchemeProvider</param>
         /// <param name="events">IEventService</param>
-        /// <param name="users">TestUserStore</param>
+        /// <param name="signInManager">SignInManager&lt;ApplicationUser&gt;</param>
+        /// <param name="userManager">UserManager&lt;ApplicationUser&gt;</param>
         /// <method>
         /// AccountController(
         ///     ILogger&lt;AccountController&gt; logger, 
@@ -62,7 +63,8 @@ namespace is4_cdcavell.Controllers
         ///     IClientStore clientStore,
         ///     IAuthenticationSchemeProvider schemeProvider,
         ///     IEventService events,
-        ///     TestUserStore users = null
+        ///     SignInManager&lt;ApplicationUser&gt; signInManager,
+        ///     UserManager&lt;ApplicationUser&gt; userManager
         /// ) : base(logger, webHostEnvironment, httpContextAccessor)
         /// </method>
         public AccountController(
@@ -73,13 +75,12 @@ namespace is4_cdcavell.Controllers
             IClientStore clientStore,
             IAuthenticationSchemeProvider schemeProvider,
             IEventService events,
-            TestUserStore users = null
+            SignInManager<ApplicationUser> signInManager,
+            UserManager<ApplicationUser> userManager
         ) : base(logger, webHostEnvironment, httpContextAccessor)
         {
-            // if the TestUserStore is not in DI, then we'll just use the global users collection
-            // this is where you would plug in your own custom identity management library (e.g. ASP.NET Identity)
-            _users = users ?? new TestUserStore(TestUsers.Users);
-
+            _userManager = userManager;
+            _signInManager = signInManager;
             _interaction = interaction;
             _clientStore = clientStore;
             _schemeProvider = schemeProvider;
@@ -147,31 +148,11 @@ namespace is4_cdcavell.Controllers
 
             if (ModelState.IsValid)
             {
-                // validate username/password against in-memory store
-                if (_users.ValidateCredentials(model.Username, model.Password))
+                var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberLogin, lockoutOnFailure: true);
+                if (result.Succeeded)
                 {
-                    var user = _users.FindByUsername(model.Username);
-                    await _events.RaiseAsync(new UserLoginSuccessEvent(user.Username, user.SubjectId, user.Username, clientId: context?.Client.ClientId));
-
-                    // only set explicit expiration here if user chooses "remember me". 
-                    // otherwise we rely upon expiration configured in cookie middleware.
-                    AuthenticationProperties props = null;
-                    if (AccountOptions.AllowRememberLogin && model.RememberLogin)
-                    {
-                        props = new AuthenticationProperties
-                        {
-                            IsPersistent = true,
-                            ExpiresUtc = DateTimeOffset.UtcNow.Add(AccountOptions.RememberMeLoginDuration)
-                        };
-                    };
-
-                    // issue authentication cookie with subject ID and username
-                    var isuser = new IdentityServerUser(user.SubjectId)
-                    {
-                        DisplayName = user.Username
-                    };
-
-                    await HttpContext.SignInAsync(isuser, props);
+                    var user = await _userManager.FindByNameAsync(model.Username);
+                    await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName, clientId: context?.Client.ClientId));
 
                     if (context != null)
                     {
@@ -247,7 +228,7 @@ namespace is4_cdcavell.Controllers
             if (User?.Identity.IsAuthenticated == true)
             {
                 // delete local authentication cookie
-                await HttpContext.SignOutAsync();
+                await _signInManager.SignOutAsync();
 
                 // raise the logout event
                 await _events.RaiseAsync(new UserLogoutSuccessEvent(User.GetSubjectId(), User.GetDisplayName()));

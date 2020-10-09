@@ -2,11 +2,15 @@ using CDCavell.ClassLibrary.Commons.Logging;
 using CDCavell.ClassLibrary.Web.Mvc.Fillters;
 using CDCavell.ClassLibrary.Web.Security;
 using IdentityServer4;
+using is4_cdcavell.Data;
+using is4_cdcavell.Models.Account;
 using is4_cdcavell.Models.AppSettings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -15,7 +19,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
 
 namespace is4_cdcavell
 {
@@ -28,7 +31,7 @@ namespace is4_cdcavell
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/01/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/08/2020 | Initial build |~ 
     /// </revision>
     public class Startup
     {
@@ -75,6 +78,13 @@ namespace is4_cdcavell
             var rsa = new RsaKeyService(_webHostEnvironment, TimeSpan.FromDays(30));
             services.AddSingleton<RsaKeyService>(provider => rsa);
 
+            services.AddDbContext<AspIdUsersDbContext>(options =>
+                options.UseSqlite(appSettings.ConnectionStrings.AspIdUsersConnection));
+
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<AspIdUsersDbContext>()
+                .AddDefaultTokenProviders();
+
             var builder = services.AddIdentityServer(options =>
             {
                 options.Events.RaiseErrorEvents = true;
@@ -85,7 +95,7 @@ namespace is4_cdcavell
                 // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
                 options.EmitStaticAudienceClaim = true;
             })
-                .AddTestUsers(TestUsers.Users);
+                .AddAspNetIdentity<ApplicationUser>();
 
             // in-memory, code config
             builder.AddInMemoryIdentityResources(Config.IdentityResources);
