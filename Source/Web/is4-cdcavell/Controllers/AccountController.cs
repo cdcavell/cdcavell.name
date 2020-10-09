@@ -121,34 +121,39 @@ namespace is4_cdcavell.Controllers
             var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
 
             // the user clicked the "cancel" button
-            if (button.Clean() != "login")
+            if (button != "login")
             {
-                if (context != null)
+                if (button == "cancel")
                 {
-                    // if the user cancels, send a result back into IdentityServer as if they 
-                    // denied the consent (even if this client does not require consent).
-                    // this will send back an access denied OIDC error response to the client.
-                    await _interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
-
-                    // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
-                    if (context.IsNativeClient())
+                    if (context != null)
                     {
-                        // The client is native, so this change in how to
-                        // return the response is for better UX for the end user.
-                        return this.LoadingPage("Redirect", model.ReturnUrl);
-                    }
+                        // if the user cancels, send a result back into IdentityServer as if they 
+                        // denied the consent (even if this client does not require consent).
+                        // this will send back an access denied OIDC error response to the client.
+                        await _interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
 
-                    return Redirect(model.ReturnUrl);
+                        // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
+                        if (context.IsNativeClient())
+                        {
+                            // The client is native, so this change in how to
+                            // return the response is for better UX for the end user.
+                            return this.LoadingPage("Redirect", model.ReturnUrl);
+                        }
+
+                        return Redirect(model.ReturnUrl);
+                    }
+                    else
+                    {
+                        // since we don't have a valid context, then we just go back to the home page
+                        return Redirect("~/");
+                    }
                 }
                 else
                 {
-                    // since we don't have a valid context, then we just go back to the home page
-                    return Redirect("~/");
+                    // Avoid User-controlled bypass of sensitive method (CWE-807, CWE-247, CWE-350)
+                    _logger.Warning(string.Format("Invalid parameter value: {0}", button.Clean()));
+                    return BadRequest(string.Format("Invalid parameter value: {0}", button.Clean()));
                 }
-            }
-            else
-            {
-                // Avoid User-controlled bypass of sensitive method (CWE-807, CWE-247, CWE-350)
             }
 
             if (ModelState.IsValid)
