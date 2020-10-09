@@ -5,6 +5,7 @@ Personal Website for Christopher D. Cavell
 ![GitHub top language](https://img.shields.io/github/languages/top/cdcavell/cdcavell.name?style=flat-square)
 ![GitHub language count](https://img.shields.io/github/languages/count/cdcavell/cdcavell.name?style=flat-square)
 ![W3C Validation](https://img.shields.io/w3c-validation/default?style=flat-square&targetUrl=https%3A%2F%2Fcdcavell.name)
+![CodeQL](https://github.com/cdcavell/cdcavell.name/workflows/CodeQL/badge.svg?style=flat-square)
 
 <hr />
 
