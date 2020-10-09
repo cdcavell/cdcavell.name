@@ -17,7 +17,10 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
 using Org.BouncyCastle.Security;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading.Tasks;
 
 namespace is4_cdcavell.Controllers
@@ -243,6 +246,12 @@ namespace is4_cdcavell.Controllers
 
             if (User?.Identity.IsAuthenticated == true)
             {
+                // delete user from store
+                var result = await DeleteUserFromStore(User.Identity);
+                if (!result.Succeeded)
+                    LogResultError(result.Errors);
+
+
                 // delete local authentication cookie
                 await _signInManager.SignOutAsync();
 
@@ -394,6 +403,53 @@ namespace is4_cdcavell.Controllers
             }
 
             return vm;
+        }
+
+        private async Task<IdentityResult> DeleteUserFromStore(IIdentity identity)
+        {
+            List<IdentityError> results = new List<IdentityError>();
+
+            ApplicationUser user = await _userManager.FindByIdAsync(identity.GetSubjectId());
+            if (user != null)
+            {
+                // get user roles
+                IList<string> roles = await _userManager.GetRolesAsync(user);
+                if (roles != null)
+                {
+                    // delete user from roles
+                    var rolesDeleteResult = await _userManager.RemoveFromRolesAsync(user, roles);
+                    if (!rolesDeleteResult.Succeeded)
+                        results.AddRange(rolesDeleteResult.Errors);
+                }
+
+                // get user claims
+                IList<Claim> claims = await _userManager.GetClaimsAsync(user);
+                if (claims != null)
+                {
+                    // delete user claims
+                    var claimsDeleteResult = await _userManager.RemoveClaimsAsync(user, claims);
+                    if (!claimsDeleteResult.Succeeded)
+                        results.AddRange(claimsDeleteResult.Errors);
+                }
+
+                // delete aspIdUser
+                var userDeleteResult = await _userManager.DeleteAsync(user);
+                if (!userDeleteResult.Succeeded)
+                    results.AddRange(userDeleteResult.Errors);
+            }
+
+            if (results.Count > 0)
+                return IdentityResult.Failed(results.ToArray());
+
+            return IdentityResult.Success;
+        }
+
+        private void LogResultError(IEnumerable<IdentityError> errors)
+        {
+            foreach (IdentityError error in errors)
+                _logger.Warning(string.Format("DeleteUserFromStore  Code: {0} Description: {1}", 
+                    error.Code, 
+                    error.Description));
         }
     }
 }
