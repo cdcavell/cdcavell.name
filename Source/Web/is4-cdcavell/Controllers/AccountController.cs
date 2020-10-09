@@ -96,12 +96,13 @@ namespace is4_cdcavell.Controllers
         public async Task<IActionResult> Login(string returnUrl)
         {
             // build a model so we know what to show on the login page
-            var vm = await BuildLoginViewModelAsync(returnUrl);
+            string cleanReturnUrl = returnUrl.Clean();
+            var vm = await BuildLoginViewModelAsync(cleanReturnUrl);
 
             if (vm.IsExternalLoginOnly)
             {
                 // we only have one option for logging in and it's an external provider
-                return RedirectToAction("Challenge", "External", new { scheme = vm.ExternalLoginScheme, returnUrl });
+                return RedirectToAction("Challenge", "External", new { scheme = vm.ExternalLoginScheme, cleanReturnUrl });
             }
 
             return View(vm);
@@ -120,7 +121,7 @@ namespace is4_cdcavell.Controllers
             var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
 
             // the user clicked the "cancel" button
-            if (button != "login")
+            if (button.Clean() != "login")
             {
                 if (context != null)
                 {
@@ -201,7 +202,8 @@ namespace is4_cdcavell.Controllers
         public async Task<IActionResult> Logout(string logoutId)
         {
             // build a model so the logout page knows what to display
-            var vm = await BuildLogoutViewModelAsync(logoutId);
+            string cleanLogoutId = logoutId.Clean();
+            var vm = await BuildLogoutViewModelAsync(cleanLogoutId);
 
             if (vm.ShowLogoutPrompt == false)
             {
