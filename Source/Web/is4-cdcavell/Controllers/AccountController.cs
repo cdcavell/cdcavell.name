@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
+using Org.BouncyCastle.Security;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -120,39 +121,44 @@ namespace is4_cdcavell.Controllers
             // check if we are in the context of an authorization request
             var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
 
-            // the user clicked the "cancel" button
-            if (button != "login")
+            // Avoid User-controlled bypass of sensitive method (CWE-807, CWE-247, CWE-350)
+            bool cancel;
+            switch (button)
             {
-                if (button == "cancel")
+                case "login":
+                    cancel = false;
+                    break;
+                case "cancel":
+                    cancel = true;
+                    break;
+                default:
+                    throw new InvalidParameterException();
+            }
+
+            // the user clicked the "cancel" button
+            if (cancel)
+            {
+                if (context != null)
                 {
-                    if (context != null)
-                    {
-                        // if the user cancels, send a result back into IdentityServer as if they 
-                        // denied the consent (even if this client does not require consent).
-                        // this will send back an access denied OIDC error response to the client.
-                        await _interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
+                    // if the user cancels, send a result back into IdentityServer as if they 
+                    // denied the consent (even if this client does not require consent).
+                    // this will send back an access denied OIDC error response to the client.
+                    await _interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
 
-                        // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
-                        if (context.IsNativeClient())
-                        {
-                            // The client is native, so this change in how to
-                            // return the response is for better UX for the end user.
-                            return this.LoadingPage("Redirect", model.ReturnUrl);
-                        }
-
-                        return Redirect(model.ReturnUrl);
-                    }
-                    else
+                    // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
+                    if (context.IsNativeClient())
                     {
-                        // since we don't have a valid context, then we just go back to the home page
-                        return Redirect("~/");
+                        // The client is native, so this change in how to
+                        // return the response is for better UX for the end user.
+                        return this.LoadingPage("Redirect", model.ReturnUrl);
                     }
+
+                    return Redirect(model.ReturnUrl);
                 }
                 else
                 {
-                    // Avoid User-controlled bypass of sensitive method (CWE-807, CWE-247, CWE-350)
-                    _logger.Warning(string.Format("Invalid parameter value: {0}", button.Clean()));
-                    return BadRequest(string.Format("Invalid parameter value: {0}", button.Clean()));
+                    // since we don't have a valid context, then we just go back to the home page
+                    return Redirect("~/");
                 }
             }
 
