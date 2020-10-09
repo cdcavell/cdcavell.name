@@ -9,7 +9,6 @@
 *.user
 *.userosscache
 *.sln.docstates
-*.db
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -17,8 +16,6 @@ Documentation/Source/*.xml
 Documentation/Source/*.xsl
 Documentation/Source/*.dll
 Documentation/Source/*.json
-Source/Web/is4-cdcavell/tempkey.jwk
-Source/Web/is4-cdcavell/rsakey.json
 
 # Build results
 [Dd]ebug/
