@@ -146,6 +146,10 @@ namespace is4_cdcavell.Controllers
                     return Redirect("~/");
                 }
             }
+            else
+            {
+                // Avoid User-controlled bypass of sensitive method (CWE-807, CWE-247, CWE-350)
+            }
 
             if (ModelState.IsValid)
             {
