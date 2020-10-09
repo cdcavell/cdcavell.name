@@ -11,7 +11,7 @@ namespace System
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 07/05/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/08/2020 | Initial build |~ 
     /// </revision>
     public static class StringExtensions
     {
@@ -71,7 +71,7 @@ namespace System
                 return string.Empty;
 
             string cleanString = HttpUtility.HtmlEncode(value.Replace("\r", string.Empty).Replace("\n", string.Empty));
-            return string.Format(cleanString);
+            return string.Format("{0}", cleanString);
         }
 
         /// <summary>
