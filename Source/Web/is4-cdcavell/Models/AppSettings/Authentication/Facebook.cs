@@ -3,7 +3,7 @@
     /// <summary>
     /// Facebook Authentication model
     /// &lt;br/&gt;&lt;br/&gt;
-    /// 
+    /// https://developers.facebook.com/apps/
     /// </summary>
     /// <revision>
     /// __Revisions:__~~
