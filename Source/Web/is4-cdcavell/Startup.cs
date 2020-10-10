@@ -121,6 +121,12 @@ namespace is4_cdcavell
                     googleOptions.ClientId = appSettings.Authentication.Google.ClientId;
                     googleOptions.ClientSecret = appSettings.Authentication.Google.ClientSecret;
                 })
+                .AddGitHub("GitHub", githubOptions =>
+                {
+                    githubOptions.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                    githubOptions.ClientId = appSettings.Authentication.GitHub.ClientId;
+                    githubOptions.ClientSecret = appSettings.Authentication.GitHub.ClientSecret;
+                })
                 .AddTwitter("Twitter", twitterOptions =>
                 {
                     twitterOptions.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
