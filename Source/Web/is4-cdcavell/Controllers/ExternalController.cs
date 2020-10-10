@@ -31,7 +31,7 @@ namespace is4_cdcavell.Controllers
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/08/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/09/2020 | Initial build |~ 
     /// </revision>
     [AllowAnonymous]
     public class ExternalController : WebBaseController<ExternalController>
