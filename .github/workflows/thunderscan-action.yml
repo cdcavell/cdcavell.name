@@ -1,3 +1,0 @@
-# https://github.com/defensecode/thunderscan-action
-- name: DefenseCode ThunderScan Action
-  uses: defensecode/thunderscan-action@v1.0
