@@ -31,7 +31,7 @@ namespace is4_cdcavell
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/08/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/09/2020 | Initial build |~ 
     /// </revision>
     public class Startup
     {
@@ -109,6 +109,11 @@ namespace is4_cdcavell
             builder.AddSigningCredential(key, SecurityAlgorithms.RsaSha512);
 
             services.AddAuthentication()
+                .AddMicrosoftAccount("Microsoft", microsoftOptions =>
+                {
+                    microsoftOptions.ClientId = appSettings.Authentication.Microsoft.ClientId;
+                    microsoftOptions.ClientSecret = appSettings.Authentication.Microsoft.ClientSecret;
+                })
                 .AddTwitter("Twitter", twitterOptions =>
                 {
                     twitterOptions.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
@@ -116,7 +121,8 @@ namespace is4_cdcavell
                     twitterOptions.ConsumerSecret = appSettings.Authentication.Twitter.ConsumerSecret;
                     twitterOptions.RetrieveUserDetails = true;
                 })
-                .AddFacebook("Facebook", facebookOptions => {
+                .AddFacebook("Facebook", facebookOptions =>
+                {
                     facebookOptions.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
                     facebookOptions.AppId = appSettings.Authentication.Facebook.AppId;
                     facebookOptions.AppSecret = appSettings.Authentication.Facebook.AppSecret;
