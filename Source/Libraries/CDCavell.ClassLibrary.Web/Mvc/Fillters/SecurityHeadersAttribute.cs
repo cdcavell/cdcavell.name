@@ -1,4 +1,4 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+﻿// Copyright (c) Brock Allen &amp; Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 using Microsoft.AspNetCore.Mvc;
@@ -7,16 +7,16 @@ using Microsoft.AspNetCore.Mvc.Filters;
 namespace CDCavell.ClassLibrary.Web.Mvc.Fillters
 {
     /// <summary>
-    /// Security Headers Attribute Filter from Brock Allen & Dominick Baier.
-    /// &lt'br /&gth'&lt'br /&gth'
-    /// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+    /// Security Headers Attribute Filter from Brock Allen &amp; Dominick Baier.
+    /// &lt;br /&gt;&lt;br /&gt;
+    /// Copyright (c) Brock Allen &amp; Dominick Baier. All rights reserved.
     /// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
     /// </summary>
     /// <revision>
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Brock Allen & Dominick Baier | 1.0.0 | 09/29/2020 | Initial build |~ 
+    /// | Brock Allen &amp; Dominick Baier | 1.0.0 | 09/29/2020 | Initial build |~ 
     /// </revision>
     public class SecurityHeadersAttribute : ActionFilterAttribute
     {
@@ -67,8 +67,8 @@ namespace CDCavell.ClassLibrary.Web.Mvc.Fillters
                     context.HttpContext.Response.Headers.Add("Referrer-Policy", referrer_policy);
                 }
 
-                //// Additional security headers ////
-                /// https://blog.elmah.io/the-asp-net-core-security-headers-guide/
+                // Additional security headers //
+                // https://blog.elmah.io/the-asp-net-core-security-headers-guide/
 
                 // The X-Xss-Protection header will cause most modern browsers to stop loading the page when a cross-site scripting attack is identified. 
                 if (!context.HttpContext.Response.Headers.ContainsKey("X-Xss-Protection"))
