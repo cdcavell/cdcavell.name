@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace is4_cdcavell.Models.AppSettings
+﻿namespace is4_cdcavell.Models.AppSettings
 {
     /// <summary>
     /// Authentication model
@@ -24,5 +19,7 @@ namespace is4_cdcavell.Models.AppSettings
         public Microsoft Microsoft { get; set; }
         /// <value>Google</value>
         public Google Google { get; set; }
+        /// <value>GitHub</value>
+        public GitHub GitHub { get; set; }
     }
 }
