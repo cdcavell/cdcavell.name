@@ -22,5 +22,7 @@ namespace is4_cdcavell.Models.AppSettings
         public Facebook Facebook { get; set; }
         /// <value>Microsoft</value>
         public Microsoft Microsoft { get; set; }
+        /// <value>Google</value>
+        public Google Google { get; set; }
     }
 }
