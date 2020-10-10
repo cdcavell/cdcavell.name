@@ -71,5 +71,17 @@ namespace cdcavell.Controllers
         {
             return View();
         }
+
+        /// <summary>
+        /// Search method
+        /// </summary>
+        /// <returns>IActionResult</returns>
+        /// <method>Search()</method>
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult Search()
+        {
+            return View();
+        }
     }
 }
