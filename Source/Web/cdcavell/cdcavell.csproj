@@ -9,7 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="wwwroot\.well-known\microsoft-identity-association.json" />
+    <Content Include="wwwroot\.well-known\microsoft-identity-association.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
