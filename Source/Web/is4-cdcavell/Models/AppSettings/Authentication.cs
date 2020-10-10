@@ -21,5 +21,7 @@
         public Google Google { get; set; }
         /// <value>GitHub</value>
         public GitHub GitHub { get; set; }
+        /// <value>LinkedIn</value>
+        public LinkedIn LinkedIn { get; set; }
     }
 }
