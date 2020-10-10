@@ -41,6 +41,17 @@
     opacity: 0.09;
 }
 
+.background-gradient {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    background-image: linear-gradient(180deg, rgba(32, 32, 32, 0.3), rgba(245, 245, 245, 1.0));
+    background-size: contain;
+    opacity: 0.09;
+}
+
 .footer {
     font-size: x-small;
     background-color: rgb(245, 245, 245);
