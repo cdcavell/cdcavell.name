@@ -7,7 +7,7 @@
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/02/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/10/2020 | Initial build |~ 
     /// </revision>
     public class Authentication
     {
@@ -17,5 +17,7 @@
         public string ClientId { get; set; }
         /// <value>string</value>
         public string ClientSecret { get; set; }
+        /// <value>BingCustomSearch</value>
+        public BingCustomSearch BingCustomSearch { get; set; }
     }
 }
