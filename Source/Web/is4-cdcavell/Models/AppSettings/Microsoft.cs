@@ -15,5 +15,7 @@
         public string ClientId { get; set; }
         /// <value>string</value>
         public string ClientSecret { get; set; }
+        /// <value>string</value>
+        public string TokenEndpoint { get; set; }
     }
 }

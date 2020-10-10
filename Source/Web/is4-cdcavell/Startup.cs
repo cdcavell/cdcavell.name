@@ -111,8 +111,15 @@ namespace is4_cdcavell
             services.AddAuthentication()
                 .AddMicrosoftAccount("Microsoft", microsoftOptions =>
                 {
+                    microsoftOptions.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
                     microsoftOptions.ClientId = appSettings.Authentication.Microsoft.ClientId;
                     microsoftOptions.ClientSecret = appSettings.Authentication.Microsoft.ClientSecret;
+                })
+                .AddGoogle("Google", googleOptions =>
+                {
+                    googleOptions.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                    googleOptions.ClientId = appSettings.Authentication.Google.ClientId;
+                    googleOptions.ClientSecret = appSettings.Authentication.Google.ClientSecret;
                 })
                 .AddTwitter("Twitter", twitterOptions =>
                 {
