@@ -360,7 +360,7 @@ namespace CDCavell.ClassLibrary.Web.Security
 
         /// <summary>
         /// Method to seed internal password with SecretKey from AppSettings:Application:SecretKey value in appsettings.json
-        /// &lt;br /&gt;https://www.random.org/cgi-bin/randbyte?nbytes=21&format=d
+        /// &lt;br /&gt;https://www.random.org/cgi-bin/randbyte?nbytes=21&amp;format=d
         /// </summary>
         /// <param name="configuration">IConfiguration</param>
         /// <exception cref="ArgumentNullException"></exception>
