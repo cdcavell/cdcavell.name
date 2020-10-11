@@ -1,6 +1,16 @@
+body {
+    height: 100%;
+    width: 100%;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: rgb(245, 245, 245);
+    color: rgb(0, 0, 0);
+}
+
 .body-container {
     margin-top: 60px;
     padding-bottom: 40px;
+    right: 0;
+    bottom: 0;
     opacity: .99;
 }
 
@@ -61,6 +71,23 @@
 }
 
 
+textarea:hover,
+[type="text"]:hover,
+textarea:active,
+[type="text"]:active,
+textarea:focus,
+input:focus,
+button:focus,
+button:active,
+button:hover,
+label:focus,
+.btn:active,
+.btn.active {
+    outline: 0px !important;
+    -webkit-appearance: none;
+    box-shadow: none !important;
+}
 
-
-
+.border-grey {
+    border-color: #c1c7c9 !important;
+}
