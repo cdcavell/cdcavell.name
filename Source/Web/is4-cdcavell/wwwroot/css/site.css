@@ -1,6 +1,16 @@
+body {
+    height: 100%;
+    width: 100%;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: rgb(245, 245, 245);
+    color: rgb(0, 0, 0);
+}
+
 .body-container {
     margin-top: 60px;
     padding-bottom: 40px;
+    right: 0;
+    bottom: 0;
     text-shadow: 1px 1px 0.3px rgba(0,0,0,0.2), 1px 1px 0.1px rgba(0,0,0,0.19);
     opacity: .99;
 }
