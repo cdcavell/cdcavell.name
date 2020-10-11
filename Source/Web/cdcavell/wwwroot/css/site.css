@@ -70,3 +70,7 @@ label:focus,
 .border-grey {
     border-color: #c1c7c9 !important;
 }
+
+.card {
+    opacity: 0.6;
+}
