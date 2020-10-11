@@ -1,12 +1,12 @@
-﻿using CDCavell.ClassLibrary.Web.Mvc.Controllers;
-using CDCavell.ClassLibrary.Web.Mvc.Models;
+﻿using cdcavell.Models.Search;
+using CDCavell.ClassLibrary.Web.Mvc.Controllers;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Diagnostics;
+using System;
+using System.Web;
 
 namespace cdcavell.Controllers
 {
@@ -73,7 +73,7 @@ namespace cdcavell.Controllers
         }
 
         /// <summary>
-        /// Search method
+        /// Search get method
         /// </summary>
         /// <returns>IActionResult</returns>
         /// <method>Search()</method>
@@ -81,7 +81,36 @@ namespace cdcavell.Controllers
         [HttpGet]
         public IActionResult Search()
         {
-            return View();
+            SearchModel model = new SearchModel();
+            return View(model);
+        }
+
+        /// <summary>
+        /// Handle postback from Search request method
+        /// </summary>
+        /// <returns>IActionResult</returns>
+        /// <method>Search()</method>
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Search(SearchModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                string request = HttpUtility.UrlEncode(model.SearchRequest).Clean();
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(model.SearchRequest))
+                {
+                    return BadRequest();
+                }
+
+                model.MessageClass = "text-danger";
+                model.Message = "No results returned";
+            }
+
+            return View(model);
         }
     }
 }
