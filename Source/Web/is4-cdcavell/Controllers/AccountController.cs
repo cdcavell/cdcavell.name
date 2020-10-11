@@ -100,6 +100,9 @@ namespace is4_cdcavell.Controllers
         [HttpGet]
         public async Task<IActionResult> Login(string returnUrl)
         {
+            if (string.IsNullOrEmpty(returnUrl))
+                return Redirect("https://cdcavell.name");
+
             // build a model so we know what to show on the login page
             var vm = await BuildLoginViewModelAsync(returnUrl);
 
