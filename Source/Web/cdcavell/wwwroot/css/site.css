@@ -11,7 +11,12 @@
     padding-bottom: 40px;
     right: 0;
     bottom: 0;
+    text-shadow: 1px 1px 0.3px rgba(0,0,0,0.2), 1px 1px 0.1px rgba(0,0,0,0.19);
     opacity: .99;
+}
+
+.no-shadow {
+    text-shadow: none;
 }
 
 .request-id {

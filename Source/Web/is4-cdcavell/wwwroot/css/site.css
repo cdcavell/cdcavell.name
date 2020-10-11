@@ -1,7 +1,12 @@
 .body-container {
     margin-top: 60px;
     padding-bottom: 40px;
+    text-shadow: 1px 1px 0.5px rgba(0,0,0,0.2), 1px 1px 0.2px rgba(0,0,0,0.19);
     opacity: .99;
+}
+
+.no-shadow {
+    text-shadow: none;
 }
 
 .welcome-page li {
