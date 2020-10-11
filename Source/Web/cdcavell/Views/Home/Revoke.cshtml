@@ -1,0 +1,34 @@
+﻿@{
+    switch (ViewBag.Provider)
+    {
+        case "microsoft":
+            <h2>Revoke access to personal information stored in your Microsoft account</h2><br />
+            <ul>
+                <li><i>Access your <a class="text-decoration-none" href="https://www.microsoft.com/en-us/account" rel="external nofollow noopener">Microsoft account.</a></i><br /><br /></li>
+                <li><i>Select <strong>Privacy</strong> in the menu bar.<br /><img src="~/img/PrivacyPolicy/Capture-001.JPG" /></i><br /><br /></li>
+                <li><i>Select <strong>Apps and services that can access your data.</strong><br /><img src="~/img/PrivacyPolicy/Capture-002.JPG" /><br /><br /></i></li>
+                <li><i>Select <strong>Edit</strong> for cdcanell.name application.<br /><img src="~/img/PrivacyPolicy/Capture-003.JPG" /></i><br /><br /></li>
+                <li><i>Select <strong>Remove these permissions.</strong><br /><img src="~/img/PrivacyPolicy/Capture-004.JPG" /></i></li>
+            </ul>
+            break;
+        case "google":
+            <h2>To revoke access to personal information stored in your Google account:</h2><br />
+            <ul>
+                <li><i>Access your <a class="text-decoration-none" href="https://accounts.google.com/login" rel="external nofollow noopener">Google account.</a></i><br /><br /></li>
+                <li><i>Select <strong>Security</strong> from left hand menu.<br /><img src="~/img/PrivacyPolicy/Capture-005.JPG" /></i><br /><br /></li>
+                <li><i>Select <strong>Manage third-party access</strong>.<br /><img src="~/img/PrivacyPolicy/Capture-006.JPG" /></i><br /><br /></li>
+                <li><i>Select <strong>cdcavell.name</strong> application under <strong>Signing in with Google</strong> section.<br /><img src="~/img/PrivacyPolicy/Capture-007.JPG" /><br /><img src="~/img/PrivacyPolicy/Capture-008.JPG" /></i><br /><br /></li>
+                <li><i>Seclect <strong>Remove Access</strong>.<br /><img src="~/img/PrivacyPolicy/Capture-009.JPG" /></i><br /><br /></li>
+            </ul>
+            break;
+        case "github":
+            <h2>Revoke access to personal information stored in your GitHub account</h2><br />
+            break;
+        case "twitter":
+            <h2>Revoke access to personal information stored in your Twitter account</h2><br />
+            break;
+        case "facebook":
+            <h2>Revoke access to personal information stored in your Facebook account</h2><br />
+            break;
+    }
+}

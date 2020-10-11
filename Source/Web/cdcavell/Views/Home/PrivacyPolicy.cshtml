@@ -1,5 +1,5 @@
 ﻿<h1 class="text-center">Privacy Policy</h1>
-<p>Last updated: October 11, 2020</p>
+<p><i>Last updated: October 11, 2020</i></p>
 <p>This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You.</p>
 <p>We use Your Personal data to provide and improve the Service. By using the Service, You agree to the collection and use of information in accordance with this Privacy Policy.</p>
 <h2>Interpretation and Definitions</h2>
@@ -103,29 +103,26 @@
     <li><strong>To manage Your requests:</strong> To attend and manage Your requests to Us.</li>
 </ul>
 <br />
-<strong><i>Use of information received from Microsoft APIs will adhere to the <a class="text-decoration-none" href="https://docs.microsoft.com/en-us/legal/microsoft-apis/terms-of-use" rel="external nofollow noopener">Microsoft APIs Terms of Use</a>, including the <a href="https://docs.microsoft.com/en-us/legal/microsoft-apis/terms-of-use#5--your-compliance-with-applicable-privacy-and-data-protection-laws" rel="external nofollow noopener">Compliance with Applicable Privacy and Data Protection Laws requirements.</a></i></strong>
+@{
+    var MicrosoftProviderParm = new Dictionary<string, string> { { "provider", "microsoft" } };
+    var GoogleProviderParm = new Dictionary<string, string> { { "provider", "google" } };
+    var GitHubProviderParm = new Dictionary<string, string> { { "provider", "github" } };
+    var TwitterProviderParm = new Dictionary<string, string> { { "provider", "twitter" } };
+    var FacebookProviderParm = new Dictionary<string, string> { { "provider", "facebook" } };
+}
+<p><strong><i>Use of information received from Microsoft APIs will adhere to the <a class="text-decoration-none" href="https://docs.microsoft.com/en-us/legal/microsoft-apis/terms-of-use" rel="external nofollow noopener">Microsoft APIs Terms of Use</a>, including the <a href="https://docs.microsoft.com/en-us/legal/microsoft-apis/terms-of-use#5--your-compliance-with-applicable-privacy-and-data-protection-laws" rel="external nofollow noopener">Compliance with Applicable Privacy and Data Protection Laws requirements.</a></i></strong></p>
+<ul><li><i>Information on how to revoke access to personal information stored in your <a asp-action="Revoke" asp-controller="Home" asp-all-route-data="MicrosoftProviderParm">Microsoft account</a>.</i></li></ul>
 <br />
+<p><strong><i>Use of information received from Google APIs will adhere to the <a class="text-decoration-none" href="https://developers.google.com/terms/api-services-user-data-policy" rel="external nofollow noopener">Google API Services User Data Policy</a>, including the <a class="text-decoration-none" href="https://developers.google.com/terms/api-services-user-data-policy#limited-use" rel="external nofollow noopener">Limited Use requirements</a>.</i></strong></p>
+<ul><li><i>Information on how to revoke access to personal information stored in your <a asp-action="Revoke" asp-controller="Home" asp-all-route-data="GoogleProviderParm">Google account</a>.</i></li></ul>
 <br />
-<p><i>To revoke access to personal information stored in your Microsoft account:</i></p>
+<p><strong><i>Use of information received from all other external providers will adhere to their respective terms of use, including the compliance with applicable privacy and data protection requirements.</i></strong></p>
 <ul>
-    <li><i>Access your <a class="text-decoration-none" href="https://www.microsoft.com/en-us/account" rel="external nofollow noopener">Microsoft account.</a></i></li>
-    <li><i>Select <strong>Privacy</strong> in the menu bar.<br /><img src="~/img/PrivacyPolicy/Capture-001.JPG" /></i><br /><br /></li>
-    <li><i>Select <strong>Apps and services that can access your data.</strong><br /><img src="~/img/PrivacyPolicy/Capture-002.JPG" /><br /><br /></i></li>
-    <li><i>Select <strong>Edit</strong> for cdcanell.name application.<br /><img src="~/img/PrivacyPolicy/Capture-003.JPG" /></i><br /><br /></li>
-    <li><i>Select <strong>Remove these permissions.</strong><br /><img src="~/img/PrivacyPolicy/Capture-004.JPG" /></i></li>
+    <li><i>Information on how to revoke access to personal information stored in your <a asp-action="Revoke" asp-controller="Home" asp-all-route-data="GitHubProviderParm">GitHub account</a>.</i></li>
+    <li><i>Information on how to revoke access to personal information stored in your <a asp-action="Revoke" asp-controller="Home" asp-all-route-data="TwitterProviderParm">Twitter account</a>.</i></li>
+    <li><i>Information on how to revoke access to personal information stored in your <a asp-action="Revoke" asp-controller="Home" asp-all-route-data="FacebookProviderParm">Facebook account</a>.</i></li>
 </ul>
 <br />
-<strong><i>Use of information received from Google APIs will adhere to the <a class="text-decoration-none" href="https://developers.google.com/terms/api-services-user-data-policy" rel="external nofollow noopener">Google API Services User Data Policy</a>, including the <a class="text-decoration-none" href="https://developers.google.com/terms/api-services-user-data-policy#limited-use" rel="external nofollow noopener">Limited Use requirements</a>.</i></strong>
-<br />
-<br />
-<p><i>To revoke access to personal information stored in your Google account:</i></p>
-<ul>
-    <li><i>Access your <a class="text-decoration-none" href="https://accounts.google.com/login" rel="external nofollow noopener">Google account.</a></i></li>
-    <li><i>Select <strong>Security</strong> from left hand menu.<br /><img src="~/img/PrivacyPolicy/Capture-005.JPG" /></i><br /><br /></li>
-    <li><i>Select <strong>Manage third-party access</strong>.<br /><img src="~/img/PrivacyPolicy/Capture-006.JPG" /></i><br /><br /></li>
-    <li><i>Select <strong>cdcavell.name</strong> application under <strong>Signing in with Google</strong> section.<br /><img src="~/img/PrivacyPolicy/Capture-007.JPG" /><br /><img src="~/img/PrivacyPolicy/Capture-008.JPG" /></i><br /><br /></li>
-    <li><i>Seclect <strong>Remove Access</strong>.<br /><img src="~/img/PrivacyPolicy/Capture-009.JPG" /></i><br /><br /></li>
-</ul>
 <p>We may share your personal information in the following situations:</p>
 <ul>
     <li><strong>With Service Providers:</strong> We may share Your personal information with Service Providers to monitor and analyze the use of our Service, to contact You.</li>
