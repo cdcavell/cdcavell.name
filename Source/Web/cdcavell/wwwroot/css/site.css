@@ -11,12 +11,7 @@
     padding-bottom: 40px;
     right: 0;
     bottom: 0;
-    text-shadow: 1px 1px 0.3px rgba(0,0,0,0.2), 1px 1px 0.1px rgba(0,0,0,0.19);
     opacity: .99;
-}
-
-.no-shadow {
-    text-shadow: none;
 }
 
 .request-id {
@@ -54,16 +49,24 @@
     opacity: 1;
 }
 
-.form-control-shadow {
-    border-color: rgba(32, 32, 32, 0.3);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(32, 32, 32, 0.6);
+
+textarea:hover,
+[type="text"]:hover,
+textarea:active,
+[type="text"]:active,
+textarea:focus,
+input:focus,
+button:focus,
+button:active,
+button:hover,
+label:focus,
+.btn:active,
+.btn.active {
+    outline: 0px !important;
+    -webkit-appearance: none;
+    box-shadow: none !important;
 }
 
-.form-control-shadow:focus {
-    border-color: rgba(32, 32, 32, 0.3);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(32, 32, 32, 0.6);
+.border-grey {
+    border-color: #c1c7c9 !important;
 }
-
-    .form-control-shadow:active {
-        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 13px rgba(32, 32, 32, 0.6);
-    }

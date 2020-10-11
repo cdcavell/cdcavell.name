@@ -11,12 +11,7 @@ body {
     padding-bottom: 40px;
     right: 0;
     bottom: 0;
-    text-shadow: 1px 1px 0.3px rgba(0,0,0,0.2), 1px 1px 0.1px rgba(0,0,0,0.19);
     opacity: .99;
-}
-
-.no-shadow {
-    text-shadow: none;
 }
 
 .welcome-page li {
@@ -76,6 +71,23 @@ body {
 }
 
 
+textarea:hover,
+[type="text"]:hover,
+textarea:active,
+[type="text"]:active,
+textarea:focus,
+input:focus,
+button:focus,
+button:active,
+button:hover,
+label:focus,
+.btn:active,
+.btn.active {
+    outline: 0px !important;
+    -webkit-appearance: none;
+    box-shadow: none !important;
+}
 
-
-
+.border-grey {
+    border-color: #c1c7c9 !important;
+}
