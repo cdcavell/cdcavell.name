@@ -1,5 +1,5 @@
 ﻿<h1 class="text-center">Privacy Policy</h1>
-<p>Last updated: October 11, 2020</p>
+<p><i>Last updated: October 11, 2020</i></p>
 <p>This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You.</p>
 <p>We use Your Personal data to provide and improve the Service. By using the Service, You agree to the collection and use of information in accordance with this Privacy Policy.</p>
 <h2>Interpretation and Definitions</h2>
@@ -103,11 +103,25 @@
     <li><strong>To manage Your requests:</strong> To attend and manage Your requests to Us.</li>
 </ul>
 <br />
-<strong><i>Use of information received from Microsoft APIs will adhere to the <a class="text-decoration-none" href="https://docs.microsoft.com/en-us/legal/microsoft-apis/terms-of-use" rel="external nofollow noopener">Microsoft APIs Terms of Use</a>, including the Compliance with Applicable Privacy and Data Protection Laws requirements.</i></strong>
+@{
+    var MicrosoftProviderParm = new Dictionary<string, string> { { "provider", "microsoft" } };
+    var GoogleProviderParm = new Dictionary<string, string> { { "provider", "google" } };
+    var GitHubProviderParm = new Dictionary<string, string> { { "provider", "github" } };
+    var TwitterProviderParm = new Dictionary<string, string> { { "provider", "twitter" } };
+    var FacebookProviderParm = new Dictionary<string, string> { { "provider", "facebook" } };
+}
+<p><strong><i>Use of information received from Microsoft APIs will adhere to the <a class="text-decoration-none" href="https://docs.microsoft.com/en-us/legal/microsoft-apis/terms-of-use" rel="external nofollow noopener">Microsoft APIs Terms of Use</a>, including the <a href="https://docs.microsoft.com/en-us/legal/microsoft-apis/terms-of-use#5--your-compliance-with-applicable-privacy-and-data-protection-laws" rel="external nofollow noopener">Compliance with Applicable Privacy and Data Protection Laws requirements.</a></i></strong></p>
+<ul><li><i>Information on how to revoke access to personal information stored in your <a asp-action="Revoke" asp-controller="Home" asp-all-route-data="MicrosoftProviderParm">Microsoft account</a>.</i></li></ul>
 <br />
+<p><strong><i>Use of information received from Google APIs will adhere to the <a class="text-decoration-none" href="https://developers.google.com/terms/api-services-user-data-policy" rel="external nofollow noopener">Google API Services User Data Policy</a>, including the <a class="text-decoration-none" href="https://developers.google.com/terms/api-services-user-data-policy#limited-use" rel="external nofollow noopener">Limited Use requirements</a>.</i></strong></p>
+<ul><li><i>Information on how to revoke access to personal information stored in your <a asp-action="Revoke" asp-controller="Home" asp-all-route-data="GoogleProviderParm">Google account</a>.</i></li></ul>
 <br />
-<strong><i>Use of information received from Google APIs will adhere to the <a class="text-decoration-none" href="https://developers.google.com/terms/api-services-user-data-policy" rel="external nofollow noopener">Google API Services User Data Policy</a>, including the Limited Use requirements.</i></strong>
-<br />
+<p><strong><i>Use of information received from all other external providers will adhere to their respective terms of use, including the compliance with applicable privacy and data protection requirements.</i></strong></p>
+<ul>
+    <li><i>Information on how to revoke access to personal information stored in your <a asp-action="Revoke" asp-controller="Home" asp-all-route-data="GitHubProviderParm">GitHub account</a>.</i></li>
+    <li><i>Information on how to revoke access to personal information stored in your <a asp-action="Revoke" asp-controller="Home" asp-all-route-data="TwitterProviderParm">Twitter account</a>.</i></li>
+    <li><i>Information on how to revoke access to personal information stored in your <a asp-action="Revoke" asp-controller="Home" asp-all-route-data="FacebookProviderParm">Facebook account</a>.</i></li>
+</ul>
 <br />
 <p>We may share your personal information in the following situations:</p>
 <ul>

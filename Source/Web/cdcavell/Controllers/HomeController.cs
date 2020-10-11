@@ -69,6 +69,35 @@ namespace cdcavell.Controllers
         }
 
         /// <summary>
+        /// Revoke external access permissions
+        /// </summary>
+        /// <returns>IActionResult</returns>
+        /// <method>Revoke()</method>
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult Revoke(string provider)
+        {
+            switch (provider.Clean().ToLower())
+            {
+                case "microsoft":
+                    break;
+                case "google":
+                    break;
+                case "github":
+                    break;
+                case "twitter":
+                    break;
+                case "facebook":
+                    break;
+                default:
+                    return BadRequest();
+            }
+
+            ViewBag.Provider = provider.ToLower();
+            return View();
+        }
+
+        /// <summary>
         /// Terms of service
         /// </summary>
         /// <returns>IActionResult</returns>
