@@ -43,7 +43,7 @@ namespace CDCavell.ClassLibrary.Web.Http
         /// <value>HttpStatusCode</value>
         public HttpStatusCode StatusCode { get { return _statusCode; } }
 
-        /// <value>HttpStatusCode</value>
+        /// <value>bool</value>
         public bool IsResponseSuccess { get { return _responseSuccess; } }
 
         /// <value>TimeSpan</value>
@@ -116,7 +116,7 @@ namespace CDCavell.ClassLibrary.Web.Http
 
                     if (response.IsSuccessStatusCode)
                     {
-                        _returnMessage = response.Content.ReadAsStringAsync().Result.CleanJsonResult();
+                        _returnMessage = response.Content.ReadAsStringAsync().Result;
                         _responseSuccess = true;
                     }
                     else

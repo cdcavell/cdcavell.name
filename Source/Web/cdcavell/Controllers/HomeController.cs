@@ -139,57 +139,34 @@ namespace cdcavell.Controllers
             {
                 string request = HttpUtility.UrlEncode(model.SearchRequest).Clean();
                 JsonClient client = new JsonClient(_appSettings.Authentication.BingCustomSearch.Url);
+                HttpStatusCode statusCode = client.StatusCode;
 
                 // get search results
                 string searchUrl = "search?q=" + request
                     + "&customconfig=" + _appSettings.Authentication.BingCustomSearch.CustomConfigId;
 
                 client.AddRequestHeader("Ocp-Apim-Subscription-Key", _appSettings.Authentication.BingCustomSearch.SubscriptionKey);
-                HttpStatusCode statusCode = client.SendRequest(HttpMethod.Get, searchUrl, string.Empty);
+                statusCode = client.SendRequest(HttpMethod.Get, searchUrl, string.Empty);
 
                 if (client.IsResponseSuccess)
                 {
-                    //var responseContent = httpResponseMessage.Content.ReadAsStringAsync().Result;
-                    //SearchResponse response = JsonConvert.DeserializeObject<SearchResponse>(responseContent);
-                    SearchResponse response = client.GetResponseObject<SearchResponse>();
+                    SearchResponse searchResponse = client.GetResponseObject<SearchResponse>();
 
-                    model.SearchResponse = response;
-                    model.MessageClass = "text-info";
-
-                    int resultCount = response.webPages.value.Count();
-                    if (resultCount > 0)
-                    {
-                        model.Message = resultCount.ToString();
-
-                        if (resultCount == 1)
-                        {
-                            model.Message += " result returned";
-                        }
-                        else
-                        {
-                            model.Message += " resukts returned";
-                        }
-                    }
-                    else
-                    {
-                        model.MessageClass = "text-danger";
-                        model.Message = "No results returned";
-                    }
+                    model.SearchResponse = searchResponse;
+                    model.SearchResponse.StatusCode = client.StatusCode;
+                    model.SearchResponse.StatusMessage = client.StatusCode.ToString();
                 }
                 else 
                 {
-                    model.MessageClass = "text-danger";
-                    model.Message = client.StatusCode.ToString()
-                        + ": " + client.GetResponseString();
+                    model.SearchResponse.StatusCode = client.StatusCode;
+                    model.SearchResponse.StatusMessage = client.GetResponseString();
                 }
             }
             else
             {
-                model.MessageClass = "text-danger";
-                if (string.IsNullOrEmpty(model.SearchRequest))
-                    model.Message = "No results returned";
-                else
-                    model.Message = "Invalid request";
+                model.SearchResponse = null;
+                model.ImageResponse = null;
+                model.VideoResponse = null;
             }
 
             return View(model);
