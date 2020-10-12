@@ -68,6 +68,7 @@ namespace cdcavell
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             // Register controller fillters
+            services.AddScoped<SecurityHeadersAttribute>();
             services.AddScoped<ControllerActionLogFilter>();
             services.AddScoped<ControllerActionUserFilter>();
             services.AddScoped<ControllerActionPageFilter>();
