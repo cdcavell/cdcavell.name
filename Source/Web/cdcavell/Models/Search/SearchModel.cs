@@ -20,5 +20,7 @@ namespace cdcavell.Models.Search
         public string MessageClass { get; set; } = "text-info";
         /// <value>string</value>
         public string Message { get; set; }
+        /// <value>SearchResponse</value>
+        public SearchResponse SearchResponse { get; set; }
     }
 }

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Web;
 
@@ -152,6 +153,29 @@ namespace cdcavell.Controllers
                 {
                     var responseContent = httpResponseMessage.Content.ReadAsStringAsync().Result;
                     SearchResponse response = JsonConvert.DeserializeObject<SearchResponse>(responseContent);
+
+                    model.SearchResponse = response;
+                    model.MessageClass = "text-info";
+
+                    int resultCount = response.webPages.value.Count();
+                    if (resultCount > 0)
+                    {
+                        model.Message = resultCount.ToString();
+
+                        if (resultCount == 1)
+                        {
+                            model.Message += " result returned";
+                        }
+                        else
+                        {
+                            model.Message += " resukts returned";
+                        }
+                    }
+                    else
+                    {
+                        model.MessageClass = "text-danger";
+                        model.Message = "No results returned";
+                    }
                 }
             }
             else
