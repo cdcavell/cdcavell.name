@@ -22,5 +22,9 @@ namespace cdcavell.Models.Search
         public string Message { get; set; }
         /// <value>SearchResponse</value>
         public SearchResponse SearchResponse { get; set; }
+        /// <value>ImageResponse</value>
+        public SearchResponse ImageResponse { get; set; }
+        /// <value>VideoResponse</value>
+        public SearchResponse VideoResponse { get; set; }
     }
 }
