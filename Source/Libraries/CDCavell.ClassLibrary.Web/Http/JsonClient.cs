@@ -12,7 +12,7 @@ namespace CDCavell.ClassLibrary.Web.Http
     /// and can be overriden with TimeOut property.
     /// </summary>
     /// <example>
-    /// JasonClient client = new JasonClient("https://SomeAPI.com");
+    /// JsonClient client = new JsonClient("https://SomeAPI.com");
     /// client.TimeOut = TimeSpan.FromMinutes(2);
     /// client.AddRequestHeader("MyHeader", "Some Custome Header String");
     /// 
@@ -28,7 +28,7 @@ namespace CDCavell.ClassLibrary.Web.Http
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/11/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/12/2020 | Initial build |~ 
     /// </revision>
     public class JsonClient
     {

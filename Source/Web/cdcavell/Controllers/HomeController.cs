@@ -1,5 +1,6 @@
 ﻿using cdcavell.Models.AppSettings;
 using cdcavell.Models.Search;
+using CDCavell.ClassLibrary.Web.Http;
 using CDCavell.ClassLibrary.Web.Mvc.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Web;
 
@@ -21,7 +23,7 @@ namespace cdcavell.Controllers
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/10/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/12/2020 | Initial build |~ 
     /// </revision>
     public class HomeController : WebBaseController<HomeController>
     {
@@ -136,23 +138,20 @@ namespace cdcavell.Controllers
             if (ModelState.IsValid)
             {
                 string request = HttpUtility.UrlEncode(model.SearchRequest).Clean();
-                string url = _appSettings.Authentication.BingCustomSearch.Url
-                    + "?q=" + request + "&customconfig=" + _appSettings.Authentication.BingCustomSearch.CustomConfigId;
+                JsonClient client = new JsonClient(_appSettings.Authentication.BingCustomSearch.Url);
 
-                var client = new HttpClient();
-                client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", _appSettings.Authentication.BingCustomSearch.SubscriptionKey);
+                // get search results
+                string searchUrl = "search?q=" + request
+                    + "&customconfig=" + _appSettings.Authentication.BingCustomSearch.CustomConfigId;
 
-                var httpResponseMessage = client.GetAsync(url).Result;
-                if (!httpResponseMessage.IsSuccessStatusCode)
+                client.AddRequestHeader("Ocp-Apim-Subscription-Key", _appSettings.Authentication.BingCustomSearch.SubscriptionKey);
+                HttpStatusCode statusCode = client.SendRequest(HttpMethod.Get, searchUrl, string.Empty);
+
+                if (client.IsResponseSuccess)
                 {
-                    model.MessageClass = "text-danger";
-                    model.Message = httpResponseMessage.StatusCode
-                        + ": " + httpResponseMessage.ReasonPhrase;
-                }
-                else
-                {
-                    var responseContent = httpResponseMessage.Content.ReadAsStringAsync().Result;
-                    SearchResponse response = JsonConvert.DeserializeObject<SearchResponse>(responseContent);
+                    //var responseContent = httpResponseMessage.Content.ReadAsStringAsync().Result;
+                    //SearchResponse response = JsonConvert.DeserializeObject<SearchResponse>(responseContent);
+                    SearchResponse response = client.GetResponseObject<SearchResponse>();
 
                     model.SearchResponse = response;
                     model.MessageClass = "text-info";
@@ -176,6 +175,12 @@ namespace cdcavell.Controllers
                         model.MessageClass = "text-danger";
                         model.Message = "No results returned";
                     }
+                }
+                else 
+                {
+                    model.MessageClass = "text-danger";
+                    model.Message = client.StatusCode.ToString()
+                        + ": " + client.GetResponseString();
                 }
             }
             else
