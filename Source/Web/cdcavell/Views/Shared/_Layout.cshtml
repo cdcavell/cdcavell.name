@@ -37,18 +37,37 @@
     <link rel="stylesheet" type="text/css" href="~/css/site.css" />
 </head>
 <body>
-    <partial name="_Nav" />
 
-    <div class="background-image"></div>
-    <div class="background-gradient"></div>
-    <div class="container body-container pt-4" id="container">
-        @RenderBody()
+    <noscript>
+        <style type="text/css">
+            .page-container {
+                display: none;
+            }
+        </style>
+        <div class="background-image"></div>
+        <div class="background-gradient"></div>
+        <div class="noscriptmsg">
+            <div class="alert alert-danger" role="alert">
+                JavaScript must be enabled in order for you to use cdcavell.name.
+                However, it seems JavaScript is either disabled or not supported by your browser.
+            </div>
+        </div>
+    </noscript>
+    <div class="page-container">
+        <partial name="_Nav" />
+
+        <div class="background-image"></div>
+        <div class="background-gradient"></div>
+        <div class="container body-container pt-4" id="container">
+            @RenderBody()
+        </div>
+
+        <partial name="_Foot" />
     </div>
-
-    <partial name="_Foot" />
 
     <script src="~/lib/jquery/dist/jquery.slim.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     @RenderSection("scripts", required: false)
+
 </body>
 </html>
