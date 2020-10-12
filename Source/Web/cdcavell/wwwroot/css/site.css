@@ -71,8 +71,6 @@ label:focus,
     border-color: #c1c7c9 !important;
 }
 
-/*.card {
-    opacity: 0.9;
-    z-index: 1;
+.card {
+    opacity: 0.99;
 }
-*/
