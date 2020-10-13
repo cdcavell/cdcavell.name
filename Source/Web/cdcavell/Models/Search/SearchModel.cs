@@ -9,7 +9,7 @@ namespace cdcavell.Models.Search
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/10/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/12/2020 | Initial build |~ 
     /// </revision>
     public class SearchModel
     {
@@ -17,8 +17,10 @@ namespace cdcavell.Models.Search
         [Required]
         public string SearchRequest { get; set; }
         /// <value>string</value>
-        public string MessageClass { get; set; } = "text-info";
-        /// <value>string</value>
-        public string Message { get; set; }
+        public SearchResponse SearchResponse { get; set; }
+        /// <value>ImageResponse</value>
+        public SearchResponse ImageResponse { get; set; }
+        /// <value>VideoResponse</value>
+        public SearchResponse VideoResponse { get; set; }
     }
 }

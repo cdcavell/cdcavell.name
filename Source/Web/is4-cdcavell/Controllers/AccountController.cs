@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
 using Org.BouncyCastle.Security;
 using System;
@@ -35,10 +34,10 @@ namespace is4_cdcavell.Controllers
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/09/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/12/2020 | Initial build |~ 
     /// </revision>
     [AllowAnonymous]
-    public class AccountController : WebBaseController<AccountController>
+    public class AccountController : ApplicationBaseController<AccountController>
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;

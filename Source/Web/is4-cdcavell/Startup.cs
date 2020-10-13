@@ -1,8 +1,9 @@
 using CDCavell.ClassLibrary.Commons.Logging;
-using CDCavell.ClassLibrary.Web.Mvc.Fillters;
+using CDCavell.ClassLibrary.Web.Mvc.Filters;
 using CDCavell.ClassLibrary.Web.Security;
 using IdentityServer4;
 using is4_cdcavell.Data;
+using is4_cdcavell.Filters;
 using is4_cdcavell.Models.Account;
 using is4_cdcavell.Models.AppSettings;
 using Microsoft.AspNetCore.Builder;
@@ -31,7 +32,7 @@ namespace is4_cdcavell
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/09/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/12/2020 | Initial build |~ 
     /// </revision>
     public class Startup
     {
@@ -70,6 +71,7 @@ namespace is4_cdcavell
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             // Register controller fillters
+            services.AddScoped<SecurityHeadersAttribute>();
             services.AddScoped<ControllerActionLogFilter>();
             services.AddScoped<ControllerActionUserFilter>();
             services.AddScoped<ControllerActionPageFilter>();

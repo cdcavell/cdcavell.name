@@ -1,7 +1,6 @@
 ﻿using CDCavell.ClassLibrary.Web.Mvc.Controllers;
 using is4_cdcavell.Models.Diagnostics;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,9 +20,9 @@ namespace is4_cdcavell.Controllers
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 09/30/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/12/2020 | Initial build |~ 
     /// </revision>
-    public class DiagnosticsController : WebBaseController<DiagnosticsController>
+    public class DiagnosticsController : ApplicationBaseController<DiagnosticsController>
     {
         /// <summary>
         /// Constructor method

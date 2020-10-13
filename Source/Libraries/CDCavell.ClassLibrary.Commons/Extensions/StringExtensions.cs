@@ -11,7 +11,7 @@ namespace System
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/08/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/11/2020 | Initial build |~ 
     /// </revision>
     public static class StringExtensions
     {
@@ -90,6 +90,17 @@ namespace System
                     isValid = true;
 
             return isValid;
+        }
+
+        /// <summary>
+        /// Strip escape slash and beginning/ending quotes from Json result string
+        /// </summary>
+        /// <param name="value">this string</param>
+        /// <returns>string</returns>
+        /// <method>CleanJsonResult(this string result)</method>
+        public static string CleanJsonResult(this string value)
+        {
+            return value.Replace("\\", string.Empty).Trim(new char[1] { '"' });
         }
     }
 }

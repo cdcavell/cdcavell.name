@@ -1,6 +1,6 @@
 ﻿using CDCavell.ClassLibrary.Commons.Logging;
 using CDCavell.ClassLibrary.Web.Html;
-using CDCavell.ClassLibrary.Web.Mvc.Fillters;
+using CDCavell.ClassLibrary.Web.Mvc.Filters;
 using CDCavell.ClassLibrary.Web.Mvc.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
@@ -21,11 +21,10 @@ namespace CDCavell.ClassLibrary.Web.Mvc.Controllers
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 09/29/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/12/2020 | Initial build |~ 
     /// </revision>
     [Controller]
     [Authorize]
-    [SecurityHeaders]
     [ServiceFilter(typeof(ControllerActionLogFilter))]
     [ServiceFilter(typeof(ControllerActionUserFilter))]
     [ServiceFilter(typeof(ControllerActionPageFilter))]
