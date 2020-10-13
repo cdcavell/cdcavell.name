@@ -1,6 +1,6 @@
 ﻿using CDCavell.ClassLibrary.Commons.Logging;
 using CDCavell.ClassLibrary.Web.Html;
-using CDCavell.ClassLibrary.Web.Mvc.Fillters;
+using CDCavell.ClassLibrary.Web.Mvc.Filters;
 using CDCavell.ClassLibrary.Web.Mvc.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;

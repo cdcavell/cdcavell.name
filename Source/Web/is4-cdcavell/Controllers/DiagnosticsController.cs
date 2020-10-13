@@ -1,7 +1,6 @@
 ﻿using CDCavell.ClassLibrary.Web.Mvc.Controllers;
 using is4_cdcavell.Models.Diagnostics;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

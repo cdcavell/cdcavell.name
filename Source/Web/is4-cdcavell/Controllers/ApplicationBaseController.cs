@@ -28,8 +28,8 @@ namespace is4_cdcavell.Controllers
         /// <param name="httpContextAccessor">IHttpContextAccessor</param>
         /// <method>ApplicationBaseController(ILogger&lt;T&gt; logger, IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor)</method>
         protected ApplicationBaseController(
-            ILogger<T> logger, 
-            IWebHostEnvironment webHostEnvironment, 
+            ILogger<T> logger,
+            IWebHostEnvironment webHostEnvironment,
             IHttpContextAccessor httpContextAccessor
         ) : base(logger, webHostEnvironment, httpContextAccessor)
         {

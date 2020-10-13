@@ -1,5 +1,5 @@
 using CDCavell.ClassLibrary.Commons.Logging;
-using CDCavell.ClassLibrary.Web.Mvc.Fillters;
+using CDCavell.ClassLibrary.Web.Mvc.Filters;
 using CDCavell.ClassLibrary.Web.Security;
 using IdentityServer4;
 using is4_cdcavell.Data;
@@ -32,7 +32,7 @@ namespace is4_cdcavell
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/09/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/12/2020 | Initial build |~ 
     /// </revision>
     public class Startup
     {
