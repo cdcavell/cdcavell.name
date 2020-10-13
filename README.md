@@ -35,4 +35,4 @@ $ git flow init -d
 
 | Build | Date | Description |
 |-------|------|-------------|
-| 1.0.0 | 10/12/2020 | __Initial Development__ |
+| 1.0.0 | 10/13/2020 | __Initial Development__ |
