@@ -139,9 +139,15 @@ namespace cdcavell.Controllers
                 JsonClient client = new JsonClient(_appSettings.Authentication.BingCustomSearch.Url);
                 HttpStatusCode statusCode = client.StatusCode;
 
+                // set offset
+                int offset = (model.SearchResponse == null) ? 0 : model.SearchResponse.OffSet;
+                if (model.SearchResponse != null && model.SearchResponse.NextPage)
+                    model.SearchResponse.OffSet += 10;
+
                 // get search results
                 string searchUrl = "search?q=" + request
-                    + "&customconfig=" + _appSettings.Authentication.BingCustomSearch.CustomConfigId;
+                    + "&customconfig=" + _appSettings.Authentication.BingCustomSearch.CustomConfigId
+                    + "&count=10" + "&offset=" + offset;
 
                 client.AddRequestHeader("Ocp-Apim-Subscription-Key", _appSettings.Authentication.BingCustomSearch.SubscriptionKey);
                 statusCode = client.SendRequest(HttpMethod.Get, searchUrl, string.Empty);
@@ -153,6 +159,7 @@ namespace cdcavell.Controllers
                     model.SearchResponse = searchResponse;
                     model.SearchResponse.StatusCode = client.StatusCode;
                     model.SearchResponse.StatusMessage = client.StatusCode.ToString();
+                    model.SearchResponse.NextPage = false;
                 }
                 else 
                 {

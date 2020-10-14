@@ -23,5 +23,9 @@ namespace cdcavell.Models.Search
         public HttpStatusCode StatusCode { get; set; }
         /// <value>string</value>
         public string StatusMessage { get; set; }
+        /// <value>int</value>
+        public int OffSet { get; set; } 
+        /// <value>bool</value>
+        public bool NextPage { get; set; } = false;
     }
 }
