@@ -36,7 +36,11 @@
         {
           <div class="card border-0">
             <div class="card-body">
-            <h5 class="card-title">@searchPage.name</h5>
+            <h5 class="card-title">
+                <a class="text-decoration-none" href="@searchPage.url" rel="external nofollow noopener" target="_blank">
+                    @searchPage.name
+                </a>               
+            </h5>
             <h6 class="card-subtitle mb-2 text-muted">@searchPage.displayUrl</h6>
             <p class="card-text">@searchPage.snippet</p>
             </div>
