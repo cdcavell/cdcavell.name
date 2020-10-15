@@ -24,8 +24,6 @@ namespace cdcavell.Models.Search
         /// <value>string</value>
         public string StatusMessage { get; set; }
         /// <value>int</value>
-        public int OffSet { get; set; } 
-        /// <value>bool</value>
-        public bool NextPage { get; set; } = false;
+        public int PageNumber { get; set; } = 1; 
     }
 }

@@ -140,9 +140,7 @@ namespace cdcavell.Controllers
                 HttpStatusCode statusCode = client.StatusCode;
 
                 // set offset
-                int offset = (model.SearchResponse == null) ? 0 : model.SearchResponse.OffSet;
-                if (model.SearchResponse != null && model.SearchResponse.NextPage)
-                    model.SearchResponse.OffSet += 10;
+                int offset = (model.SearchResponse == null) ? 0 : ((model.SearchResponse.PageNumber * 10) - 1);
 
                 // get search results
                 string searchUrl = "search?q=" + request
@@ -159,7 +157,6 @@ namespace cdcavell.Controllers
                     model.SearchResponse = searchResponse;
                     model.SearchResponse.StatusCode = client.StatusCode;
                     model.SearchResponse.StatusMessage = client.StatusCode.ToString();
-                    model.SearchResponse.NextPage = false;
                 }
                 else 
                 {

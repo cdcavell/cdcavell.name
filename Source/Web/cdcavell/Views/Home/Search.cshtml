@@ -11,7 +11,6 @@
             </span>
         </div>
     </div>
-</form>
 <br/>
 
 @if (Model.SearchResponse != null || Model.ImageResponse != null || Model.VideoResponse != null)
@@ -34,6 +33,7 @@
       <div class="tab-pane fade overflow-auto show active" id="search" role="tabpanel" aria-labelledby="search-tab">
         @if (@Model.SearchResponse != null && @Model.SearchResponse.webPages != null)
         {
+            @Html.HiddenFor(Model => Model.SearchResponse.PageNumber)
             <div class="card border-0">
               <div class="card-body">
                 <p class="card-text text-muted">Number of results: @Model.SearchResponse.webPages.value.Count()</p>
@@ -55,6 +55,19 @@
                 </div>
               </div>
             }
+            <nav aria-label="Search navigation">
+              <ul class="pagination justify-content-center">
+                <li class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1">Previous</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#" onclick="NextPage(1);">1</a></li>
+                <li class="page-item"><a class="page-link" href="#" onclick="NextPage(2);">2</a></li>
+                <li class="page-item"><a class="page-link" href="#" onclick="NextPage(3);">3</a></li>
+                <li class="page-item">
+                  <a class="page-link" href="#">Next</a>
+                </li>
+              </ul>
+            </nav>
         }
       </div>
       <div class="tab-pane fade overflow-auto" id="image" role="tabpanel" aria-labelledby="image-tab">
@@ -66,4 +79,17 @@
     </div>
 }
 
+</form>
 
+@section scripts {
+<script type="text/javascript">
+
+function NextPage(val)
+{
+    document.getElementById('PageNumber').value = val;
+    document.forms[0].submit();
+    return true;
+    //and probably call document.forms[0].submit();
+}
+</script>
+}
