@@ -9,7 +9,7 @@
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/12/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/17/2020 | Initial build |~ 
     /// </revision>
     public class SearchPages
     {
@@ -17,7 +17,11 @@
         public string webSearchUrl { get; set; }
         /// <value>int</value>
         public int totalEstimatedMatches { get; set; }
-        /// <value>WebPage[]</value>
-        public SearchPage[] value { get; set; }
+        /// <value>int</value>
+        public int nextOffset { get; set; }
+        /// <value>int</value>
+        public int currentOffset { get; set; }
+        /// <value>VideoPage[]</value>
+        public SearchPage[] value { get; set; } = new SearchPage[0];
     }
 }

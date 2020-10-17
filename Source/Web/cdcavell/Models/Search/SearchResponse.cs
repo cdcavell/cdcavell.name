@@ -11,7 +11,7 @@ namespace cdcavell.Models.Search
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/12/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/17/2020 | Initial build |~ 
     /// </revision>
     public class SearchResponse
     {
@@ -20,10 +20,10 @@ namespace cdcavell.Models.Search
         /// <value>SearchPages</value>
         public SearchPages webPages { get; set; }
         /// <value>HttpStatusCode</value>
-        public HttpStatusCode StatusCode { get; set; }
+        public HttpStatusCode StatusCode { get; set; } = HttpStatusCode.NoContent;
         /// <value>string</value>
         public string StatusMessage { get; set; }
         /// <value>int</value>
-        public int PageNumber { get; set; } = 1; 
+        public int PageNumber { get; set; } = 1;
     }
 }

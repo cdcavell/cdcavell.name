@@ -50,18 +50,15 @@ namespace cdcavell.Filters
 
                 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
                 var csp = "default-src 'self'; ";
-                csp += "img-src 'self' data:; ";
+                csp += "img-src 'self' https://*.mm.bing.net data:; ";
                 csp += "object-src 'none'; ";
                 csp += "frame-ancestors 'self'; ";
                 csp += "sandbox allow-modals allow-forms allow-same-origin allow-scripts allow-popups; ";
                 csp += "base-uri 'self'; ";
                 csp += "style-src 'self' 'nonce-" + _StyleNonce + "'; ";
                 csp += "script-src 'strict-dynamic' 'nonce-" + _ScriptNonce + "'; ";
-                //csp += "require-trusted-types-for 'script'; ";
                 // also consider adding upgrade-insecure-requests once you have HTTPS in place for production
-                // csp += "upgrade-insecure-requests; ";
-                // also an example if you need client images to be displayed from twitter
-                // csp += "img-src 'self' https://pbs.twimg.com;";
+                csp += "upgrade-insecure-requests; ";
 
                 // once for standards compliant browsers
                 if (!context.HttpContext.Response.Headers.ContainsKey("Content-Security-Policy"))
