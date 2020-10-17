@@ -1,6 +1,6 @@
 @model cdcavell.Models.Search.SearchModel
 
-<form asp-action="Search" asp-controller="Home">
+<form asp-action="Search" asp-controller="Home" id="SearchRequest">
     <div class="input-group md-form form-sm form-2 shadow-sm pl-0">
         <input class="form-control border-grey my-0 py-1" type="text" placeholder="Search" aria-label="Search" asp-for="SearchRequest" autofocus>
         <div class="input-group-append">
@@ -11,59 +11,170 @@
             </span>
         </div>
     </div>
-</form>
 <br/>
 
-@if (Model.SearchResponse != null || Model.ImageResponse != null || Model.VideoResponse != null)
+@if (Model.StatusCode != System.Net.HttpStatusCode.NoContent)
 {
-    string imageDisabled = Model.ImageResponse != null && Model.ImageResponse.webPages.value.Count() > 0 ? string.Empty : "disabled";
-    string videoDisabled = Model.VideoResponse != null && Model.VideoResponse.webPages.value.Count() > 0 ? string.Empty : "disabled";
+    string imageDisabled = Model.ImageResponse.value != null && Model.ImageResponse.value.Count() > 0 ? string.Empty : "disabled";
+    string videoDisabled = Model.VideoResponse.webPages.value != null && Model.VideoResponse.webPages.value.Count() > 0 ? string.Empty : "disabled";
 
+    string searchActive = Model.Tab < 2 ? "active" : string.Empty;
+    string imageActive = Model.Tab == 2 ? "active" : string.Empty;
+    string videoActive = Model.Tab == 3 ? "active" : string.Empty;
+
+    string searchShow = Model.Tab < 2 ? "show" : string.Empty;
+    string imageShow = Model.Tab == 2 ? "show" : string.Empty;
+    string videoShow = Model.Tab == 3 ? "show" : string.Empty;
+
+    @Html.HiddenFor(Model => Model.Tab)
     <ul class="nav nav-tabs" id="resultsTab" role="tablist">
       <li class="nav-item border border-bottom-0">
-        <a class="nav-link active" id="search-tab" data-toggle="tab" href="#search" role="tab" aria-controls="search" aria-selected="true">Search Results</a>
+        <a class="nav-link @searchActive" id="search-tab" data-toggle="tab" href="#search" role="tab" aria-controls="search" aria-selected='@(searchActive == "active") ? "true" : "false"'>Search Results</a>
       </li>
       <li class="nav-item border border-bottom-0">
-        <a class="nav-link @imageDisabled" id="image-tab" data-toggle="tab" href="#image" role="tab" aria-controls="image" aria-selected="false">Image Results</a>
+        <a class="nav-link @imageActive @imageDisabled" id="image-tab" data-toggle="tab" href="#image" role="tab" aria-controls="image" aria-selected='@(imageActive == "active") ? "true" : "false"'>Image Results</a>
       </li>
       <li class="nav-item border border-bottom-0">
-        <a class="nav-link @videoDisabled" id="video-tab" data-toggle="tab" href="#video" role="tab" aria-controls="video" aria-selected="false">Video Results</a>
+        <a class="nav-link @videoActive @videoDisabled" id="video-tab" data-toggle="tab" href="#video" role="tab" aria-controls="video" aria-selected='@(imageActive == "active") ? "true" : "false"'>Video Results</a>
       </li>
     </ul>
     <div class="tab-content border border-top-0" id="resultsTabContent">
-      <div class="tab-pane fade overflow-auto show active" id="search" role="tabpanel" aria-labelledby="search-tab">
+      <div class="tab-pane fade @searchShow @searchActive" id="search" role="tabpanel" aria-labelledby="search-tab">
         @if (@Model.SearchResponse != null && @Model.SearchResponse.webPages != null)
         {
-            <div class="card border-0">
-              <div class="card-body">
-                <p class="card-text text-muted">Number of results: @Model.SearchResponse.webPages.value.Count()</p>
-              </div>
-            </div>
-            @foreach (SearchPage searchPage in Model.SearchResponse.webPages.value)
+            @if (Model.SearchResponse.StatusCode != System.Net.HttpStatusCode.OK)
             {
-              <div class="card border-0">
-                <div class="card-body">
-                <h5 class="card-title">
-                    <a class="text-decoration-none" href="@searchPage.url" rel="external nofollow noopener" target="_blank">
-                        @searchPage.name
-                    </a>               
-                </h5>
-                <h6 class="card-subtitle mb-2 text-muted">
-                    [Last crawled: @searchPage.dateLastCrawled.ToString("MM/dd/yyyy HH:mm:ss")] @searchPage.displayUrl
-                </h6>
-                <p class="card-text">@searchPage.snippet</p>
+                <div class="shadow alert alert-danger mb-1" role="alert">
+                    <strong>Status Code: @Model.SearchResponse.ToString()</strong>
+                    <br />@Model.SearchResponse.StatusMessage
                 </div>
-              </div>
+            }
+            else
+            {
+                @Html.HiddenFor(Model => Model.SearchResponse.PageNumber)
+                <div class="card border-0">
+                  <div class="card-body">
+                    <p class="card-text text-muted">Approximate number of results: @Model.SearchResponse.webPages.totalEstimatedMatches</p>
+                  </div>
+                </div>
+                @foreach (SearchPage searchPage in Model.SearchResponse.webPages.value)
+                {
+                  <div class="card border-0">
+                    <div class="card-body">
+                    <h5 class="card-title">
+                        <a class="text-decoration-none" href="@searchPage.url" rel="external nofollow noopener" target="_blank">
+                            @searchPage.name
+                        </a>               
+                    </h5>
+                    <h6 class="card-subtitle mb-2 text-muted">
+                        [Last crawled: @searchPage.dateLastCrawled.ToString("MM/dd/yyyy HH:mm:ss")] @searchPage.displayUrl
+                    </h6>
+                    <p class="card-text">@searchPage.snippet</p>
+                    </div>
+                  </div>
+                }
+                <nav aria-label="Search navigation">
+                  <ul class="pagination justify-content-center" id="SearchPagination">
+                    <li class="page-item disabled"><a class="page-link">Previous</a></li>
+                    <li class="page-item active"><a class="page-link">1</a></li>
+                    <li class="page-item"><a class="page-link">2</a></li>
+                    <li class="page-item"><a class="page-link">3</a></li>
+                    <li class="page-item"><a class="page-link">Next</a></li>
+                  </ul>
+                </nav>
             }
         }
       </div>
-      <div class="tab-pane fade overflow-auto" id="image" role="tabpanel" aria-labelledby="image-tab">
-
+      <div class="tab-pane fade @imageShow @imageActive" id="image" role="tabpanel" aria-labelledby="image-tab">
+        @if (@Model.ImageResponse != null)
+        {
+            @if (Model.SearchResponse.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+                <div class="shadow alert alert-danger mb-1" role="alert">
+                    <strong>Status Code: @Model.SearchResponse.ToString()</strong>
+                    <br />@Model.SearchResponse.StatusMessage
+                </div>
+            }
+            else
+            {
+                @Html.HiddenFor(Model => Model.ImageResponse.PageNumber)
+                <div class="card border-0">
+                  <div class="card-body">
+                    <p class="card-text text-muted">Approximate number of results: @Model.ImageResponse.totalEstimatedMatches</p>
+                    <div class="container">
+                        <div class="row text-center text-lg-left">
+                        @foreach (ImagePage imagePage in Model.ImageResponse.value)
+                        {
+                            <div class="col-lg-3 col-md-4 col-6">
+                              <a href="@imagePage.contentUrl" class="d-block mb-4 h-100" rel="external nofollow noopener" target="_blank">
+                                <img class="img-fluid img-thumbnail" src="@imagePage.thumbnailUrl" alt="">
+                              </a>
+                            </div>
+                        }
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                <nav aria-label="Image navigation">
+                  <ul class="pagination justify-content-center" id="ImagePagination">
+                    <li class="page-item disabled"><a class="page-link">Previous</a></li>
+                    <li class="page-item active"><a class="page-link">1</a></li>
+                    <li class="page-item"><a class="page-link">2</a></li>
+                    <li class="page-item"><a class="page-link">3</a></li>
+                    <li class="page-item"><a class="page-link">Next</a></li>
+                  </ul>
+                </nav>
+            }
+        }
       </div>
-      <div class="tab-pane fade overflow-auto" id="video" role="tabpanel" aria-labelledby="video-tab">
+      <div class="tab-pane fade @videoShow @videoActive" id="video" role="tabpanel" aria-labelledby="video-tab">
 
       </div>
     </div>
 }
 
+</form>
 
+@section scripts {
+<script type="text/javascript" nonce="@ViewBag.ScriptNonce">
+
+    $('#SearchPagination li').click(function () {
+        $(this).addClass('active').siblings().removeClass('active');
+        $('#SearchResponse_PageNumber').val($(this).text());
+        $( "#SearchRequest" ).submit();
+    });
+
+    $('#ImagePagination li').click(function () {
+        $(this).addClass('active').siblings().removeClass('active');
+        $('#ImageResponse_PageNumber').val($(this).text());
+        $( "#SearchRequest" ).submit();
+    });
+
+    $('#VideoPagination li').click(function () {
+        $(this).addClass('active').siblings().removeClass('active');
+        $('#SearchResponse_PageNumber').val($(this).text());
+        $( "#VideoRequest" ).submit();
+    });
+
+    $('#resultsTab li').click(function () {
+        switch ($(this).text().trim()) {
+            case 'Search Results':
+                if (!$('a', this).hasClass('disabled')) {
+                    $('#Tab').val(1);
+                }
+                break;
+            case 'Image Results':
+                if (!$('a', this).hasClass('disabled')) {
+                    $('#Tab').val(2);
+                }
+                break;
+            case 'Video Results':
+                if (!$('a', this).hasClass('disabled')) {
+                    $('#Tab').val(3);
+                }
+                break;
+        }
+    });
+
+</script>
+}

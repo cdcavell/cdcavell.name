@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Brock Allen &amp; Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
+using CDCavell.ClassLibrary.Web.Security;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -20,8 +21,13 @@ namespace cdcavell.Filters
     /// </revision>
     public class SecurityHeadersAttribute : ActionFilterAttribute
     {
+        private string _StyleNonce;
+        private string _ScriptNonce;
+
         /// <summary>
         /// Executes before result execution
+        /// &lt;br /&gt;&lt;br /&gt;
+        /// CSP Evaluator: https://csp-evaluator.appspot.com/
         /// </summary>
         /// <param name="context">ResultExecutingContext</param>
         /// <method>OnResultExecuting(ResultExecutingContext context)</method>
@@ -44,16 +50,15 @@ namespace cdcavell.Filters
 
                 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
                 var csp = "default-src 'self'; ";
-                csp += "img-src 'self' data:; ";
+                csp += "img-src 'self' https://*.mm.bing.net data:; ";
                 csp += "object-src 'none'; ";
                 csp += "frame-ancestors 'self'; ";
                 csp += "sandbox allow-modals allow-forms allow-same-origin allow-scripts allow-popups; ";
                 csp += "base-uri 'self'; ";
-                csp += "style-src 'self' 'sha256-dapbzoBUpMY09sH855CMpiVFzV9xGciiPGiUTeyf/gA='";
+                csp += "style-src 'self' 'nonce-" + _StyleNonce + "'; ";
+                csp += "script-src 'strict-dynamic' 'nonce-" + _ScriptNonce + "'; ";
                 // also consider adding upgrade-insecure-requests once you have HTTPS in place for production
-                //csp += "upgrade-insecure-requests;";
-                // also an example if you need client images to be displayed from twitter
-                // csp += "img-src 'self' https://pbs.twimg.com;";
+                csp += "upgrade-insecure-requests; ";
 
                 // once for standards compliant browsers
                 if (!context.HttpContext.Response.Headers.ContainsKey("Content-Security-Policy"))
@@ -88,6 +93,21 @@ namespace cdcavell.Filters
                     context.HttpContext.Response.Headers.Add("X-Permitted-Cross-Domain-Policies", "none");
                 }
             }
+        }
+
+        /// <summary>
+        /// Executes after action method execution to set script nonce
+        /// </summary>
+        /// <param name="context">ActionExecutedContext</param>
+        /// <method>OnActionExecuted(ActionExecutedContext context)</method>
+        public override void OnActionExecuted(ActionExecutedContext context)
+        {
+            var controller = context.Controller as Controller;
+            _StyleNonce = Nonce.Calculate();
+            _ScriptNonce = Nonce.Calculate();
+            controller.ViewBag.StyleNonce = _StyleNonce;
+            controller.ViewBag.ScriptNonce = _ScriptNonce;
+            base.OnActionExecuted(context);
         }
     }
 }

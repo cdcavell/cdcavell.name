@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Net;
 
 namespace cdcavell.Models.Search
 {
@@ -9,18 +10,24 @@ namespace cdcavell.Models.Search
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/12/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/17/2020 | Initial build |~ 
     /// </revision>
     public class SearchModel
     {
         /// <value>string</value>
         [Required]
         public string SearchRequest { get; set; }
+        /// <value>int</value>
+        public int Tab { get; set; } = 1;
         /// <value>string</value>
-        public SearchResponse SearchResponse { get; set; }
+        public SearchResponse SearchResponse { get; set; } = new SearchResponse();
         /// <value>ImageResponse</value>
-        public SearchResponse ImageResponse { get; set; }
+        public ImageResponse ImageResponse { get; set; } = new ImageResponse();
         /// <value>VideoResponse</value>
-        public SearchResponse VideoResponse { get; set; }
+        public SearchResponse VideoResponse { get; set; } = new SearchResponse();
+        /// <value>string</value>
+        public string Nonce { get; set; }
+        /// <value>HttpStatusCode</value>
+        public HttpStatusCode StatusCode { get; set; } = HttpStatusCode.NoContent;
     }
 }
