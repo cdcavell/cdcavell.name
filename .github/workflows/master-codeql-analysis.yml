@@ -13,12 +13,8 @@ on:
     # The branches below must be a subset of the branches above
     branches: 
       - master
-  check_suite:
-    types:
-      - completed
-  status: {}
-  schedule:
-    - cron: '0 14 * * 0'
+#  schedule:
+#    - cron: '0 14 * * 0'
 
 jobs:
   analyze:
@@ -83,7 +79,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
-      - name: automerge 
+      - name: Automerge 
         uses: "pascalgn/automerge-action@v0.12.0"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
