@@ -5,8 +5,7 @@ Personal Website for Christopher D. Cavell
 ![GitHub top language](https://img.shields.io/github/languages/top/cdcavell/cdcavell.name)
 ![GitHub language count](https://img.shields.io/github/languages/count/cdcavell/cdcavell.name)
 [![W3C Validation](https://img.shields.io/w3c-validation/default?targetUrl=https%3A%2F%2Fcdcavell.name)](https://validator.w3.org/nu/?doc=https%3A%2F%2Fcdcavell.name%2F)
-![CodeQL](https://github.com/cdcavell/cdcavell.name/workflows/CodeQL/badge.svg)
-
+[![Master-CodeQL-Analysis](https://github.com/cdcavell/cdcavell.name/workflows/Master-CodeQL-Analysis/badge.svg)](https://github.com/cdcavell/cdcavell.name/actions?query=workflow%3AMaster-CodeQL-Analysis)
 <hr />
 
 Project incorporates generation of markdown files in Documentation folder, during project builds, from comment syntax of source code, through console application XmlToMarkdown. Documentation changes are maintained in a [wiki submodule](https://brendancleary.com/2013/03/08/including-a-github-wiki-in-a-repository-as-a-submodule/) that is also updated during project build.
