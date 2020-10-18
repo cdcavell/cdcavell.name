@@ -17,7 +17,7 @@ namespace cdcavell.Filters
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Brock Allen &amp; Dominick Baier | 1.0.0 | 10/17/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/18/2020 | Initial build |~ 
     /// </revision>
     public class SecurityHeadersAttribute : ActionFilterAttribute
     {
