@@ -24,9 +24,7 @@ namespace cdcavell.Models.Search
         /// <value>ImageResponse</value>
         public ImageResponse ImageResponse { get; set; } = new ImageResponse();
         /// <value>VideoResponse</value>
-        public SearchResponse VideoResponse { get; set; } = new SearchResponse();
-        /// <value>string</value>
-        public string Nonce { get; set; }
+        public VideoResponse VideoResponse { get; set; } = new VideoResponse();
         /// <value>HttpStatusCode</value>
         public HttpStatusCode StatusCode { get; set; } = HttpStatusCode.NoContent;
     }

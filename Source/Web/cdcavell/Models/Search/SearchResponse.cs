@@ -25,5 +25,7 @@ namespace cdcavell.Models.Search
         public string StatusMessage { get; set; }
         /// <value>int</value>
         public int PageNumber { get; set; } = 1;
+        /// <value>int</value>
+        public int TotalPages { get; set; } = 1;
     }
 }

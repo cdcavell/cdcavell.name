@@ -162,6 +162,9 @@ namespace cdcavell.Controllers
                     model.SearchResponse.StatusMessage = client.StatusCode.ToString();
                     model.SearchResponse.webPages.currentOffset = offset;
                     model.SearchResponse.webPages.nextOffset = offset + resultCount;
+
+                    model.SearchResponse.webPages.totalEstimatedMatches = (searchResponse.webPages.totalEstimatedMatches / resultCount) < 40 ? searchResponse.webPages.totalEstimatedMatches : (40 * resultCount);
+                    model.SearchResponse.TotalPages = (searchResponse.webPages.totalEstimatedMatches < resultCount) ? 1 : (searchResponse.webPages.totalEstimatedMatches / resultCount);
                 }
                 else 
                 {
@@ -176,7 +179,7 @@ namespace cdcavell.Controllers
                 // get search results
                 searchUrl = "images/search?q=" + request
                     + "&customconfig=" + _appSettings.Authentication.BingCustomSearch.CustomConfigId
-                    + "&count=20" + "&offset=" + offset;
+                    + "&count=" + resultCount + "&offset=" + offset;
 
                 client.AddRequestHeader("Ocp-Apim-Subscription-Key", _appSettings.Authentication.BingCustomSearch.SubscriptionKey);
                 statusCode = client.SendRequest(HttpMethod.Get, searchUrl, string.Empty);
@@ -189,6 +192,9 @@ namespace cdcavell.Controllers
                     model.ImageResponse = imageResponse;
                     model.ImageResponse.StatusCode = client.StatusCode;
                     model.ImageResponse.StatusMessage = client.StatusCode.ToString();
+
+                    model.ImageResponse.totalEstimatedMatches = (imageResponse.totalEstimatedMatches / resultCount) < 40 ? imageResponse.totalEstimatedMatches : (40 * resultCount);
+                    model.ImageResponse.TotalPages = (imageResponse.totalEstimatedMatches < resultCount) ? 1 : (imageResponse.totalEstimatedMatches / resultCount);
                 }
                 else
                 {
@@ -197,10 +203,37 @@ namespace cdcavell.Controllers
                 }
 
                 // --------------------------- get video results ---------------------------
-                resultCount = 20;
+                resultCount = 10;
                 offset = (model.VideoResponse == null) ? 0 : ((model.VideoResponse.PageNumber * resultCount) - resultCount);
 
-                model.VideoResponse.webPages = new SearchPages();
+                // get video results
+                searchUrl = "videos/search?q=" + request
+                    + "&customconfig=" + _appSettings.Authentication.BingCustomSearch.CustomConfigId
+                    + "&count=" + resultCount + "&offset=" + offset;
+
+                client.AddRequestHeader("Ocp-Apim-Subscription-Key", _appSettings.Authentication.BingCustomSearch.SubscriptionKey);
+                statusCode = client.SendRequest(HttpMethod.Get, searchUrl, string.Empty);
+
+                if (client.IsResponseSuccess)
+                {
+                    VideoResponse videoResponse = client.GetResponseObject<VideoResponse>();
+                    videoResponse.PageNumber = model.VideoResponse.PageNumber;
+
+                    model.VideoResponse = videoResponse;
+                    model.VideoResponse.StatusCode = client.StatusCode;
+                    model.VideoResponse.StatusMessage = client.StatusCode.ToString();
+                    model.VideoResponse.currentOffset = offset;
+                    model.VideoResponse.nextOffset = offset + resultCount;
+
+                    model.VideoResponse.totalEstimatedMatches = (videoResponse.totalEstimatedMatches / resultCount) < 40 ? videoResponse.totalEstimatedMatches : (40 * resultCount);
+                    model.VideoResponse.TotalPages = (videoResponse.totalEstimatedMatches < resultCount) ? 1 : (videoResponse.totalEstimatedMatches / resultCount);
+                }
+                else
+                {
+                    model.VideoResponse.StatusCode = client.StatusCode;
+                    model.VideoResponse.StatusMessage = client.GetResponseString();
+                }
+
             }
             else
             {
