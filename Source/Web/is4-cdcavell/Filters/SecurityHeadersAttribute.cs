@@ -16,7 +16,7 @@ namespace is4_cdcavell.Filters
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Brock Allen &amp; Dominick Baier | 1.0.0 | 10/12/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/18/2020 | Initial build |~ 
     /// </revision>
     public class SecurityHeadersAttribute : ActionFilterAttribute
     {
@@ -43,7 +43,12 @@ namespace is4_cdcavell.Filters
                 }
 
                 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
-                var csp = "default-src 'self'; object-src 'none'; frame-ancestors 'none'; sandbox allow-forms allow-same-origin allow-scripts; base-uri 'self';";
+                var csp = "default-src 'self'; ";
+                csp += "img-src 'self' data:; ";
+                csp += "object-src 'none'; ";
+                csp += "frame-ancestors 'none'; ";
+                csp += "sandbox allow-forms allow-same-origin allow-scripts allow-popups; ";
+                csp += "base-uri 'self'; ";
                 // also consider adding upgrade-insecure-requests once you have HTTPS in place for production
                 //csp += "upgrade-insecure-requests;";
                 // also an example if you need client images to be displayed from twitter

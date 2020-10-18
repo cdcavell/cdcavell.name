@@ -95,3 +95,15 @@ label:focus,
 .card {
     opacity: 0.99;
 }
+
+.bing-logo-xx-small {
+    max-height: 16px;
+    margin: 0;
+    padding-bottom: 1px;
+}
+
+.azure-logo-foot {
+    max-height: 16px;
+    margin: 0;
+    padding: 0;
+}
