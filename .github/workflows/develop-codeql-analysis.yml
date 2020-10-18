@@ -91,23 +91,3 @@ jobs:
           UPDATE_LABELS: ""
           UPDATE_METHOD: "merge"
 
-  createPullRequest:
-    # https://github.com/marketplace/actions/create-pull-request
-    needs: sync-branch
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Make changes to pull request
-        run: date +%s > report.txt
-
-      - name: Create Pull Request
-        id: cpr
-        uses: peter-evans/create-pull-request@v3
-        with:
-          base: master
-
-      - name: Check outputs
-        run: |
-          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
-          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
