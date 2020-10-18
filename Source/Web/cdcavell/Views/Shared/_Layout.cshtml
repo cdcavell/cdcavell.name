@@ -35,6 +35,13 @@
     <link rel="stylesheet" type="text/css" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="~/lib/fontawesome-free/css/all.min.css" />
     <link rel="stylesheet" type="text/css" href="~/css/site.css" />
+    <noscript>
+        <style nonce="@ViewBag.StyleNonce">
+            .page-container {
+                display: none;
+            }
+        </style>
+    </noscript>
 </head>
 <body>
 
@@ -42,11 +49,6 @@
         <div class="background-image"></div>
         <div class="background-gradient"></div>
         <div class="noscriptmsg" id="noscriptmsg">
-            <style scoped nonce="@ViewBag.StyleNonce">
-                .page-container {
-                    display: none;
-                }
-            </style>
             <div class="alert alert-danger" role="alert">
                 JavaScript must be enabled in order for you to use cdcavell.name.
                 However, it seems JavaScript is either disabled or not supported by your browser.
