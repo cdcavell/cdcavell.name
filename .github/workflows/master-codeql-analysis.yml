@@ -3,7 +3,7 @@
 #
 # You may wish to alter this file to override the set of languages analyzed,
 # or to provide custom queries or build logic.
-name: "Master-CodeQL-Analysis"
+name: "CodeQL Analysis"
 
 on:
   push:
@@ -80,6 +80,7 @@ jobs:
       - uses: actions/checkout@master
 
       - name: Automerge 
+        description: "Automatically merge pull requests that are ready"
         uses: "pascalgn/automerge-action@v0.12.0"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
