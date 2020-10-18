@@ -3,7 +3,24 @@ name: "Dev-CodeQL-Merge"
 
 on:
   pull_request:
-    branches: [develop]
+    branches: 
+      - develop
+    types:
+      - labeled
+      - unlabeled
+      - synchronize
+      - opened
+      - edited
+      - ready_for_review
+      - reopened
+      - unlocked
+  pull_request_review:
+    types:
+      - submitted
+  check_suite:
+    types:
+      - completed
+  status: {}
 
 jobs:
   analyze:
@@ -69,12 +86,12 @@ jobs:
       - uses: actions/checkout@master
 
       - name: Merge develop -> master
-        uses: devmasx/merge-branch@v1.3.0
-        with:
-          type: now
-          from_branch: develop
-          target_branch: master
-          github_token: ${{ github.token }}
+        uses: "pascalgn/automerge-action@v0.12.0"
+#        with:
+#          type: now
+#          from_branch: develop
+#          target_branch: master
+#          github_token: ${{ github.token }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MERGE_LABELS: ""
