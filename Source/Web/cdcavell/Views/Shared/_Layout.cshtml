@@ -39,14 +39,14 @@
 <body>
 
     <noscript>
-        <style nonce="@ViewBag.StyleNonce">
-            .page-container {
-                display: none;
-            }
-        </style>
         <div class="background-image"></div>
         <div class="background-gradient"></div>
-        <div class="noscriptmsg">
+        <div class="noscriptmsg" id="noscriptmsg">
+            <style nonce="@ViewBag.StyleNonce">
+                .page-container {
+                    display: none;
+                }
+            </style>
             <div class="alert alert-danger" role="alert">
                 JavaScript must be enabled in order for you to use cdcavell.name.
                 However, it seems JavaScript is either disabled or not supported by your browser.

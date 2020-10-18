@@ -3,7 +3,7 @@
 #
 # You may wish to alter this file to override the set of languages analyzed,
 # or to provide custom queries or build logic.
-name: "Master-CodeQL-Merge"
+name: "Master-CodeQL-Analysis"
 
 on:
   push:
@@ -13,24 +13,8 @@ on:
     # The branches below must be a subset of the branches above
     branches: 
       - master
-    types:
-      - labeled
-      - unlabeled
-      - synchronize
-      - opened
-      - edited
-      - ready_for_review
-      - reopened
-      - unlocked
-  pull_request_review:
-  types:
-      - submitted
-  check_suite:
-  types:
-      - completed
-  status: {}
-#  schedule:
-#    - cron: '0 14 * * 0'
+  schedule:
+    - cron: '0 14 * * 0'
 
 jobs:
   analyze:
