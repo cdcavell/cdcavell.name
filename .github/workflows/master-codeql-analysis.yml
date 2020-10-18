@@ -80,7 +80,6 @@ jobs:
       - uses: actions/checkout@master
 
       - name: Automerge 
-        description: "Automatically merge pull requests that are ready"
         uses: "pascalgn/automerge-action@v0.12.0"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
