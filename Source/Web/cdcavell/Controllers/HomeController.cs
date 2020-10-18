@@ -244,5 +244,16 @@ namespace cdcavell.Controllers
             model.StatusCode = HttpStatusCode.OK;
             return View(model);
         }
+
+        /// <summary>
+        /// Authorized get method
+        /// </summary>
+        /// <returns>IActionResult</returns>
+        /// <method>Search()</method>
+        [HttpGet]
+        public IActionResult Authorized()
+        {
+            return View();
+        }
     }
 }
