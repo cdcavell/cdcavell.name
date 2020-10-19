@@ -1,9 +1,11 @@
+using cdcavell.Authorization;
 using cdcavell.Filters;
 using cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Commons.Logging;
 using CDCavell.ClassLibrary.Web.Mvc.Filters;
 using CDCavell.ClassLibrary.Web.Security;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -30,7 +32,7 @@ namespace cdcavell
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/17/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/18/2020 | Initial build |~ 
     /// </revision>
     public class Startup
     {
@@ -73,6 +75,22 @@ namespace cdcavell
             services.AddScoped<ControllerActionLogFilter>();
             services.AddScoped<ControllerActionUserFilter>();
             services.AddScoped<ControllerActionPageFilter>();
+
+
+            // Register Application Authorization
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("User", policy => policy
+                    .Requirements
+                    .Add(new UserRequirement(true)));
+                options.AddPolicy("Administration", policy => policy
+                    .Requirements
+                    .Add(new AdministrationRequirement(true)));
+            });
+
+            // Registered authorization handlers
+            services.AddSingleton<IAuthorizationHandler, UserHandler>();
+            services.AddSingleton<IAuthorizationHandler, AdministrationHandler>();
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
