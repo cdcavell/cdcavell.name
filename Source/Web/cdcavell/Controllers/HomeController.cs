@@ -26,8 +26,6 @@ namespace cdcavell.Controllers
     /// </revision>
     public class HomeController : ApplicationBaseController<HomeController>
     {
-        private readonly AppSettings _appSettings;
-
         /// <summary>
         /// Constructor method
         /// </summary>
@@ -35,15 +33,21 @@ namespace cdcavell.Controllers
         /// <param name="webHostEnvironment">IWebHostEnvironment</param>
         /// <param name="httpContextAccessor">IHttpContextAccessor</param>
         /// <param name="appSettings">AppSettings</param>
-        /// <method>HomeController(ILogger&lt;HomeController&gt; logger, IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor)</method>
+        /// <method>
+        /// public HomeController(
+        ///     ILogger&lt;HomeController&gt; logger,
+        ///     IWebHostEnvironment webHostEnvironment,
+        ///     IHttpContextAccessor httpContextAccessor,
+        ///     AppSettings appSettings
+        /// ) : base(logger, webHostEnvironment, httpContextAccessor, appSettings)
+        /// </method>
         public HomeController(
             ILogger<HomeController> logger,
             IWebHostEnvironment webHostEnvironment,
             IHttpContextAccessor httpContextAccessor,
             AppSettings appSettings
-        ) : base(logger, webHostEnvironment, httpContextAccessor)
+        ) : base(logger, webHostEnvironment, httpContextAccessor, appSettings)
         {
-            _appSettings = appSettings;
         }
 
         /// <summary>
@@ -250,6 +254,7 @@ namespace cdcavell.Controllers
         /// </summary>
         /// <returns>IActionResult</returns>
         /// <method>Search()</method>
+        [Authorize(Policy = "User")]
         [HttpGet]
         public IActionResult Authorized()
         {

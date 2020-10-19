@@ -15,21 +15,19 @@
 }
 
 .menu {
+    margin-top: 80px;
+    margin-left: 5px;
+    padding-bottom: 40px;
     left: 0;
     top: 0;
-    margin-top: 85px;
-    margin-left: 25px;
-    opacity: .99;
 }
 
 .body-container {
-    margin-top: 60px;
+    margin-top: 80px;
+    padding-right: 35px;
     padding-bottom: 40px;
     right: 0;
     bottom: 0;
-    min-width: 100%;
-    min-height: 100%;
-    opacity: .99;
 }
 
 .request-id {
@@ -64,7 +62,7 @@
 .footer {
     font-size: x-small;
     background-color: rgb(245, 245, 245);
-    opacity: 1;
+    opacity: 0.99;
 }
 
 textarea:hover,

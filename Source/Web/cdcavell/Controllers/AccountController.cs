@@ -1,4 +1,5 @@
-﻿using CDCavell.ClassLibrary.Web.Mvc.Controllers;
+﻿using cdcavell.Models.AppSettings;
+using CDCavell.ClassLibrary.Web.Mvc.Controllers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -16,7 +17,7 @@ namespace cdcavell.Controllers
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/12/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/18/2020 | Initial build |~ 
     /// </revision>
     [AllowAnonymous]
     public class AccountController : ApplicationBaseController<AccountController>
@@ -27,18 +28,21 @@ namespace cdcavell.Controllers
         /// <param name="logger">ILogger&lt;AccountController&gt;</param>
         /// <param name="webHostEnvironment">IWebHostEnvironment</param>
         /// <param name="httpContextAccessor">IHttpContextAccessor</param>
+        /// <param name="appSettings">AppSettings</param>
         /// <method>
         /// AccountController(
         ///     ILogger&lt;AccountController&gt; logger, 
         ///     IWebHostEnvironment webHostEnvironment, 
-        ///     IHttpContextAccessor httpContextAccessor
-        /// ) : base(logger, webHostEnvironment, httpContextAccessor)
+        ///     IHttpContextAccessor httpContextAccessor,
+        ///     AppSettings appSettings
+        /// ) : base(logger, webHostEnvironment, httpContextAccessor, appSettings)
         /// </method>
         public AccountController(
             ILogger<AccountController> logger,
             IWebHostEnvironment webHostEnvironment,
-            IHttpContextAccessor httpContextAccessor
-        ) : base(logger, webHostEnvironment, httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            AppSettings appSettings
+        ) : base(logger, webHostEnvironment, httpContextAccessor, appSettings)
         {
         }
 

@@ -1,4 +1,6 @@
-﻿using CDCavell.ClassLibrary.Web.Mvc.Controllers;
+﻿using cdcavell.Models.AppSettings;
+using CDCavell.ClassLibrary.Web.Mvc.Controllers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +17,7 @@ namespace cdcavell.Controllers
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0 | 10/12/2020 | Initial build |~ 
     /// </revision>
+    [Authorize(Policy = "Administration")]
     public class AdministrationController : ApplicationBaseController<AdministrationController>
     {
         /// <summary>
@@ -23,18 +26,21 @@ namespace cdcavell.Controllers
         /// <param name="logger">ILogger&lt;AdministrationController&gt;</param>
         /// <param name="webHostEnvironment">IWebHostEnvironment</param>
         /// <param name="httpContextAccessor">IHttpContextAccessor</param>
+        /// <param name="appSettings">AppSettings</param>
         /// <method>
         /// AccountController(
         ///     ILogger&lt;AdministrationController&gt; logger, 
         ///     IWebHostEnvironment webHostEnvironment, 
-        ///     IHttpContextAccessor httpContextAccessor
-        /// ) : base(logger, webHostEnvironment, httpContextAccessor)
+        ///     IHttpContextAccessor httpContextAccessor,
+        ///     AppSettings appSettings
+        /// ) : base(logger, webHostEnvironment, httpContextAccessor, appSettings)
         /// </method>
         public AdministrationController(
             ILogger<AdministrationController> logger,
             IWebHostEnvironment webHostEnvironment,
-            IHttpContextAccessor httpContextAccessor
-        ) : base(logger, webHostEnvironment, httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            AppSettings appSettings
+        ) : base(logger, webHostEnvironment, httpContextAccessor, appSettings)
         {
         }
 
