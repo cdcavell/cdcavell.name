@@ -16,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Reflection;
@@ -32,7 +33,7 @@ namespace cdcavell
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/18/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/19/2020 | Initial build |~ 
     /// </revision>
     public class Startup
     {
@@ -103,6 +104,11 @@ namespace cdcavell
                     cookieOptions.Events.OnRedirectToAccessDenied = context =>
                     {
                         context.Response.StatusCode = (int)(HttpStatusCode.Unauthorized);
+                        return Task.CompletedTask;
+                    };
+                    cookieOptions.Events.OnSigningOut = context =>
+                    {
+                        context.CookieOptions.Expires = DateTime.Now.AddDays(-1);
                         return Task.CompletedTask;
                     };
                 })
