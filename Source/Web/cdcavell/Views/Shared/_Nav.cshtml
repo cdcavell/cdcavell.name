@@ -15,17 +15,36 @@
         <ul class="navbar-nav ml-auto">
             @if (userModel.IsAuthenticated)
             {
-                <li class="nav-item dropdown m-auto">
-                    <a href="#" class="nav-link dropdown-toggle text-light mr-4" data-toggle="dropdown">@userModel.Email <b class="caret"></b></a>
+                <li class="nav-item dropdown mr-2">
+                    <a href="#" class="nav-link dropdown-toggle text-light mr-lg-5" data-toggle="dropdown">@userModel.Email <b class="caret"></b></a>
 
                     <div class="dropdown-menu">
+                        @if ((await AuthorizationService.AuthorizeAsync(User, "Administration")).Succeeded)
+                        {
+                            <a class="dropdown-item" asp-action="Index" asp-controller="Administration">Administration</a>
+                            <hr />
+                        }
+                        @if ((await AuthorizationService.AuthorizeAsync(User, "User")).Succeeded)
+                        {
+                            <a class="dropdown-item" asp-action="Authorized" asp-controller="Home">User Authorized</a>
+                            <hr />
+                        }
                         <a class="dropdown-item" asp-action="Logout" asp-controller="Account">Logout</a>
                     </div>
-                </li>            
+                </li>         
+            }
+            else
+            {
+                <li class="nav-item mr-lg-5">
+                    <a class="text-light text-decoration-none" asp-action="Login" asp-controller="Account">
+                        Login
+                    </a>
+                </li>
             }
             <li class="nav-item m-auto">
-                <a class="text-light" asp-action="Search" asp-controller="Home">
-                  <i class="fas fa-search mr-2" aria-hidden="true"></i>
+                <a class="text-light text-decoration-none" asp-action="Search" asp-controller="Home">
+                    Search
+                    <i class="fas fa-search mr-2" aria-hidden="true"></i>
                 </a>
             </li>
         </ul>
