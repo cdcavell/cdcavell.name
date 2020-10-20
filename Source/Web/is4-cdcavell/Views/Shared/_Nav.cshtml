@@ -16,16 +16,15 @@
         <ul class="navbar-nav ml-auto">
             @if (userModel.IsAuthenticated)
             {
-                <li class="nav-item dropdown m-auto">
-                    <a href="#" class="nav-link dropdown-toggle text-light mr-4" data-toggle="dropdown">@userModel.Email <b class="caret"></b></a>
-
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" asp-action="Logout" asp-controller="Account">Logout</a>
-                    </div>
+                <li class="nav-item mr-lg-5">
+                    <a class="text-light text-decoration-none" asp-action="Logout" asp-controller="Account">
+                        Logout
+                    </a>
                 </li>
             }
             <li class="nav-item m-auto">
-                <a class="text-light" href="https://cdcavell.name/Home/Search">
+                <a class="text-light text-decoration-none" href="https://cdcavell.name/Home/Search">
+                    Search
                     <i class="fas fa-search mr-2" aria-hidden="true"></i>
                 </a>
             </li>

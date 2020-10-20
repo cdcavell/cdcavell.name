@@ -7,4 +7,7 @@
 @using is4_cdcavell.Models.Diagnostics
 @using is4_cdcavell.Models.Grants
 @using CDCavell.ClassLibrary.Web.Mvc.Models
+@using Microsoft.AspNetCore.Authorization
+@inject AppSettings AppSettings
+@inject IAuthorizationService AuthorizationService
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
