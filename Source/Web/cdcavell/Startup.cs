@@ -1,3 +1,4 @@
+using AspNetCore.SEOHelper;
 using cdcavell.Authorization;
 using cdcavell.Filters;
 using cdcavell.Models.AppSettings;
@@ -153,7 +154,7 @@ namespace cdcavell
 
             app.UseExceptionHandler("/Home/Error/500");
             app.UseStatusCodePagesWithRedirects("~/Home/Error/{0}");
-
+            app.UseXMLSitemap(env.ContentRootPath);
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

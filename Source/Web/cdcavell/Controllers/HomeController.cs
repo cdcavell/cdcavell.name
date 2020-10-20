@@ -1,12 +1,10 @@
 ﻿using cdcavell.Models.AppSettings;
 using cdcavell.Models.Search;
 using CDCavell.ClassLibrary.Web.Http;
-using CDCavell.ClassLibrary.Web.Mvc.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Net;
@@ -22,7 +20,7 @@ namespace cdcavell.Controllers
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/17/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/19/2020 | Initial build |~ 
     /// </revision>
     public class HomeController : ApplicationBaseController<HomeController>
     {
@@ -140,7 +138,7 @@ namespace cdcavell.Controllers
         {
             if (ModelState.IsValid)
             {
-                string request = HttpUtility.UrlEncode(model.SearchRequest).Clean();
+                string request = HttpUtility.UrlEncode(model.SearchRequest.Trim()).Clean();
                 JsonClient client = new JsonClient(_appSettings.Authentication.BingCustomSearch.Url);
                 HttpStatusCode statusCode = client.StatusCode;
 
