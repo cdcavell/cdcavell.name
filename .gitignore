@@ -12,6 +12,7 @@
 *.db
 *.db-*
 /report.txt
+sitemap.xml
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
