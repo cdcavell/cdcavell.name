@@ -17,9 +17,8 @@ namespace cdcavell.Controllers
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/18/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/19/2020 | Initial build |~ 
     /// </revision>
-    [AllowAnonymous]
     public class AccountController : ApplicationBaseController<AccountController>
     {
         /// <summary>
@@ -47,10 +46,23 @@ namespace cdcavell.Controllers
         }
 
         /// <summary>
+        /// Login method
+        /// </summary>
+        /// <returns>IActionResult</returns>
+        /// <method>Login()</method>
+        [Authorize(Policy = "User")]
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return RedirectToAction("Index", "Home");
+        }
+
+        /// <summary>
         /// Logout method
         /// </summary>
         /// <returns>IActionResult</returns>
         /// <method>Logout()</method>
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Logout()
         {
