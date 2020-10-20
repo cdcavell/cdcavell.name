@@ -64,6 +64,8 @@ namespace cdcavell
             // Register appsettings.json
             AppSettings appSettings = new AppSettings();
             _configuration.Bind("AppSettings", appSettings);
+            //appSettings.Application.Name = typeof(Program).Assembly.GetName().Name;
+            //appSettings.Application.Version = typeof(Program).Assembly.GetName().Version.ToString();
             services.AddSingleton(appSettings);
 
             services.AddMvc();
