@@ -6,6 +6,16 @@
 	  <Version>1.0.0</Version>
 	  <DocumentationFile>../../../Documentation/Source/$(AssemblyName).xml</DocumentationFile>
 	  <UserSecretsId>7e0ff3e4-a0a2-4cb5-985c-85156cc56a57</UserSecretsId>
+	  <Authors>Christopher D. Cavell</Authors>
+	  <Product>Website</Product>
+	  <Description>Personal website for Christopher D. Cavell. This website is currently under development and will primarily be used to showcase development of ASP.NET Core 3.1 MVC utilizing  OAuth 2.0 framework for authentication.</Description>
+	  <Copyright>2020 - Christopher D. Cavell</Copyright>
+	  <PackageLicenseFile>LICENSE</PackageLicenseFile>
+	  <PackageProjectUrl>https://cdcavell.name</PackageProjectUrl>
+	  <RepositoryType>Git</RepositoryType>
+	  <PackageIcon>icon.png</PackageIcon>
+	  <RepositoryUrl>https://github.com/cdcavell/cdcavell.name</RepositoryUrl>
+	  <NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,6 +41,17 @@
 		<_findDllFile Include="../../../Documentation/Source/XmlToMarkdown.dll" />
 		<_findJsonFile Include="../../../Documentation/Source/XmlToMarkdown.runtimeconfig.json" />
 		<_findLibraryFile Include="../../../Documentation/Source/CDCavell.ClassLibrary.Commons.dll" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="..\..\..\LICENSE">
+	    <Pack>True</Pack>
+	    <PackagePath></PackagePath>
+	  </None>
+	  <None Include="wwwroot\img\icon.png">
+	    <Pack>True</Pack>
+	    <PackagePath></PackagePath>
+	  </None>
 	</ItemGroup>
 
 	<Target Name="BuildXmlToMarkdown" AfterTargets="AfterBuild" DependsOnTargets="AfterBuild" Condition="Exists('@(_findDllFile)') AND Exists('@(_findJsonFile)') AND Exists('@(_findLibraryFile)')">
