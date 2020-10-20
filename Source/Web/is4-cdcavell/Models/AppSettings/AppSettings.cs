@@ -13,7 +13,7 @@ namespace is4_cdcavell.Models.AppSettings
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/08/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/20/2020 | Initial build |~ 
     /// </revision>
     public class AppSettings
     {
@@ -21,6 +21,11 @@ namespace is4_cdcavell.Models.AppSettings
         public string AssemblyName 
         { 
             get { return Assembly.GetEntryAssembly().GetName().Name; }
+        }
+        /// <value>string</value>
+        public string AssemblyVersion
+        {
+            get { return Assembly.GetEntryAssembly().GetName().Version.ToString(); }
         }
         /// <value>ConnectionStrings</value>
         public ConnectionStrings ConnectionStrings { get; set; }
