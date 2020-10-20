@@ -6,6 +6,17 @@
     <Version>1.0.0</Version>
 	<DocumentationFile>../../../Documentation/Source/$(AssemblyName).xml</DocumentationFile>
 	<UserSecretsId>d3cf6ddf-02cc-4800-b31d-64a3837fc362</UserSecretsId>
+	<ApplicationIcon>favicon.ico</ApplicationIcon>
+	<Authors>Christopher D. Cavell</Authors>
+	<Product>Website</Product>
+	<Description>IdentityServer4 OAuth 2.0 framework authentication</Description>
+	<Copyright>2020 - Christopher D. Cavell</Copyright>
+	<PackageLicenseFile>LICENSE</PackageLicenseFile>
+	<PackageProjectUrl>https://is4-cdcavell.azurewebsites.net</PackageProjectUrl>
+	<PackageIcon>icon.png</PackageIcon>
+	<RepositoryUrl>https://github.com/cdcavell/cdcavell.name</RepositoryUrl>
+	<RepositoryType>Git</RepositoryType>
+	<NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>
@@ -36,6 +47,14 @@
 	<ItemGroup>
 	  <None Update="AspIdUsers.db">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Include="..\..\..\LICENSE">
+	    <Pack>True</Pack>
+	    <PackagePath></PackagePath>
+	  </None>
+	  <None Include="wwwroot\img\icon.png">
+	    <Pack>True</Pack>
+	    <PackagePath></PackagePath>
 	  </None>
 	</ItemGroup>
 

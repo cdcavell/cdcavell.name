@@ -97,8 +97,8 @@
                         <nav aria-label="Search navigation">
                           <ul class="pagination justify-content-center" id="SearchPagination">
                             @{ 
-                                int pageCutLow = Model.SearchResponse.PageNumber - 1;
-                                int pageCutHigh = Model.SearchResponse.PageNumber + 1;
+                                int searchTabCutLow = Model.SearchResponse.PageNumber - 1;
+                                int searchTabCutHigh = Model.SearchResponse.PageNumber + 1;
 
                                 string previousDisabled = (Model.SearchResponse.PageNumber == 1) ? "disabled" : string.Empty;
                                 string nextDisabled = (Model.SearchResponse.PageNumber == Model.SearchResponse.TotalPages) ? "disabled" : string.Empty;
@@ -128,30 +128,30 @@
                                     // Determine how many pages to show after the current page index
                                     @if (Model.SearchResponse.PageNumber == 1)
                                     {
-                                        pageCutHigh += 2;
+                                        searchTabCutHigh += 2;
                                     }
                                     else
                                     {
                                         if (Model.SearchResponse.PageNumber == 2)
                                         {
-                                            pageCutHigh += 1;
+                                            searchTabCutHigh += 1;
                                         }
                                     }
                                     // Determine how many pages to show before the current page index
                                     @if (Model.SearchResponse.PageNumber == Model.SearchResponse.TotalPages)
                                     {
-                                        pageCutLow -= 2;
+                                        searchTabCutLow -= 2;
                                     }
                                     else
                                     {
                                         if (Model.SearchResponse.PageNumber == Model.SearchResponse.TotalPages - 1)
                                         {
-                                            pageCutLow -= 1;
+                                            searchTabCutLow -= 1;
                                         }
                                     }
-                                    // Output the indexes for pages that fall inside the range of pageCutLow
-                                    // and pageCutHigh
-                                    @for (int i = pageCutLow; i <= pageCutHigh; i++)
+                                    // Output the indexes for pages that fall inside the range of TabCutLow
+                                    // and TabCutHigh
+                                    @for (int i = searchTabCutLow; i <= searchTabCutHigh; i++)
                                     {
                                         if (i == 0)
                                         {
@@ -220,8 +220,8 @@
                         <nav aria-label="Image navigation">
                           <ul class="pagination justify-content-center" id="ImagePagination">
                             @{ 
-                                int pageCutLow = Model.ImageResponse.PageNumber - 1;
-                                int pageCutHigh = Model.ImageResponse.PageNumber + 1;
+                                int imageTabCutLow = Model.ImageResponse.PageNumber - 1;
+                                int imageTabCutHigh = Model.ImageResponse.PageNumber + 1;
 
                                 string previousDisabled = (Model.ImageResponse.PageNumber == 1) ? "disabled" : string.Empty;
                                 string nextDisabled = (Model.ImageResponse.PageNumber == Model.ImageResponse.TotalPages) ? "disabled" : string.Empty;
@@ -251,30 +251,30 @@
                                     // Determine how many pages to show after the current page index
                                     @if (Model.ImageResponse.PageNumber == 1)
                                     {
-                                        pageCutHigh += 2;
+                                        imageTabCutHigh += 2;
                                     }
                                     else
                                     {
                                         if (Model.ImageResponse.PageNumber == 2)
                                         {
-                                            pageCutHigh += 1;
+                                            imageTabCutHigh += 1;
                                         }
                                     }
                                     // Determine how many pages to show before the current page index
                                     @if (Model.ImageResponse.PageNumber == Model.ImageResponse.TotalPages)
                                     {
-                                        pageCutLow -= 2;
+                                        imageTabCutLow -= 2;
                                     }
                                     else
                                     {
                                         if (Model.ImageResponse.PageNumber == Model.ImageResponse.TotalPages - 1)
                                         {
-                                            pageCutLow -= 1;
+                                            imageTabCutLow -= 1;
                                         }
                                     }
-                                    // Output the indexes for pages that fall inside the range of pageCutLow
-                                    // and pageCutHigh
-                                    @for (int i = pageCutLow; i <= pageCutHigh; i++)
+                                    // Output the indexes for pages that fall inside the range of TabCutLow
+                                    // and TabCutHigh
+                                    @for (int i = imageTabCutLow; i <= imageTabCutHigh; i++)
                                     {
                                         if (i == 0)
                                         {
@@ -360,8 +360,8 @@
                         <nav aria-label="Video navigation">
                           <ul class="pagination justify-content-center" id="VideoPagination">
                             @{ 
-                                int pageCutLow = Model.VideoResponse.PageNumber - 1;
-                                int pageCutHigh = Model.VideoResponse.PageNumber + 1;
+                                int videoTabCutLow = Model.VideoResponse.PageNumber - 1;
+                                int videoTabCutHigh = Model.VideoResponse.PageNumber + 1;
 
                                 string previousDisabled = (Model.VideoResponse.PageNumber == 1) ? "disabled" : string.Empty;
                                 string nextDisabled = (Model.VideoResponse.PageNumber == Model.VideoResponse.TotalPages) ? "disabled" : string.Empty;
@@ -391,30 +391,30 @@
                                     // Determine how many pages to show after the current page index
                                     @if (Model.VideoResponse.PageNumber == 1)
                                     {
-                                        pageCutHigh += 2;
+                                        videoTabCutHigh += 2;
                                     }
                                     else
                                     {
                                         if (Model.VideoResponse.PageNumber == 2)
                                         {
-                                            pageCutHigh += 1;
+                                            videoTabCutHigh += 1;
                                         }
                                     }
                                     // Determine how many pages to show before the current page index
                                     @if (Model.VideoResponse.PageNumber == Model.VideoResponse.TotalPages)
                                     {
-                                        pageCutLow -= 2;
+                                        videoTabCutLow -= 2;
                                     }
                                     else
                                     {
                                         if (Model.VideoResponse.PageNumber == Model.VideoResponse.TotalPages - 1)
                                         {
-                                            pageCutLow -= 1;
+                                            videoTabCutLow -= 1;
                                         }
                                     }
-                                    // Output the indexes for pages that fall inside the range of pageCutLow
-                                    // and pageCutHigh
-                                    @for (int i = pageCutLow; i <= pageCutHigh; i++)
+                                    // Output the indexes for pages that fall inside the range of TabCutLow
+                                    // and TabCutHigh
+                                    @for (int i = videoTabCutLow; i <= videoTabCutHigh; i++)
                                     {
                                         if (i == 0)
                                         {
