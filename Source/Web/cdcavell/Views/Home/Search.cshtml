@@ -21,6 +21,16 @@
     </small>
 <br />
 <br />
+@if (Model.StatusCode == System.Net.HttpStatusCode.NoContent)
+{
+    <p class="m-2 p-2">
+        I have found issues with Pagination in dealing with Bing Custom Search results utilizing offset and totalEstimatedMatches. 
+        I have opted to rewrite this feature limiting website results, image results, and video results to a maximum of two hundred 
+        results for each category. I then plan on using a separate return object to pull subset of records from initial returned 
+        objects from Bing API. This is to provide for a better user experience and besides, if I can't find what I'm looking for in 
+        two hundred records then I really need to narrow my search query.
+    </p>
+}
 
 @if (Model.StatusCode != System.Net.HttpStatusCode.NoContent)
 {
@@ -40,12 +50,12 @@
       <li class="nav-item border border-bottom-0">
         <a class="nav-link @searchActive" id="search-tab" data-toggle="tab" href="#search" role="tab" aria-controls="search" aria-selected='@(searchActive == "active") ? "true" : "false"'>Search Results</a>
       </li>
-      @*<li class="nav-item border border-bottom-0">
+      <li class="nav-item border border-bottom-0">
         <a class="nav-link @imageActive @imageDisabled" id="image-tab" data-toggle="tab" href="#image" role="tab" aria-controls="image" aria-selected='@(imageActive == "active") ? "true" : "false"'>Image Results</a>
       </li>
       <li class="nav-item border border-bottom-0">
         <a class="nav-link @videoActive @videoDisabled" id="video-tab" data-toggle="tab" href="#video" role="tab" aria-controls="video" aria-selected='@(imageActive == "active") ? "true" : "false"'>Video Results</a>
-      </li>*@
+      </li>
     </ul>
     <div class="tab-content border border-top-0" id="resultsTabContent">
       <div class="tab-pane fade @searchShow @searchActive" id="search" role="tabpanel" aria-labelledby="search-tab">
@@ -86,7 +96,7 @@
                     </div>
                   </div>
                 </div>
-                @*<div class="card border-0">
+                <div class="card border-0">
                     <div class="card-body">
                         <nav aria-label="Search navigation">
                           <ul class="pagination justify-content-center" id="SearchPagination">
@@ -175,11 +185,11 @@
                           </ul>
                         </nav>
                     </div>
-                </div>*@
+                </div>
             }
         }
       </div>
-      @*<div class="tab-pane fade @imageShow @imageActive" id="image" role="tabpanel" aria-labelledby="image-tab">
+      <div class="tab-pane fade @imageShow @imageActive" id="image" role="tabpanel" aria-labelledby="image-tab">
         @if (@Model.ImageResponse != null)
         {
             @if (Model.ImageResponse.StatusCode != System.Net.HttpStatusCode.OK)
@@ -301,9 +311,9 @@
                 </div>
             }
         }
-      </div>*@
+      </div>
 
-      @*<div class="tab-pane fade @videoShow @videoActive" id="video" role="tabpanel" aria-labelledby="video-tab">
+      <div class="tab-pane fade @videoShow @videoActive" id="video" role="tabpanel" aria-labelledby="video-tab">
             @if (Model.VideoResponse.StatusCode != System.Net.HttpStatusCode.OK)
             {
                 <div class="shadow alert alert-danger mb-1" role="alert">
@@ -441,7 +451,7 @@
                     </div>
                 </div>
             }
-      </div>*@
+      </div>
     </div>
 }
 
