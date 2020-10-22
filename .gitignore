@@ -11,7 +11,7 @@
 *.sln.docstates
 *.db
 *.db-*
-/report.txt
+report.txt
 sitemap.xml
 
 # User-specific files (MonoDevelop/Xamarin Studio)
