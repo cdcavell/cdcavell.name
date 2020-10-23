@@ -20,6 +20,8 @@ namespace cdcavell.Models.Search
         /// <value>string</value>
         public string StatusMessage { get; set; } = HttpStatusCode.NoContent.ToString();
         /// <value>int</value>
+        public int MaxResults { get; set; } = 300;
+        /// <value>int</value>
         public int DisplayCount { get; set; } = 15;
         /// <value>int</value>
         public int PageNumber { get; set; } = 1;
