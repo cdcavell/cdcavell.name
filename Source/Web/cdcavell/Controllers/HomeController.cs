@@ -138,6 +138,11 @@ namespace cdcavell.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (model.StatusCode == HttpStatusCode.NoContent)
+                {
+
+                }
+
                 model.StatusCode = HttpStatusCode.OK;
                 return View(model);
             }
