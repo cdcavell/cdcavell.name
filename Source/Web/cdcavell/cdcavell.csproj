@@ -16,7 +16,7 @@
 	  <PackageIcon>icon.png</PackageIcon>
 	  <RepositoryUrl>https://github.com/cdcavell/cdcavell.name</RepositoryUrl>
 	  <NeutralLanguage>en-US</NeutralLanguage>
-	  <AssemblyName>cdcavell.name</AssemblyName>
+	  <AssemblyName>CDCavell</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
