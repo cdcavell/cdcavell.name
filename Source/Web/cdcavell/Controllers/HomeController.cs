@@ -20,7 +20,7 @@ namespace cdcavell.Controllers
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/23/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/24/2020 | Initial build |~ 
     /// </revision>
     public class HomeController : ApplicationBaseController<HomeController>
     {
@@ -140,7 +140,15 @@ namespace cdcavell.Controllers
             {
                 if (model.StatusCode == HttpStatusCode.NoContent)
                 {
+                    Classes.BingCustomSearch search = new Classes.BingCustomSearch(
+                        _appSettings.Authentication.BingCustomSearch.Url,
+                        _appSettings.Authentication.BingCustomSearch.CustomConfigId,
+                        _appSettings.Authentication.BingCustomSearch.SubscriptionKey
+                    );
 
+                    model.SearchResult = Classes.BingCustomSearch.GetResults("Web", model.SearchRequest);
+                    model.ImageResult = Classes.BingCustomSearch.GetResults("Image", model.SearchRequest);
+                    model.VideoResult = Classes.BingCustomSearch.GetResults("Video", model.SearchRequest);
                 }
 
                 model.StatusCode = HttpStatusCode.OK;

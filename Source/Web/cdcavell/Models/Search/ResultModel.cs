@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Runtime.CompilerServices;
 
@@ -27,9 +29,28 @@ namespace cdcavell.Models.Search
         public int PageNumber { get; set; } = 1;
         /// <value>int</value>
         public int TotalPages { get { return (this.Items.Count() < this.DisplayCount) ? 1 : (this.Items.Count() / this.DisplayCount); } }
-        /// <value>string</value>
-        public string Type { get; set; }
-        /// <value>ItemModel[]</value>
-        public ItemModel[] Items { get; set; } = new ItemModel[0];
+        /// <value>List&lt;ItemModel&gt;</value>
+        public List<ItemModel> Items { get; set; } = new List<ItemModel>();
+
+        private string _type;
+        /// <value>string - excepted values (Web, Image or Video)</value>
+        public string Type
+        {
+            get => _type;
+            set
+            {
+                switch(value)
+                {
+                    case "Web":
+                    case "Image":
+                    case "Video":
+                        _type = value;
+                        break;
+                    default:
+                        throw new Exception("Invalid property type: " + value);
+                }
+            
+            }
+        }
     }
 }
