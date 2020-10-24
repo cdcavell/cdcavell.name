@@ -34,7 +34,7 @@ namespace cdcavell
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/19/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/23/2020 | Initial build |~ 
     /// </revision>
     public class Startup
     {
@@ -64,8 +64,6 @@ namespace cdcavell
             // Register appsettings.json
             AppSettings appSettings = new AppSettings();
             _configuration.Bind("AppSettings", appSettings);
-            //appSettings.Application.Name = typeof(Program).Assembly.GetName().Name;
-            //appSettings.Application.Version = typeof(Program).Assembly.GetName().Version.ToString();
             services.AddSingleton(appSettings);
 
             services.AddMvc();

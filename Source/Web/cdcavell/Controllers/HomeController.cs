@@ -20,7 +20,7 @@ namespace cdcavell.Controllers
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/19/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/24/2020 | Initial build |~ 
     /// </revision>
     public class HomeController : ApplicationBaseController<HomeController>
     {
@@ -138,113 +138,25 @@ namespace cdcavell.Controllers
         {
             if (ModelState.IsValid)
             {
-                string request = HttpUtility.UrlEncode(model.SearchRequest.Trim()).Clean();
-                JsonClient client = new JsonClient(_appSettings.Authentication.BingCustomSearch.Url);
-                HttpStatusCode statusCode = client.StatusCode;
-
-                // --------------------------- get search results ---------------------------
-                int resultCount = 10;
-                int offset = (model.SearchResponse == null) ? 0 : ((model.SearchResponse.PageNumber * resultCount) - resultCount);
-
-                // get search results
-                string searchUrl = "search?q=" + request
-                    + "&customconfig=" + _appSettings.Authentication.BingCustomSearch.CustomConfigId
-                    + "&count=" + resultCount + "&offset=" + offset;
-
-                client.AddRequestHeader("Ocp-Apim-Subscription-Key", _appSettings.Authentication.BingCustomSearch.SubscriptionKey);
-                statusCode = client.SendRequest(HttpMethod.Get, searchUrl, string.Empty);
-
-                if (client.IsResponseSuccess)
+                if (model.StatusCode == HttpStatusCode.NoContent)
                 {
-                    SearchResponse searchResponse = client.GetResponseObject<SearchResponse>();
-                    searchResponse.PageNumber = model.SearchResponse.PageNumber;
+                    Classes.BingCustomSearch search = new Classes.BingCustomSearch(
+                        _appSettings.Authentication.BingCustomSearch.Url,
+                        _appSettings.Authentication.BingCustomSearch.CustomConfigId,
+                        _appSettings.Authentication.BingCustomSearch.SubscriptionKey
+                    );
 
-                    model.SearchResponse = searchResponse;
-                    model.SearchResponse.StatusCode = client.StatusCode;
-                    model.SearchResponse.StatusMessage = client.StatusCode.ToString();
-                    model.SearchResponse.webPages.currentOffset = offset;
-                    model.SearchResponse.webPages.nextOffset = offset + resultCount;
-
-                    model.SearchResponse.webPages.totalEstimatedMatches = (searchResponse.webPages.totalEstimatedMatches / resultCount) < 40 ? searchResponse.webPages.totalEstimatedMatches : (40 * resultCount);
-                    model.SearchResponse.TotalPages = (searchResponse.webPages.totalEstimatedMatches < resultCount) ? 1 : (searchResponse.webPages.totalEstimatedMatches / resultCount);
-                }
-                else 
-                {
-                    model.SearchResponse.StatusCode = client.StatusCode;
-                    model.SearchResponse.StatusMessage = client.GetResponseString();
+                    model.SearchResult = Classes.BingCustomSearch.GetResults("Web", model.SearchRequest);
+                    model.ImageResult = Classes.BingCustomSearch.GetResults("Image", model.SearchRequest);
+                    model.VideoResult = Classes.BingCustomSearch.GetResults("Video", model.SearchRequest);
                 }
 
-                // --------------------------- get image results ---------------------------
-                resultCount = 20;
-                offset = (model.ImageResponse == null) ? 0 : ((model.ImageResponse.PageNumber * resultCount) - resultCount);
-
-                // get search results
-                searchUrl = "images/search?q=" + request
-                    + "&customconfig=" + _appSettings.Authentication.BingCustomSearch.CustomConfigId
-                    + "&count=" + resultCount + "&offset=" + offset;
-
-                client.AddRequestHeader("Ocp-Apim-Subscription-Key", _appSettings.Authentication.BingCustomSearch.SubscriptionKey);
-                statusCode = client.SendRequest(HttpMethod.Get, searchUrl, string.Empty);
-
-                if (client.IsResponseSuccess)
-                {
-                    ImageResponse imageResponse = client.GetResponseObject<ImageResponse>();
-                    imageResponse.PageNumber = model.ImageResponse.PageNumber;
-
-                    model.ImageResponse = imageResponse;
-                    model.ImageResponse.StatusCode = client.StatusCode;
-                    model.ImageResponse.StatusMessage = client.StatusCode.ToString();
-
-                    model.ImageResponse.totalEstimatedMatches = (imageResponse.totalEstimatedMatches / resultCount) < 40 ? imageResponse.totalEstimatedMatches : (40 * resultCount);
-                    model.ImageResponse.TotalPages = (imageResponse.totalEstimatedMatches < resultCount) ? 1 : (imageResponse.totalEstimatedMatches / resultCount);
-                }
-                else
-                {
-                    model.ImageResponse.StatusCode = client.StatusCode;
-                    model.ImageResponse.StatusMessage = client.GetResponseString();
-                }
-
-                // --------------------------- get video results ---------------------------
-                resultCount = 10;
-                offset = (model.VideoResponse == null) ? 0 : ((model.VideoResponse.PageNumber * resultCount) - resultCount);
-
-                // get video results
-                searchUrl = "videos/search?q=" + request
-                    + "&customconfig=" + _appSettings.Authentication.BingCustomSearch.CustomConfigId
-                    + "&count=" + resultCount + "&offset=" + offset;
-
-                client.AddRequestHeader("Ocp-Apim-Subscription-Key", _appSettings.Authentication.BingCustomSearch.SubscriptionKey);
-                statusCode = client.SendRequest(HttpMethod.Get, searchUrl, string.Empty);
-
-                if (client.IsResponseSuccess)
-                {
-                    VideoResponse videoResponse = client.GetResponseObject<VideoResponse>();
-                    videoResponse.PageNumber = model.VideoResponse.PageNumber;
-
-                    model.VideoResponse = videoResponse;
-                    model.VideoResponse.StatusCode = client.StatusCode;
-                    model.VideoResponse.StatusMessage = client.StatusCode.ToString();
-                    model.VideoResponse.currentOffset = offset;
-                    model.VideoResponse.nextOffset = offset + resultCount;
-
-                    model.VideoResponse.totalEstimatedMatches = (videoResponse.totalEstimatedMatches / resultCount) < 40 ? videoResponse.totalEstimatedMatches : (40 * resultCount);
-                    model.VideoResponse.TotalPages = (videoResponse.totalEstimatedMatches < resultCount) ? 1 : (videoResponse.totalEstimatedMatches / resultCount);
-                }
-                else
-                {
-                    model.VideoResponse.StatusCode = client.StatusCode;
-                    model.VideoResponse.StatusMessage = client.GetResponseString();
-                }
-
-            }
-            else
-            {
-                model.StatusCode = HttpStatusCode.BadRequest;
-                return BadRequest(ModelState);
+                model.StatusCode = HttpStatusCode.OK;
+                return View(model);
             }
 
-            model.StatusCode = HttpStatusCode.OK;
-            return View(model);
+            model.StatusCode = HttpStatusCode.BadRequest;
+            return BadRequest(ModelState);
         }
 
         /// <summary>
