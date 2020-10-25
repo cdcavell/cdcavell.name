@@ -20,11 +20,6 @@ $(function() {
 
     $('#processing').on('shown.bs.modal', function (e) {
         console.log('-- processing modal shown --');
-        if ($('#form').attr('suppressSubmit') != 'false') {
-            setTimeout(() => {
-                $(this).modal('hide');
-            }, 100);
-        }
     })
 
     $('#processing').on('hide.bs.modal', function (e) {
