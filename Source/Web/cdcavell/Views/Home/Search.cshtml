@@ -23,7 +23,7 @@
     <br />
     <br />
 
-    @if (Model.StatusCode == System.Net.HttpStatusCode.OK)
+    @if (Model.StatusCode == HttpStatusCode.OK)
     {
         @Html.HiddenFor(Model => Model.WebActive);
         @Html.HiddenFor(Model => Model.ImageActive);
@@ -56,14 +56,14 @@
         </div>
     }
 
-    @if (Model.StatusCode != System.Net.HttpStatusCode.OK && Model.StatusCode != System.Net.HttpStatusCode.NoContent)
+    @if (Model.StatusCode != HttpStatusCode.OK && Model.StatusCode != HttpStatusCode.NoContent)
     {
-        <div class="alert alert-danger shadow">
-            <p class="m-0">Search Result Error: @Model.StatusCode</p>
-            <code class="text-danger m-0">
-                <small>&nbsp;&nbsp;&nbsp;&nbsp;Web Search Result&nbsp;&nbsp;: @Model.WebResult.StatusMessage</small><br />
-                <small>&nbsp;&nbsp;&nbsp;&nbsp;Image Search Result: @Model.ImageResult.StatusMessage</small><br />
-                <small>&nbsp;&nbsp;&nbsp;&nbsp;Video Search Result: @Model.VideoResult.StatusMessage</small>
+        <div class="alert @(Model.StatusCode == HttpStatusCode.NotFound ? "alert-warning" : "alert-danger") shadow">
+            <p class="m-0">Search Result@(Model.StatusCode == HttpStatusCode.NotFound ? string.Empty : " Error"): @Model.StatusCode</p>
+            <code class="m-0">
+                <small class="@(Model.WebResult.StatusCode == HttpStatusCode.NotFound ? "text-warning" : "text-danger")">&nbsp;&nbsp;&nbsp;&nbsp;Web Search Result&nbsp;&nbsp;: @Model.WebResult.StatusMessage</small><br />
+                <small class="@(Model.ImageResult.StatusCode == HttpStatusCode.NotFound ? "text-warning" : "text-danger")">&nbsp;&nbsp;&nbsp;&nbsp;Image Search Result: @Model.ImageResult.StatusMessage</small><br />
+                <small class="@(Model.VideoResult.StatusCode == HttpStatusCode.NotFound ? "text-warning" : "text-danger")">&nbsp;&nbsp;&nbsp;&nbsp;Video Search Result: @Model.VideoResult.StatusMessage</small>
             </code>
         </div>
     }
