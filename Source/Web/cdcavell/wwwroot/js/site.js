@@ -42,8 +42,8 @@ $(function() {
 
         if ($('#form').attr('suppressSubmit') != 'false') {
             e.preventDefault();
-            alert('Form submission surppressed while in development');
-            console.log('-- submit surppressed --');
+            alert('Form submission suppressed while in development');
+            console.log('-- form submit suppressed --');
         } else {
             $('#processing').modal('show');
         }
