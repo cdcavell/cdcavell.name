@@ -1,0 +1,31 @@
+﻿@model cdcavell.Models.Search.ResultModel
+
+@if (Model.StatusCode != System.Net.HttpStatusCode.OK)
+{
+    <div class="shadow alert @(Model.StatusCode == HttpStatusCode.NotFound ? "alert-warning" : "alert-danger") mb-1" role="alert">
+       <p class="m-0">@Model.Type Search Result@(Model.StatusCode == HttpStatusCode.NotFound ? string.Empty : " Error"): @Model.StatusCode</p>
+    </div>
+}
+else
+{
+    @Html.HiddenFor(Model => Model.PageNumber);
+    @Html.HiddenFor(Model => Model.DisplayCount);
+    <div class="card border-0">
+        <div class="card-header border-0 bg-white">
+            <p class="card-text text-muted">@Model.Type Search Results Returned: @Model.Items.Count</p>
+        </div>
+        <div class="card-body">
+            <div class="container">
+                <div class="row text-center text-lg-left">
+                @* foreach goes here *@
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@*@section SearchTabPaneScript {
+
+    // @Model.Type TabPane scripting goes here
+
+}*@

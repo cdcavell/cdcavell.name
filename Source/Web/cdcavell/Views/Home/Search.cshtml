@@ -2,6 +2,7 @@
 
 @using (Html.BeginForm("Search", "Home", FormMethod.Post, new { id = "form", suppressSubmit = "false" }))
 {
+    @Html.HiddenFor(Model => Model.StatusCode);
     <div class="input-group md-form form-sm form-2 shadow-sm pl-0">
         <input class="form-control border-grey my-0 py-1" type="text" placeholder="Search" aria-label="Search" asp-for="SearchRequest" autofocus>
         <div class="input-group-append">
@@ -45,13 +46,13 @@
         </ul>
         <div class="tab-content border border-top-0" id="resultsTabContent">
             <div class="tab-pane fade @(Model.WebActive == "active" ? "show" : string.Empty) @Model.WebActive bg-white" id="web-panel" role="tabpanel" aria-labelledby="web-tab">
-                -- Web Results will show here --
+                <partial name="_SearchTabPane" model="@Model.WebResult" />
             </div>
             <div class="tab-pane fade @(Model.ImageActive == "active" ? "show" : string.Empty) @Model.ImageActive bg-white" id="image-panel" role="tabpanel" aria-labelledby="image-tab">
-                -- Image Results will show here --
+                <partial name="_SearchTabPane" model="@Model.ImageResult" />
             </div>
             <div class="tab-pane fade @(Model.VideoActive == "active" ? "show" : string.Empty) @Model.VideoActive bg-white" id="video-panel" role="tabpanel" aria-labelledby="video-tab">
-                -- Video Results will show here --
+                <partial name="_SearchTabPane" model="@Model.VideoResult" />
             </div>
         </div>
     }
@@ -73,7 +74,7 @@
 <script type="text/javascript" nonce="@ViewBag.ScriptNonce">
 
     $('#ResultsTab li').click(function () {
-        console.log('Tab: ' + $(this).text().trim());
+        console.log('Tab Click: ' + $(this).text().trim());
         switch ($(this).text().trim()) {
             case 'Web Results':
                 if (!$('a', this).hasClass('disabled')) {
@@ -91,9 +92,12 @@
                 }
                 break;
         }
+    });
 
-        //$('#form').submit();
+    $('#form').on('submit', function (e) {
+        $('#StatusCode').val('@HttpStatusCode.NoContent');
     });
 
 </script>
 }
+
