@@ -146,7 +146,7 @@ namespace cdcavell.Controllers
                         _appSettings.Authentication.BingCustomSearch.SubscriptionKey
                     );
 
-                    model.SearchResult = Classes.BingCustomSearch.GetResults("Web", model.SearchRequest);
+                    model.WebResult = Classes.BingCustomSearch.GetResults("Web", model.SearchRequest);
                     model.ImageResult = Classes.BingCustomSearch.GetResults("Image", model.SearchRequest);
                     model.VideoResult = Classes.BingCustomSearch.GetResults("Video", model.SearchRequest);
                 }

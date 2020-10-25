@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Web;
 
 namespace cdcavell.Models.Search
@@ -19,10 +20,20 @@ namespace cdcavell.Models.Search
         public HttpStatusCode StatusCode { get; set; } = HttpStatusCode.NoContent;
         /// <value>int</value>
         public int Tab { get; set; } = 1;
+        /// <value>string</value>
+        public string WebActive { get; set; } = "active";
         /// <value>ResultModel</value>
-        public ResultModel SearchResult { get; set; } = new ResultModel();
+        public ResultModel WebResult { get; set; } = new ResultModel();
+        /// <value>string</value>
+        public string ImageActive { get; set; } = string.Empty;
+        /// <value>string</value>
+        public string ImageDisabled { get { return (this.ImageResult.Items.Count > 0) ? string.Empty : "disabled"; } }
         /// <value>ResultModel</value>
         public ResultModel ImageResult { get; set; } = new ResultModel();
+        /// <value>string</value>
+        public string VideoActive { get; set; } = string.Empty;
+        /// <value>string</value>
+        public string VideoDisabled { get { return (this.VideoResult.Items.Count > 0) ? string.Empty : "disabled"; } }
         /// <value>ResultModel</value>
         public ResultModel VideoResult { get; set; } = new ResultModel();
 
@@ -31,7 +42,7 @@ namespace cdcavell.Models.Search
         public string SearchRequest 
         {
             get => _searchRequest; 
-            set { _searchRequest = HttpUtility.UrlEncode(value.Trim().Clean()); }
+            set { _searchRequest = HttpUtility.UrlEncode((value ?? string.Empty).Trim().Clean()); }
                 
         }
     }

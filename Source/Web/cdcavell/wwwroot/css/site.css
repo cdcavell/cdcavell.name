@@ -14,6 +14,10 @@
     min-height: 100%;
 }
 
+.bg-loading {
+    background-color: rgba(235, 235, 235, 0.3);
+}
+
 .body-container {
     margin-top: 80px;
     padding-left: 10px;
@@ -21,6 +25,7 @@
     padding-bottom: 40px;
     right: 0;
     bottom: 0;
+    opacity: .99;
 }
 
 .request-id {
