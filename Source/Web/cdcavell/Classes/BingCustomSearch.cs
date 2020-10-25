@@ -20,7 +20,7 @@ namespace cdcavell.Classes
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/24/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/25/2020 | Initial build |~ 
     /// </revision>
     public class BingCustomSearch
     {
@@ -88,8 +88,8 @@ namespace cdcavell.Classes
                 switch (results.Type)
                 {
                     case "Web":
-                        SearchPages searchPages = client.GetResponseObject<SearchPages>();
-                        foreach (SearchPage page in searchPages.value)
+                        SearchResponse searchResponse = client.GetResponseObject<SearchResponse>();
+                        foreach (SearchPage page in searchResponse.webPages.value)
                         {
                             ItemModel item = new ItemModel();
                             item.ContentUrl = page.url;
@@ -137,6 +137,12 @@ namespace cdcavell.Classes
                         break;
                     default:
                         throw new InvalidParameterException("Invalid search type: " + results.Type);
+                }
+
+                if (results.Items.Count == 0)
+                {
+                    results.StatusCode = HttpStatusCode.NotFound;
+                    results.StatusMessage = HttpStatusCode.NotFound.ToString();
                 }
             }
             else 

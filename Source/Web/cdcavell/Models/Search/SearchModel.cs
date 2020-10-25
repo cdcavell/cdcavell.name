@@ -12,16 +12,16 @@ namespace cdcavell.Models.Search
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/24/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/25/2020 | Initial build |~ 
     /// </revision>
     public class SearchModel
     {
         /// <value>HttpStatusCode</value>
         public HttpStatusCode StatusCode { get; set; } = HttpStatusCode.NoContent;
-        /// <value>int</value>
-        public int Tab { get; set; } = 1;
         /// <value>string</value>
-        public string WebActive { get; set; } = "active";
+        public string WebActive { get; set; } = string.Empty;
+        /// <value>string</value>
+        public string WebDisabled { get { return (this.WebResult.Items.Count > 0) ? string.Empty : "disabled"; } }
         /// <value>ResultModel</value>
         public ResultModel WebResult { get; set; } = new ResultModel();
         /// <value>string</value>
