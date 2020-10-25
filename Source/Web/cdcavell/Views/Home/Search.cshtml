@@ -34,7 +34,7 @@
 
         <ul class="nav nav-tabs" id="ResultsTab" role="tablist">
             <li class="nav-item border border-bottom-0">
-                <a class="nav-link text-decoration-none @Model.WebActive" id="web-tab" data-toggle="tab" href="#web-panel" role="tab" aria-controls="web-panel" aria-selected='@Model.WebActive == "active" ? "true" : "false"'>Web Results</a>
+                <a class="nav-link text-decoration-none @Model.WebActive @Model.WebDisabled" id="web-tab" data-toggle="tab" href="#web-panel" role="tab" aria-controls="web-panel" aria-selected='@Model.WebActive == "active" ? "true" : "false"'>Web Results</a>
             </li>
             <li class="nav-item border border-bottom-0">
                 <a class="nav-link text-decoration-none @Model.ImageActive @Model.ImageDisabled" id="image-tab" data-toggle="tab" href="#image-panel" role="tab" aria-controls="image-panel" aria-selected='@Model.ImageActive == "active" ? "true" : "false"'>Image Results</a>
@@ -45,13 +45,13 @@
         </ul>
         <div class="tab-content border border-top-0" id="resultsTabContent">
             <div class="tab-pane fade @(Model.WebActive == "active" ? "show" : string.Empty) @Model.WebActive bg-white" id="web-panel" role="tabpanel" aria-labelledby="web-tab">
-                -- Web Results Here --
+                -- Web Results will show here --
             </div>
             <div class="tab-pane fade @(Model.ImageActive == "active" ? "show" : string.Empty) @Model.ImageActive bg-white" id="image-panel" role="tabpanel" aria-labelledby="image-tab">
-                -- Image Results Here --
+                -- Image Results will show here --
             </div>
             <div class="tab-pane fade @(Model.VideoActive == "active" ? "show" : string.Empty) @Model.VideoActive bg-white" id="video-panel" role="tabpanel" aria-labelledby="video-tab">
-                -- Video Results Here --
+                -- Video Results will show here --
             </div>
         </div>
     }
@@ -60,6 +60,11 @@
     {
         <div class="alert alert-danger shadow">
             <p class="m-0">Search Result Error: @Model.StatusCode</p>
+            <code class="text-danger m-0">
+                <small>&nbsp;&nbsp;&nbsp;&nbsp;Web Search Result&nbsp;&nbsp;: @Model.WebResult.StatusMessage</small><br />
+                <small>&nbsp;&nbsp;&nbsp;&nbsp;Image Search Result: @Model.ImageResult.StatusMessage</small><br />
+                <small>&nbsp;&nbsp;&nbsp;&nbsp;Video Search Result: @Model.VideoResult.StatusMessage</small>
+            </code>
         </div>
     }
 }
