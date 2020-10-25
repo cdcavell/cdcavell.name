@@ -140,6 +140,14 @@ namespace cdcavell.Controllers
             {
                 if (model.StatusCode == HttpStatusCode.NoContent)
                 {
+                    model.StatusCode = HttpStatusCode.NotFound;
+                    model.WebResult.StatusCode = HttpStatusCode.NotFound;
+                    model.WebResult.StatusMessage = HttpStatusCode.NotFound.ToString();
+                    model.ImageResult.StatusCode = HttpStatusCode.NotFound;
+                    model.ImageResult.StatusMessage = HttpStatusCode.NotFound.ToString();
+                    model.VideoResult.StatusCode = HttpStatusCode.NotFound;
+                    model.VideoResult.StatusMessage = HttpStatusCode.NotFound.ToString();
+
                     Classes.BingCustomSearch search = new Classes.BingCustomSearch(
                         _appSettings.Authentication.BingCustomSearch.Url,
                         _appSettings.Authentication.BingCustomSearch.CustomConfigId,
@@ -147,16 +155,35 @@ namespace cdcavell.Controllers
                     );
 
                     model.WebResult = Classes.BingCustomSearch.GetResults("Web", model.SearchRequest);
+                    if (model.WebResult.StatusCode == HttpStatusCode.OK)
+                    {
+                        model.StatusCode = model.WebResult.StatusCode;
+                        model.WebActive = "active";
+                    }
+
                     model.ImageResult = Classes.BingCustomSearch.GetResults("Image", model.SearchRequest);
+                    if (model.ImageResult.StatusCode == HttpStatusCode.OK)
+                    {
+                        model.StatusCode = model.ImageResult.StatusCode;
+                        if (string.IsNullOrEmpty(model.WebActive))
+                            model.ImageActive = "active";
+                    }
+
                     model.VideoResult = Classes.BingCustomSearch.GetResults("Video", model.SearchRequest);
+                    if (model.VideoResult.StatusCode == HttpStatusCode.OK)
+                    {
+                        model.StatusCode = model.VideoResult.StatusCode;
+                        if (string.IsNullOrEmpty(model.WebActive) && string.IsNullOrEmpty(model.ImageActive))
+                            model.VideoActive = "active";
+                    }
                 }
 
-                model.StatusCode = HttpStatusCode.OK;
                 return View(model);
             }
 
+            model = new SearchModel();
             model.StatusCode = HttpStatusCode.BadRequest;
-            return BadRequest(ModelState);
+            return View(model);
         }
 
         /// <summary>
