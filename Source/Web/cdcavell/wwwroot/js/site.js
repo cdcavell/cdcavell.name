@@ -1,41 +1,61 @@
 ﻿/*!
   * Licensed under MIT (https://github.com/cdcavell/cdcavell.name/blob/master/LICENSE)
+  * 
+  *  Revisions:
+  *  ----------------------------------------------------------------------------------------------------
+  * | Contributor           | Build | Revison Date | Description 
+  * |-----------------------|-------|--------------|-----------------------------------------------------
+  * | Christopher D. Cavell | 1.0.0 | 10/25/2020   | Initial build 
+  *
   */
 
-console.log('-- Loading site.js --');
+console.log('-- Loading site.js (https://github.com/cdcavell/cdcavell.name/blob/master/Source/Web/cdcavell/wwwroot/js/site.js) --');
+console.log('Licensed under MIT (https://github.com/cdcavell/cdcavell.name/blob/master/LICENSE)');
 
 $(function() {
 
-    $('#loading').on('show.bs.modal', function () {
-        console.log('-- show loading modal --');
+    $('#processing').on('show.bs.modal', function (e) {
+        console.log('-- show processing modal --');
     })
 
-    $('#loading').on('shown.bs.modal', function () {
-        console.log('-- loading modal shown --');
-        if ($('#pageLoad').val() === 'true') {
+    $('#processing').on('shown.bs.modal', function (e) {
+        console.log('-- processing modal shown --');
+        if ($('#form').attr('suppressSubmit') != 'false') {
             setTimeout(() => {
-                $('#pageLoad').val('false');
                 $(this).modal('hide');
             }, 100);
         }
     })
 
-    $('#loading').on('hide.bs.modal', function () {
-        console.log('-- hide loading modal --');
+    $('#processing').on('hide.bs.modal', function (e) {
+        console.log('-- hide processing modal --');
     })
 
-    $('#loading').on('hidden.bs.modal', function () {
-        console.log('-- loading modal hid --');
+    $('#processing').on('hidden.bs.modal', function (e) {
+        console.log('-- processing modal hid --');
     })
 
-    $('#loading').modal('show');
+    $('#form').on('submit', function (e) { 
+        var data = $("#form :input").serializeArray();
+        console.log('-- form submitted --');
+        console.log(data); 
 
-    console.log("-- DOM Loaded --");
+        if ($('#form').attr('suppressSubmit') != 'false') {
+            e.preventDefault();
+            alert('Form submission surppressed while in development');
+            console.log('-- submit surppressed --');
+        } else {
+            $('#processing').modal('show');
+        }
+    });
+
+    console.log('-- DOM Loaded --');
+    $('#processing').modal('hide');
 });
 
 $(window).on('load', function() {
 
-    console.log("-- Document Loaded --");
+    console.log('-- Document Loaded --');
 });
 
 
