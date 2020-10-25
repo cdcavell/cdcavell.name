@@ -37,6 +37,9 @@
     <link rel="stylesheet" type="text/css" href="~/css/site.css" />
     <noscript>
         <style nonce="@ViewBag.StyleNonce">
+            #loading {
+                display: none;
+            }
             .page-container {
                 display: none;
             }
@@ -45,6 +48,16 @@
 </head>
 <body>
 
+    <input type="hidden" id="pageLoad" name="pageLoad" value="true">
+    <div id="loading" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="loadingLabel" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content border-0 shadow bg-loading">
+                <div class="modal-body p-0">
+                    <h3 class="text-center pt-2">Processing, please wait ...</h3>
+                </div>
+            </div>
+        </div>
+    </div>
     <noscript>
         <div class="background-image"></div>
         <div class="background-gradient"></div>
