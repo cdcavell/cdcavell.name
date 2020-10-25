@@ -1,6 +1,6 @@
 @model cdcavell.Models.Search.SearchModel
 
-@using (Html.BeginForm("Search", "Home", FormMethod.Post, new { id = "form", suppressSubmit = "true" }))
+@using (Html.BeginForm("Search", "Home", FormMethod.Post, new { id = "form", suppressSubmit = "false" }))
 {
     <div class="input-group md-form form-sm form-2 shadow-sm pl-0">
         <input class="form-control border-grey my-0 py-1" type="text" placeholder="Search" aria-label="Search" asp-for="SearchRequest" autofocus>
@@ -34,20 +34,33 @@
 
         <ul class="nav nav-tabs" id="ResultsTab" role="tablist">
             <li class="nav-item border border-bottom-0">
-                <a class="nav-link @Model.WebActive" id="search-tab" data-toggle="tab" href="#search" role="tab" aria-controls="search" aria-selected='@(Model.WebActive == "active") ? "true" : "false"'>Web Results</a>
+                <a class="nav-link text-decoration-none @Model.WebActive" id="web-tab" data-toggle="tab" href="#web-panel" role="tab" aria-controls="web-panel" aria-selected='@Model.WebActive == "active" ? "true" : "false"'>Web Results</a>
             </li>
             <li class="nav-item border border-bottom-0">
-                <a class="nav-link @Model.ImageActive @Model.ImageDisabled" id="image-tab" data-toggle="tab" href="#image" role="tab" aria-controls="image" aria-selected='@(Model.ImageActive == "active") ? "true" : "false"'>Image Results</a>
+                <a class="nav-link text-decoration-none @Model.ImageActive @Model.ImageDisabled" id="image-tab" data-toggle="tab" href="#image-panel" role="tab" aria-controls="image-panel" aria-selected='@Model.ImageActive == "active" ? "true" : "false"'>Image Results</a>
             </li>
             <li class="nav-item border border-bottom-0">
-                <a class="nav-link @Model.VideoActive @Model.VideoDisabled" id="video-tab" data-toggle="tab" href="#video" role="tab" aria-controls="video" aria-selected='@(Model.VideoActive == "active") ? "true" : "false"'>Video Results</a>
+                <a class="nav-link text-decoration-none @Model.VideoActive @Model.VideoDisabled" id="video-tab" data-toggle="tab" href="#video-panel" role="tab" aria-controls="video-panel" aria-selected='@Model.VideoActive == "active" ? "true" : "false"'>Video Results</a>
             </li>
         </ul>
+        <div class="tab-content border border-top-0" id="resultsTabContent">
+            <div class="tab-pane fade @(Model.WebActive == "active" ? "show" : string.Empty) @Model.WebActive bg-white" id="web-panel" role="tabpanel" aria-labelledby="web-tab">
+                -- Web Results Here --
+            </div>
+            <div class="tab-pane fade @(Model.ImageActive == "active" ? "show" : string.Empty) @Model.ImageActive bg-white" id="image-panel" role="tabpanel" aria-labelledby="image-tab">
+                -- Image Results Here --
+            </div>
+            <div class="tab-pane fade @(Model.VideoActive == "active" ? "show" : string.Empty) @Model.VideoActive bg-white" id="video-panel" role="tabpanel" aria-labelledby="video-tab">
+                -- Video Results Here --
+            </div>
+        </div>
     }
 
-    @if (Model.StatusCode != System.Net.HttpStatusCode.NoContent)
+    @if (Model.StatusCode != System.Net.HttpStatusCode.OK && Model.StatusCode != System.Net.HttpStatusCode.NoContent)
     {
-
+        <div class="alert alert-danger shadow">
+            <p class="m-0">Search Result Error: @Model.StatusCode</p>
+        </div>
     }
 }
 
@@ -74,7 +87,7 @@
                 break;
         }
 
-        $('#form').submit();
+        //$('#form').submit();
     });
 
 </script>

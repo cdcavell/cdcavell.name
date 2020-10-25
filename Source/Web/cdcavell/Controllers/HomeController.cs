@@ -155,8 +155,9 @@ namespace cdcavell.Controllers
                 return View(model);
             }
 
+            model = new SearchModel();
             model.StatusCode = HttpStatusCode.BadRequest;
-            return BadRequest(ModelState);
+            return View(model);
         }
 
         /// <summary>
