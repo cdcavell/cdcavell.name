@@ -1,6 +1,5 @@
 ﻿using cdcavell.Models.AppSettings;
 using cdcavell.Models.Search;
-using CDCavell.ClassLibrary.Web.Http;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -8,8 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Net;
-using System.Net.Http;
-using System.Web;
 
 namespace cdcavell.Controllers
 {
@@ -20,7 +17,7 @@ namespace cdcavell.Controllers
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/24/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/25/2020 | Initial build |~ 
     /// </revision>
     public class HomeController : ApplicationBaseController<HomeController>
     {
@@ -148,33 +145,36 @@ namespace cdcavell.Controllers
                     model.VideoResult.StatusCode = HttpStatusCode.NotFound;
                     model.VideoResult.StatusMessage = HttpStatusCode.NotFound.ToString();
 
-                    Classes.BingCustomSearch search = new Classes.BingCustomSearch(
-                        _appSettings.Authentication.BingCustomSearch.Url,
-                        _appSettings.Authentication.BingCustomSearch.CustomConfigId,
-                        _appSettings.Authentication.BingCustomSearch.SubscriptionKey
-                    );
-
-                    model.WebResult = Classes.BingCustomSearch.GetResults("Web", model.SearchRequest);
-                    if (model.WebResult.StatusCode == HttpStatusCode.OK)
+                    if (!string.IsNullOrEmpty(model.SearchRequest.Trim()))
                     {
-                        model.StatusCode = model.WebResult.StatusCode;
-                        model.WebActive = "active";
-                    }
+                        Classes.BingCustomSearch search = new Classes.BingCustomSearch(
+                            _appSettings.Authentication.BingCustomSearch.Url,
+                            _appSettings.Authentication.BingCustomSearch.CustomConfigId,
+                            _appSettings.Authentication.BingCustomSearch.SubscriptionKey
+                        );
 
-                    model.ImageResult = Classes.BingCustomSearch.GetResults("Image", model.SearchRequest);
-                    if (model.ImageResult.StatusCode == HttpStatusCode.OK)
-                    {
-                        model.StatusCode = model.ImageResult.StatusCode;
-                        if (string.IsNullOrEmpty(model.WebActive))
-                            model.ImageActive = "active";
-                    }
+                        model.WebResult = Classes.BingCustomSearch.GetResults("Web", model.SearchRequest);
+                        if (model.WebResult.StatusCode == HttpStatusCode.OK)
+                        {
+                            model.StatusCode = model.WebResult.StatusCode;
+                            model.WebActive = "active";
+                        }
 
-                    model.VideoResult = Classes.BingCustomSearch.GetResults("Video", model.SearchRequest);
-                    if (model.VideoResult.StatusCode == HttpStatusCode.OK)
-                    {
-                        model.StatusCode = model.VideoResult.StatusCode;
-                        if (string.IsNullOrEmpty(model.WebActive) && string.IsNullOrEmpty(model.ImageActive))
-                            model.VideoActive = "active";
+                        model.ImageResult = Classes.BingCustomSearch.GetResults("Image", model.SearchRequest);
+                        if (model.ImageResult.StatusCode == HttpStatusCode.OK)
+                        {
+                            model.StatusCode = model.ImageResult.StatusCode;
+                            if (string.IsNullOrEmpty(model.WebActive))
+                                model.ImageActive = "active";
+                        }
+
+                        model.VideoResult = Classes.BingCustomSearch.GetResults("Video", model.SearchRequest);
+                        if (model.VideoResult.StatusCode == HttpStatusCode.OK)
+                        {
+                            model.StatusCode = model.VideoResult.StatusCode;
+                            if (string.IsNullOrEmpty(model.WebActive) && string.IsNullOrEmpty(model.ImageActive))
+                                model.VideoActive = "active";
+                        }
                     }
                 }
 
