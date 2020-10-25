@@ -1,7 +1,7 @@
 @model cdcavell.Models.Search.SearchModel
 
-@using (Html.BeginForm("Search", "Home", FormMethod.Post, new { id="SearchRequest" }))
-{ 
+@using (Html.BeginForm("Search", "Home", FormMethod.Post, new { id = "form", suppressSubmit = "true" }))
+{
     <div class="input-group md-form form-sm form-2 shadow-sm pl-0">
         <input class="form-control border-grey my-0 py-1" type="text" placeholder="Search" aria-label="Search" asp-for="SearchRequest" autofocus>
         <div class="input-group-append">
@@ -74,7 +74,7 @@
                 break;
         }
 
-        $('#SearchRequest').submit();
+        $('#form').submit();
     });
 
 </script>
