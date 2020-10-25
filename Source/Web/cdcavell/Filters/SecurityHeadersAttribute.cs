@@ -56,7 +56,7 @@ namespace cdcavell.Filters
                 csp += "sandbox allow-modals allow-forms allow-same-origin allow-scripts allow-popups; ";
                 csp += "base-uri 'self'; ";
                 csp += "style-src 'self' 'nonce-" + _StyleNonce + "'; ";
-                csp += "script-src 'strict-dynamic' 'nonce-" + _ScriptNonce + "'; ";
+                csp += "script-src 'strict-dynamic' https: 'self' 'nonce-" + _ScriptNonce + "'; ";
                 // also consider adding upgrade-insecure-requests once you have HTTPS in place for production
                 csp += "upgrade-insecure-requests; ";
 
