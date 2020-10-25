@@ -45,13 +45,13 @@
         </ul>
         <div class="tab-content border border-top-0" id="resultsTabContent">
             <div class="tab-pane fade @(Model.WebActive == "active" ? "show" : string.Empty) @Model.WebActive bg-white" id="web-panel" role="tabpanel" aria-labelledby="web-tab">
-                -- Web Results will show here --
+                <partial name="_SearchTabPane" model="@Model.WebResult" />
             </div>
             <div class="tab-pane fade @(Model.ImageActive == "active" ? "show" : string.Empty) @Model.ImageActive bg-white" id="image-panel" role="tabpanel" aria-labelledby="image-tab">
-                -- Image Results will show here --
+                <partial name="_SearchTabPane" model="@Model.ImageResult" />
             </div>
             <div class="tab-pane fade @(Model.VideoActive == "active" ? "show" : string.Empty) @Model.VideoActive bg-white" id="video-panel" role="tabpanel" aria-labelledby="video-tab">
-                -- Video Results will show here --
+                <partial name="_SearchTabPane" model="@Model.VideoResult" />
             </div>
         </div>
     }
@@ -73,7 +73,7 @@
 <script type="text/javascript" nonce="@ViewBag.ScriptNonce">
 
     $('#ResultsTab li').click(function () {
-        console.log('Tab: ' + $(this).text().trim());
+        console.log('Tab Click: ' + $(this).text().trim());
         switch ($(this).text().trim()) {
             case 'Web Results':
                 if (!$('a', this).hasClass('disabled')) {

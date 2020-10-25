@@ -1,0 +1,19 @@
+﻿@model cdcavell.Models.Search.ResultModel
+
+@if (Model.StatusCode != System.Net.HttpStatusCode.OK)
+{
+    <div class="shadow alert @(Model.StatusCode == HttpStatusCode.NotFound ? "alert-warning" : "alert-danger") mb-1" role="alert">
+       <p class="m-0">@Model.Type Search Result@(Model.StatusCode == HttpStatusCode.NotFound ? string.Empty : " Error"): @Model.StatusCode</p>
+    </div>
+}
+else
+{
+    <div class="card border-0">
+        <div class="card-header border-0 bg-white">
+            <p>@Model.Type Search Results Returned: @Model.Items.Count</p>
+        </div>
+        <div class="card-body">
+
+        </div>
+    </div>
+}
