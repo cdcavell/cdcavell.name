@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
+using CDCavell.ClassLibrary.Web.Security;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -16,10 +17,13 @@ namespace is4_cdcavell.Filters
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/18/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/25/2020 | Initial build |~ 
     /// </revision>
     public class SecurityHeadersAttribute : ActionFilterAttribute
     {
+        private string _StyleNonce;
+        private string _ScriptNonce;
+
         /// <summary>
         /// Executes before result execution
         /// </summary>
@@ -49,8 +53,10 @@ namespace is4_cdcavell.Filters
                 csp += "frame-ancestors 'none'; ";
                 csp += "sandbox allow-forms allow-same-origin allow-scripts allow-popups; ";
                 csp += "base-uri 'self'; ";
+                csp += "style-src 'self' 'nonce-" + _StyleNonce + "'; ";
+                csp += "script-src 'strict-dynamic' https: 'self' 'nonce-" + _ScriptNonce + "'; ";
                 // also consider adding upgrade-insecure-requests once you have HTTPS in place for production
-                //csp += "upgrade-insecure-requests;";
+                csp += "upgrade-insecure-requests;";
                 // also an example if you need client images to be displayed from twitter
                 // csp += "img-src 'self' https://pbs.twimg.com;";
 
@@ -72,6 +78,21 @@ namespace is4_cdcavell.Filters
                     context.HttpContext.Response.Headers.Add("Referrer-Policy", referrer_policy);
                 }
             }
+        }
+
+        /// <summary>
+        /// Executes after action method execution to set script nonce
+        /// </summary>
+        /// <param name="context">ActionExecutedContext</param>
+        /// <method>OnActionExecuted(ActionExecutedContext context)</method>
+        public override void OnActionExecuted(ActionExecutedContext context)
+        {
+            var controller = context.Controller as Controller;
+            _StyleNonce = Nonce.Calculate();
+            _ScriptNonce = Nonce.Calculate();
+            controller.ViewBag.StyleNonce = _StyleNonce;
+            controller.ViewBag.ScriptNonce = _ScriptNonce;
+            base.OnActionExecuted(context);
         }
     }
 }
