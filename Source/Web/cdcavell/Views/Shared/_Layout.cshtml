@@ -48,15 +48,6 @@
 </head>
 <body>
 
-    <div id="processing" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="processingLabel" aria-hidden="true" data-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content border-0 shadow bg-processing">
-                <div class="modal-body p-0">
-                    <h3 class="text-center pt-2">Processing, please wait ...</h3>
-                </div>
-            </div>
-        </div>
-    </div>
     <noscript>
         <div class="background-image"></div>
         <div class="background-gradient"></div>
@@ -79,6 +70,15 @@
         </div>
 
         <partial name="_Foot" />
+    </div>
+    <div id="processing" class="modal fade" tabindex="-1" role="dialog" aria-label="processingLabel" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content border-0 shadow bg-processing">
+                <div class="modal-body p-0">
+                    <h3 class="text-center pt-2">Processing, please wait ...</h3>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="~/lib/jquery/jQuery-3.5.1-min.js" nonce="@ViewBag.ScriptNonce"></script>
