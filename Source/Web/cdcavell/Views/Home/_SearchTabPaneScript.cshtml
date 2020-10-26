@@ -4,4 +4,6 @@
 
     console.log('-- Loading Script: _SearchTabPaneScript.cshtml [@Model.Type]');
 
+    var @(Model.Type)_Items = @(Html.Raw(JsonConvert.SerializeObject(Model.Items)));
+
 </script>
