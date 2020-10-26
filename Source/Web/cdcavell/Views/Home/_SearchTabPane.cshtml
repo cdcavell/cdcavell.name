@@ -8,8 +8,8 @@
 }
 else
 {
-    @Html.HiddenFor(Model => Model.PageNumber);
-    @Html.HiddenFor(Model => Model.DisplayCount);
+    @Html.Hidden(Model.Type + "_PageNumber", Model.PageNumber, new { id = Model.Type + "_PageNumber"});
+    @Html.Hidden(Model.Type + "_DisplayCount", Model.DisplayCount, new { id = Model.Type + "_DisplayCount"});
     <div class="card border-0">
         <div class="card-header border-0 bg-white">
             <p class="card-text text-muted">@Model.Type Search Results Returned: @Model.Items.Count</p>
@@ -24,8 +24,3 @@ else
     </div>
 }
 
-@*@section SearchTabPaneScript {
-
-    // @Model.Type TabPane scripting goes here
-
-}*@

@@ -73,8 +73,10 @@
 @section scripts {
 <script type="text/javascript" nonce="@ViewBag.ScriptNonce">
 
+    console.log('-- Loading Script: Search.cshtml');
+
     $('#ResultsTab li').click(function () {
-        console.log('Tab Click: ' + $(this).text().trim());
+        console.log('-- Tab Click: ' + $(this).text().trim());
         switch ($(this).text().trim()) {
             case 'Web Results':
                 if (!$('a', this).hasClass('disabled')) {
@@ -99,5 +101,9 @@
     });
 
 </script>
+<partial name="_SearchTabPaneScript" model="@Model.WebResult" />
+<partial name="_SearchTabPaneScript" model="@Model.ImageResult" />
+<partial name="_SearchTabPaneScript" model="@Model.VideoResult" />
+
 }
 
