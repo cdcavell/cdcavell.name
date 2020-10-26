@@ -52,5 +52,16 @@ namespace cdcavell.Models.Search
             
             }
         }
+
+        /// <summary>
+        /// Constructor method
+        /// </summary>
+        /// <param name="type">string</param>
+        /// <method>
+        /// public ResultModel(string type)</method>
+        public ResultModel(string type)
+        {
+            this.Type = type;
+        }
     }
 }

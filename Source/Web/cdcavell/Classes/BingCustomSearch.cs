@@ -55,8 +55,7 @@ namespace cdcavell.Classes
             string query
         )
         {
-            ResultModel results = new ResultModel();
-            results.Type = searchType;
+            ResultModel results = new ResultModel(searchType);
 
             // set search query url
             string url = string.Empty;
