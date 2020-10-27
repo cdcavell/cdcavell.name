@@ -7,4 +7,21 @@
     var @(Model.Type)_Items = @(Html.Raw(JsonConvert.SerializeObject(Model.Items)));
     console.log(@(Model.Type)_Items.length + ' record(s) loaded to @(Model.Type)_Items');
 
+
+    jQuery.fn.extend({
+        @(Model.Type)_InnerHtml: function () {
+            var lowOffset = ((parseInt($('#@(Model.Type)_PageNumber').val()) * parseInt($('#@(Model.Type)_DisplayCount').val())) - parseInt($('#@(Model.Type)_DisplayCount').val()));
+            var highOffset = (lowOffset + parseInt($('#@(Model.Type)_DisplayCount').val()));
+            var innerHtml = '';
+            for (var i = lowOffset; i < highOffset; i++) {
+                innerHtml += '<br /> ' + i;
+            }
+            $('#@(Model.Type)_ItemsDiv').html(innerHtml);
+        }
+    });
+
+    $(function () {
+        $('#@(Model.Type)_ItemsDiv').@(Model.Type)_InnerHtml();
+    });
+
 </script>
