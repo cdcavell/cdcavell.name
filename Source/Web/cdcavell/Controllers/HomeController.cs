@@ -17,7 +17,7 @@ namespace cdcavell.Controllers
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/25/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/28/2020 | Initial build |~ 
     /// </revision>
     public class HomeController : ApplicationBaseController<HomeController>
     {
@@ -138,10 +138,13 @@ namespace cdcavell.Controllers
                 if (model.StatusCode == HttpStatusCode.NoContent)
                 {
                     model.StatusCode = HttpStatusCode.NotFound;
+                    model.WebActive = string.Empty;
                     model.WebResult.StatusCode = HttpStatusCode.NotFound;
                     model.WebResult.StatusMessage = HttpStatusCode.NotFound.ToString();
+                    model.ImageActive = string.Empty;
                     model.ImageResult.StatusCode = HttpStatusCode.NotFound;
                     model.ImageResult.StatusMessage = HttpStatusCode.NotFound.ToString();
+                    model.VideoActive = string.Empty;
                     model.VideoResult.StatusCode = HttpStatusCode.NotFound;
                     model.VideoResult.StatusMessage = HttpStatusCode.NotFound.ToString();
 
