@@ -11,11 +11,39 @@
     jQuery.fn.extend({
         @(Model.Type)_InnerHtml: function () {
             var lowOffset = ((parseInt($('#@(Model.Type)_PageNumber').val()) * parseInt($('#@(Model.Type)_DisplayCount').val())) - parseInt($('#@(Model.Type)_DisplayCount').val()));
+            console.log('lowOffset: ' + lowOffset);
             var highOffset = (lowOffset + parseInt($('#@(Model.Type)_DisplayCount').val()));
-            var innerHtml = '';
-            for (var i = lowOffset; i < highOffset; i++) {
-                innerHtml += '<br /> ' + i;
+            if (highOffset > parseInt(@(Model.Type)_Items.length)) {
+                highOffset = highOffset - ((highOffset - parseInt(@(Model.Type)_Items.length)) + 1);
             }
+            console.log('highOffset: ' + highOffset);
+            var innerHtml = '';
+            innerHtml += '<div class="container">';
+            for (var i = lowOffset; i < highOffset; i++) {
+
+                var item = @(Model.Type)_Items[i];
+                console.log(item);
+
+                if ('@(Model.Type)' === 'Web') {
+                    innerHtml += '<div class="row m-0 p-0 mb-1"><div class="col"><h5>';
+                    innerHtml += '<a class="text-decoration-none" href="' + item.HostPageUrl + '" rel="external nofollow noopener" target="_blank">';
+                    innerHtml += item.Heading;
+                    innerHtml += '</a></h5>';
+                    innerHtml += '<small class="text-muted">[Last Crawled/Published: ' + item.DatePublishedCrawledFormated + ']</small>';
+                    innerHtml += '<p>' + item.Description + '</p></div></div>';
+                } else {
+                    innerHtml += '<div class="row m-0 p-0 mb-1"><div class="col-2 m-0 p-0">';
+                    innerHtml += '<a href="' + item.ContentUrl + '" class="d-block mb-4 h-100" rel="external nofollow noopener" target="_blank">';
+                    innerHtml += '<img class="img-fluid img-thumbnail" src="' + item.ThumbnailUrl + '" width="300" alt="" />';
+                    innerHtml += '</a></div><div class="col"><h5>';
+                    innerHtml += '<a class="text-decoration-none" href="' + item.HostPageUrl + '" rel="external nofollow noopener" target="_blank">';
+                    innerHtml += item.Heading;
+                    innerHtml += '</a></h5>';
+                    innerHtml += '<small class="text-muted">[Last Crawled/Published: ' + item.DatePublishedCrawledFormated + ']</small>';
+                    innerHtml += '<p>' + item.Description + '</p></div></div>';
+                }
+            }
+            innerHtml += '</div>';
             $('#@(Model.Type)_ItemsDiv').html(innerHtml);
         }
     });
