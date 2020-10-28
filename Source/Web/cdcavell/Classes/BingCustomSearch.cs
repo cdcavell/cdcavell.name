@@ -20,7 +20,7 @@ namespace cdcavell.Classes
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/25/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/27/2020 | Initial build |~ 
     /// </revision>
     public class BingCustomSearch
     {
@@ -55,8 +55,7 @@ namespace cdcavell.Classes
             string query
         )
         {
-            ResultModel results = new ResultModel();
-            results.Type = searchType;
+            ResultModel results = new ResultModel(searchType);
 
             // set search query url
             string url = string.Empty;
@@ -93,7 +92,7 @@ namespace cdcavell.Classes
                         {
                             ItemModel item = new ItemModel();
                             item.ContentUrl = page.url;
-                            item.HostPageUrl = page.displayUrl;
+                            item.HostPageUrl = page.url;
                             item.Heading = page.name;
                             item.Description = page.snippet;
                             item.DatePublishedCrawled = page.dateLastCrawled;

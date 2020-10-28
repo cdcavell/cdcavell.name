@@ -23,19 +23,19 @@ namespace cdcavell.Models.Search
         /// <value>string</value>
         public string WebDisabled { get { return (this.WebResult.Items.Count > 0) ? string.Empty : "disabled"; } }
         /// <value>ResultModel</value>
-        public ResultModel WebResult { get; set; } = new ResultModel();
+        public ResultModel WebResult { get; set; } = new ResultModel("Web");
         /// <value>string</value>
         public string ImageActive { get; set; } = string.Empty;
         /// <value>string</value>
         public string ImageDisabled { get { return (this.ImageResult.Items.Count > 0) ? string.Empty : "disabled"; } }
         /// <value>ResultModel</value>
-        public ResultModel ImageResult { get; set; } = new ResultModel();
+        public ResultModel ImageResult { get; set; } = new ResultModel("Image");
         /// <value>string</value>
         public string VideoActive { get; set; } = string.Empty;
         /// <value>string</value>
         public string VideoDisabled { get { return (this.VideoResult.Items.Count > 0) ? string.Empty : "disabled"; } }
         /// <value>ResultModel</value>
-        public ResultModel VideoResult { get; set; } = new ResultModel();
+        public ResultModel VideoResult { get; set; } = new ResultModel("Video");
 
         private string _searchRequest;
         /// <value>string</value>

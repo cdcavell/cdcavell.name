@@ -8,24 +8,22 @@
 }
 else
 {
-    @Html.HiddenFor(Model => Model.PageNumber);
-    @Html.HiddenFor(Model => Model.DisplayCount);
+    @Html.Hidden(Model.Type + "_PageNumber", Model.PageNumber, new { id = Model.Type + "_PageNumber" });
+    @Html.Hidden(Model.Type + "_DisplayCount", Model.DisplayCount, new { id = Model.Type + "_DisplayCount" });
     <div class="card border-0">
         <div class="card-header border-0 bg-white">
             <p class="card-text text-muted">@Model.Type Search Results Returned: @Model.Items.Count</p>
         </div>
         <div class="card-body">
             <div class="container">
-                <div class="row text-center text-lg-left">
-                @* foreach goes here *@
+                <div class="row text-left text-lg-left" id="@(Model.Type)_ItemsDiv">
+                @* for loop populates here *@
                 </div>
             </div>
         </div>
     </div>
+    <div class="justify-content-center" id="@(Model.Type)_Pager">
+        <ul id="@(Model.Type)_Pagination" class="pagination-sm"></ul>
+    </div>
 }
 
-@*@section SearchTabPaneScript {
-
-    // @Model.Type TabPane scripting goes here
-
-}*@

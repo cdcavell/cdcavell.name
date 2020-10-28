@@ -19,6 +19,8 @@ namespace cdcavell.Models.Search
         public string Description { get; set; }
         /// <value>DateTime</value>
         public DateTime DatePublishedCrawled { get; set; }
+        /// <value>string</value>
+        public string DatePublishedCrawledFormated { get { return this.DatePublishedCrawled.ToString("MM/dd/yyyy"); } }
         /// <value>bool</value>
         public bool isFamilyFriendly { get; set; }
         /// <value>string</value>
@@ -26,7 +28,7 @@ namespace cdcavell.Models.Search
         /// <value>string</value>
         public string HostPageUrl { get; set; }
         /// <value>string</value>
-        public string ThumbnailUrl { get; set; }
+        public string ThumbnailUrl { get; set; } = string.Empty;
         /// <value>string</value>
         public string EncodingFormat { get; set; }
     }
