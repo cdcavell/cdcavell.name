@@ -17,7 +17,7 @@ namespace cdcavell
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/02/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/28/2020 | Initial build |~ 
     /// </revision>
     public class Program
     {
@@ -101,6 +101,7 @@ namespace cdcavell
                     configApp.AddJsonFile("appsettings.json", optional: true);
                     configApp.AddJsonFile($"appsettings.{hostContext.HostingEnvironment.EnvironmentName}.json", optional: false);
                     configApp.AddEnvironmentVariables();
+                    configApp.AddUserSecrets(Assembly.GetEntryAssembly(), optional: true);
                     configApp.AddCommandLine(args);
                 })
                 .ConfigureWebHostDefaults(webBuilder =>

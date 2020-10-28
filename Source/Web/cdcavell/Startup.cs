@@ -1,5 +1,6 @@
 using AspNetCore.SEOHelper;
 using cdcavell.Authorization;
+using cdcavell.Classes;
 using cdcavell.Filters;
 using cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Commons.Logging;
@@ -34,13 +35,14 @@ namespace cdcavell
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/23/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0 | 10/28/2020 | Initial build |~ 
     /// </revision>
     public class Startup
     {
         private IConfiguration _configuration;
         private IWebHostEnvironment _webHostEnvironment;
         private Logger _logger;
+        private AppSettings _appSettings;
 
         /// <summary>
         /// Class Constructor
@@ -64,6 +66,7 @@ namespace cdcavell
             // Register appsettings.json
             AppSettings appSettings = new AppSettings();
             _configuration.Bind("AppSettings", appSettings);
+            _appSettings = appSettings;
             services.AddSingleton(appSettings);
 
             services.AddMvc();
@@ -172,6 +175,7 @@ namespace cdcavell
         public void OnAppStarted()
         {
             AESGCM.Seed(_configuration);
+            new Sitemap(_logger, _webHostEnvironment, _appSettings).Create();
 
             _logger.Information($"{Assembly.GetEntryAssembly().GetName().Name} Application Started");
             _logger.Information($"Hosting Environment: {_webHostEnvironment.EnvironmentName}");
