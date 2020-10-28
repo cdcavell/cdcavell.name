@@ -4,29 +4,35 @@
     UserViewModel userModel = (UserViewModel)ViewData["UserViewModel"];
 }
 
-
 <div class="nav-page">
-    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
-
-        <a href="https://cdcavell.name" class="navbar-brand">
-            <img src="~/img/icon-light.png" alt="logo" width="32" height="32" class="icon-banner mb-2">
-            CDCavell
-        </a>
-
-        <ul class="navbar-nav navbar-expand ml-auto">
-            @if (userModel.IsAuthenticated)
-            {
-                <li class="nav-item mr-lg-5">
-                    <a class="text-light text-decoration-none" asp-action="Logout" asp-controller="Account">Logout</a>
-                </li>
-            }
-            <li class="nav-item ml-3">
-                <a class="text-light text-decoration-none" href="https://cdcavell.name/Home/Search">
-                    Search
-                    <i class="fas fa-search mr-2" aria-hidden="true"></i>
+    <nav class="navbar fixed-top navbar-expand navbar-dark bg-dark">
+        <div class="container">
+            <div class="navbar-header">
+                <a href="https://cdcavell.name" class="navbar-brand">
+                    <img src="~/img/icon-light.png" alt="logo" width="32" height="32" class="icon-banner mb-2">
+                    CDCavell
                 </a>
-            </li>
-        </ul>
-
+            </div>
+        </div>
+         <div id="navbar" class="navbar-collapse collapse w-75 justify-content-end">
+             <ul class="nav navbar-nav m-1">
+                 @if (userModel.IsAuthenticated)
+                 {
+                    <li>
+                        <a class="text-light text-decoration-none" asp-action="Logout" asp-controller="Account">Logout</a>
+                    </li>
+                 }
+             </ul>
+             <ul class="nav navbar-nav ml-1 mx-4 justify-content-end">
+                <li>
+                    <a class="text-light text-decoration-none" href="https://cdcavell.name/Home/Search">
+                        <div class="row flex-nowrap">
+                            <div class="col-auto text-right m-1 mr-0 p-0">Search</div>
+                            <div class="col-auto m-1 p-0"><i class="fas fa-search" aria-hidden="true"></i></div>
+                        </div>
+                    </a>
+                </li>
+             </ul>
+         </div>
     </nav>
 </div>

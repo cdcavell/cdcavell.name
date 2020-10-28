@@ -5,49 +5,55 @@
 
 
 <div class="nav-page">
-    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
-
-        <a href="~/" class="navbar-brand">
-            <img src="~/img/icon-light.png" alt="logo" width="32" height="32" class="icon-banner mb-2">
-            CDCavell
-        </a>
-
-        <ul class="navbar-nav navbar-expand ml-auto">
-            @if (userModel.IsAuthenticated)
-            {
-                <li class="nav-item dropdown mr-lg-5">
-                    <a href="#" class="nav-link dropdown-toggle text-light" data-toggle="dropdown">@userModel.Email <b class="caret"></b></a>
-
-                    <div class="dropdown-menu">
-                        @if ((await AuthorizationService.AuthorizeAsync(User, "Administration")).Succeeded)
-                        {
-                            <a class="dropdown-item" asp-action="Index" asp-controller="Administration">Administration</a>
-                            <hr />
-                        }
-                        @if ((await AuthorizationService.AuthorizeAsync(User, "User")).Succeeded)
-                        {
-                            <a class="dropdown-item" asp-action="Authorized" asp-controller="Home">User Authorized</a>
-                            <hr />
-                        }
-                        <a class="dropdown-item" asp-action="Logout" asp-controller="Account">Logout</a>
-                    </div>
-                </li>         
-            }
-            else
-            {
-                <li class="nav-item mr-lg-5">
-                    <a class="text-light text-decoration-none" asp-action="Login" asp-controller="Account">
-                        Login
+    <nav class="navbar fixed-top navbar-expand navbar-dark bg-dark">
+        <div class="container">
+            <div class="navbar-header">
+                <a href="~/" class="navbar-brand">
+                    <img src="~/img/icon-light.png" alt="logo" width="32" height="32" class="icon-banner mb-2">
+                    CDCavell
+                </a>
+            </div>
+        </div>
+         <div id="navbar" class="navbar-collapse collapse w-75 justify-content-end">
+             <ul class="nav navbar-nav m-1">
+                 @if (userModel.IsAuthenticated)
+                 {
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle text-decoration-none text-light" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@userModel.Email <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            @if ((await AuthorizationService.AuthorizeAsync(User, "Administration")).Succeeded) 
+                            {
+                                <li><a class="dropdown-item" asp-action="Index" asp-controller="Administration">Administration</a></li>
+                                <li role="separator" class="divider"></li>
+                            }
+                            @if ((await AuthorizationService.AuthorizeAsync(User, "User")).Succeeded) 
+                            { 
+                                <li><a class="dropdown-item" asp-action="Authorized" asp-controller="Home">User Authorized</a></li>
+                                <li role="separator" class="divider"></li>
+                            }
+                            <li><a class="dropdown-item" asp-action="Logout" asp-controller="Account">Logout</a></li>
+                        </ul>
+                    </li>
+                 }
+                 else
+                 {
+                     <li>
+                        <a class="text-light text-decoration-none" asp-action="Login" asp-controller="Account">
+                            Login
+                        </a>
+                     </li>
+                 }
+             </ul>
+             <ul class="nav navbar-nav ml-1 mx-4 justify-content-end">
+                <li>
+                    <a class="text-light text-decoration-none" asp-action="Search" asp-controller="Home">
+                        <div class="row flex-nowrap">
+                            <div class="col-auto text-right m-1 mr-0 p-0">Search</div>
+                            <div class="col-auto m-1 p-0"><i class="fas fa-search" aria-hidden="true"></i></div>
+                        </div>
                     </a>
                 </li>
-            }
-            <li class="nav-item ml-3">
-                <a class="text-light text-decoration-none" asp-action="Search" asp-controller="Home">
-                    Search
-                    <i class="fas fa-search mr-2" aria-hidden="true"></i>
-                </a>
-            </li>
-        </ul>
-
+             </ul>
+         </div>
     </nav>
 </div>

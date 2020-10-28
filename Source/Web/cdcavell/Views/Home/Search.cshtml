@@ -81,16 +81,19 @@
             case 'Web Results':
                 if (!$('a', this).hasClass('disabled')) {
                     $('#WebActive').val('active');
+                    $('#Web_ItemsDiv').Web_InnerHtml();
                 }
                 break;
             case 'Image Results':
                 if (!$('a', this).hasClass('disabled')) {
                     $('#ImageActive').val('active');
+                    $('#Image_ItemsDiv').Image_InnerHtml();
                 }
                 break;
             case 'Video Results':
                 if (!$('a', this).hasClass('disabled')) {
                     $('#VideoActive').val('active');
+                    $('#Video_ItemsDiv').Video_InnerHtml();
                 }
                 break;
         }

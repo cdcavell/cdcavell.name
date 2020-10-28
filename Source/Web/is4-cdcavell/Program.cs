@@ -101,6 +101,7 @@ namespace is4_cdcavell
                     configApp.AddJsonFile("appsettings.json", optional: true);
                     configApp.AddJsonFile($"appsettings.{hostContext.HostingEnvironment.EnvironmentName}.json", optional: false);
                     configApp.AddEnvironmentVariables();
+                    configApp.AddUserSecrets(Assembly.GetEntryAssembly(), optional: true);
                     configApp.AddCommandLine(args);
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
