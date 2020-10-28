@@ -2,27 +2,30 @@
 
 <script type="text/javascript" nonce="@ViewBag.ScriptNonce">
 
-    console.log('-- Loading Script: _SearchTabPaneScript.cshtml [@Model.Type]');
+    console.info('-- Loading Script: _SearchTabPaneScript.cshtml [@Model.Type]');
 
     var @(Model.Type)_Items = @(Html.Raw(JsonConvert.SerializeObject(Model.Items)));
-    console.log(@(Model.Type)_Items.length + ' record(s) loaded to @(Model.Type)_Items');
+    console.info(@(Model.Type)_Items.length + ' record(s) loaded to @(Model.Type)_Items');
 
 
     jQuery.fn.extend({
         @(Model.Type)_InnerHtml: function () {
+            console.info('@(Model.Type)_InnerHtml function called');
             var lowOffset = ((parseInt($('#@(Model.Type)_PageNumber').val()) * parseInt($('#@(Model.Type)_DisplayCount').val())) - parseInt($('#@(Model.Type)_DisplayCount').val()));
-            console.log('lowOffset: ' + lowOffset);
+            console.debug('lowOffset: ' + lowOffset);
             var highOffset = (lowOffset + parseInt($('#@(Model.Type)_DisplayCount').val()));
+            console.debug('highOffset: ' + highOffset);
+            console.debug('@(Model.Type)_Items.length: ' + @(Model.Type)_Items.length);
             if (highOffset > parseInt(@(Model.Type)_Items.length)) {
                 highOffset = highOffset - ((highOffset - parseInt(@(Model.Type)_Items.length)) + 1);
             }
-            console.log('highOffset: ' + highOffset);
+            console.debug('highOffset: ' + highOffset);
             var innerHtml = '';
             innerHtml += '<div class="container">';
             for (var i = lowOffset; i < highOffset; i++) {
 
                 var item = @(Model.Type)_Items[i];
-                console.log(item);
+                console.debug(item);
 
                 if ('@(Model.Type)' === 'Web') {
                     innerHtml += '<div class="row m-0 p-0 mb-1"><div class="col"><h5>';
@@ -46,6 +49,22 @@
             innerHtml += '</div>';
             $('#@(Model.Type)_ItemsDiv').html(innerHtml);
         }
+    });
+
+    $(function () {
+        window.pagObj = $('#@(Model.Type)_Pagination').twbsPagination({
+            totalPages: @Model.TotalPages,
+            visiblePages: @Model.DisplayCount,
+            onPageClick: function (event, page) {
+                console.info('#@(Model.Type)_Pagination clicked');
+                console.debug(page + ' (from options)');
+                $('#@(Model.Type)_PageNumber').val(page);
+                $('#@(Model.Type)_ItemsDiv').@(Model.Type)_InnerHtml();
+                $('#@(Model.Type)_ItemsDiv').show();
+            }
+        }).on('page', function (event, page) {
+            console.debug(page + ' (from event listening)');
+        });
     });
 
     $(function () {
