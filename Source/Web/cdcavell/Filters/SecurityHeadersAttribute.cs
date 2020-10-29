@@ -18,6 +18,7 @@ namespace cdcavell.Filters
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0 | 10/25/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.1 | 10/28/2020 | Add frame YouTube |~ 
     /// </revision>
     public class SecurityHeadersAttribute : ActionFilterAttribute
     {
@@ -50,12 +51,14 @@ namespace cdcavell.Filters
 
                 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
                 var csp = "default-src 'self'; ";
-                csp += "img-src 'self' https://*.mm.bing.net data:; ";
+                csp += "img-src 'self' https://*.mm.bing.net https://www.youtube.com data:; ";
                 csp += "object-src 'none'; ";
+                csp += "frame-src 'self' https://www.youtube.com; ";
                 csp += "frame-ancestors 'self'; ";
                 csp += "sandbox allow-modals allow-forms allow-same-origin allow-scripts allow-popups; ";
                 csp += "base-uri 'self'; ";
                 csp += "style-src 'self' 'nonce-" + _StyleNonce + "'; ";
+                csp += "style-src-attr 'self' 'nonce-" + _StyleNonce + "'; ";
                 csp += "script-src 'strict-dynamic' https: 'self' 'nonce-" + _ScriptNonce + "'; ";
                 // also consider adding upgrade-insecure-requests once you have HTTPS in place for production
                 csp += "upgrade-insecure-requests; ";

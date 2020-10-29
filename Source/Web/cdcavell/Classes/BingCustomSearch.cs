@@ -1,6 +1,6 @@
 ﻿using cdcavell.Models.AppSettings;
-using cdcavell.Models.Search;
-using cdcavell.Models.Search.BingResult;
+using cdcavell.Models.Home.Search;
+using cdcavell.Models.Home.Search.BingResult;
 using CDCavell.ClassLibrary.Commons.Logging;
 using CDCavell.ClassLibrary.Web.Http;
 using Microsoft.Extensions.Logging;
@@ -21,6 +21,7 @@ namespace cdcavell.Classes
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0 | 10/27/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.1 | 10/28/2020 | Update namespace |~ 
     /// </revision>
     public class BingCustomSearch
     {

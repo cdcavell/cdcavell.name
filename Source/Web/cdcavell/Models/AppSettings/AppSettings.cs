@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using cdcavell.Models.Utilities;
+using System.Reflection;
 
 namespace cdcavell.Models.AppSettings
 {
@@ -10,6 +11,7 @@ namespace cdcavell.Models.AppSettings
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0 | 10/20/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.1 | 10/28/2020 | Add YouTubeVideos |~ 
     /// </revision>
     public class AppSettings
     {
@@ -29,5 +31,7 @@ namespace cdcavell.Models.AppSettings
         public Authorization Authorization { get; set; }
         /// <value>Application</value>
         public Application Application { get; set; }
+        /// <value>YouTubeVideo[]</value>
+        public YouTubeVideo[] YouTubeVideos { get; set; }
     }
 }

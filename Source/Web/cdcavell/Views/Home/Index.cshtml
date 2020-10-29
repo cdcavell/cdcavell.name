@@ -1,11 +1,24 @@
-@{
-}
+@model IndexModel
 
-<h2>Welcome</h2>
-<p>
+<h2 class="mb-1">
+    Welcome
+</h2>
+<p class="font-small text-muted">
     This is the personal website for
     <a class="text-decoration-none" href="https://www.linkedin.com/in/christopher-d-cavell-6192113b/" rel="external nofollow noopener" target="_blank">
-    Christopher D. Cavell</a>. This website is currently under development 
-    and will primarily be used to showcase development of ASP.NET Core 3.1 
-    MVC utilizing  OAuth 2.0 framework for authentication.
+    Christopher D. Cavell</a>. 
 </p>
+
+<div class="youtube-holder">
+    <iframe class="youtube-iframe" tabindex="-1"
+            src="@Model.YouTubeVideo.VideoUrl"
+            style="background-image: url(@Model.YouTubeVideo.ImageUrl);"
+            frameborder="0"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            nonce="@ViewBag.StyleNonce">
+    </iframe>
+    <div class="youtube-footer">
+        Video streamed from <a class="text-decoration-none" href="@Model.YouTubeVideo.RedirectUrl" rel="external nofollow noopener" target="_blank">YouTube</a> website.
+    </div>
+</div>

@@ -1,5 +1,6 @@
 ﻿using cdcavell.Models.AppSettings;
-using cdcavell.Models.Search;
+using cdcavell.Models.Home;
+using cdcavell.Models.Home.Search;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -18,6 +19,8 @@ namespace cdcavell.Controllers
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0 | 10/28/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.1 | 10/28/2020 | Update namespace |~ 
+    /// | Christopher D. Cavell | 1.0.1 | 10/28/2020 | Add YouTubeVideo to Index |~ 
     /// </revision>
     public class HomeController : ApplicationBaseController<HomeController>
     {
@@ -54,7 +57,10 @@ namespace cdcavell.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            return View();
+            IndexModel model = new IndexModel();
+            model.YouTubeVideo = _appSettings.YouTubeVideos[1];
+
+            return View(model);
         }
 
         /// <summary>
