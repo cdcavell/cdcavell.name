@@ -35,4 +35,6 @@ $ git flow init -d
 | Build | Date | Description |
 |-------|------|-------------|
 | 1.0.0 | 10/28/2020 | __Initial Development__ |
-| 1.0.0.1 | 10/28/2020 | __Fix: Center Search Pagination |
+| 1.0.0.1 | 10/28/2020 | __Fix: Center Search Pagination__ |
+| 1.0.0.2 | 10/28/2020 | __Fix: Change twitter description in layout__ |
+
