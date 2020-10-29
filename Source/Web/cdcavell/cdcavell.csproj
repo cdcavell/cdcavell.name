@@ -3,12 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
 	  <RootNamespace>cdcavell</RootNamespace>
-	  <Version>1.0.0.2</Version>
+	  <Version>1.0.1</Version>
 	  <DocumentationFile>../../../Documentation/Source/$(AssemblyName).xml</DocumentationFile>
 	  <UserSecretsId>7e0ff3e4-a0a2-4cb5-985c-85156cc56a57</UserSecretsId>
 	  <Authors>Christopher D. Cavell</Authors>
 	  <Product>Website</Product>
-	  <Description>Personal website for Christopher D. Cavell. This website is currently under development and will primarily be used to showcase development of ASP.NET Core 3.1 MVC utilizing  OAuth 2.0 framework for authentication.</Description>
+	  <Description>Personal website for Christopher D. Cavell. An ongoing development of a Net Core 3.1 MVC application utilizing OAuth 2.0 framework for authentication. Built with Brock Allen &amp; Dominick Baier's IdentityServer4 v4.1.1. This version also includes Microsoft's Bing Custom Search API with Eugene Simakin's jQuery pagination plugin v1.4.2. Application can easily be changed to use SAML2P in place of OAuth 2.0 for authentication, with the Rsk.Saml SAML component from Rock Solid Knowledge.</Description>
 	  <Copyright>2020 - Christopher D. Cavell</Copyright>
 	  <PackageLicenseFile>LICENSE</PackageLicenseFile>
 	  <PackageProjectUrl>https://cdcavell.name</PackageProjectUrl>
@@ -17,8 +17,8 @@
 	  <RepositoryUrl>https://github.com/cdcavell/cdcavell.name</RepositoryUrl>
 	  <NeutralLanguage>en-US</NeutralLanguage>
 	  <AssemblyName>CDCavell</AssemblyName>
-	  <AssemblyVersion>1.0.0.2</AssemblyVersion>
-	  <FileVersion>1.0.0.2</FileVersion>
+	  <AssemblyVersion>1.0.1.0</AssemblyVersion>
+	  <FileVersion>1.0.1.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -58,6 +58,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="Models\Utilities\" />
 	  <Folder Include="wwwroot\lib\bootstrap\" />
 	</ItemGroup>
 

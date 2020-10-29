@@ -6,19 +6,13 @@
 <p class="font-small text-muted">
     This is the personal website for
     <a class="text-decoration-none" href="https://www.linkedin.com/in/christopher-d-cavell-6192113b/" rel="external nofollow noopener" target="_blank">
-    Christopher D. Cavell</a>. 
+    Christopher D. Cavell</a>. An ongoing development of a Net Core 3.1 MVC application utilizing OAuth 2.0 framework for authentication. Built with 
+    Brock Allen & Dominick Baier's 
+    <a class="text-decoration-none" href="https://identityserver4.readthedocs.io/en/latest/" rel="external nofollow noopener" target="_blank">IdentityServer4</a> v4.1.1. 
+    This version also includes Microsoft's <a class="text-decoration-none" href="https://www.customsearch.ai/" rel="external nofollow noopener" target="_blank">Bing Custom Search API</a> 
+    with Eugene Simakin's <a class="text-decoration-none" href="http://josecebe.github.io/twbs-pagination/" rel="external nofollow noopener" target="_blank">jQuery pagination plugin</a> v1.4.2. 
+    Application can easily be changed to use SAML2P in place of OAuth 2.0 for authentication, with the 
+    <a class="text-decoration-none" href="https://www.identityserver.com/documentation/saml2p/" rel="external nofollow noopener" target="_blank">Rsk.Saml SAML component</a> 
+    from <a class="text-decoration-none" href="https://www.rocksolidknowledge.com/" rel="external nofollow noopener" target="_blank">Rock Solid Knowledge</a>. 
 </p>
 
-<div class="youtube-holder">
-    <iframe class="youtube-iframe" tabindex="-1"
-            src="@Model.YouTubeVideo.VideoUrl"
-            style="background-image: url(@Model.YouTubeVideo.ImageUrl);"
-            frameborder="0"
-            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-            nonce="@ViewBag.StyleNonce">
-    </iframe>
-    <div class="youtube-footer">
-        Video streamed from <a class="text-decoration-none" href="@Model.YouTubeVideo.RedirectUrl" rel="external nofollow noopener" target="_blank">YouTube</a> website.
-    </div>
-</div>

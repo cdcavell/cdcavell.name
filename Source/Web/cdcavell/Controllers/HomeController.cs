@@ -20,7 +20,7 @@ namespace cdcavell.Controllers
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0 | 10/28/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.1 | 10/28/2020 | Update namespace |~ 
-    /// | Christopher D. Cavell | 1.0.1 | 10/28/2020 | Add YouTubeVideo to Index |~ 
+    /// | Christopher D. Cavell | 1.0.1 | 10/29/2020 | Remove YouTubeVideo from Index |~ 
     /// </revision>
     public class HomeController : ApplicationBaseController<HomeController>
     {
@@ -58,8 +58,6 @@ namespace cdcavell.Controllers
         public IActionResult Index()
         {
             IndexModel model = new IndexModel();
-            model.YouTubeVideo = _appSettings.YouTubeVideos[1];
-
             return View(model);
         }
 
