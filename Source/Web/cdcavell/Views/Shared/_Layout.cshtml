@@ -37,7 +37,7 @@
     <link rel="stylesheet" type="text/css" href="~/css/site.css" nonce="@ViewBag.StyleNonce" />
     <noscript>
         <style nonce="@ViewBag.StyleNonce">
-            #loading {
+            #processing {
                 display: none;
             }
             .page-container {
@@ -48,16 +48,6 @@
 </head>
 <body>
 
-    <noscript>
-        <div class="background-image"></div>
-        <div class="background-gradient"></div>
-        <div class="noscriptmsg" id="noscriptmsg">
-            <div class="alert alert-danger" role="alert">
-                JavaScript must be enabled in order for you to use cdcavell.name.
-                However, it seems JavaScript is either disabled or not supported by your browser.
-            </div>
-        </div>
-    </noscript>
     <div class="page-container">
         <partial name="_Nav" />
 
@@ -80,6 +70,16 @@
             </div>
         </div>
     </div>
+    <noscript>
+        <div class="background-image"></div>
+        <div class="background-gradient"></div>
+        <div class="noscriptmsg" id="noscriptmsg">
+            <div class="alert alert-danger" role="alert">
+                JavaScript must be enabled in order for you to use cdcavell.name.
+                However, it seems JavaScript is either disabled or not supported by your browser.
+            </div>
+        </div>
+    </noscript>
 
     <script src="~/lib/jquery/jQuery-3.5.1-min.js" nonce="@ViewBag.ScriptNonce"></script>
     <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js" nonce="@ViewBag.ScriptNonce"></script>

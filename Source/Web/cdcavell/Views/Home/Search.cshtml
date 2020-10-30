@@ -1,5 +1,7 @@
 @model SearchModel
 
+<h1 class="h2"></h1>
+
 @using (Html.BeginForm("Search", "Home", FormMethod.Post, new { id = "form", suppressSubmit = "false" }))
 {
     @Html.HiddenFor(Model => Model.StatusCode);
