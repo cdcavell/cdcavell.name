@@ -37,6 +37,7 @@ namespace cdcavell
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.0 | 10/28/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.0.4 | 10/30/2020 | Enforce HTTPS in ASP.NET Core [#158](https://github.com/cdcavell/cdcavell.name/issues/158) |~
+    /// | Christopher D. Cavell | 1.0.0.5 | 10/30/2020 | EU General Data Protection Regulation (GDPR) support in ASP.NET Core [#161](https://github.com/cdcavell/cdcavell.name/issues/161) |~
     /// </revision>
     public class Startup
     {
@@ -148,6 +149,13 @@ namespace cdcavell
                     options.HttpsPort = 443;
                 });
             }
+
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+                options.ConsentCookie.Expiration = TimeSpan.FromDays(30);
+            });
         }
 
         /// <summary>
@@ -187,6 +195,7 @@ namespace cdcavell
             app.UseAuthorization();
 
             app.UseStaticFiles();
+            app.UseCookiePolicy();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
