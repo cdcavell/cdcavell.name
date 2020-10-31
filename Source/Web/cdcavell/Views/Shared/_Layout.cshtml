@@ -70,6 +70,7 @@
             </div>
         </div>
     </div>
+    <partial name="_CookieConsentPartial" />
     <noscript>
         <div class="background-image"></div>
         <div class="background-gradient"></div>
@@ -85,6 +86,9 @@
     <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js" nonce="@ViewBag.ScriptNonce"></script>
     <script src="~/lib/twbs-pagination/jquery.twbsPagination.min.js" nonce="@ViewBag.ScriptNonce"></script>
     <script src="~/js/site.js" nonce="@ViewBag.ScriptNonce"></script>
+
+    <partial name="_CookieConsentPartialScript" />
+
     @RenderSection("scripts", required: false)
 
 </body>
