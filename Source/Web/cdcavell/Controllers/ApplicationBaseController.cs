@@ -16,7 +16,7 @@ namespace cdcavell.Controllers
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/18/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0.0 | 10/18/2020 | Initial build |~ 
     /// </revision>
     [ServiceFilter(typeof(SecurityHeadersAttribute))]
     public abstract partial class ApplicationBaseController<T> : WebBaseController<ApplicationBaseController<T>> where T : ApplicationBaseController<T>
