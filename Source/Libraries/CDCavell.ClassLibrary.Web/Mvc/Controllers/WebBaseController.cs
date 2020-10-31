@@ -21,7 +21,7 @@ namespace CDCavell.ClassLibrary.Web.Mvc.Controllers
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/12/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0.0 | 10/12/2020 | Initial build |~ 
     /// </revision>
     [Controller]
     [Authorize]

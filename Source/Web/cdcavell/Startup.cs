@@ -35,8 +35,8 @@ namespace cdcavell
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/28/2020 | Initial build |~ 
-    /// | Christopher D. Cavell | 1.0.1 | 10/30/2020 | Enforce HTTPS in ASP.NET Core #158 |~
+    /// | Christopher D. Cavell | 1.0.0.0 | 10/28/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0.4 | 10/30/2020 | Enforce HTTPS in ASP.NET Core [#158](https://github.com/cdcavell/cdcavell.name/issues/158) |~
     /// </revision>
     public class Startup
     {
