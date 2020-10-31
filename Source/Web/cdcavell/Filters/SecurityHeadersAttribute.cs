@@ -62,8 +62,6 @@ namespace cdcavell.Filters
                 csp += "script-src 'strict-dynamic' https: 'self' 'nonce-" + _ScriptNonce + "'; ";
                 // also consider adding upgrade-insecure-requests once you have HTTPS in place for production
                 csp += "upgrade-insecure-requests; ";
-                csp += "Strict-Transport-Security: max-age=63072000; includeSubDomains; preload ";
-                csp += "Permissions-Policy: geolocation=(self) ";
 
                 // once for standards compliant browsers
                 if (!context.HttpContext.Response.Headers.ContainsKey("Content-Security-Policy"))
