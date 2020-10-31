@@ -20,6 +20,7 @@ namespace cdcavell.Filters
     /// | Christopher D. Cavell | 1.0.0 | 10/25/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.1 | 10/28/2020 | Add YouTubeVideos |~ 
     /// | Christopher D. Cavell | 1.0.1 | 10/29/2020 | Remove YouTubeVideos (Not Implemented) |~ 
+    /// | Christopher D. Cavell | 1.0.1 | 10/29/2020 | Issue #150 Content-Security-Policy HTTP header: Bad content security policy |~ 
     /// </revision>
     public class SecurityHeadersAttribute : ActionFilterAttribute
     {
@@ -58,10 +59,11 @@ namespace cdcavell.Filters
                 csp += "sandbox allow-modals allow-forms allow-same-origin allow-scripts allow-popups; ";
                 csp += "base-uri 'self'; ";
                 csp += "style-src 'self' 'nonce-" + _StyleNonce + "'; ";
-                csp += "style-src-attr 'self' 'nonce-" + _StyleNonce + "'; ";
                 csp += "script-src 'strict-dynamic' https: 'self' 'nonce-" + _ScriptNonce + "'; ";
                 // also consider adding upgrade-insecure-requests once you have HTTPS in place for production
                 csp += "upgrade-insecure-requests; ";
+                csp += "Strict-Transport-Security: max-age=63072000; includeSubDomains; preload ";
+                csp += "Permissions-Policy: geolocation=(self) ";
 
                 // once for standards compliant browsers
                 if (!context.HttpContext.Response.Headers.ContainsKey("Content-Security-Policy"))
