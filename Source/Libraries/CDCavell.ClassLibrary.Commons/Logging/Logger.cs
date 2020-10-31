@@ -10,7 +10,7 @@ namespace CDCavell.ClassLibrary.Commons.Logging
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 07/05/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0.0 | 07/05/2020 | Initial build |~ 
     /// </revision>
     public class Logger
     {

@@ -9,7 +9,7 @@ namespace CDCavell.ClassLibrary.Web.Html
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 09/29/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0.0 | 09/29/2020 | Initial build |~ 
     /// </revision>
     public static class StatusCodes
     {

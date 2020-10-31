@@ -18,8 +18,8 @@ namespace cdcavell.Filters
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.0 | 10/25/2020 | Initial build |~ 
-    /// | Christopher D. Cavell | 1.0.0.3 | 10/28/2020 | Add YouTubeVideos |~ 
-    /// | Christopher D. Cavell | 1.0.0.3 | 10/29/2020 | Remove YouTubeVideos (Not Implemented) |~ 
+    /// | Christopher D. Cavell | 1.0.0.1 | 10/28/2020 | Add YouTubeVideos |~ 
+    /// | Christopher D. Cavell | 1.0.0.1 | 10/29/2020 | Remove YouTubeVideos (Not Implemented) |~ 
     /// | Christopher D. Cavell | 1.0.0.3 | 10/30/2020 | Issue #150 Content-Security-Policy HTTP header: Bad content security policy |~ 
     /// </revision>
     public class SecurityHeadersAttribute : ActionFilterAttribute
