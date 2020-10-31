@@ -42,4 +42,4 @@ $ git flow init -d
 | 1.0.0.1 | 10/28/2020 | __Fix: Center Search Pagination__ |
 | 1.0.0.2 | 10/28/2020 | __Fix: Change twitter description in layout__ |
 | 1.0.1 | 10/30/2020 | __Feature: Addressed Issues #142 #143 #146 #147 #150__
-
+| 1.0.1 | 10/30/2020 | __Feature: Enforce HTTPS in ASP.NET Core #158__
