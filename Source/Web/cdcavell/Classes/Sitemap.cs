@@ -1,10 +1,14 @@
 ﻿using AspNetCore.SEOHelper.Sitemap;
 using cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Commons.Logging;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace cdcavell.Classes
 {
@@ -16,6 +20,7 @@ namespace cdcavell.Classes
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.0 | 10/28/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0.6 | 10/31/2020 | Convert Sitemap class to build sitemap.xml dynamic based on existing controllers in project [#145](https://github.com/cdcavell/cdcavell.name/issues/145) |~ 
     /// </revision>
     public class Sitemap
     {
@@ -55,18 +60,38 @@ namespace cdcavell.Classes
         /// <method>public void Create()</method>
         public void Create()
         {
+            Assembly asm = Assembly.GetExecutingAssembly();
+
+            var controllerActionList = asm.GetTypes()
+                .Where(type => typeof(Controller).IsAssignableFrom(type))
+                .SelectMany(type => type.GetMethods(BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public))
+                .Select(x => new { Controller = x.DeclaringType.Name, Action = x.Name, ReturnType = x.ReturnType.Name, Attributes = String.Join(",", x.GetCustomAttributes().Select(a => a.GetType().Name.Replace("Attribute", string.Empty))) })
+                .ToList()
+                .Where(x => x.Attributes.Contains("AllowAnonymous") && x.Attributes.Contains("HttpGet"))
+                .Where(x => !x.Controller.Equals("AccountController"))
+                .Where(x => !x.Controller.Equals("HomeController") || !x.Action.Equals("WithdrawConsent"))
+                .ToList();
+
+
             var url = "https://cdcavell.name";
             var list = new List<SitemapNode>();
             list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.9, Url = url, Frequency = SitemapFrequency.Daily });
-            list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.8, Url = url + "/Home/Index", Frequency = SitemapFrequency.Daily });
-            list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.8, Url = url + "/Home/Search", Frequency = SitemapFrequency.Daily });
-            list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.7, Url = url + "/Home/PrivacyPolicy", Frequency = SitemapFrequency.Yearly });
-            list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.7, Url = url + "/Home/TermsOfService", Frequency = SitemapFrequency.Yearly });
-            list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.6, Url = url + "/Home/Revoke?provider=microsoft", Frequency = SitemapFrequency.Yearly });
-            list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.6, Url = url + "/Home/Revoke?provider=google", Frequency = SitemapFrequency.Yearly });
-            list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.6, Url = url + "/Home/Revoke?provider=github", Frequency = SitemapFrequency.Yearly });
-            list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.6, Url = url + "/Home/Revoke?provider=twitter", Frequency = SitemapFrequency.Yearly });
-            list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.6, Url = url + "/Home/Revoke?provider=facebook", Frequency = SitemapFrequency.Yearly });
+
+            foreach (var controllerAction in controllerActionList)
+            {
+                if (controllerAction.Controller.Equals("HomeController") && controllerAction.Action.Equals("Revoke"))
+                {
+                    list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.6, Url = url + "/" + controllerAction.Controller.Replace("Controller", string.Empty) + "/" + controllerAction.Action + "?provider=microsoft", Frequency = SitemapFrequency.Yearly });
+                    list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.6, Url = url + "/" + controllerAction.Controller.Replace("Controller", string.Empty) + "/" + controllerAction.Action + "?provider=google", Frequency = SitemapFrequency.Yearly });
+                    list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.6, Url = url + "/" + controllerAction.Controller.Replace("Controller", string.Empty) + "/" + controllerAction.Action + "?provider=github", Frequency = SitemapFrequency.Yearly });
+                    list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.6, Url = url + "/" + controllerAction.Controller.Replace("Controller", string.Empty) + "/" + controllerAction.Action + "?provider=twitter", Frequency = SitemapFrequency.Yearly });
+                    list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.6, Url = url + "/" + controllerAction.Controller.Replace("Controller", string.Empty) + "/" + controllerAction.Action + "?provider=facebook", Frequency = SitemapFrequency.Yearly });
+                }
+                else
+                {
+                    list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.7, Url = url + "/" + controllerAction.Controller.Replace("Controller", string.Empty) + "/" + controllerAction.Action, Frequency = SitemapFrequency.Daily });
+                }
+            }
 
             new SitemapDocument().CreateSitemapXML(list, _webHostEnvironment.ContentRootPath);
         }
