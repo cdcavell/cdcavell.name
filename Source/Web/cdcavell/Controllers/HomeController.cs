@@ -4,6 +4,7 @@ using cdcavell.Models.Home.Search;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -21,6 +22,7 @@ namespace cdcavell.Controllers
     /// | Christopher D. Cavell | 1.0.0.0 | 10/28/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.0.1 | 10/28/2020 | Update namespace |~ 
     /// | Christopher D. Cavell | 1.0.0.1 | 10/29/2020 | Remove YouTubeVideo from Index |~ 
+    /// | Christopher D. Cavell | 1.0.0.5 | 10/30/2020 | EU General Data Protection Regulation (GDPR) support in ASP.NET Core [#161](https://github.com/cdcavell/cdcavell.name/issues/161) |~
     /// </revision>
     public class HomeController : ApplicationBaseController<HomeController>
     {
@@ -112,6 +114,19 @@ namespace cdcavell.Controllers
         public IActionResult TermsOfService()
         {
             return View();
+        }
+
+        /// <summary>
+        /// Withdraw cookie consent
+        /// </summary>
+        /// <returns>IActionResult</returns>
+        /// <method>WithdrawConsent()</method>
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult WithdrawConsent()
+        {
+            HttpContext.Features.Get<ITrackingConsentFeature>().WithdrawConsent();
+            return RedirectToAction("Index", "Home");
         }
 
         /// <summary>

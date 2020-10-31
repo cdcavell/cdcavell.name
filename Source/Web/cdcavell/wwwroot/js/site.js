@@ -19,19 +19,19 @@ $(function() {
 
     $('#processing').on('show.bs.modal', function (e) {
         console.info('-- show processing modal');
-    })
+    });
 
     $('#processing').on('shown.bs.modal', function (e) {
         console.info('-- processing modal shown');
-    })
+    });
 
     $('#processing').on('hide.bs.modal', function (e) {
         console.info('-- hide processing modal');
-    })
+    });
 
     $('#processing').on('hidden.bs.modal', function (e) {
         console.info('-- processing modal hid');
-    })
+    });
 
     $('#form').on('submit', function (e) { 
         var data = $("#form :input").serializeArray();
