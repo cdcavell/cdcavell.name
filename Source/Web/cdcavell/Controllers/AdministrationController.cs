@@ -19,6 +19,7 @@ namespace cdcavell.Controllers
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.0 | 10/19/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0.6 | 10/31/2020 | Convert Sitemap class to build sitemap.xml dynamic based on existing controllers in project [#145](https://github.com/cdcavell/cdcavell.name/issues/145) |~ 
     /// </revision>
     [Authorize(Policy = "Administration")]
     public class AdministrationController : ApplicationBaseController<AdministrationController>
@@ -68,21 +69,7 @@ namespace cdcavell.Controllers
         [HttpGet]
         public IActionResult CreateSitemap()
         {
-            var url = "https://cdcavell.name";
-            var list = new List<SitemapNode>();
-            list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.9, Url = url, Frequency = SitemapFrequency.Daily });
-            list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.8, Url = url + "/Home/Index", Frequency = SitemapFrequency.Daily });
-            list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.8, Url = url + "/Home/Search", Frequency = SitemapFrequency.Daily });
-            list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.7, Url = url + "/Home/PrivacyPolicy", Frequency = SitemapFrequency.Yearly });
-            list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.7, Url = url + "/Home/TermsOfService", Frequency = SitemapFrequency.Yearly });
-            list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.6, Url = url + "/Home/Revoke?provider=microsoft", Frequency = SitemapFrequency.Yearly });
-            list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.6, Url = url + "/Home/Revoke?provider=google", Frequency = SitemapFrequency.Yearly });
-            list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.6, Url = url + "/Home/Revoke?provider=github", Frequency = SitemapFrequency.Yearly });
-            list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.6, Url = url + "/Home/Revoke?provider=twitter", Frequency = SitemapFrequency.Yearly });
-            list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.6, Url = url + "/Home/Revoke?provider=facebook", Frequency = SitemapFrequency.Yearly });
-
-            new SitemapDocument().CreateSitemapXML(list, _webHostEnvironment.ContentRootPath);
-            return Redirect("/sitemap.xml");  // "sitemap.xml file should be created in root directory"
+            return Redirect("/sitemap.xml");  
         }
     }
 }
