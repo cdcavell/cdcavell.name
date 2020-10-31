@@ -3,10 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Primitives;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 
@@ -19,7 +16,7 @@ namespace CDCavell.ClassLibrary.Web.Mvc.Filters
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/12/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0.0 | 10/12/2020 | Initial build |~ 
     /// </revision>
     [AttributeUsage(AttributeTargets.Class)]
     public class ControllerActionLogFilter : ActionFilterAttribute
