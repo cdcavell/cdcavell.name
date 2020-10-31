@@ -38,8 +38,8 @@ $ git flow init -d
 
 | Build | Date | Description |
 |-------|------|-------------|
-| 1.0.0 | 10/28/2020 | __Initial Development__ |
-| 1.0.0.1 | 10/28/2020 | __Fix: Center Search Pagination__ |
+| 1.0.0.4 | 10/30/2020 | __Fix: Enforce HTTPS in ASP.NET Core [#158](https://github.com/cdcavell/cdcavell.name/issues/158)__
+| 1.0.0.3 | 10/30/2020 | __Fix: Addressed Issues [#142](https://github.com/cdcavell/cdcavell.name/issues/142) [#143](https://github.com/cdcavell/cdcavell.name/issues/143) [#146](https://github.com/cdcavell/cdcavell.name/issues/146) [#147](https://github.com/cdcavell/cdcavell.name/issues/147) [#150](https://github.com/cdcavell/cdcavell.name/issues/150)__
 | 1.0.0.2 | 10/28/2020 | __Fix: Change twitter description in layout__ |
-| 1.0.1 | 10/30/2020 | __Feature: Addressed Issues #142 #143 #146 #147 #150__
-| 1.0.1 | 10/30/2020 | __Feature: Enforce HTTPS in ASP.NET Core #158__
+| 1.0.0.1 | 10/28/2020 | __Fix: Center Search Pagination__ |
+| 1.0.0.0 | 10/28/2020 | __Initial Development__ |
