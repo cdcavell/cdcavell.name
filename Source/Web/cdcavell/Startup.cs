@@ -36,6 +36,7 @@ namespace cdcavell
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0 | 10/28/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.1 | 10/30/2020 | Enforce HTTPS in ASP.NET Core #158 |~
     /// </revision>
     public class Startup
     {
@@ -131,6 +132,22 @@ namespace cdcavell
                     options.Scope.Add("email");
                     options.SaveTokens = true;
                 });
+
+            if (_webHostEnvironment.EnvironmentName.Equals("Production"))
+            {
+                services.AddHsts(options =>
+                {
+                    options.Preload = true;
+                    options.IncludeSubDomains = true;
+                    options.MaxAge = TimeSpan.FromDays(730);
+                });
+
+                services.AddHttpsRedirection(options =>
+                {
+                    options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
+                    options.HttpsPort = 443;
+                });
+            }
         }
 
         /// <summary>
@@ -158,6 +175,13 @@ namespace cdcavell
             app.UseExceptionHandler("/Home/Error/500");
             app.UseStatusCodePagesWithRedirects("~/Home/Error/{0}");
             app.UseXMLSitemap(env.ContentRootPath);
+
+            if (env.EnvironmentName.Equals("Production"))
+            {
+                app.UseHsts();
+                app.UseHttpsRedirection();
+            }
+
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
