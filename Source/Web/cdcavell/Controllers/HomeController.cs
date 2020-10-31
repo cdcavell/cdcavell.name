@@ -18,9 +18,9 @@ namespace cdcavell.Controllers
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 10/28/2020 | Initial build |~ 
-    /// | Christopher D. Cavell | 1.0.1 | 10/28/2020 | Update namespace |~ 
-    /// | Christopher D. Cavell | 1.0.1 | 10/29/2020 | Remove YouTubeVideo from Index |~ 
+    /// | Christopher D. Cavell | 1.0.0.0 | 10/28/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0.1 | 10/28/2020 | Update namespace |~ 
+    /// | Christopher D. Cavell | 1.0.0.1 | 10/29/2020 | Remove YouTubeVideo from Index |~ 
     /// </revision>
     public class HomeController : ApplicationBaseController<HomeController>
     {

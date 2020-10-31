@@ -12,7 +12,7 @@ namespace is4_cdcavell.Models.Device
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0 | 09/30/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0.0 | 09/30/2020 | Initial build |~ 
     /// </revision>
     public class DeviceAuthorizationViewModel : ConsentViewModel
     {
