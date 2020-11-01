@@ -1,4 +1,5 @@
 ﻿using AspNetCore.SEOHelper.Sitemap;
+using cdcavell.Data;
 using cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Web.Mvc.Controllers;
 using CDCavell.ClassLibrary.Web.Utilities;
@@ -36,20 +37,23 @@ namespace cdcavell.Controllers
         /// <param name="webHostEnvironment">IWebHostEnvironment</param>
         /// <param name="httpContextAccessor">IHttpContextAccessor</param>
         /// <param name="appSettings">AppSettings</param>
+        /// <param name="dbContext">CDCavellDbContext</param>
         /// <method>
         /// AccountController(
         ///     ILogger&lt;AdministrationController&gt; logger, 
         ///     IWebHostEnvironment webHostEnvironment, 
         ///     IHttpContextAccessor httpContextAccessor,
-        ///     AppSettings appSettings
-        /// ) : base(logger, webHostEnvironment, httpContextAccessor, appSettings)
+        ///     AppSettings appSettings,
+        ///     CDCavellDbContext dbContext
+        /// ) : base(logger, webHostEnvironment, httpContextAccessor, appSettings, dbContext)
         /// </method>
         public AdministrationController(
             ILogger<AdministrationController> logger,
             IWebHostEnvironment webHostEnvironment,
             IHttpContextAccessor httpContextAccessor,
-            AppSettings appSettings
-        ) : base(logger, webHostEnvironment, httpContextAccessor, appSettings)
+            AppSettings appSettings,
+            CDCavellDbContext dbContext
+        ) : base(logger, webHostEnvironment, httpContextAccessor, appSettings, dbContext)
         {
         }
 
@@ -83,6 +87,8 @@ namespace cdcavell.Controllers
             {
                 siteUrl = "https://cdcavell.name";
             }
+
+            var test = SiteMap.GetAllSiteMap(_dbContext);
 
             Assembly asm = Assembly.GetExecutingAssembly();
 

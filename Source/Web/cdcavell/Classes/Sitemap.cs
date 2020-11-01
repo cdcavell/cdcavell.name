@@ -29,7 +29,6 @@ namespace cdcavell.Classes
         private Logger _logger;
         private IWebHostEnvironment _webHostEnvironment;
         private AppSettings _appSettings;
-        private CDCavellDbContext _dbContext;
 
         /// <summary>
         /// Constructor method
@@ -37,26 +36,22 @@ namespace cdcavell.Classes
         /// <param name="logger">ILogger&lt;AdministrationController&gt;</param>
         /// <param name="webHostEnvironment">IWebHostEnvironment</param>
         /// <param name="appSettings">AppSettings</param>
-        /// <param name="dbContext">CdcavellDbContext</param>
         /// <method>
         /// Sitemap(
         ///     Logger logger, 
         ///     IWebHostEnvironment webHostEnvironment, 
-        ///     AppSettings appSettings,
-        ///     CdcavellDdContext dbContext
+        ///     AppSettings appSettings
         /// )
         /// </method>
         public Sitemap(
             Logger logger,
             IWebHostEnvironment webHostEnvironment,
-            AppSettings appSettings,
-            CDCavellDbContext dbContext
+            AppSettings appSettings
         ) 
         {
             _logger = logger;
             _webHostEnvironment = webHostEnvironment;
             _appSettings = appSettings;
-            _dbContext = dbContext;
         }
 
         /// <summary>
@@ -65,7 +60,7 @@ namespace cdcavell.Classes
         /// https://www.c-sharpcorner.com/article/create-and-configure-sitemap-xml-in-asp-net-core/
         /// </summary>
         /// <method>public void Create()</method>
-        public void Create()
+        public void Create(CDCavellDbContext dbContext)
         {
             Assembly asm = Assembly.GetExecutingAssembly();
 
@@ -97,6 +92,16 @@ namespace cdcavell.Classes
                 else
                 {
                     list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.7, Url = url + "/" + controllerAction.Controller.Replace("Controller", string.Empty) + "/" + controllerAction.Action, Frequency = SitemapFrequency.Daily });
+                    int count = SiteMap.GetCount(controllerAction.Controller.Replace("Controller", string.Empty), controllerAction.Action, dbContext);
+                    if (count == 0)
+                    {
+                        SiteMap siteMap = new SiteMap();
+                        siteMap.Controller = controllerAction.Controller.Replace("Controller", string.Empty);
+                        siteMap.Action = controllerAction.Action;
+
+                        dbContext.Add(siteMap);
+                        dbContext.SaveChanges();
+                    }
                 }
             }
 

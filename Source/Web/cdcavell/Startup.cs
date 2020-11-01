@@ -50,7 +50,6 @@ namespace cdcavell
         private IWebHostEnvironment _webHostEnvironment;
         private Logger _logger;
         private AppSettings _appSettings;
-        private CDCavellDbContext _dbContext;
 
         /// <summary>
         /// Class Constructor
@@ -181,7 +180,8 @@ namespace cdcavell
             _logger = new Logger(logger);
             _logger.Trace($"Configure(IApplicationBuilder: {app}, IWebHostEnvironment: {env}, ILogger<Startup> {logger}, IHostApplicationLifetime: {lifetime})");
 
-            _dbContext = dbContext;
+            AESGCM.Seed(_configuration);
+            new Sitemap(_logger, _webHostEnvironment, _appSettings).Create(dbContext);
 
             lifetime.ApplicationStarted.Register(OnAppStarted);
             lifetime.ApplicationStopping.Register(OnAppStopping);
@@ -227,9 +227,6 @@ namespace cdcavell
         /// <method>OnAppStarted()</method>
         public void OnAppStarted()
         {
-            AESGCM.Seed(_configuration);
-            new Sitemap(_logger, _webHostEnvironment, _appSettings, _dbContext).Create();
-
             _logger.Information($"{Assembly.GetEntryAssembly().GetName().Name} Application Started");
             _logger.Information($"Hosting Environment: {_webHostEnvironment.EnvironmentName}");
         }
