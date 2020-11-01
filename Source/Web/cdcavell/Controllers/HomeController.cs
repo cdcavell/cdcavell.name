@@ -1,4 +1,5 @@
-﻿using cdcavell.Models.AppSettings;
+﻿using cdcavell.Data;
+using cdcavell.Models.AppSettings;
 using cdcavell.Models.Home;
 using cdcavell.Models.Home.Search;
 using Microsoft.AspNetCore.Authorization;
@@ -23,6 +24,7 @@ namespace cdcavell.Controllers
     /// | Christopher D. Cavell | 1.0.0.1 | 10/28/2020 | Update namespace |~ 
     /// | Christopher D. Cavell | 1.0.0.1 | 10/29/2020 | Remove YouTubeVideo from Index |~ 
     /// | Christopher D. Cavell | 1.0.0.5 | 10/30/2020 | EU General Data Protection Regulation (GDPR) support in ASP.NET Core [#161](https://github.com/cdcavell/cdcavell.name/issues/161) |~
+    /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
     /// </revision>
     public class HomeController : ApplicationBaseController<HomeController>
     {
@@ -33,20 +35,23 @@ namespace cdcavell.Controllers
         /// <param name="webHostEnvironment">IWebHostEnvironment</param>
         /// <param name="httpContextAccessor">IHttpContextAccessor</param>
         /// <param name="appSettings">AppSettings</param>
+        /// <param name="dbContext">CDCavellDbContext</param>
         /// <method>
         /// public HomeController(
         ///     ILogger&lt;HomeController&gt; logger,
         ///     IWebHostEnvironment webHostEnvironment,
         ///     IHttpContextAccessor httpContextAccessor,
-        ///     AppSettings appSettings
-        /// ) : base(logger, webHostEnvironment, httpContextAccessor, appSettings)
+        ///     AppSettings appSettings,
+        ///     CDCavellDbContext dbContext
+        /// ) : base(logger, webHostEnvironment, httpContextAccessor, appSettings, dbContext)
         /// </method>
         public HomeController(
             ILogger<HomeController> logger,
             IWebHostEnvironment webHostEnvironment,
             IHttpContextAccessor httpContextAccessor,
-            AppSettings appSettings
-        ) : base(logger, webHostEnvironment, httpContextAccessor, appSettings)
+            AppSettings appSettings,
+            CDCavellDbContext dbContext
+        ) : base(logger, webHostEnvironment, httpContextAccessor, appSettings, dbContext)
         {
         }
 

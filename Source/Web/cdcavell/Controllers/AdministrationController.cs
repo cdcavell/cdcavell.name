@@ -1,6 +1,9 @@
 ﻿using AspNetCore.SEOHelper.Sitemap;
+using cdcavell.Data;
 using cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Web.Mvc.Controllers;
+using CDCavell.ClassLibrary.Web.Utilities;
+using CDCavell.ClassLibrary.Web.Utilities.Models.BingWebmasterModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -8,6 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace cdcavell.Controllers
 {
@@ -31,20 +36,23 @@ namespace cdcavell.Controllers
         /// <param name="webHostEnvironment">IWebHostEnvironment</param>
         /// <param name="httpContextAccessor">IHttpContextAccessor</param>
         /// <param name="appSettings">AppSettings</param>
+        /// <param name="dbContext">CDCavellDbContext</param>
         /// <method>
         /// AccountController(
         ///     ILogger&lt;AdministrationController&gt; logger, 
         ///     IWebHostEnvironment webHostEnvironment, 
         ///     IHttpContextAccessor httpContextAccessor,
-        ///     AppSettings appSettings
-        /// ) : base(logger, webHostEnvironment, httpContextAccessor, appSettings)
+        ///     AppSettings appSettings,
+        ///     CDCavellDbContext dbContext
+        /// ) : base(logger, webHostEnvironment, httpContextAccessor, appSettings, dbContext)
         /// </method>
         public AdministrationController(
             ILogger<AdministrationController> logger,
             IWebHostEnvironment webHostEnvironment,
             IHttpContextAccessor httpContextAccessor,
-            AppSettings appSettings
-        ) : base(logger, webHostEnvironment, httpContextAccessor, appSettings)
+            AppSettings appSettings,
+            CDCavellDbContext dbContext
+        ) : base(logger, webHostEnvironment, httpContextAccessor, appSettings, dbContext)
         {
         }
 
@@ -57,19 +65,6 @@ namespace cdcavell.Controllers
         public IActionResult Index()
         {
             return View();
-        }
-
-        /// <summary>
-        /// sitemap.xml in ASP.NET Core
-        /// &lt;br /&gt;&lt;br /&gt;
-        /// https://www.c-sharpcorner.com/article/create-and-configure-sitemap-xml-in-asp-net-core/
-        /// </summary>
-        /// <returns>IActionResult</returns>
-        /// <method>public IActionResult CreateSitemap()</method>
-        [HttpGet]
-        public IActionResult CreateSitemap()
-        {
-            return Redirect("/sitemap.xml");  
         }
     }
 }

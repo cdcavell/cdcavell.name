@@ -1,6 +1,9 @@
 ﻿using AspNetCore.SEOHelper.Sitemap;
+using cdcavell.Data;
 using cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Commons.Logging;
+using CDCavell.ClassLibrary.Web.Utilities;
+using CDCavell.ClassLibrary.Web.Utilities.Models.BingWebmasterModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 
 namespace cdcavell.Classes
@@ -21,6 +25,7 @@ namespace cdcavell.Classes
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.0 | 10/28/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.0.6 | 10/31/2020 | Convert Sitemap class to build sitemap.xml dynamic based on existing controllers in project [#145](https://github.com/cdcavell/cdcavell.name/issues/145) |~ 
+    /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
     /// </revision>
     public class Sitemap
     {
@@ -58,7 +63,7 @@ namespace cdcavell.Classes
         /// https://www.c-sharpcorner.com/article/create-and-configure-sitemap-xml-in-asp-net-core/
         /// </summary>
         /// <method>public void Create()</method>
-        public void Create()
+        public void Create(CDCavellDbContext dbContext)
         {
             Assembly asm = Assembly.GetExecutingAssembly();
 
@@ -90,10 +95,42 @@ namespace cdcavell.Classes
                 else
                 {
                     list.Add(new SitemapNode { LastModified = DateTime.UtcNow, Priority = 0.7, Url = url + "/" + controllerAction.Controller.Replace("Controller", string.Empty) + "/" + controllerAction.Action, Frequency = SitemapFrequency.Daily });
+                    int count = SiteMap.GetCount(controllerAction.Controller.Replace("Controller", string.Empty), controllerAction.Action, dbContext);
+                    if (count == 0)
+                    {
+                        SiteMap siteMap = new SiteMap();
+                        siteMap.Controller = controllerAction.Controller.Replace("Controller", string.Empty);
+                        siteMap.Action = controllerAction.Action;
+
+                        dbContext.Add(siteMap);
+                        dbContext.SaveChanges();
+                    }
                 }
             }
 
             new SitemapDocument().CreateSitemapXML(list, _webHostEnvironment.ContentRootPath);
+
+            BingWebmaster bingWebmaster = new BingWebmaster(_appSettings.Authentication.BingWebmaster.ApiKey);
+            UrlSubmissionQuota quota = bingWebmaster.GetUrlSubmission(url);
+
+            var siteMaps = SiteMap.GetAllSiteMap(dbContext)
+                .Where(x => x.LastSubmitDate.ToString() == "1/1/0001 12:00:00 AM");
+            foreach (SiteMap siteMap in siteMaps)
+            {
+                if (quota.DailyQuota > 0 && quota.MonthlyQuota > 0)
+                {
+                    HttpStatusCode statusCode = bingWebmaster.SubmitUrl(url, url + "/" + siteMap.Controller + "/" + siteMap.Action);
+                    if (statusCode == HttpStatusCode.OK)
+                    {
+                        siteMap.LastSubmitDate = DateTime.Now;
+                        dbContext.Update(siteMap);
+                        dbContext.SaveChanges();
+                    }
+
+                    quota = bingWebmaster.GetUrlSubmission(url);
+                }
+            }
+
         }
     }
 }
