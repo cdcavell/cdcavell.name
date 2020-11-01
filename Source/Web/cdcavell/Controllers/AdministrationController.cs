@@ -74,7 +74,15 @@ namespace cdcavell.Controllers
         [HttpGet]
         public IActionResult SubmitUrl()
         {
-            string siteUrl = "https://cdcavell.name";
+            string siteUrl = string.Empty;
+            if (_webHostEnvironment.EnvironmentName.Equals("Production"))
+            {
+                siteUrl = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}";
+            }
+            else
+            {
+                siteUrl = "https://cdcavell.name";
+            }
 
             Assembly asm = Assembly.GetExecutingAssembly();
 
@@ -90,10 +98,10 @@ namespace cdcavell.Controllers
                 .OrderBy(x => x.Action)
                 .ToList();
 
-            BingWebmaster bingWebmaster = new BingWebmaster(_appSettings.Authentication.BingWebmaster.ApiKey);
-            UrlSubmissionQuota quota = bingWebmaster.GetUrlSubmission(siteUrl);
+            //BingWebmaster bingWebmaster = new BingWebmaster(_appSettings.Authentication.BingWebmaster.ApiKey);
+            //UrlSubmissionQuota quota = bingWebmaster.GetUrlSubmission(siteUrl);
 
-            bingWebmaster.SubmitUrl(siteUrl, siteUrl + "/Home/Index");
+            //bingWebmaster.SubmitUrl(siteUrl, siteUrl + "/Home/Index");
 
             return View();
         }
