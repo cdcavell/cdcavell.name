@@ -71,7 +71,7 @@ namespace CDCavell.ClassLibrary.Web.Utilities
         /// <param name="siteUrl">string</param>
         /// <param name="submitUrl">string</param>
         /// <method>SubmitUrl(string siteUrl, string submitUrl)</method>
-        public void SubmitUrl(string siteUrl, string submitUrl)
+        public HttpStatusCode SubmitUrl(string siteUrl, string submitUrl)
         {
             string postUrl = "SubmitUrl?apikey="
                 + _apiKey;
@@ -83,13 +83,7 @@ namespace CDCavell.ClassLibrary.Web.Utilities
                 new { siteUrl = siteUrl.Clean(), url = submitUrl.Clean() }
             );
 
-            if (client.IsResponseSuccess)
-            {
-                string result = client.GetResponseString();
-                result = result.Substring(0, (result.Length - 1));
-                result = result.Substring(5);
-            }
-            
+            return statusCode;
         }
     }
 }
