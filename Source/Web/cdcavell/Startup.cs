@@ -50,6 +50,7 @@ namespace cdcavell
         private IWebHostEnvironment _webHostEnvironment;
         private Logger _logger;
         private AppSettings _appSettings;
+        private CDCavellDbContext _dbContext;
 
         /// <summary>
         /// Class Constructor
@@ -76,7 +77,7 @@ namespace cdcavell
             _appSettings = appSettings;
             services.AddSingleton(appSettings);
 
-            services.AddDbContext<CDCavellDdContext>(options =>
+            services.AddDbContext<CDCavellDbContext>(options =>
                 options.UseSqlite(appSettings.ConnectionStrings.CDCavellConnection));
 
             services.AddMvc();
@@ -173,11 +174,14 @@ namespace cdcavell
         /// <param name="env">IWebHostEnvironment</param>
         /// <param name="logger">ILogger&lt;Startup&gt;</param>
         /// <param name="lifetime">IHostApplicationLifetime</param>
-        /// <method>Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger&lt;Startup&gt; logger, IHostApplicationLifetime lifetime)</method>
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger, IHostApplicationLifetime lifetime)
+        /// <param name="dbContext">CDCavellDbContext</param>
+        /// <method>Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger&lt;Startup&gt; logger, IHostApplicationLifetime lifetime, CDCavellDbContext dbContext)</method>
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger, IHostApplicationLifetime lifetime, CDCavellDbContext dbContext)
         {
             _logger = new Logger(logger);
             _logger.Trace($"Configure(IApplicationBuilder: {app}, IWebHostEnvironment: {env}, ILogger<Startup> {logger}, IHostApplicationLifetime: {lifetime})");
+
+            _dbContext = dbContext;
 
             lifetime.ApplicationStarted.Register(OnAppStarted);
             lifetime.ApplicationStopping.Register(OnAppStopping);
@@ -224,7 +228,7 @@ namespace cdcavell
         public void OnAppStarted()
         {
             AESGCM.Seed(_configuration);
-            new Sitemap(_logger, _webHostEnvironment, _appSettings).Create();
+            new Sitemap(_logger, _webHostEnvironment, _appSettings, _dbContext).Create();
 
             _logger.Information($"{Assembly.GetEntryAssembly().GetName().Name} Application Started");
             _logger.Information($"Hosting Environment: {_webHostEnvironment.EnvironmentName}");

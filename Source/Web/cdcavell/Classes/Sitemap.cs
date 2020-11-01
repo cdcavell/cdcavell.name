@@ -1,4 +1,5 @@
 ﻿using AspNetCore.SEOHelper.Sitemap;
+using cdcavell.Data;
 using cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Commons.Logging;
 using Microsoft.AspNetCore.Authorization;
@@ -21,12 +22,14 @@ namespace cdcavell.Classes
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.0 | 10/28/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.0.6 | 10/31/2020 | Convert Sitemap class to build sitemap.xml dynamic based on existing controllers in project [#145](https://github.com/cdcavell/cdcavell.name/issues/145) |~ 
+    /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
     /// </revision>
     public class Sitemap
     {
         private Logger _logger;
         private IWebHostEnvironment _webHostEnvironment;
         private AppSettings _appSettings;
+        private CDCavellDbContext _dbContext;
 
         /// <summary>
         /// Constructor method
@@ -34,22 +37,26 @@ namespace cdcavell.Classes
         /// <param name="logger">ILogger&lt;AdministrationController&gt;</param>
         /// <param name="webHostEnvironment">IWebHostEnvironment</param>
         /// <param name="appSettings">AppSettings</param>
+        /// <param name="dbContext">CdcavellDbContext</param>
         /// <method>
         /// Sitemap(
         ///     Logger logger, 
         ///     IWebHostEnvironment webHostEnvironment, 
-        ///     AppSettings appSettings
+        ///     AppSettings appSettings,
+        ///     CdcavellDdContext dbContext
         /// )
         /// </method>
         public Sitemap(
             Logger logger,
             IWebHostEnvironment webHostEnvironment,
-            AppSettings appSettings
+            AppSettings appSettings,
+            CDCavellDbContext dbContext
         ) 
         {
             _logger = logger;
             _webHostEnvironment = webHostEnvironment;
             _appSettings = appSettings;
+            _dbContext = dbContext;
         }
 
         /// <summary>

@@ -49,7 +49,7 @@ namespace cdcavell
                 using (var scope = host.Services.CreateScope())
                 {
                     var services = scope.ServiceProvider;
-                    var context = services.GetRequiredService<CDCavellDdContext>();
+                    var context = services.GetRequiredService<CDCavellDbContext>();
                     DbInitializer.Initialize(context);
                 }
 

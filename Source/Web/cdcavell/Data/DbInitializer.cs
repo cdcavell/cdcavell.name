@@ -16,7 +16,7 @@
         /// </summary>
         /// <param name="context">CDCavellDdContext</param>
         /// <method>Initialize(CDCavellDdContext context)</method>
-        public static void Initialize(CDCavellDdContext context)
+        public static void Initialize(CDCavellDbContext context)
         {
             context.Database.EnsureCreated();
 
