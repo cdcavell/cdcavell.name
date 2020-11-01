@@ -35,7 +35,7 @@ namespace cdcavell.Classes
         /// <param name="url">string</param>
         /// <param name="customConfigId">string</param>
         /// <param name="subscriptionKey">string</param>
-        /// <method>BingCustomSearch(string url)</method>
+        /// <method>BingCustomSearch(string url, string customConfigId, string subscriptionKey)</method>
         public BingCustomSearch(string url, string customConfigId, string subscriptionKey)
         {
             _bingCustomSearchUrl = url;

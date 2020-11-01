@@ -59,7 +59,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Models\Utilities\" />
 	  <Folder Include="wwwroot\lib\bootstrap\" />
 	</ItemGroup>
 

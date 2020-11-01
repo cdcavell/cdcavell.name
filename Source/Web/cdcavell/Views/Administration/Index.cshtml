@@ -9,10 +9,18 @@
         <div class="card-body">
             <ul class="list-inline">
                 <li class="list-inline-item">
-                    <a class="btn btn-secondary shadow-sm"
-                        asp-controller="Administration"
-                        asp-action="CreateSitemap">
+                    <a class="btn btn-secondary shadow-sm text-decoration-none"
+                       href="~/sitemap.xml"
+                       rel="external nofollow noopener" 
+                       target="_blank">
                         Create Sitemap.xml
+                    </a>
+                </li>
+                <li>
+                    <a class="btn btn-secondary shadow-sm text-decoration-none"
+                       asp-controller="Administration"
+                       asp-action="SubmitUrl">
+                        Submit Url
                     </a>
                 </li>
             </ul>
