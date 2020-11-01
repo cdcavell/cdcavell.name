@@ -9,7 +9,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "is4-cdcavell", "Source\Web\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDCavell.ClassLibrary.Web", "Source\Libraries\CDCavell.ClassLibrary.Web\CDCavell.ClassLibrary.Web.csproj", "{507F8532-BCA8-4DDA-99AF-403EB08C97AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cdcavell", "Source\Web\cdcavell\cdcavell.csproj", "{390AD4C8-3A9F-4829-9AD8-D2DAF76394FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cdcavell", "Source\Web\cdcavell\cdcavell.csproj", "{390AD4C8-3A9F-4829-9AD8-D2DAF76394FD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Root Files", "Root Files", "{6B4633D2-F769-467B-95FF-6F7AA664BAAB}"
+	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

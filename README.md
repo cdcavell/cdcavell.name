@@ -38,10 +38,11 @@ $ git flow init -d
 
 | Build | Date | Description |
 |-------|------|-------------|
-| 1.0.0.6 | 10/31/2020 | __Update: Convert Sitemap class to build sitemap.xml dynamic based on existing controllers in project [#145](https://github.com/cdcavell/cdcavell.name/issues/145)__ |
-| 1.0.0.5 | 10/31/2020 | __Add: EU General Data Protection Regulation (GDPR) support in ASP.NET Core [#161](https://github.com/cdcavell/cdcavell.name/issues/161)__ |
-| 1.0.0.4 | 10/30/2020 | __Add: Enforce HTTPS in ASP.NET Core [#158](https://github.com/cdcavell/cdcavell.name/issues/158)__ |
-| 1.0.0.3 | 10/30/2020 | __Fix: Addressed Issues [#142](https://github.com/cdcavell/cdcavell.name/issues/142) [#143](https://github.com/cdcavell/cdcavell.name/issues/143) [#146](https://github.com/cdcavell/cdcavell.name/issues/146) [#147](https://github.com/cdcavell/cdcavell.name/issues/147) [#150](https://github.com/cdcavell/cdcavell.name/issues/150)__ |
-| 1.0.0.2 | 10/28/2020 | __Fix: Change twitter description in layout__ |
-| 1.0.0.1 | 10/28/2020 | __Fix: Center Search Pagination__ |
+| 1.0.0.7 | 10/31/2020 | __Fix:__ Eliminate render-blocking resources [#171](https://github.com/cdcavell/cdcavell.name/issues/171) <br /> __Fix:__ Serve static assets with an efficient cache policy [#172](https://github.com/cdcavell/cdcavell.name/issues/172) <br /> __Add:__ Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |
+| 1.0.0.6 | 10/31/2020 | __Update:__ Convert Sitemap class to build sitemap.xml dynamic based on existing controllers in project [#145](https://github.com/cdcavell/cdcavell.name/issues/145) |
+| 1.0.0.5 | 10/31/2020 | __Add:__ EU General Data Protection Regulation (GDPR) support in ASP.NET Core [#161](https://github.com/cdcavell/cdcavell.name/issues/161) |
+| 1.0.0.4 | 10/30/2020 | __Add:__ Enforce HTTPS in ASP.NET Core [#158](https://github.com/cdcavell/cdcavell.name/issues/158) |
+| 1.0.0.3 | 10/30/2020 | __Fix:__ Addressed Issues [#142](https://github.com/cdcavell/cdcavell.name/issues/142) [#143](https://github.com/cdcavell/cdcavell.name/issues/143) [#146](https://github.com/cdcavell/cdcavell.name/issues/146) [#147](https://github.com/cdcavell/cdcavell.name/issues/147) [#150](https://github.com/cdcavell/cdcavell.name/issues/150) |
+| 1.0.0.2 | 10/28/2020 | __Fix:__ Change twitter description in layout |
+| 1.0.0.1 | 10/28/2020 | __Fix:__ Center Search Pagination |
 | 1.0.0.0 | 10/28/2020 | __Initial Development__ |

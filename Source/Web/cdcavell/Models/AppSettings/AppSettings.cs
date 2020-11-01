@@ -12,6 +12,7 @@ namespace cdcavell.Models.AppSettings
     /// | Christopher D. Cavell | 1.0.0.0 | 10/20/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.0.1 | 10/28/2020 | Add YouTubeVideos |~ 
     /// | Christopher D. Cavell | 1.0.0.1 | 10/29/2020 | Remove YouTubeVideos (Not Implemented) |~ 
+    /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
     /// </revision>
     public class AppSettings
     {
@@ -31,5 +32,7 @@ namespace cdcavell.Models.AppSettings
         public Authorization Authorization { get; set; }
         /// <value>Application</value>
         public Application Application { get; set; }
+        /// <value>ConnectionStrings</value>
+        public ConnectionStrings ConnectionStrings { get; set; }
     }
 }
