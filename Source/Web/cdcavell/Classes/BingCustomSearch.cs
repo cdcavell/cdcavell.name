@@ -50,7 +50,7 @@ namespace cdcavell.Classes
         /// <param name="query">string</param>
         /// <returns>ResultModel</returns>
         /// <exception cref="Exception">searchType - excepted (Web, Image or Video)</exception>
-        /// <method>Search()</method>
+        /// <method>GetResults(string searchType, string query)</method>
         public static ResultModel GetResults(
             string searchType, 
             string query
