@@ -2,6 +2,8 @@
 using cdcavell.Data;
 using cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Commons.Logging;
+using CDCavell.ClassLibrary.Web.Utilities;
+using CDCavell.ClassLibrary.Web.Utilities.Models.BingWebmasterModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 
 namespace cdcavell.Classes
@@ -106,6 +109,28 @@ namespace cdcavell.Classes
             }
 
             new SitemapDocument().CreateSitemapXML(list, _webHostEnvironment.ContentRootPath);
+
+            BingWebmaster bingWebmaster = new BingWebmaster(_appSettings.Authentication.BingWebmaster.ApiKey);
+            UrlSubmissionQuota quota = bingWebmaster.GetUrlSubmission(url);
+
+            var siteMaps = SiteMap.GetAllSiteMap(dbContext)
+                .Where(x => x.LastSubmitDate.ToString() == "1/1/0001 12:00:00 AM");
+            foreach (SiteMap siteMap in siteMaps)
+            {
+                if (quota.DailyQuota > 0 && quota.MonthlyQuota > 0)
+                {
+                    HttpStatusCode statusCode = bingWebmaster.SubmitUrl(url, url + "/" + siteMap.Controller + "/" + siteMap.Action);
+                    if (statusCode == HttpStatusCode.OK)
+                    {
+                        siteMap.LastSubmitDate = DateTime.Now;
+                        dbContext.Update(siteMap);
+                        dbContext.SaveChanges();
+                    }
+
+                    quota = bingWebmaster.GetUrlSubmission(url);
+                }
+            }
+
         }
     }
 }

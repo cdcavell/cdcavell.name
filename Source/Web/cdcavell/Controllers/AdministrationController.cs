@@ -25,7 +25,6 @@ namespace cdcavell.Controllers
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.0 | 10/19/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.0.6 | 10/31/2020 | Convert Sitemap class to build sitemap.xml dynamic based on existing controllers in project [#145](https://github.com/cdcavell/cdcavell.name/issues/145) |~ 
-    /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
     /// </revision>
     [Authorize(Policy = "Administration")]
     public class AdministrationController : ApplicationBaseController<AdministrationController>
@@ -65,50 +64,6 @@ namespace cdcavell.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            return View();
-        }
-
-        /// <summary>
-        /// sitemap.xml in ASP.NET Core
-        /// &lt;br /&gt;&lt;br /&gt;
-        /// https://www.c-sharpcorner.com/article/create-and-configure-sitemap-xml-in-asp-net-core/
-        /// </summary>
-        /// <returns>IActionResult</returns>
-        /// <method>public IActionResult CreateSitemap()</method>
-        [HttpGet]
-        public IActionResult SubmitUrl()
-        {
-            string siteUrl = string.Empty;
-            if (_webHostEnvironment.EnvironmentName.Equals("Production"))
-            {
-                siteUrl = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}";
-            }
-            else
-            {
-                siteUrl = "https://cdcavell.name";
-            }
-
-            var test = SiteMap.GetAllSiteMap(_dbContext);
-
-            Assembly asm = Assembly.GetExecutingAssembly();
-
-            var controllerActionList = asm.GetTypes()
-                .Where(type => typeof(Controller).IsAssignableFrom(type))
-                .SelectMany(type => type.GetMethods(BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public))
-                .Select(x => new { Controller = x.DeclaringType.Name, Action = x.Name, ReturnType = x.ReturnType.Name, Attributes = String.Join(",", x.GetCustomAttributes().Select(a => a.GetType().Name.Replace("Attribute", string.Empty))) })
-                .ToList()
-                .Where(x => x.Attributes.Contains("AllowAnonymous") && x.Attributes.Contains("HttpGet"))
-                .Where(x => !x.Controller.Equals("AccountController"))
-                .Where(x => !x.Controller.Equals("HomeController") || !x.Action.Equals("WithdrawConsent"))
-                .OrderBy(x => x.Controller)
-                .OrderBy(x => x.Action)
-                .ToList();
-
-            //BingWebmaster bingWebmaster = new BingWebmaster(_appSettings.Authentication.BingWebmaster.ApiKey);
-            //UrlSubmissionQuota quota = bingWebmaster.GetUrlSubmission(siteUrl);
-
-            //bingWebmaster.SubmitUrl(siteUrl, siteUrl + "/Home/Index");
-
             return View();
         }
     }

@@ -59,6 +59,22 @@ namespace cdcavell.Data
             return dbContext.SiteMap.ToList();
         }
 
+        /// <summary>
+        /// Get StieMap entity records
+        /// </summary>
+        /// <param name="controller"></param>
+        /// <param name="action"></param>
+        /// <param name="dbContext"></param>
+        /// <returns>int</returns>
+        /// <method>GetSiteMap(string controller, string action, CDCavellDbContext dbContext)</method>
+        public static SiteMap GetSiteMap(string controller, string action, CDCavellDbContext dbContext)
+        {
+            return dbContext.SiteMap
+                .Where(x => x.Controller == controller.Clean())
+                .Where(x => x.Action == action.Clean())
+                .FirstOrDefault();
+        }
+
         #endregion
     }
 }
