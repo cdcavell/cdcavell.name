@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace CDCavell.ClassLibrary.Web.Utilities.Models.BingWebSearchModels
 {
@@ -13,12 +14,27 @@ namespace CDCavell.ClassLibrary.Web.Utilities.Models.BingWebSearchModels
     /// </revision>
     public class ItemModel
     {
+        private string _name;
         /// <value>string</value>
-        public string Name { get; set; }
+        public string Name 
+        {
+            get { return Regex.Replace(_name ?? string.Empty, @"[^\u0000-\u007F]+", string.Empty); }
+            set { _name = value; } 
+        }
+        private string _description;
         /// <value>string</value>
-        public string Description { get; set; }
+        public string Description
+        {
+            get { return Regex.Replace(_description ?? string.Empty, @"[^\u0000-\u007F]+", string.Empty); }
+            set { _description = value; }
+        }
+        private string _snippet;
         /// <value>string</value>
-        public string Snippet { get; set; }
+        public string Snippet
+        {
+            get { return Regex.Replace(_snippet ?? string.Empty, @"[^\u0000-\u007F]+", string.Empty); }
+            set { _snippet = value; }
+        }
         /// <value>DateTime</value>
         public DateTime DatePublished { get; set; }
         /// <value>string</value>
