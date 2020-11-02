@@ -1,6 +1,6 @@
-﻿using System;
+﻿using CDCavell.ClassLibrary.Web.Utilities.Models.BingWebSearchModels;
+using System;
 using System.Net;
-using System.Runtime.CompilerServices;
 using System.Web;
 
 namespace cdcavell.Models.Home.Search
@@ -14,6 +14,7 @@ namespace cdcavell.Models.Home.Search
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.0 | 10/25/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.0.1 | 10/28/2020 | Update namespace |~ 
+    /// | Christopher D. Cavell | 1.0.0.8 | 11/01/2020 | Bing Search APIs will transition from Azure Cognitive Services to Azure Marketplace on 31 October 2023 [#152](https://github.com/cdcavell/cdcavell.name/issues/152) |~ 
     /// </revision>
     public class SearchModel
     {

@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace CDCavell.ClassLibrary.Web.Utilities
 {
@@ -87,6 +89,10 @@ namespace CDCavell.ClassLibrary.Web.Utilities
             JsonClient client = new JsonClient(_baseUri);
             client.AddRequestHeader("Ocp-Apim-Subscription-Key", _subscriptionKey);
             results.StatusCode = client.SendRequest(HttpMethod.Get, queryString, string.Empty);
+
+            // wait 1 second to prevent throttling
+            Thread.Sleep(1000);
+            
             results.StatusMessage = client.GetResponseString();
 
             if (client.IsResponseSuccess)
