@@ -11,6 +11,7 @@ namespace cdcavell.Models.AppSettings
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.0 | 10/12/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
+    /// | Christopher D. Cavell | 1.0.0.8 | 11/01/2020 | Bing Search APIs will transition from Azure Cognitive Services to Azure Marketplace on 31 October 2023 [#152](https://github.com/cdcavell/cdcavell.name/issues/152) |~ 
     /// </revision>
     public class Authentication
     {
@@ -18,6 +19,8 @@ namespace cdcavell.Models.AppSettings
         public IdP IdP { get; set; }
         /// <value>BingCustomSearch</value>
         public BingCustomSearch BingCustomSearch { get; set; }
+        /// <value>BingWebSearch</value>
+        public BingWebSearchModel BingWebSearch { get; set; }
         /// <value>BingWebmaster</value>
         public BingWebmasterModel BingWebmaster { get; set; }
     }

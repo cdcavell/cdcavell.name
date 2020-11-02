@@ -2,6 +2,8 @@
 using CDCavell.ClassLibrary.Web.Utilities.Models.BingWebmasterModels;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 
@@ -49,10 +51,10 @@ namespace CDCavell.ClassLibrary.Web.Utilities
             UrlSubmissionQuota quota = new UrlSubmissionQuota();
             if (client.IsResponseSuccess)
             {
-                string result = client.GetResponseString();
-                result = result.Substring(0, (result.Length - 1));
-                result = result.Substring(5);
-                quota = JsonConvert.DeserializeObject<UrlSubmissionQuota>(result);
+                Dictionary<string, object> results = client.GetResponseObject<Dictionary<string, object>>();
+                if (results.Count > 0)
+                    quota = JsonConvert.DeserializeObject<UrlSubmissionQuota>(results.ElementAt(0).Value.ToString());
+
                 quota.StatusCode = statusCode;
                 quota.StatusMessage = statusCode.ToString();
             }

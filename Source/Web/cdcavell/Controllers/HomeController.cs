@@ -2,6 +2,7 @@
 using cdcavell.Models.AppSettings;
 using cdcavell.Models.Home;
 using cdcavell.Models.Home.Search;
+using CDCavell.ClassLibrary.Web.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -25,6 +26,7 @@ namespace cdcavell.Controllers
     /// | Christopher D. Cavell | 1.0.0.1 | 10/29/2020 | Remove YouTubeVideo from Index |~ 
     /// | Christopher D. Cavell | 1.0.0.5 | 10/30/2020 | EU General Data Protection Regulation (GDPR) support in ASP.NET Core [#161](https://github.com/cdcavell/cdcavell.name/issues/161) |~
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
+    /// | Christopher D. Cavell | 1.0.0.8 | 11/01/2020 | Bing Search APIs will transition from Azure Cognitive Services to Azure Marketplace on 31 October 2023 [#152](https://github.com/cdcavell/cdcavell.name/issues/152) |~ 
     /// </revision>
     public class HomeController : ApplicationBaseController<HomeController>
     {
@@ -174,20 +176,20 @@ namespace cdcavell.Controllers
 
                     if (!string.IsNullOrEmpty(model.SearchRequest.Trim()))
                     {
-                        Classes.BingCustomSearch search = new Classes.BingCustomSearch(
-                            _appSettings.Authentication.BingCustomSearch.Url,
-                            _appSettings.Authentication.BingCustomSearch.CustomConfigId,
-                            _appSettings.Authentication.BingCustomSearch.SubscriptionKey
+                        BingWebSearch bingWebSearch = new BingWebSearch(
+                            _appSettings.Authentication.BingWebSearch.SubscriptionKey,
+                            _appSettings.Authentication.BingWebSearch.CustomConfigId
                         );
 
-                        model.WebResult = Classes.BingCustomSearch.GetResults("Web", model.SearchRequest);
+                        model.WebResult = bingWebSearch.Search("Web", model.SearchRequest);
                         if (model.WebResult.StatusCode == HttpStatusCode.OK)
                         {
                             model.StatusCode = model.WebResult.StatusCode;
                             model.WebActive = "active";
                         }
 
-                        model.ImageResult = Classes.BingCustomSearch.GetResults("Image", model.SearchRequest);
+
+                        model.ImageResult = bingWebSearch.Search("Image", model.SearchRequest);
                         if (model.ImageResult.StatusCode == HttpStatusCode.OK)
                         {
                             model.StatusCode = model.ImageResult.StatusCode;
@@ -195,7 +197,7 @@ namespace cdcavell.Controllers
                                 model.ImageActive = "active";
                         }
 
-                        model.VideoResult = Classes.BingCustomSearch.GetResults("Video", model.SearchRequest);
+                        model.VideoResult = bingWebSearch.Search("Video", model.SearchRequest);
                         if (model.VideoResult.StatusCode == HttpStatusCode.OK)
                         {
                             model.StatusCode = model.VideoResult.StatusCode;

@@ -29,20 +29,20 @@
 
                 if ('@(Model.Type)' === 'Web') {
                     innerHtml += '<div class="row m-0 p-0 mb-1"><div class="col"><h5>';
-                    innerHtml += '<a class="text-decoration-none" href="' + item.HostPageUrl + '" rel="external nofollow noopener" target="_blank">';
-                    innerHtml += item.Heading;
+                    innerHtml += '<a class="text-decoration-none" href="' + item.Url + '" rel="external nofollow noopener" target="_blank">';
+                    innerHtml += item.Name;
                     innerHtml += '</a></h5>';
-                    innerHtml += '<small class="text-muted">[Last Crawled/Published: ' + item.DatePublishedCrawledFormated + ']</small>';
-                    innerHtml += '<p>' + item.Description + '</p></div></div>';
+                    innerHtml += '<small class="text-muted">[Last Crawled: ' + item.DateLastCrawledFormated + ']</small>';
+                    innerHtml += '<p>' + item.Snippet + '</p></div></div>';
                 } else {
                     innerHtml += '<div class="row m-0 p-0 mb-1"><div class="col-2 m-0 p-0">';
                     innerHtml += '<a href="' + item.ContentUrl + '" class="d-block mb-4 h-100" rel="external nofollow noopener" target="_blank">';
                     innerHtml += '<img class="img-fluid img-thumbnail" src="' + item.ThumbnailUrl + '" width="300" alt="" />';
                     innerHtml += '</a></div><div class="col"><h5>';
                     innerHtml += '<a class="text-decoration-none" href="' + item.HostPageUrl + '" rel="external nofollow noopener" target="_blank">';
-                    innerHtml += item.Heading;
+                    innerHtml += item.Name;
                     innerHtml += '</a></h5>';
-                    innerHtml += '<small class="text-muted">[Last Crawled/Published: ' + item.DatePublishedCrawledFormated + ']</small>';
+                    innerHtml += '<small class="text-muted">[Published: ' + item.DatePublishedFormated + ']</small>';
                     innerHtml += '<p>' + item.Description + '</p></div></div>';
                 }
             }
