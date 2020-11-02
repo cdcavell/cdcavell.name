@@ -27,10 +27,12 @@
                 var item = @(Model.Type)_Items[i];
                 console.debug(item);
 
-                var description = item.Snippet;
-                if (description === null) {
-                    description = item.Description;
+                var snippet = item.Snippet;
+                if (snippet === null) {
+                    snippet = '';
                 }
+
+                var description = item.Description;
                 if (description === null) {
                     description = '';
                 }
@@ -41,7 +43,7 @@
                     innerHtml += item.Name;
                     innerHtml += '</a></h5>';
                     innerHtml += '<small class="text-muted">[Last Crawled: ' + item.DateLastCrawledFormated + ']</small>';
-                    innerHtml += '<p>' + description + '</p></div></div>';
+                    innerHtml += '<p>' + snippet + '</p></div></div>';
                 } else {
                     innerHtml += '<div class="row m-0 p-0 mb-1"><div class="col-2 m-0 p-0">';
                     innerHtml += '<a href="' + item.ContentUrl + '" class="d-block mb-4 h-100" rel="external nofollow noopener" target="_blank">';
