@@ -1,7 +1,6 @@
 ﻿using CDCavell.ClassLibrary.Commons.Logging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -38,6 +37,8 @@ namespace cdcavell.Data
         public CDCavellDbContext(ILogger<CDCavellDbContext> logger, IHttpContextAccessor httpContextAccessor, DbContextOptions<CDCavellDbContext> options)
             : base(options)
         {
+            Database.EnsureCreated();
+
             _logger = new Logger(logger);
             _httpContextAccessor = httpContextAccessor;
 
@@ -78,6 +79,10 @@ namespace cdcavell.Data
         /// <method>OnModelCreating(ModelBuilder builder)</method>
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<Registration>()
+                .HasIndex(x => x.Email)
+                .IsUnique();
+
             base.OnModelCreating(builder);
         }
 

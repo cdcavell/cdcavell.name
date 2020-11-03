@@ -7,7 +7,6 @@ using cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Commons.Logging;
 using CDCavell.ClassLibrary.Web.Mvc.Filters;
 using CDCavell.ClassLibrary.Web.Security;
-using CDCavell.ClassLibrary.Web.Utilities;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -44,6 +43,7 @@ namespace cdcavell
     /// | Christopher D. Cavell | 1.0.0.5 | 10/31/2020 | EU General Data Protection Regulation (GDPR) support in ASP.NET Core [#161](https://github.com/cdcavell/cdcavell.name/issues/161) |~
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Serve static assets with an efficient cache policy [#172](https://github.com/cdcavell/cdcavell.name/issues/172) |~
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
+    /// | Christopher D. Cavell | 1.0.0.9 | 11/03/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// </revision>
     public class Startup
     {
@@ -77,9 +77,6 @@ namespace cdcavell
             _appSettings = appSettings;
             services.AddSingleton(appSettings);
 
-            services.AddDbContext<MigrateDbContext>(options =>
-                options.UseSqlite(appSettings.ConnectionStrings.CDCavellConnection));
-
             services.AddDbContext<CDCavellDbContext>(options =>
                 options.UseSqlite(appSettings.ConnectionStrings.CDCavellConnection));
 
@@ -99,16 +96,16 @@ namespace cdcavell
             // Register Application Authorization
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("User", policy => policy
+                options.AddPolicy("Authenticated", policy => policy
                     .Requirements
-                    .Add(new UserRequirement(true)));
+                    .Add(new AuthenticatedRequirement(true)));
                 options.AddPolicy("Administration", policy => policy
                     .Requirements
                     .Add(new AdministrationRequirement(true)));
             });
 
             // Registered authorization handlers
-            services.AddSingleton<IAuthorizationHandler, UserHandler>();
+            services.AddSingleton<IAuthorizationHandler, AuthenticatedHandler>();
             services.AddSingleton<IAuthorizationHandler, AdministrationHandler>();
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
@@ -185,6 +182,7 @@ namespace cdcavell
             _logger.Trace($"Configure(IApplicationBuilder: {app}, IWebHostEnvironment: {env}, ILogger<Startup> {logger}, IHostApplicationLifetime: {lifetime})");
 
             AESGCM.Seed(_configuration);
+            DbInitializer.Initialize(dbContext);
             new Sitemap(_logger, _webHostEnvironment, _appSettings).Create(dbContext);
 
             lifetime.ApplicationStarted.Register(OnAppStarted);

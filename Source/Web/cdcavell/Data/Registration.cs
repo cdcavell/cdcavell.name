@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace cdcavell.Data
 {
@@ -13,6 +15,7 @@ namespace cdcavell.Data
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.9 | 11/03/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// </revision>
+    [Table("Registration")]
     public class Registration : DataModel<Registration>
     {
         /// <value>string</value>
@@ -38,6 +41,22 @@ namespace cdcavell.Data
         #endregion
 
         #region Static Methods
+
+        /// <summary>
+        /// Is email addressed registered
+        /// </summary>
+        /// <param name="emailAddress">string</param>
+        /// <param name="dbContext">CDCavellDbContext</param>
+        /// <returns>bool</returns>
+        /// <method>IsRegistered(string emailAddress, CDCavellDbContext dbContext)</method>
+        public static bool IsRegistered(string emailAddress, CDCavellDbContext dbContext)
+        {
+            int count = dbContext.Registration
+                .Where(x => x.Email == emailAddress.Trim().Clean())
+                .Count();
+
+            return count > 0 ? true : false;
+        }
 
         #endregion
     }

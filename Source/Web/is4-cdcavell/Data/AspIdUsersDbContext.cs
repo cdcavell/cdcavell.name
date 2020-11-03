@@ -12,6 +12,7 @@ namespace is4_cdcavell.Data
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.0 | 10/08/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.0.9 | 11/03/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// </revision>
     public class AspIdUsersDbContext : IdentityDbContext<ApplicationUser>
     {
@@ -23,6 +24,7 @@ namespace is4_cdcavell.Data
         public AspIdUsersDbContext(DbContextOptions<AspIdUsersDbContext> options)
             : base(options)
         {
+            Database.EnsureCreated();
         }
 
         /// <summary>

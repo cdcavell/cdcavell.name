@@ -1,4 +1,3 @@
-using cdcavell.Data;
 using CDCavell.ClassLibrary.Commons.Logging;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -20,6 +19,7 @@ namespace cdcavell
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.0 | 10/28/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
+    /// | Christopher D. Cavell | 1.0.0.9 | 11/03/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// </revision>
     public class Program
     {
@@ -45,15 +45,7 @@ namespace cdcavell
 
             try
             {
-                var host = CreateHostBuilder(args).Build();
-                using (var scope = host.Services.CreateScope())
-                {
-                    var services = scope.ServiceProvider;
-                    var context = services.GetRequiredService<MigrateDbContext>();
-                    DbInitializer.Initialize(context);
-                }
-
-                host.Run();
+                CreateHostBuilder(args).Build().Run();
                 _logger.Information($"{_assemblyName} Started");
             }
             catch (Exception e)

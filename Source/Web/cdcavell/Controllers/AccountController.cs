@@ -1,6 +1,8 @@
-﻿using cdcavell.Data;
+﻿using System;
+using cdcavell.Data;
 using cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Web.Mvc.Controllers;
+using CDCavell.ClassLibrary.Web.Mvc.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -56,11 +58,15 @@ namespace cdcavell.Controllers
         /// </summary>
         /// <returns>IActionResult</returns>
         /// <method>Login()</method>
-        [Authorize(Policy = "User")]
+        [Authorize(Policy = "Authenticated")]
         [HttpGet]
         public IActionResult Login()
         {
-            return RedirectToAction("Index", "Home");
+            UserViewModel user = (UserViewModel)ViewData["UserViewModel"];
+            if (Data.Registration.IsRegistered(user.Email.Trim().Clean(), _dbContext))
+                return RedirectToAction("Index", "Home");
+
+            return RedirectToAction("Registration", "Account");
         }
 
         /// <summary>
@@ -68,7 +74,7 @@ namespace cdcavell.Controllers
         /// </summary>
         /// <returns>IActionResult</returns>
         /// <method>Registration()</method>
-        [Authorize(Policy = "User")]
+        [Authorize(Policy = "Authenticated")]
         [HttpGet]
         public IActionResult Registration()
         {
