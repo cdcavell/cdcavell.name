@@ -16,19 +16,55 @@ namespace cdcavell.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.9");
 
+            modelBuilder.Entity("cdcavell.Data.AuditHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Application")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CurrentValues")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Entity")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("KeyValues")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("OriginalValues")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("State")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AuditHistory");
+                });
+
             modelBuilder.Entity("cdcavell.Data.Permission", b =>
                 {
-                    b.Property<int>("PermissionId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("RoleId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("PermissionId");
+                    b.HasKey("Id");
 
                     b.HasIndex("RoleId");
 
@@ -37,41 +73,48 @@ namespace cdcavell.Migrations
 
             modelBuilder.Entity("cdcavell.Data.Registration", b =>
                 {
-                    b.Property<int>("RegistrationId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("RegistrationId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.ToTable("Registration");
                 });
 
             modelBuilder.Entity("cdcavell.Data.Role", b =>
                 {
-                    b.Property<int>("RoleId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("RoleId");
+                    b.HasKey("Id");
 
                     b.ToTable("Role");
                 });
 
             modelBuilder.Entity("cdcavell.Data.RolePermission", b =>
                 {
-                    b.Property<int>("RolePermissionId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -84,7 +127,7 @@ namespace cdcavell.Migrations
                     b.Property<int>("RoleId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("RolePermissionId");
+                    b.HasKey("Id");
 
                     b.HasIndex("PermissionId");
 
@@ -97,20 +140,22 @@ namespace cdcavell.Migrations
 
             modelBuilder.Entity("cdcavell.Data.SiteMap", b =>
                 {
-                    b.Property<int>("SiteMapId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Action")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Controller")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("LastSubmitDate")
+                    b.Property<DateTime?>("LastSubmitDate")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("SiteMapId");
+                    b.HasKey("Id");
 
                     b.ToTable("SiteMap");
                 });

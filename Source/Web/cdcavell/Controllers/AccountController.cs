@@ -1,6 +1,8 @@
-﻿using cdcavell.Data;
+﻿using System;
+using cdcavell.Data;
 using cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Web.Mvc.Controllers;
+using CDCavell.ClassLibrary.Web.Mvc.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -20,6 +22,7 @@ namespace cdcavell.Controllers
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.0 | 10/19/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
+    /// | Christopher D. Cavell | 1.0.0.9 | 11/03/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// </revision>
     public class AccountController : ApplicationBaseController<AccountController>
     {
@@ -55,11 +58,27 @@ namespace cdcavell.Controllers
         /// </summary>
         /// <returns>IActionResult</returns>
         /// <method>Login()</method>
-        [Authorize(Policy = "User")]
+        [Authorize(Policy = "Authenticated")]
         [HttpGet]
         public IActionResult Login()
         {
-            return RedirectToAction("Index", "Home");
+            UserViewModel user = (UserViewModel)ViewData["UserViewModel"];
+            if (Data.Registration.IsRegistered(user.Email.Trim().Clean(), _dbContext))
+                return RedirectToAction("Index", "Home");
+
+            return RedirectToAction("Registration", "Account");
+        }
+
+        /// <summary>
+        /// Registration method
+        /// </summary>
+        /// <returns>IActionResult</returns>
+        /// <method>Registration()</method>
+        [Authorize(Policy = "Authenticated")]
+        [HttpGet]
+        public IActionResult Registration()
+        {
+            return View();
         }
 
         /// <summary>
