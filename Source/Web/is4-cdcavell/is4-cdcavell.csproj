@@ -1,9 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>is4_cdcavell</RootNamespace>
-    <Version>1.0.0.8</Version>
+    <Version>1.0.0.9</Version>
 	<DocumentationFile>../../../Documentation/Source/$(AssemblyName).xml</DocumentationFile>
 	<UserSecretsId>d3cf6ddf-02cc-4800-b31d-64a3837fc362</UserSecretsId>
 	<ApplicationIcon>favicon.ico</ApplicationIcon>
@@ -17,8 +17,8 @@
 	<RepositoryUrl>https://github.com/cdcavell/cdcavell.name</RepositoryUrl>
 	<RepositoryType>Git</RepositoryType>
 	<NeutralLanguage>en-US</NeutralLanguage>
-	<AssemblyVersion>1.0.0.8</AssemblyVersion>
-	<FileVersion>1.0.0.8</FileVersion>
+	<AssemblyVersion>1.0.0.9</AssemblyVersion>
+	<FileVersion>1.0.0.9</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,7 +31,12 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="3.1.9" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.9">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging.ApplicationInsights" Version="2.15.0" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
   </ItemGroup>

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
 	  <RootNamespace>cdcavell</RootNamespace>
-	  <Version>1.0.0.8</Version>
+	  <Version>1.0.0.9</Version>
 	  <DocumentationFile>../../../Documentation/Source/$(AssemblyName).xml</DocumentationFile>
 	  <UserSecretsId>7e0ff3e4-a0a2-4cb5-985c-85156cc56a57</UserSecretsId>
 	  <Authors>Christopher D. Cavell</Authors>
@@ -17,8 +17,8 @@
 	  <RepositoryUrl>https://github.com/cdcavell/cdcavell.name</RepositoryUrl>
 	  <NeutralLanguage>en-US</NeutralLanguage>
 	  <AssemblyName>CDCavell</AssemblyName>
-	  <AssemblyVersion>1.0.0.8</AssemblyVersion>
-	  <FileVersion>1.0.0.8</FileVersion>
+	  <AssemblyVersion>1.0.0.9</AssemblyVersion>
+	  <FileVersion>1.0.0.9</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
