@@ -10,16 +10,12 @@ namespace cdcavell.Data
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0.9 | 11/02/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
+    /// | Christopher D. Cavell | 1.0.0.9 | 11/03/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// </revision>
-    public class RolePermission
+    public class RolePermission : DataModel<RolePermission>
     {
         /// <value>int</value>
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int RolePermissionId { get; set; }
-
-        /// <value>int</value>
+        [Required]
         public int RegistrationId { get; set; }
         /// <value>Registration</value>
         [ForeignKey("RegistrationId")]
@@ -27,6 +23,7 @@ namespace cdcavell.Data
 
 
         /// <value>int</value>
+        [Required]
         public int RoleId { get; set; }
         /// <value>Role</value>
         [ForeignKey("RoleId")]
@@ -34,9 +31,18 @@ namespace cdcavell.Data
 
 
         /// <value>int</value>
+        [Required]
         public int PermissionId { get; set; }
         /// <value>Permission</value>
         [ForeignKey("PermissionId")]
         public Permission Permission { get; set; }
+
+        #region Instance Methods
+
+        #endregion
+
+        #region Static Methods
+
+        #endregion
     }
 }

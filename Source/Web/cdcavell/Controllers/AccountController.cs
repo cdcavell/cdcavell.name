@@ -20,6 +20,7 @@ namespace cdcavell.Controllers
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.0 | 10/19/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
+    /// | Christopher D. Cavell | 1.0.0.9 | 11/03/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// </revision>
     public class AccountController : ApplicationBaseController<AccountController>
     {
@@ -60,6 +61,18 @@ namespace cdcavell.Controllers
         public IActionResult Login()
         {
             return RedirectToAction("Index", "Home");
+        }
+
+        /// <summary>
+        /// Registration method
+        /// </summary>
+        /// <returns>IActionResult</returns>
+        /// <method>Registration()</method>
+        [Authorize(Policy = "User")]
+        [HttpGet]
+        public IActionResult Registration()
+        {
+            return View();
         }
 
         /// <summary>

@@ -77,6 +77,9 @@ namespace cdcavell
             _appSettings = appSettings;
             services.AddSingleton(appSettings);
 
+            services.AddDbContext<MigrateDbContext>(options =>
+                options.UseSqlite(appSettings.ConnectionStrings.CDCavellConnection));
+
             services.AddDbContext<CDCavellDbContext>(options =>
                 options.UseSqlite(appSettings.ConnectionStrings.CDCavellConnection));
 

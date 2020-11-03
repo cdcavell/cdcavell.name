@@ -18,8 +18,8 @@ namespace cdcavell.Data
         /// Initialize method
         /// </summary>
         /// <param name="context">CDCavellDdContext</param>
-        /// <method>Initialize(CDCavellDdContext context)</method>
-        public static void Initialize(CDCavellDbContext context)
+        /// <method>Initialize(MigrateDdContext context)</method>
+        public static void Initialize(MigrateDbContext context)
         {
             context.Database.Migrate(); 
         }

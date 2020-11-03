@@ -26,6 +26,7 @@ namespace cdcavell.Classes
     /// | Christopher D. Cavell | 1.0.0.0 | 10/28/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.0.6 | 10/31/2020 | Convert Sitemap class to build sitemap.xml dynamic based on existing controllers in project [#145](https://github.com/cdcavell/cdcavell.name/issues/145) |~ 
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
+    /// | Christopher D. Cavell | 1.0.0.9 | 11/03/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// </revision>
     public class Sitemap
     {
@@ -101,9 +102,7 @@ namespace cdcavell.Classes
                         SiteMap siteMap = new SiteMap();
                         siteMap.Controller = controllerAction.Controller.Replace("Controller", string.Empty);
                         siteMap.Action = controllerAction.Action;
-
-                        dbContext.Add(siteMap);
-                        dbContext.SaveChanges();
+                        siteMap.AddUpdate(dbContext);
                     }
                 }
             }
@@ -113,8 +112,7 @@ namespace cdcavell.Classes
             BingWebmaster bingWebmaster = new BingWebmaster(_appSettings.Authentication.BingWebmaster.ApiKey);
             UrlSubmissionQuota quota = bingWebmaster.GetUrlSubmission(url);
 
-            var siteMaps = SiteMap.GetAllSiteMap(dbContext)
-                .Where(x => x.LastSubmitDate.ToString() == "1/1/0001 12:00:00 AM");
+            var siteMaps = SiteMap.GetNotSubmittedSiteMap(dbContext);
             foreach (SiteMap siteMap in siteMaps)
             {
                 if (quota.DailyQuota > 0 && quota.MonthlyQuota > 0)
@@ -123,8 +121,7 @@ namespace cdcavell.Classes
                     if (statusCode == HttpStatusCode.OK)
                     {
                         siteMap.LastSubmitDate = DateTime.Now;
-                        dbContext.Update(siteMap);
-                        dbContext.SaveChanges();
+                        siteMap.AddUpdate(dbContext);
                     }
 
                     quota = bingWebmaster.GetUrlSubmission(url);
