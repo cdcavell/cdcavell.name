@@ -18,10 +18,9 @@ namespace cdcavell.Data
     /// </revision>
     public class SiteMap
     {
-        /// <value>long</value>
+        /// <value>int</value>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        /// <value>int</value>
         public int SiteMapId { get; set; }
         /// <value>string</value>
         public string Controller { get; set; }

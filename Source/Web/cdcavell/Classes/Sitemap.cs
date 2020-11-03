@@ -130,7 +130,6 @@ namespace cdcavell.Classes
                     quota = bingWebmaster.GetUrlSubmission(url);
                 }
             }
-
         }
     }
 }
