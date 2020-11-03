@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace cdcavell.Data
@@ -15,19 +16,27 @@ namespace cdcavell.Data
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
+    /// | Christopher D. Cavell | 1.0.0.9 | 11/03/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// </revision>
-    public class SiteMap
+    [Table("SiteMap")]
+    public class SiteMap : DataModel<SiteMap>
     {
-        /// <value>int</value>
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int SiteMapId { get; set; }
         /// <value>string</value>
+        [Required]
+        [DataType(DataType.Text)]
         public string Controller { get; set; }
         /// <value>string</value>
+        [Required]
+        [DataType(DataType.Text)]
         public string Action { get; set; }
-        /// <value>DateTime</value>
-        public DateTime LastSubmitDate { get; set; }
+        /// <value>DateTime?</value>
+        [AllowNull]
+        [DataType(DataType.DateTime)]
+        public DateTime? LastSubmitDate { get; set; } = DateTime.MinValue;
+
+        #region Instance Methods
+
+        #endregion
 
         #region Static Methods
 
@@ -56,6 +65,19 @@ namespace cdcavell.Data
         public static List<SiteMap> GetAllSiteMap(CDCavellDbContext dbContext)
         {
             return dbContext.SiteMap.ToList();
+        }
+
+        /// <summary>
+        /// Get StieMap entity records that have not been submitted
+        /// </summary>
+        /// <param name="dbContext"></param>
+        /// <returns>int</returns>
+        /// <method>GetNotSubmittedSiteMap(CDCavellDbContext dbContext)</method>
+        public static List<SiteMap> GetNotSubmittedSiteMap(CDCavellDbContext dbContext)
+        {
+            return dbContext.SiteMap
+                .Where(x => x.LastSubmitDate == DateTime.MinValue)
+                .ToList();
         }
 
         /// <summary>

@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace is4_cdcavell.Data
 {
@@ -16,12 +18,18 @@ namespace is4_cdcavell.Data
     {
         /// <summary>
         /// Initialize method
+        /// &lt;br /&gt;
+        /// To Initialize: dotnet ef migrations add InitialCreate
+        /// &lt;br /&gt;
+        /// To Update:     dotnet ef migrations add UpdateDatabase
         /// </summary>
         /// <param name="context">AspIdUsersDbContext</param>
         /// <method>Initialize(AspIdUsersDbContext context)</method>
         public static void Initialize(AspIdUsersDbContext context)
         {
-            context.Database.Migrate();
+            IEnumerable<string> pending = context.Database.GetPendingMigrations();
+            if (pending.Count() > 0)
+                context.Database.Migrate();
         }
     }
 }

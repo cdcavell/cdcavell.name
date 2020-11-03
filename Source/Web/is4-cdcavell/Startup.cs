@@ -34,6 +34,7 @@ namespace is4_cdcavell
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.0 | 10/12/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.0.4 | 10/30/2020 | Enforce HTTPS in ASP.NET Core [#158](https://github.com/cdcavell/cdcavell.name/issues/158) |~
+    /// | Christopher D. Cavell | 1.0.0.9 | 11/03/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// </revision>
     public class Startup
     {
@@ -168,11 +169,15 @@ namespace is4_cdcavell
         /// <param name="env">IWebHostEnvironment</param>
         /// <param name="logger">ILogger&lt;Startup&gt;</param>
         /// <param name="lifetime">IHostApplicationLifetime</param>
-        /// <method>Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger&lt;Startup&gt; logger, IHostApplicationLifetime lifetime)</method>
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger, IHostApplicationLifetime lifetime)
+        /// <param name="dbContext">AspIdUsersDbContext</param>
+        /// <method>Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger&lt;Startup&gt; logger, IHostApplicationLifetime lifetime, AspIdUsersDbContext dbContext)</method>
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger, IHostApplicationLifetime lifetime, AspIdUsersDbContext dbContext)
         {
             _logger = new Logger(logger);
             _logger.Trace($"Configure(IApplicationBuilder: {app}, IWebHostEnvironment: {env}, ILogger<Startup> {logger}, IHostApplicationLifetime: {lifetime})");
+
+            AESGCM.Seed(_configuration);
+            DbInitializer.Initialize(dbContext);
 
             lifetime.ApplicationStarted.Register(OnAppStarted);
             lifetime.ApplicationStopping.Register(OnAppStopping);
