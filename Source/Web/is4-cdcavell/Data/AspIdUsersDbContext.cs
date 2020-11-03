@@ -24,7 +24,6 @@ namespace is4_cdcavell.Data
         public AspIdUsersDbContext(DbContextOptions<AspIdUsersDbContext> options)
             : base(options)
         {
-            Database.EnsureCreated();
         }
 
         /// <summary>

@@ -37,8 +37,6 @@ namespace cdcavell.Data
         public CDCavellDbContext(ILogger<CDCavellDbContext> logger, IHttpContextAccessor httpContextAccessor, DbContextOptions<CDCavellDbContext> options)
             : base(options)
         {
-            Database.EnsureCreated();
-
             _logger = new Logger(logger);
             _httpContextAccessor = httpContextAccessor;
 
