@@ -95,6 +95,26 @@ namespace cdcavell.Filters
                 {
                     context.HttpContext.Response.Headers.Add("X-Permitted-Cross-Domain-Policies", "none");
                 }
+
+                // Permissions-Policy (https://scotthelme.co.uk/goodbye-feature-policy-and-hello-permissions-policy/)
+                var pp = "geolocation 'self'; ";
+                pp += "midi 'self'; ";
+                pp += "notifications 'self'; ";
+                pp += "push 'self'; ";
+                pp += "sync-xhr 'self'; ";
+                pp += "microphone 'self'; ";
+                pp += "camera 'self'; ";
+                pp += "magnetometer 'self'; ";
+                pp += "gyroscope 'self'; ";
+                pp += "speaker 'self'; ";
+                pp += "vibrate 'self'; ";
+                pp += "fullscreen 'self'; ";
+                pp += "payment 'self'; ";
+
+                if (!context.HttpContext.Response.Headers.ContainsKey("Permissions-Policy"))
+                {
+                    context.HttpContext.Response.Headers.Add("Permissions-Policy", pp);
+                }
             }
         }
 
