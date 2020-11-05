@@ -19,6 +19,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Root Files", "Root Files", 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{A8AF2C8D-6A42-403D-9D45-ED2C198B62FC}"
+	ProjectSection(SolutionItems) = preProject
+		Source\Data\AspIdUsers.db = Source\Data\AspIdUsers.db
+		Source\Data\CDCavell.db = Source\Data\CDCavell.db
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
