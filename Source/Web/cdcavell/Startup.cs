@@ -8,6 +8,7 @@ using CDCavell.ClassLibrary.Commons.Logging;
 using CDCavell.ClassLibrary.Web.Mvc.Filters;
 using CDCavell.ClassLibrary.Web.Security;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -22,9 +23,12 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.Net.Http.Headers;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace cdcavell
@@ -43,7 +47,7 @@ namespace cdcavell
     /// | Christopher D. Cavell | 1.0.0.5 | 10/31/2020 | EU General Data Protection Regulation (GDPR) support in ASP.NET Core [#161](https://github.com/cdcavell/cdcavell.name/issues/161) |~
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Serve static assets with an efficient cache policy [#172](https://github.com/cdcavell/cdcavell.name/issues/172) |~
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
-    /// | Christopher D. Cavell | 1.0.0.9 | 11/03/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
+    /// | Christopher D. Cavell | 1.0.0.9 | 11/04/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// </revision>
     public class Startup
     {
@@ -96,16 +100,32 @@ namespace cdcavell
             // Register Application Authorization
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("Authenticated", policy => policy
-                    .Requirements
-                    .Add(new AuthenticatedRequirement(true)));
-                options.AddPolicy("Administration", policy => policy
-                    .Requirements
-                    .Add(new AdministrationRequirement(true)));
+                options.AddPolicy("Authenticated", policy =>
+                {
+                    policy.Requirements.Add(new AuthenticatedRequirement(true));
+                });
+                options.AddPolicy("NewRegistration", policy =>
+                {
+                    policy.Requirements.Add(new AuthenticatedRequirement(true));
+                    policy.Requirements.Add(new NewRegistrationRequirement(true));
+                });
+                options.AddPolicy("ExistingRegistration", policy =>
+                {
+                    policy.Requirements.Add(new AuthenticatedRequirement(true));
+                    policy.Requirements.Add(new ExistingRegistrationRequirement(true));
+                });
+                options.AddPolicy("Administration", policy =>
+                {
+                    policy.Requirements.Add(new AuthenticatedRequirement(true));
+                    policy.Requirements.Add(new ExistingRegistrationRequirement(true));
+                    policy.Requirements.Add(new AdministrationRequirement(true));
+                });
             });
 
             // Registered authorization handlers
             services.AddSingleton<IAuthorizationHandler, AuthenticatedHandler>();
+            services.AddSingleton<IAuthorizationHandler, NewRegistrationHandler>();
+            services.AddSingleton<IAuthorizationHandler, ExistingRegistrationHandler>();
             services.AddSingleton<IAuthorizationHandler, AdministrationHandler>();
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
@@ -141,6 +161,41 @@ namespace cdcavell
                     options.Scope.Add("profile");
                     options.Scope.Add("email");
                     options.SaveTokens = true;
+
+                    options.Events = new OpenIdConnectEvents
+                    {
+                        OnRedirectToIdentityProvider = redirectContext =>
+                        {
+                            redirectContext.ProtocolMessage.SetParameter("acr_values", "mfa");
+                            return Task.FromResult(0);
+                        },
+
+                        OnTicketReceived = ticketReceivedContext =>
+                        {
+                            var receivedClaims = ticketReceivedContext.Principal.Claims;
+                            var additionalClaims = new List<Claim>();
+
+                            Claim emailClaim = receivedClaims.FirstOrDefault(x => x.Type == "email");
+                            if (emailClaim != null)
+                            {
+                                CDCavellDbContext dbContext = (CDCavellDbContext)ticketReceivedContext.HttpContext
+                                    .RequestServices.GetService(typeof(CDCavellDbContext));
+
+                                if (Registration.IsRegistered(emailClaim.Value.Clean(), dbContext))
+                                {
+                                    additionalClaims.Add(new Claim("registration", "existing"));
+                                    ticketReceivedContext.Principal.AddIdentity(new ClaimsIdentity(additionalClaims));
+                                }
+                                else
+                                {
+                                    additionalClaims.Add(new Claim("registration", "new"));
+                                    ticketReceivedContext.Principal.AddIdentity(new ClaimsIdentity(additionalClaims));
+                                }
+                            }
+
+                            return Task.FromResult(ticketReceivedContext.Result); 
+                        }
+                    };
                 });
 
             if (_webHostEnvironment.EnvironmentName.Equals("Production"))
