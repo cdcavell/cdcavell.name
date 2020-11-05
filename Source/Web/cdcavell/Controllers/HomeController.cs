@@ -27,7 +27,7 @@ namespace cdcavell.Controllers
     /// | Christopher D. Cavell | 1.0.0.5 | 10/30/2020 | EU General Data Protection Regulation (GDPR) support in ASP.NET Core [#161](https://github.com/cdcavell/cdcavell.name/issues/161) |~
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
     /// | Christopher D. Cavell | 1.0.0.8 | 11/01/2020 | Bing Search APIs will transition from Azure Cognitive Services to Azure Marketplace on 31 October 2023 [#152](https://github.com/cdcavell/cdcavell.name/issues/152) |~ 
-    /// | Christopher D. Cavell | 1.0.0.9 | 11/03/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
+    /// | Christopher D. Cavell | 1.0.0.9 | 11/04/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// </revision>
     public class HomeController : ApplicationBaseController<HomeController>
     {
@@ -37,6 +37,7 @@ namespace cdcavell.Controllers
         /// <param name="logger">ILogger</param>
         /// <param name="webHostEnvironment">IWebHostEnvironment</param>
         /// <param name="httpContextAccessor">IHttpContextAccessor</param>
+        /// <param name="authorizationService">IAuthorizationService</param>
         /// <param name="appSettings">AppSettings</param>
         /// <param name="dbContext">CDCavellDbContext</param>
         /// <method>
@@ -44,17 +45,19 @@ namespace cdcavell.Controllers
         ///     ILogger&lt;HomeController&gt; logger,
         ///     IWebHostEnvironment webHostEnvironment,
         ///     IHttpContextAccessor httpContextAccessor,
+        ///     IAuthorizationService authorizationService,
         ///     AppSettings appSettings,
         ///     CDCavellDbContext dbContext
-        /// ) : base(logger, webHostEnvironment, httpContextAccessor, appSettings, dbContext)
+        /// ) : base(logger, webHostEnvironment, httpContextAccessor, authorizationService, appSettings, dbContext)
         /// </method>
         public HomeController(
             ILogger<HomeController> logger,
             IWebHostEnvironment webHostEnvironment,
             IHttpContextAccessor httpContextAccessor,
+            IAuthorizationService authorizationService,
             AppSettings appSettings,
             CDCavellDbContext dbContext
-        ) : base(logger, webHostEnvironment, httpContextAccessor, appSettings, dbContext)
+        ) : base(logger, webHostEnvironment, httpContextAccessor, authorizationService, appSettings, dbContext)
         {
         }
 

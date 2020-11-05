@@ -1,5 +1,6 @@
 ﻿using cdcavell.Models.AppSettings;
 using Microsoft.AspNetCore.Authorization;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -15,7 +16,7 @@ namespace cdcavell.Authorization
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.0 | 10/18/2020 | Initial build |~ 
-    /// | Christopher D. Cavell | 1.0.0.9 | 11/03/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
+    /// | Christopher D. Cavell | 1.0.0.9 | 11/04/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// </revision>
     public class AuthenticatedHandler : AuthorizationHandler<AuthenticatedRequirement>
     {
@@ -35,7 +36,7 @@ namespace cdcavell.Authorization
         /// Handle Requirement method
         /// </summary>
         /// <param name="context">AuthorizationHandlerContext</param>
-        /// <param name="requirement">UserRequirement</param>
+        /// <param name="requirement">AuthenticatedRequirement</param>
         /// <method>HandleRequirementAsync(AuthorizationHandlerContext context, AuthenticatedRequirement requirement)</method>
         /// <returns>Task</returns>
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, AuthenticatedRequirement requirement)
