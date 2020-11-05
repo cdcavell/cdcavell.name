@@ -21,6 +21,7 @@ namespace cdcavell.Filters
     /// | Christopher D. Cavell | 1.0.0.1 | 10/28/2020 | Add YouTubeVideos |~ 
     /// | Christopher D. Cavell | 1.0.0.1 | 10/29/2020 | Remove YouTubeVideos (Not Implemented) |~ 
     /// | Christopher D. Cavell | 1.0.0.3 | 10/30/2020 | Issue #150 Content-Security-Policy HTTP header: Bad content security policy |~ 
+    /// | Christopher D. Cavell | 1.0.0.9 | 11/04/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// </revision>
     public class SecurityHeadersAttribute : ActionFilterAttribute
     {
@@ -97,19 +98,19 @@ namespace cdcavell.Filters
                 }
 
                 // Permissions-Policy (https://scotthelme.co.uk/goodbye-feature-policy-and-hello-permissions-policy/)
-                var pp = "geolocation 'self'; ";
-                pp += "midi 'self'; ";
-                pp += "notifications 'self'; ";
-                pp += "push 'self'; ";
-                pp += "sync-xhr 'self'; ";
-                pp += "microphone 'self'; ";
-                pp += "camera 'self'; ";
-                pp += "magnetometer 'self'; ";
-                pp += "gyroscope 'self'; ";
-                pp += "speaker 'self'; ";
-                pp += "vibrate 'self'; ";
-                pp += "fullscreen 'self'; ";
-                pp += "payment 'self'; ";
+                var pp = "geolocation=(self), ";
+                pp += "midi=(self), ";
+                pp += "notifications=(self), ";
+                pp += "push=(self), ";
+                pp += "sync-xhr=(self), ";
+                pp += "microphone=(self), ";
+                pp += "camera=(self), ";
+                pp += "magnetometer=(self), ";
+                pp += "gyroscope=(self), ";
+                pp += "speaker=(self), ";
+                pp += "vibrate=(self), ";
+                pp += "fullscreen=(self), ";
+                pp += "payment=(self) ";
 
                 if (!context.HttpContext.Response.Headers.ContainsKey("Permissions-Policy"))
                 {
