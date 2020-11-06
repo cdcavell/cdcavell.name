@@ -38,7 +38,7 @@ $ git flow init -d
 
 | Build | Date | Description |
 |-------|------|-------------|
-| 1.0.0.9 | 11/04/2020 | __Add:__ Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |
+| 1.0.0.9 | 11/05/2020 | __Add:__ Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |
 | 1.0.0.8 | 11/01/2020 | __Update:__ Bing Search APIs will transition from Azure Cognitive Services to Azure Marketplace on 31 October 2023 [#152](https://github.com/cdcavell/cdcavell.name/issues/152) |
 | 1.0.0.7 | 10/31/2020 | __Fix:__ Eliminate render-blocking resources [#171](https://github.com/cdcavell/cdcavell.name/issues/171) <br /> __Fix:__ Serve static assets with an efficient cache policy [#172](https://github.com/cdcavell/cdcavell.name/issues/172) <br /> __Add:__ Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |
 | 1.0.0.6 | 10/31/2020 | __Update:__ Convert Sitemap class to build sitemap.xml dynamic based on existing controllers in project [#145](https://github.com/cdcavell/cdcavell.name/issues/145) |
