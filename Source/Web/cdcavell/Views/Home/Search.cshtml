@@ -9,8 +9,11 @@
         <input class="form-control border-grey my-0 py-1" type="text" placeholder="Search" aria-label="Search" asp-for="SearchRequest" autofocus>
         <div class="input-group-append">
             <span class="input-group-text lighten-3 border-grey p-0 px-1" id="basic-text1">
-                <button class="btn btn-link m-0 p-0">
-                    <i class="fas fa-search text-grey" aria-hidden="true"></i>
+                <button class="btn btn-link m-0 p-0 g-recaptcha"
+                        data-sitekey="@ViewBag.reCAPTCHA_SiteKey"
+                        data-callback='onCaptchaSubmit'
+                        data-action='submit'>
+                   <i class="fas fa-search text-grey" aria-hidden="true"></i>
                 </button>
             </span>
         </div>
@@ -35,18 +38,18 @@
         @Html.HiddenFor(Model => Model.ImageDisabled);
         @Html.HiddenFor(Model => Model.VideoDisabled);
 
-        <ul class="nav nav-tabs" id="ResultsTab" role="tablist">
-            <li class="nav-item border border-bottom-0">
+        <ul class="nav nav-tabs border-0" id="ResultsTab" role="tablist">
+            <li class="nav-item rounded-top border border-bottom-0">
                 <a class="nav-link text-decoration-none @Model.WebActive @Model.WebDisabled" id="web-tab" data-toggle="tab" href="#web-panel" role="tab" aria-controls="web-panel" aria-selected='@Model.WebActive == "active" ? "true" : "false"'>Web Results</a>
             </li>
-            <li class="nav-item border border-bottom-0">
+            <li class="nav-item rounded-top border border-bottom-0">
                 <a class="nav-link text-decoration-none @Model.ImageActive @Model.ImageDisabled" id="image-tab" data-toggle="tab" href="#image-panel" role="tab" aria-controls="image-panel" aria-selected='@Model.ImageActive == "active" ? "true" : "false"'>Image Results</a>
             </li>
-            <li class="nav-item border border-bottom-0">
+            <li class="nav-item rounded-top border border-bottom-0">
                 <a class="nav-link text-decoration-none @Model.VideoActive @Model.VideoDisabled" id="video-tab" data-toggle="tab" href="#video-panel" role="tab" aria-controls="video-panel" aria-selected='@Model.VideoActive == "active" ? "true" : "false"'>Video Results</a>
             </li>
         </ul>
-        <div class="tab-content border border-top-0" id="resultsTabContent">
+        <div class="tab-content border border-top-0 shadow-sm" id="resultsTabContent">
             <div class="tab-pane fade @(Model.WebActive == "active" ? "show" : string.Empty) @Model.WebActive bg-white" id="web-panel" role="tabpanel" aria-labelledby="web-tab">
                 <partial name="_SearchTabPane" model="@Model.WebResult" />
             </div>
@@ -102,6 +105,7 @@
     });
 
     $('#form').on('submit', function (e) {
+        console.debug('set status code: @HttpStatusCode.NoContent');
         $('#StatusCode').val('@HttpStatusCode.NoContent');
     });
 

@@ -84,8 +84,8 @@ label:focus,
     border-color: #c1c7c9 !important;
 }
 
-.card {
-    opacity: 0.99;
+.grecaptcha-badge {
+    z-index: 1 !important;
 }
 
 .font-xx-small {

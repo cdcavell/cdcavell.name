@@ -11,20 +11,16 @@ else
     @Html.Hidden(Model.Type + "_PageNumber", Model.PageNumber, new { id = Model.Type + "_PageNumber" });
     @Html.Hidden(Model.Type + "_DisplayCount", Model.DisplayCount, new { id = Model.Type + "_DisplayCount" });
     <div class="card border-0">
-        <div class="card-header border-0 bg-white">
-            <p class="card-text text-muted">@Model.Type Search Results Returned: @Model.Items.Count</p>
-        </div>
-        <div class="card-body">
-            <div class="container">
-                <div class="row text-left text-lg-left" id="@(Model.Type)_ItemsDiv">
-                @* for loop populates here *@
-                </div>
+        <p class="card-text text-muted m-2 p-2">@Model.Type Search Results Returned: @Model.Items.Count</p>
+        <div class="container">
+            <div class="row text-left text-lg-left" id="@(Model.Type)_ItemsDiv">
+            @* for loop populates here *@
             </div>
         </div>
-    </div>
-    <div class="d-flex justify-content-center">
-        <div id="@(Model.Type)_Pager" class="w-auto m-0 p-0 bg-white">
-            <ul id="@(Model.Type)_Pagination" class="pagination-sm shadow"></ul>
+        <div class="d-flex justify-content-center">
+            <div id="@(Model.Type)_Pager" class="w-auto m-0 p-0 bg-white">
+                <ul id="@(Model.Type)_Pagination" class="pagination-sm shadow"></ul>
+            </div>
         </div>
     </div>
     <br />
