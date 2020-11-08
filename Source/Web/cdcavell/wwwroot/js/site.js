@@ -3,9 +3,10 @@
   * 
   *  Revisions:
   *  ----------------------------------------------------------------------------------------------------
-  * | Contributor           | Build | Revison Date | Description 
-  * |-----------------------|-------|--------------|-----------------------------------------------------
-  * | Christopher D. Cavell | 1.0.0 | 10/28/2020   | Initial build 
+  * | Contributor           | Build   | Revison Date | Description 
+  * |-----------------------|---------|--------------|-----------------------------------------------------
+  * | Christopher D. Cavell | 1.0.0.0 | 10/28/2020   | Initial build 
+  * | Christopher D. Cavell | 1.0.0.9 | 11/08/2020   | Implement Registration/Roles/Permissions [#183]
   *
   */
 
@@ -54,3 +55,31 @@ $(window).on('load', function() {
     console.info('-- Document Ready');
 
 });
+
+function onCaptchaSubmit(captchaToken) {
+
+    $.ajax({
+        async: true,
+        url: '/Account/ValidateCaptchaToken',
+        data: {
+            __RequestVerificationToken: $('input[name="__RequestVerificationToken"]', $('#form')).val(),
+            captchaToken: captchaToken
+        },
+        cache: false,
+        type: "POST",
+        success: function (data) {
+
+            console.debug('reCAPTCHA: ' + data);
+            $('#form').submit();
+
+        },
+        error: function (reponse) {
+
+            console.debug('reCAPTCHA error: ' + reponse.responseText);
+            alert('Error: Invalid reCAPTCHA response');
+
+        }
+    });
+
+};
+

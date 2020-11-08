@@ -1,8 +1,7 @@
-﻿using System;
-using cdcavell.Data;
+﻿using cdcavell.Data;
+using cdcavell.Models.Account;
 using cdcavell.Models.AppSettings;
-using CDCavell.ClassLibrary.Web.Mvc.Controllers;
-using CDCavell.ClassLibrary.Web.Mvc.Models;
+using CDCavell.ClassLibrary.Web.Http;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -10,6 +9,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Net;
+using System.Net.Http;
 
 namespace cdcavell.Controllers
 {
@@ -22,7 +24,7 @@ namespace cdcavell.Controllers
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.0 | 10/19/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
-    /// | Christopher D. Cavell | 1.0.0.9 | 11/04/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
+    /// | Christopher D. Cavell | 1.0.0.9 | 11/08/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// </revision>
     public class AccountController : ApplicationBaseController<AccountController>
     {
@@ -72,6 +74,40 @@ namespace cdcavell.Controllers
             }
 
             return RedirectToAction("Index", "Home");
+        }
+
+        /// <summary>
+        /// Validate returned captcha token
+        /// </summary>
+        /// <returns>IActionResult</returns>
+        /// <method>ValidateCaptchaToken(string token)</method>
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ValidateCaptchaToken(string captchaToken)
+        {
+            if (ModelState.IsValid)
+            {
+                string request = "siteverify";
+                request += "?secret=" + _appSettings.Authentication.reCAPTCHA.SecretKey;
+                request += "&response=" + captchaToken.Trim().Clean();
+                request += "&remoteip=" + _httpContextAccessor.HttpContext.GetRemoteAddress().MapToIPv4().ToString();
+
+                JsonClient client = new JsonClient(" https://www.google.com/recaptcha/api/");
+                HttpStatusCode statusCode = client.SendRequest(HttpMethod.Post, request, string.Empty);
+                if (client.IsResponseSuccess)
+                {
+                    CaptchaResponse response = client.GetResponseObject<CaptchaResponse>();
+                    if (response.success)
+                        if (response.action.Equals("submit", StringComparison.OrdinalIgnoreCase))
+                            if (response.score > 0.5)
+                                return Ok(client.GetResponseString());
+                }
+
+                return BadRequest(client.GetResponseString());
+            }
+
+            return BadRequest("Invalid request");
         }
 
         /// <summary>

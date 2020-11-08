@@ -6,3 +6,29 @@
     Please submit the following information for approval to gain access to user
     specific areas.
 </p>
+
+@using (Html.BeginForm("Search", "Home", FormMethod.Post, new { id = "form", suppressSubmit = "true" }))
+{
+    <div class="form-group md-form form-sm form-2 shadow-sm pl-0">
+        <div class="card">
+            <div class="card-body">
+
+            </div>
+            <div class="card-footer bg-white border-top-0 m-0 p-0">
+                <button id="submit" 
+                        type="submit" 
+                        class="btn btn-dark text-light border shadow text-decoration-none m-2 p-1 px-2 float-right g-recaptcha"
+                        data-sitekey="@ViewBag.reCAPTCHA_SiteKey"
+                        data-callback='onCaptchaSubmit'
+                        data-action='submit'>
+                    <i class="fas fa-inbox text-grey" aria-hidden="true"></i>
+                    Submit
+                </button>
+            </div>
+        </div>       
+    </div>
+}
+
+@section scripts {
+
+}
