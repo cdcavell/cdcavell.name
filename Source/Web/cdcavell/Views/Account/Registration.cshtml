@@ -2,7 +2,7 @@
     Registration
 </h1>
 <p class="font-small text-muted">
-    Access to user specific areas of this site require an approved registration. 
+    Access to user specific areas require an approved registration. 
     Please submit the following information for approval to gain access to user
     specific areas.
 </p>
@@ -11,13 +11,13 @@
 {
     <div class="form-group md-form form-sm form-2 shadow-sm pl-0">
         <div class="card">
-            <div class="card-body">
+            <div class="card-body rounded-top bg-white">
 
             </div>
-            <div class="card-footer bg-white border-top-0 m-0 p-0">
+            <div class="card-footer rounded-bottom bg-white border-top-0 m-0 p-0">
                 <button id="submit" 
                         type="submit" 
-                        class="btn btn-dark text-light border shadow text-decoration-none m-2 p-1 px-2 float-right g-recaptcha"
+                        class="btn btn-dark text-light border shadow-sm text-decoration-none m-2 p-1 px-2 float-right g-recaptcha"
                         data-sitekey="@ViewBag.reCAPTCHA_SiteKey"
                         data-callback='onCaptchaSubmit'
                         data-action='submit'>
