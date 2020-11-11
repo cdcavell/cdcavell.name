@@ -34,7 +34,7 @@ namespace is4_cdcavell
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.0 | 10/12/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.0.4 | 10/30/2020 | Enforce HTTPS in ASP.NET Core [#158](https://github.com/cdcavell/cdcavell.name/issues/158) |~
-    /// | Christopher D. Cavell | 1.0.0.9 | 11/03/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
+    /// | Christopher D. Cavell | 1.0.0.9 | 11/11/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// </revision>
     public class Startup
     {
@@ -215,8 +215,6 @@ namespace is4_cdcavell
         /// <method>OnAppStarted()</method>
         public void OnAppStarted()
         {
-            AESGCM.Seed(_configuration);
-
             _logger.Information($"{Assembly.GetEntryAssembly().GetName().Name} Application Started");
             _logger.Information($"Hosting Environment: {_webHostEnvironment.EnvironmentName}");
         }
