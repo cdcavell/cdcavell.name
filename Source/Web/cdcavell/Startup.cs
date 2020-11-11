@@ -47,7 +47,7 @@ namespace cdcavell
     /// | Christopher D. Cavell | 1.0.0.5 | 10/31/2020 | EU General Data Protection Regulation (GDPR) support in ASP.NET Core [#161](https://github.com/cdcavell/cdcavell.name/issues/161) |~
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Serve static assets with an efficient cache policy [#172](https://github.com/cdcavell/cdcavell.name/issues/172) |~
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
-    /// | Christopher D. Cavell | 1.0.0.9 | 11/04/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
+    /// | Christopher D. Cavell | 1.0.0.9 | 11/11/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// </revision>
     public class Startup
     {
@@ -123,10 +123,10 @@ namespace cdcavell
             });
 
             // Registered authorization handlers
-            services.AddSingleton<IAuthorizationHandler, AuthenticatedHandler>();
-            services.AddSingleton<IAuthorizationHandler, NewRegistrationHandler>();
-            services.AddSingleton<IAuthorizationHandler, ExistingRegistrationHandler>();
-            services.AddSingleton<IAuthorizationHandler, AdministrationHandler>();
+            services.AddTransient<IAuthorizationHandler, AuthenticatedHandler>();
+            services.AddTransient<IAuthorizationHandler, NewRegistrationHandler>();
+            services.AddTransient<IAuthorizationHandler, ExistingRegistrationHandler>();
+            services.AddTransient<IAuthorizationHandler, AdministrationHandler>();
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -166,7 +166,6 @@ namespace cdcavell
                     {
                         OnRedirectToIdentityProvider = redirectContext =>
                         {
-                            redirectContext.ProtocolMessage.SetParameter("acr_values", "mfa");
                             return Task.FromResult(0);
                         },
 
