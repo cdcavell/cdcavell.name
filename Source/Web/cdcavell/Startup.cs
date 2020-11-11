@@ -180,9 +180,14 @@ namespace cdcavell
                                 CDCavellDbContext dbContext = (CDCavellDbContext)ticketReceivedContext.HttpContext
                                     .RequestServices.GetService(typeof(CDCavellDbContext));
 
-                                if (Registration.IsRegistered(emailClaim.Value.Clean(), dbContext))
+                                Registration registration = Registration.Get(emailClaim.Value.Clean(), dbContext);
+                                if (registration != null)
                                 {
-                                    additionalClaims.Add(new Claim("registration", "existing"));
+                                    if (registration.IsActive)
+                                        additionalClaims.Add(new Claim("registration", "existing"));
+                                    else
+                                        additionalClaims.Add(new Claim("registration", "new"));
+
                                     ticketReceivedContext.Principal.AddIdentity(new ClaimsIdentity(additionalClaims));
                                 }
                                 else

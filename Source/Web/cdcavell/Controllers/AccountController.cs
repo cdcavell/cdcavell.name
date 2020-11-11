@@ -122,10 +122,20 @@ namespace cdcavell.Controllers
         {
             UserViewModel user = (UserViewModel)ViewData["UserViewModel"];
 
-            RegistrationViewModel model = new RegistrationViewModel();
-            model.Registration.Email = user.Email;
+            Registration registration = Data.Registration.Get(user.Email, _dbContext);
+            if (registration == null)
+            {
+                RegistrationViewModel model = new RegistrationViewModel();
+                model.Registration.Email = user.Email;
+                //model.Registration.RequestDate = DateTime.Now;
 
-            return View(model);
+                return View(model);
+            }
+
+            if (registration.IsPending)
+                return RedirectToAction("RegistrationPending", "Account");
+
+            return Unauthorized();
         }
 
         /// <summary>
@@ -140,10 +150,37 @@ namespace cdcavell.Controllers
         {
             if (ModelState.IsValid)
             {
+                model.Registration.Email = model.Registration.Email.Trim().Clean();
+                model.Registration.FirstName = model.Registration.FirstName.Trim().Clean();
+                model.Registration.LastName = model.Registration.LastName.Trim().Clean();
+                model.Registration.RequestDate = DateTime.Now;
+                model.Registration.AddUpdate(_dbContext);
 
+                return RedirectToAction("RegistrationPending", "Account");
             }
 
             return View(model);
+        }
+
+        /// <summary>
+        /// Registration pending method
+        /// </summary>
+        /// <returns>IActionResult</returns>
+        /// <method>RegistrationPending()</method>
+        [Authorize(Policy = "NewRegistration")]
+        [HttpGet]
+        public IActionResult RegistrationPending()
+        {
+            UserViewModel user = (UserViewModel)ViewData["UserViewModel"];
+
+            Registration registration = Data.Registration.Get(user.Email, _dbContext);
+            if (registration != null)
+            {
+                if (registration.IsPending)
+                    return View(registration);
+            }
+
+            return Unauthorized();
         }
 
         /// <summary>

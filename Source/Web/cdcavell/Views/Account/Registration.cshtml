@@ -9,7 +9,7 @@
     specific areas.
 </p>
 
-@using (Html.BeginForm("Registration", "Account", FormMethod.Post, new { id = "form", suppressSubmit = "true" }))
+@using (Html.BeginForm("Registration", "Account", FormMethod.Post, new { id = "form", suppressSubmit = "false" }))
 {
     <div class="card shadow-sm pl-0">
         <div class="card-body rounded-top bg-white">
@@ -19,7 +19,7 @@
                 </div>
                 <div class="col-sm-11 col-md-11">
                     @Html.EditorFor(model => model.Registration.Email, new { HtmlAttributes = new { @class = "form-control form-control-sm m-0", @readonly = "readonly" } })
-                    @Html.ValidationMessageFor(model => model.Registration.Email, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Registration.Email, "", new { @class = "text-danger font-x-small" })
                 </div>
             </div>
             <div class="form-group row m-0 p-0">
@@ -28,14 +28,14 @@
                 </div>
                 <div class="col-sm-5 col-md-5">
                     @Html.EditorFor(model => model.Registration.FirstName, new { HtmlAttributes = new { @class = "form-control form-control-sm m-0" } })
-                    @Html.ValidationMessageFor(model => model.Registration.FirstName, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Registration.FirstName, "", new { @class = "text-danger font-x-small" })
                 </div>
                 <div class="col-sm-1 col-md-1 p-1">
                     @Html.LabelFor(model => model.Registration.LastName)
                 </div>
                 <div class="col-sm-5 col-md-5">
                     @Html.EditorFor(model => model.Registration.LastName, new { HtmlAttributes = new { @class = "form-control form-control-sm m-0" } })
-                    @Html.ValidationMessageFor(model => model.Registration.LastName, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Registration.LastName, "", new { @class = "text-danger font-x-small" })
                 </div>
             </div>
         </div>
@@ -49,6 +49,8 @@
             </button>
         </div>
     </div>       
+
+    @Html.HiddenFor(model => model.Registration.RequestDate);
 }
 
 @section scripts {
