@@ -1,0 +1,54 @@
+﻿@model Registration
+
+<h1 class="h2 mb-1">
+    Registration
+</h1>
+<p class="font-small text-muted">
+    Your registration request has been received and currently waiting on approval.
+</p>
+
+<div class="card shadow-sm pl-0">
+    <div class="card-body rounded-top bg-white">
+        <div class="form-group row m-0 p-0">
+            <div class="col-sm-1 col-md-1 p-1">
+                @Html.LabelFor(model => model.Email)
+            </div>
+            <div class="col-sm-11 col-md-11">
+                @Html.TextBoxFor(model => model.Email, new { @readonly = "readonly", @class = "form-control form-control-sm m-0" })
+            </div>
+        </div>
+        <div class="form-group row m-0 p-0">
+            <div class="col-sm-1 col-md-1 p-1">
+                @Html.LabelFor(model => model.RequestDate)
+            </div>
+            <div class="col-sm-5 col-md-5">
+                @Html.TextBoxFor(model => model.RequestDate, "{0:MMM dd, yyyy}", new { @readonly = "readonly", @class = "form-control form-control-sm m-0" })
+            </div>
+            <div class="col-sm-1 col-md-1 p-1">
+                @Html.LabelFor(model => model.Status)
+            </div>
+            <div class="col-sm-5 col-md-5">
+                @Html.TextBoxFor(model => model.Status, new { @readonly = "readonly", @class = "form-control form-control-sm m-0" })
+            </div>
+        </div>
+        <div class="form-group row m-0 p-0">
+            <div class="col-sm-1 col-md-1 p-1">
+                @Html.LabelFor(model => model.FirstName)
+            </div>
+            <div class="col-sm-5 col-md-5">
+                @Html.TextBoxFor(model => model.FirstName, new { @readonly = "readonly", @class = "form-control form-control-sm m-0" })
+            </div>
+            <div class="col-sm-1 col-md-1 p-1">
+                @Html.LabelFor(model => model.LastName)
+            </div>
+            <div class="col-sm-5 col-md-5">
+                @Html.TextBoxFor(model => model.LastName, new { @readonly = "readonly", @class = "form-control form-control-sm m-0" })
+            </div>
+        </div>
+    </div>
+</div>       
+
+@section scripts {
+
+}
+
