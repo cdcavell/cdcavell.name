@@ -2,6 +2,7 @@
 using cdcavell.Models.Account;
 using cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Web.Http;
+using CDCavell.ClassLibrary.Web.Mvc.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -24,7 +25,7 @@ namespace cdcavell.Controllers
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.0 | 10/19/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
-    /// | Christopher D. Cavell | 1.0.0.9 | 11/08/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
+    /// | Christopher D. Cavell | 1.0.0.9 | 11/11/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// </revision>
     public class AccountController : ApplicationBaseController<AccountController>
     {
@@ -111,7 +112,7 @@ namespace cdcavell.Controllers
         }
 
         /// <summary>
-        /// Registration method
+        /// Registration HttpGet method
         /// </summary>
         /// <returns>IActionResult</returns>
         /// <method>Registration()</method>
@@ -119,7 +120,30 @@ namespace cdcavell.Controllers
         [HttpGet]
         public IActionResult Registration()
         {
-            return View();
+            UserViewModel user = (UserViewModel)ViewData["UserViewModel"];
+
+            RegistrationViewModel model = new RegistrationViewModel();
+            model.Registration.Email = user.Email;
+
+            return View(model);
+        }
+
+        /// <summary>
+        /// Registration HttpPost method
+        /// </summary>
+        /// <returns>IActionResult</returns>
+        /// <method>Registration(RegistrationViewModel model)</method>
+        [Authorize(Policy = "NewRegistration")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Registration(RegistrationViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+
+            }
+
+            return View(model);
         }
 
         /// <summary>
