@@ -77,6 +77,12 @@ namespace cdcavell.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ApprovedBy")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("ApprovedDate")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -87,6 +93,15 @@ namespace cdcavell.Migrations
 
                     b.Property<string>("LastName")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("RequestDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RevokedBy")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("RevokedDate")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace cdcavell.Data
@@ -30,7 +31,39 @@ namespace cdcavell.Data
         [Required]
         [DataType(DataType.Text)]
         public string LastName { get; set; }
+        /// <value>DateTime?</value>
+        [AllowNull]
+        [DataType(DataType.DateTime)]
+        public DateTime? RequestDate { get; set; } = DateTime.MinValue;
+        /// <value>DateTime?</value>
+        [AllowNull]
+        [DataType(DataType.DateTime)]
+        public DateTime? ApprovedDate { get; set; } = DateTime.MinValue;
+        /// <value>string</value>
+        [AllowNull]
+        [DataType(DataType.EmailAddress)]
+        public string ApprovedBy { get; set; }
+        /// <value>DateTime?</value>
+        [AllowNull]
+        [DataType(DataType.DateTime)]
+        public DateTime? RevokedDate { get; set; } = DateTime.MinValue;
+        /// <value>string</value>
+        [AllowNull]
+        [DataType(DataType.EmailAddress)]
+        public string RevokedBy { get; set; }
+        /// <value>bool</value>
+        [NotMapped]
+        public bool IsActive
+        {
+            get
+            {
+                if (ApprovedDate != DateTime.MinValue)
+                    if (RevokedDate == DateTime.MinValue)
+                        return true;
 
+                return false;
+            }
+        }
 
         /// <value>ICollection&lt;Role&gt;</value>
         public List<RolePermission> RolePermissions { get; set; }
@@ -56,6 +89,20 @@ namespace cdcavell.Data
                 .Count();
 
             return count > 0 ? true : false;
+        }
+
+        /// <summary>
+        /// Get registration for given email address
+        /// </summary>
+        /// <param name="emailAddress">string</param>
+        /// <param name="dbContext">CDCavellDbContext</param>
+        /// <returns>Registration</returns>
+        /// <method>Get(string emailAddress, CDCavellDbContext dbContext)</method>
+        public static Registration Get(string emailAddress, CDCavellDbContext dbContext)
+        {
+            return dbContext.Registration
+                .Where(x => x.Email == emailAddress.Trim().Clean())
+                .FirstOrDefault();
         }
 
         #endregion

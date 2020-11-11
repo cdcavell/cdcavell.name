@@ -1,4 +1,5 @@
-﻿using cdcavell.Models.AppSettings;
+﻿using cdcavell.Data;
+using cdcavell.Models.AppSettings;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
@@ -15,20 +16,23 @@ namespace cdcavell.Authorization
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0.9 | 11/04/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
+    /// | Christopher D. Cavell | 1.0.0.9 | 11/11/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// </revision>
     public class ExistingRegistrationHandler : AuthorizationHandler<ExistingRegistrationRequirement>
     {
         private AppSettings _appSettings;
+        private CDCavellDbContext _dbContext;
 
         /// <summary>
         /// Constructor method
         /// </summary>
         /// <param name="appSettings">AppSettings</param>
-        /// <method>ExistingRegistrationHandler(AppSettings appSettings)</method>
-        public ExistingRegistrationHandler(AppSettings appSettings)
+        /// <param name="dbContext">CDCavellDbContext</param>
+        /// <method>ExistingRegistrationHandler(AppSettings appSettings, CDCavellDbContext dbContext)</method>
+        public ExistingRegistrationHandler(AppSettings appSettings, CDCavellDbContext dbContext)
         {
             _appSettings = appSettings;
+            _dbContext = dbContext;
         }
 
         /// <summary>
@@ -43,22 +47,29 @@ namespace cdcavell.Authorization
             var user = context.User;
             if (user.Identity.IsAuthenticated)
             {
-                List<Claim> registrationClaims = user.Claims.Where(x => x.Type == "registration").ToList();
-                if (registrationClaims != null)
+                Claim emailClaim = user.Claims.Where(x => x.Type == "email").FirstOrDefault();
+                if (emailClaim != null && !string.IsNullOrEmpty(emailClaim.Value))
                 {
-                    Claim newClaim = registrationClaims.Where(x => x.Value.Trim()
-                        .Contains("new", StringComparison.CurrentCultureIgnoreCase))
-                        .FirstOrDefault();
-
-                    Claim existingClaim = registrationClaims.Where(x => x.Value.Trim()
-                        .Contains("existing", StringComparison.CurrentCultureIgnoreCase))
-                        .FirstOrDefault();
-
-                    if (newClaim == null && existingClaim != null)
+                    List<Claim> registrationClaims = user.Claims.Where(x => x.Type == "registration").ToList();
+                    if (registrationClaims != null)
                     {
-                        context.Succeed(requirement);
-                    }
+                        Claim newClaim = registrationClaims.Where(x => x.Value.Trim()
+                            .Contains("new", StringComparison.CurrentCultureIgnoreCase))
+                            .FirstOrDefault();
 
+                        Claim existingClaim = registrationClaims.Where(x => x.Value.Trim()
+                            .Contains("existing", StringComparison.CurrentCultureIgnoreCase))
+                            .FirstOrDefault();
+
+                        if (newClaim == null && existingClaim != null)
+                        {
+                            Registration registration = Registration.Get(emailClaim.Value, _dbContext);
+                            if (registration.IsActive)
+                            {
+                                context.Succeed(requirement);
+                            }
+                        }
+                    }
                 }
             }
 

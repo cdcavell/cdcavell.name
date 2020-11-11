@@ -1,4 +1,5 @@
-﻿using cdcavell.Models.AppSettings;
+﻿using cdcavell.Data;
+using cdcavell.Models.AppSettings;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
@@ -16,20 +17,23 @@ namespace cdcavell.Authorization
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.0 | 10/18/2020 | Initial build |~ 
-    /// | Christopher D. Cavell | 1.0.0.9 | 11/04/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
+    /// | Christopher D. Cavell | 1.0.0.9 | 11/11/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// </revision>
     public class AuthenticatedHandler : AuthorizationHandler<AuthenticatedRequirement>
     {
         private AppSettings _appSettings;
+        private CDCavellDbContext _dbContext;
 
         /// <summary>
         /// Constructor method
         /// </summary>
         /// <param name="appSettings">AppSettings</param>
-        /// <method>AuthenticatedHandler(AppSettings appSettings)</method>
-        public AuthenticatedHandler(AppSettings appSettings)
+        /// <param name="dbContext">CDCavellDbContext</param>
+        /// <method>AuthenticatedHandler(AppSettings appSettings, CDCavellDbContext dbContext)</method>
+        public AuthenticatedHandler(AppSettings appSettings, CDCavellDbContext dbContext)
         {
             _appSettings = appSettings;
+            _dbContext = dbContext;
         }
 
         /// <summary>
