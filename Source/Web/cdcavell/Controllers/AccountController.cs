@@ -25,7 +25,7 @@ namespace cdcavell.Controllers
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.0 | 10/19/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
-    /// | Christopher D. Cavell | 1.0.0.9 | 11/11/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
+    /// | Christopher D. Cavell | 1.0.0.9 | 11/12/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// </revision>
     public class AccountController : ApplicationBaseController<AccountController>
     {
@@ -60,6 +60,32 @@ namespace cdcavell.Controllers
         }
 
         /// <summary>
+        /// Index method
+        /// </summary>
+        /// <returns>IActionResult</returns>
+        /// <method>Index()</method>
+        [Authorize(Policy = "Authenticated")]
+        [HttpGet]
+        public IActionResult Index()
+        {
+            UserViewModel user = (UserViewModel)ViewData["UserViewModel"];
+
+            AccountViewModel model = new AccountViewModel();
+            model.Registration = Data.Registration.Get(user.Email, _dbContext);
+
+            if (model.Registration != null)
+            {
+                return View(model);
+            }
+
+            var isNewRegistration = _authorizationService.AuthorizeAsync(User, "NewRegistration").Result;
+            if (isNewRegistration.Succeeded)
+                return RedirectToAction("Registration", "Account");
+
+            return RedirectToAction("Logout", "Account");
+        }
+
+        /// <summary>
         /// Login method
         /// </summary>
         /// <returns>IActionResult</returns>
@@ -74,14 +100,15 @@ namespace cdcavell.Controllers
                 return RedirectToAction("Registration", "Account");
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Account");
         }
 
         /// <summary>
         /// Validate returned captcha token
         /// </summary>
+        /// <param name="captchaToken">string</param>
         /// <returns>IActionResult</returns>
-        /// <method>ValidateCaptchaToken(string token)</method>
+        /// <method>ValidateCaptchaToken(string captchaToken)</method>
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -101,7 +128,7 @@ namespace cdcavell.Controllers
                     CaptchaResponse response = client.GetResponseObject<CaptchaResponse>();
                     if (response.success)
                         if (response.action.Equals("submit", StringComparison.OrdinalIgnoreCase))
-                            if (response.score > 0.5)
+                            if (response.score > 0.6)
                                 return Ok(client.GetResponseString());
                 }
 
@@ -125,28 +152,29 @@ namespace cdcavell.Controllers
             Registration registration = Data.Registration.Get(user.Email, _dbContext);
             if (registration == null)
             {
-                RegistrationViewModel model = new RegistrationViewModel();
+                AccountViewModel model = new AccountViewModel();
+                model.Registration = new Registration();
                 model.Registration.Email = user.Email;
-                //model.Registration.RequestDate = DateTime.Now;
 
                 return View(model);
             }
 
             if (registration.IsPending)
-                return RedirectToAction("RegistrationPending", "Account");
+                return RedirectToAction("Index", "Account");
 
-            return Unauthorized();
+            return RedirectToAction("Logout", "Account");
         }
 
         /// <summary>
         /// Registration HttpPost method
         /// </summary>
+        /// <param name="model">AccountViewModel</param>
         /// <returns>IActionResult</returns>
-        /// <method>Registration(RegistrationViewModel model)</method>
+        /// <method>Registration(AccountViewModel model)</method>
         [Authorize(Policy = "NewRegistration")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Registration(RegistrationViewModel model)
+        public IActionResult Registration(AccountViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -156,31 +184,30 @@ namespace cdcavell.Controllers
                 model.Registration.RequestDate = DateTime.Now;
                 model.Registration.AddUpdate(_dbContext);
 
-                return RedirectToAction("RegistrationPending", "Account");
+                return RedirectToAction("Index", "Account");
             }
 
             return View(model);
         }
 
         /// <summary>
-        /// Registration pending method
+        /// Delete Account
         /// </summary>
+        /// <param name="model">AccountViewModel</param>
         /// <returns>IActionResult</returns>
-        /// <method>RegistrationPending()</method>
-        [Authorize(Policy = "NewRegistration")]
-        [HttpGet]
-        public IActionResult RegistrationPending()
+        /// <method>Delete(AccountViewModel model)</method>
+        [Authorize(Policy = "Authenticated")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(AccountViewModel model)
         {
-            UserViewModel user = (UserViewModel)ViewData["UserViewModel"];
-
-            Registration registration = Data.Registration.Get(user.Email, _dbContext);
-            if (registration != null)
+            if (ModelState.IsValid)
             {
-                if (registration.IsPending)
-                    return View(registration);
+                model.Registration.Delete(_dbContext);
+                return RedirectToAction("Logout", "Account");
             }
 
-            return Unauthorized();
+            return View(model);
         }
 
         /// <summary>
