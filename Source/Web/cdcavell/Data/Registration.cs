@@ -16,7 +16,7 @@ namespace cdcavell.Data
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0.9 | 11/11/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
+    /// | Christopher D. Cavell | 1.0.0.9 | 11/12/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// </revision>
     [Table("Registration")]
     public class Registration : DataModel<Registration>
@@ -109,12 +109,12 @@ namespace cdcavell.Data
             get 
             {
                 if (IsActive)
-                    return "Active";
+                    return "Account Active";
 
                 if (IsRevoked)
-                    return "Revoked";
+                    return "Account Revoked";
 
-                return "Pending";
+                return "Pending Approval";
             }
         }
 
