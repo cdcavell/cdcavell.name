@@ -10,7 +10,7 @@ namespace cdcavell.Data
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.0.9 | 11/03/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
+    /// | Christopher D. Cavell | 1.0.0.9 | 11/12/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// </revision>
     public abstract partial class DataModel<T> : IDataModel<DataModel<T>> where T : DataModel<T>
     {
@@ -35,7 +35,7 @@ namespace cdcavell.Data
         #region Instance Methods
 
         /// <summary>
-        /// Add/Update method
+        /// Add/Update record
         /// </summary>
         /// <method>AddUpdate(CDCavellDbContext dbContext)</method>
         public void AddUpdate(CDCavellDbContext dbContext)
@@ -46,6 +46,20 @@ namespace cdcavell.Data
                 dbContext.Update<DataModel<T>>(this);
 
             dbContext.SaveChanges();
+        }
+
+        /// <summary>
+        /// Delete record
+        /// </summary>
+        /// <param name="dbContext"></param>
+        public void Delete(CDCavellDbContext dbContext)
+        {
+            if (!this.IsNew)
+            {
+                dbContext.Attach<DataModel<T>>(this);
+                dbContext.Remove<DataModel<T>>(this);
+                dbContext.SaveChanges();
+            }
         }
 
         /// <summary>
