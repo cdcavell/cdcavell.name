@@ -22,7 +22,7 @@ namespace cdcavell.Filters
     /// | Christopher D. Cavell | 1.0.0.1 | 10/28/2020 | Add YouTubeVideos |~ 
     /// | Christopher D. Cavell | 1.0.0.1 | 10/29/2020 | Remove YouTubeVideos (Not Implemented) |~ 
     /// | Christopher D. Cavell | 1.0.0.3 | 10/30/2020 | Issue #150 Content-Security-Policy HTTP header: Bad content security policy |~ 
-    /// | Christopher D. Cavell | 1.0.0.9 | 11/08/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
+    /// | Christopher D. Cavell | 1.0.0.9 | 11/12/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// </revision>
     public class SecurityHeadersAttribute : ActionFilterAttribute
     {
@@ -128,6 +128,19 @@ namespace cdcavell.Filters
                 if (!context.HttpContext.Response.Headers.ContainsKey("Permissions-Policy"))
                 {
                     context.HttpContext.Response.Headers.Add("Permissions-Policy", pp);
+                }
+
+                if (!context.HttpContext.Response.Headers.ContainsKey("Last-Modified"))
+                {
+                    context.HttpContext.Response.Headers.Add(
+                        "Last-Modified",
+                        _appSettings.LastModifiedDate.ToString("ddd, dd MM yyyy HH:mm:ss 'GMT'")
+                    );
+                }
+
+                if (!context.HttpContext.Response.Headers.ContainsKey("Cache-Control"))
+                {
+                    context.HttpContext.Response.Headers.Add("Cache-Control", "public, max-age=0, must-revalidate");
                 }
             }
         }

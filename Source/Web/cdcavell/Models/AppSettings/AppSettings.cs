@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System;
+using System.IO;
+using System.Reflection;
 
 namespace cdcavell.Models.AppSettings
 {
@@ -13,6 +15,7 @@ namespace cdcavell.Models.AppSettings
     /// | Christopher D. Cavell | 1.0.0.1 | 10/28/2020 | Add YouTubeVideos |~ 
     /// | Christopher D. Cavell | 1.0.0.1 | 10/29/2020 | Remove YouTubeVideos (Not Implemented) |~ 
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
+    /// | Christopher D. Cavell | 1.0.0.9 | 11/12/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// </revision>
     public class AppSettings
     {
@@ -25,6 +28,11 @@ namespace cdcavell.Models.AppSettings
         public string AssemblyVersion
         {
             get { return Assembly.GetEntryAssembly().GetName().Version.ToString(); }
+        }
+        /// <value>DateTime</value>
+        public DateTime LastModifiedDate
+        {
+            get { return File.GetLastWriteTime(Assembly.GetEntryAssembly().Location); }
         }
         /// <value>Authentication</value>
         public Authentication Authentication { get; set; }

@@ -4,7 +4,8 @@
     <div class="row m-0 p-0">
         <div class="col d-flex m-0 ml-2 p-0">
             &copy; @DateTime.Now.Year - Christopher D. Cavell |
-            Version: @AppSettings.AssemblyVersion 
+            Version: @AppSettings.AssemblyVersion |
+            Last Modified: @AppSettings.LastModifiedDate.ToString("MM/dd/yyyy hh:mm tt")
         </div>
         <div class="col d-flex justify-content-center m-0 p-0">
             Hosted By: &nbsp;
