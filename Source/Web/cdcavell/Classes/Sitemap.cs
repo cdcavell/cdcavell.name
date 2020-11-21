@@ -2,6 +2,7 @@
 using cdcavell.Data;
 using cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Commons.Logging;
+using CDCavell.ClassLibrary.Web.Http;
 using CDCavell.ClassLibrary.Web.Utilities;
 using CDCavell.ClassLibrary.Web.Utilities.Models.BingWebmasterModels;
 using Microsoft.AspNetCore.Authorization;
@@ -12,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Reflection;
 
 namespace cdcavell.Classes
@@ -27,6 +29,7 @@ namespace cdcavell.Classes
     /// | Christopher D. Cavell | 1.0.0.6 | 10/31/2020 | Convert Sitemap class to build sitemap.xml dynamic based on existing controllers in project [#145](https://github.com/cdcavell/cdcavell.name/issues/145) |~ 
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/03/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
+    /// | Christopher D. Cavell | 1.0.0.9 | 11/21/2020 | Ping Google with the location of sitemap |~ 
     /// </revision>
     public class Sitemap
     {
@@ -127,6 +130,20 @@ namespace cdcavell.Classes
                     quota = bingWebmaster.GetUrlSubmission(url);
                 }
             }
+
+            using (var googleClient = new HttpClient())
+            {
+                HttpResponseMessage response = googleClient.GetAsync("https://www.google.com/ping?sitemap=" + url + "/sitemap.xml").Result;
+                if (!response.IsSuccessStatusCode)
+                    _logger.Warning(
+                          "Google Sitemap Ping: "
+                        + response.StatusCode.ToString()
+                        + " ["
+                        + response.ReasonPhrase
+                        + "]"
+                    );
+            }
+
         }
     }
 }
