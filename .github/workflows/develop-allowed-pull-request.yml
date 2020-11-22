@@ -1,4 +1,9 @@
 # Limit pull request from develop branch only.
+#
+# https://docs.github.com/en/free-pro-team@latest/actions/reference/context-and-expression-syntax-for-github-actions
+# https://docs.github.com/en/free-pro-team@latest/actions/reference/context-and-expression-syntax-for-github-actions#github-context
+# https://docs.github.com/en/free-pro-team@latest/actions/reference/environment-variables
+#
 name: "Allowed Pull Request"
 
 on:
@@ -20,5 +25,5 @@ jobs:
       - name: Echo 
         run: echo Merging $HEAD_REF into $BASE_REF
       - name: Compare
-        if: startsWith(${{ github.head_ref }}, 'develop')  
+        if: ${{ github.head_ref == 'develop' }}  
         run: echo Passing ${{ github.head_ref }}
