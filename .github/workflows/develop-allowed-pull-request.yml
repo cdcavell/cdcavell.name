@@ -1,0 +1,20 @@
+# Limit pull request from develop branch only.
+name: "Allowed Pull Request"
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo 
+        env:
+          BRANCH: ${{ github.payload.pull_request.head.ref }}
+        run: echo Branch is [ $BRANCH ]
