@@ -6,9 +6,9 @@
 name: "CodeQL Analysis"
 
 on:
-  push:
-    branches: 
-      - master
+#  push:
+#    branches: 
+#      - master
   pull_request:
     # The branches below must be a subset of the branches above
     branches: 
@@ -17,7 +17,21 @@ on:
 #    - cron: '0 14 * * 0'
 
 jobs:
+  allowed-branch:
+    runs-on: ubuntu-latest
+    name: Allowed Branch
+    steps:
+    # To use this repository's private action,
+    # you must check out the repository
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Validate action step
+      id: allowed-branch
+      uses: cdcavell/allowed-branch-javascript-action@v1
+      with:
+        allowed-branch: 'develop'
   analyze:
+    needs: allowed-branch
     name: Analyze
     runs-on: ubuntu-latest
 
