@@ -20,5 +20,5 @@ jobs:
       - name: Echo 
         run: echo Merging $HEAD_REF into $BASE_REF
       - name: Compare
-        if: startsWith($HEAD_REF, "feature/") 
+        if: startsWith(${{ github.head_ref }}, "feature/") 
         run: echo Passing
