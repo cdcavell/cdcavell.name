@@ -29,6 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\develop-allowed-pull-request.yml = .github\workflows\develop-allowed-pull-request.yml
 		.github\workflows\develop-codeql-analysis.yml = .github\workflows\develop-codeql-analysis.yml
+		.github\workflows\main.yml = .github\workflows\main.yml
 		.github\workflows\master-allowed-pull-request.yml = .github\workflows\master-allowed-pull-request.yml
 		.github\workflows\master-codeql-analysis.yml = .github\workflows\master-codeql-analysis.yml
 	EndProjectSection
