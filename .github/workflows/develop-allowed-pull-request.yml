@@ -22,7 +22,8 @@ jobs:
       BASE_REF: ${{ github.base_ref }}
       HEAD_REF: ${{ github.head_ref }}
     steps:
-      - if: ${{ github.head_ref == 'develop' }}  
+      - id: compare
+        if: ${{ github.head_ref }} == 'develop' 
         run: echo Passing ${{ github.head_ref }}
-      - if: failure()
-        run: failure()
+      - id: display
+        run: echo exit code ${{ steps.compare.exitcode }}
