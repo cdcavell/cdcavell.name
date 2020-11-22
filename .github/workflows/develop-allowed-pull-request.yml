@@ -22,8 +22,7 @@ jobs:
       BASE_REF: ${{ github.base_ref }}
       HEAD_REF: ${{ github.head_ref }}
     steps:
-      - name: Echo 
-        run: echo Merging $HEAD_REF into $BASE_REF
-      - name: Compare
-        if: ${{ github.head_ref == 'develop' }}  
+      - if: ${{ github.head_ref == 'develop' }}  
         run: echo Passing ${{ github.head_ref }}
+      - if: failure()
+        run: failure()
