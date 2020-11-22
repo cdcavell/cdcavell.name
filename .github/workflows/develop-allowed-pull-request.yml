@@ -16,5 +16,6 @@ jobs:
     steps:
       - name: Echo 
         env:
-          BRANCH: ${{ github }}
-        run: echo Branch is [ $BRANCH ]
+          BASE_REF: ${{ github.base_ref }}
+          HEAD_REF: ${{ github.head_ref }}
+        run: echo Merging $HEAD_REF into $BASE_REF
