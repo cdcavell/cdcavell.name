@@ -16,5 +16,5 @@ jobs:
     steps:
       - name: Echo 
         env:
-          BRANCH: ${{ github.payload.pull_request.head.ref }}
+          BRANCH: ${{ github }}
         run: echo Branch is [ $BRANCH ]
