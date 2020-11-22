@@ -13,9 +13,12 @@ jobs:
   analyze:
     name: Analyze
     runs-on: ubuntu-latest
+    env:
+      BASE_REF: ${{ github.base_ref }}
+      HEAD_REF: ${{ github.head_ref }}
     steps:
       - name: Echo 
-        env:
-          BASE_REF: ${{ github.base_ref }}
-          HEAD_REF: ${{ github.head_ref }}
         run: echo Merging $HEAD_REF into $BASE_REF
+      - name: Compare
+        if: startsWith($HEAD_REF, "feature/") 
+        run: echo Passing
