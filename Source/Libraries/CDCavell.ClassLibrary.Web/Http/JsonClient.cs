@@ -30,6 +30,7 @@ namespace CDCavell.ClassLibrary.Web.Http
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.0 | 10/12/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/08/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
+    /// | Christopher D. Cavell | 1.0.1.0 | 11/24/2020 | Update: Target Framework netcoreapp3.1 to net5.0 |~ 
     /// </revision>
     public class JsonClient
     {
@@ -49,7 +50,7 @@ namespace CDCavell.ClassLibrary.Web.Http
         public bool IsResponseSuccess { get { return _responseSuccess; } }
 
         /// <value>TimeSpan</value>
-        public TimeSpan TimeOut { get; set; }
+        public TimeSpan? TimeOut { get; set; }
 
         /// <summary>
         /// Constructor method
@@ -106,7 +107,9 @@ namespace CDCavell.ClassLibrary.Web.Http
                 using (var client = new HttpClient(clientHandler))
                 {
                     HttpRequestMessage request = new HttpRequestMessage(httpMethod, _baseUrl + requestUri);
-                    request.Properties["RequestTimeout"] = (TimeOut == null) ? TimeSpan.FromMinutes(1) : TimeOut;
+                    HttpRequestOptionsKey<TimeSpan> key = new HttpRequestOptionsKey<TimeSpan>("RequestTimeout");
+                    TimeSpan value = TimeOut.HasValue ? TimeOut.Value : TimeSpan.FromMinutes(1);
+                    request.Options.Set(key, value);
                     request.Content = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json");
 
                     // Adding any additional headers for request here
