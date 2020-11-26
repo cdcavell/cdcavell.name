@@ -30,14 +30,13 @@ namespace CDCavell.ClassLibrary.Web.Http
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.0 | 10/12/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/08/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
-    /// | Christopher D. Cavell | 1.0.1.0 | 11/24/2020 | Update: Target Framework netcoreapp3.1 to net5.0 |~ 
+    /// | Christopher D. Cavell | 1.0.1.0 | 11/25/2020 | Update: Target Framework netcoreapp3.1 to net5.0 |~ 
     /// </revision>
     public class JsonClient
     {
-        private string _baseUrl;
+        private readonly string _baseUrl;
         private string _returnMessage;
-        private List<KeyValuePair<string, string>> _headers;
-        private List<KeyValuePair<string, string>> _properties;
+        private readonly List<KeyValuePair<string, string>> _headers;
 
         private HttpStatusCode _statusCode = HttpStatusCode.NoContent;
 
@@ -50,7 +49,7 @@ namespace CDCavell.ClassLibrary.Web.Http
         public bool IsResponseSuccess { get { return _responseSuccess; } }
 
         /// <value>TimeSpan</value>
-        public TimeSpan? TimeOut { get; set; }
+        public TimeSpan TimeOut { get; set; } = TimeSpan.FromMinutes(1);
 
         /// <summary>
         /// Constructor method
@@ -62,13 +61,12 @@ namespace CDCavell.ClassLibrary.Web.Http
             if (string.IsNullOrEmpty(baseUrl))
                 throw new InvalidOperationException("Invalid baseUrl");
 
-            if (baseUrl[baseUrl.Length - 1] != '/' && baseUrl[baseUrl.Length - 1] != '\\')
-                baseUrl += "/";
+            if (baseUrl[^1] != '/' && baseUrl[^1] != '\\')
+                    baseUrl += "/";
 
             _baseUrl = baseUrl;
 
             _headers = new List<KeyValuePair<string, string>>();
-            _properties = new List<KeyValuePair<string, string>>();
         }
 
         /// <summary>
@@ -104,23 +102,15 @@ namespace CDCavell.ClassLibrary.Web.Http
                     // with self signed certificates 
                     clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
 
-                using (var client = new HttpClient(clientHandler))
-                {
+                using var client = new HttpClient(clientHandler);
                     HttpRequestMessage request = new HttpRequestMessage(httpMethod, _baseUrl + requestUri);
-                    HttpRequestOptionsKey<TimeSpan> key = new HttpRequestOptionsKey<TimeSpan>("RequestTimeout");
-                    TimeSpan value = TimeOut.HasValue ? TimeOut.Value : TimeSpan.FromMinutes(1);
-                    request.Options.Set(key, value);
+                    request.Options.Set(new HttpRequestOptionsKey<TimeSpan>("RequestTimeout"), TimeOut);
                     request.Content = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json");
 
                     // Adding any additional headers for request here
                     if (_headers.Count > 0)
                         foreach (KeyValuePair<string, string> header in _headers)
                             request.Headers.Add(header.Key, header.Value);
-
-                    // Adding any additional proprties for request here
-                    if (_properties.Count > 0)
-                        foreach (KeyValuePair<string, string> property in _properties)
-                            request.Properties.Add(property.Key, property.Value);
 
                     HttpResponseMessage response = client.SendAsync(request).Result;
                     _statusCode = response.StatusCode;
@@ -135,7 +125,7 @@ namespace CDCavell.ClassLibrary.Web.Http
 
                     // clear any additional request headers that may have been set
                     _headers.Clear();
-                }
+                
             }
             return _statusCode;
         }
@@ -173,17 +163,6 @@ namespace CDCavell.ClassLibrary.Web.Http
         public void AddRequestHeader(string name, string value)
         {
             _headers.Add(new KeyValuePair<string, string>(name, value));
-        }
-
-        /// <summary>
-        /// Add request property
-        /// </summary>
-        /// <param name="name">string</param>
-        /// <param name="value">value</param>
-        /// <method>AddRequestProperty(string name, string value)</method>
-        public void AddRequestProprty(string name, string value)
-        {
-            _properties.Add(new KeyValuePair<string, string>(name, value));
         }
     }
 }
