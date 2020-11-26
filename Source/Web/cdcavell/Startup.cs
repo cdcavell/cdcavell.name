@@ -132,7 +132,7 @@ namespace cdcavell
 
             services.AddAuthentication(options =>
             {
-                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme; ;
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme; 
                 options.DefaultChallengeScheme = "oidc";
             })
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, cookieOptions => {
