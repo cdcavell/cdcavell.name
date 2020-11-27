@@ -91,7 +91,8 @@ jobs:
       - uses: actions/checkout@master
 
       - name: Automerge 
-        uses: "pascalgn/automerge-action@v0.12.0"
+        #uses: "pascalgn/automerge-action@v0.12.0"
+        uses: "cdcavell/automerge-action@v0.12.0"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MERGE_LABELS: ""
