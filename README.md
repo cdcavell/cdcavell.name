@@ -38,6 +38,7 @@ $ git flow init -d
 
 | Build | Date | Description |
 |-------|------|-------------|
+| 1.0.1.1 | 11/27/2020 | __Update:__ Convert master repository to main |
 | 1.0.1.0 | 11/27/2020 | __Update:__ Target Framework netcoreapp3.1 to net5.0 <br /> __Update:__ use cdcavell/automerge-action@v0.12.0 |
 | 1.0.0.9 | 11/22/2020 | __Add:__ Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) <br /> __Add:__ Blog Site link <br /> __Fix:__ Meta description length <br /> __Add:__ Ping Google with the location of sitemap <br /> __Update:__ allowed-branch version |
 | 1.0.0.8 | 11/01/2020 | __Update:__ Bing Search APIs will transition from Azure Cognitive Services to Azure Marketplace on 31 October 2023 [#152](https://github.com/cdcavell/cdcavell.name/issues/152) |
