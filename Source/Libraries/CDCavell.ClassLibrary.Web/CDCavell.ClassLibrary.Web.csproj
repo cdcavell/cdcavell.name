@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-	<Version>1.0.1.0</Version>
+	<Version>1.0.1.1</Version>
 	<DocumentationFile>../../../Documentation/Source/$(AssemblyName).xml</DocumentationFile>
 	<Copyright>2020 - Christopher D. Cavell</Copyright>
 	<PackageProjectUrl>https://cdcavell.name</PackageProjectUrl>

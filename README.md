@@ -2,7 +2,7 @@
 Personal Website for Christopher D. Cavell
 <hr />
 
-[![GitHub license](https://img.shields.io/github/license/cdcavell/cdcavell.name)](https://github.com/cdcavell/cdcavell.name/blob/master/LICENSE)
+[![GitHub license](https://img.shields.io/github/license/cdcavell/cdcavell.name)](https://github.com/cdcavell/cdcavell.name/blob/main/LICENSE)
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/cdcavell/cdcavell.name)
 ![GitHub top language](https://img.shields.io/github/languages/top/cdcavell/cdcavell.name)
 ![GitHub language count](https://img.shields.io/github/languages/count/cdcavell/cdcavell.name)
@@ -16,7 +16,7 @@ Project incorporates generation of markdown files in Documentation folder, durin
 
 Target Frameworks are [.NET Core 3.1](https://dotnet.microsoft.com/download/dotnet-core/3.1) and [.NET Standard 2.1](https://docs.microsoft.com/en-us/dotnet/standard/net-standard) respectfully. Developed and built in a Windows environment utilizing [Visual Studio Community 2019 ](https://visualstudio.microsoft.com/vs/) source-code editor. Repository is [Git](https://git-scm.com/) utilizing [git-flow](https://danielkummer.github.io/git-flow-cheatsheet/) extention to provide high-level repository operations for [Vincent Driessen's branching model](https://nvie.com/posts/a-successful-git-branching-model/).
 
-All work is [licensed](https://github.com/cdcavell/cdcavell.name/blob/master/LICENSE) under the [MIT License](https://opensource.org/licenses/MIT). Source Code documentation is found in repository [Wiki](https://github.com/cdcavell/cdcavell.name/wiki) section.
+All work is [licensed](https://github.com/cdcavell/cdcavell.name/blob/main/LICENSE) under the [MIT License](https://opensource.org/licenses/MIT). Source Code documentation is found in repository [Wiki](https://github.com/cdcavell/cdcavell.name/wiki) section.
 
 <hr />
 
