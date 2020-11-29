@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>is4_cdcavell</RootNamespace>
-    <Version>1.0.1.1</Version>
+    <Version>1.0.1.2</Version>
 	<DocumentationFile>../../../Documentation/Source/$(AssemblyName).xml</DocumentationFile>
 	<UserSecretsId>d3cf6ddf-02cc-4800-b31d-64a3837fc362</UserSecretsId>
 	<ApplicationIcon>favicon.ico</ApplicationIcon>
@@ -17,8 +17,8 @@
 	<RepositoryUrl>https://github.com/cdcavell/cdcavell.name</RepositoryUrl>
 	<RepositoryType>Git</RepositoryType>
 	<NeutralLanguage>en-US</NeutralLanguage>
-	<AssemblyVersion>1.0.1.1</AssemblyVersion>
-	<FileVersion>1.0.1.1</FileVersion>
+	<AssemblyVersion>1.0.1.2</AssemblyVersion>
+	<FileVersion>1.0.1.2</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
