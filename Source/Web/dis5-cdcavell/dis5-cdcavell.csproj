@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>dis5_cdcavell</RootNamespace>
+    <Version>1.0.2.0</Version>
+    <Authors>Christopher D. Cavell</Authors>
+    <Product>Website</Product>
+    <Description>Duende IdentityServer5 OAuth 2.0 framework authentication</Description>
+    <Copyright>2021 - Christopher D. Cavell</Copyright>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl>https://dis5-cdcavell.azurewebsites.net</PackageProjectUrl>
+    <PackageIcon>icon.png</PackageIcon>
+    <RepositoryUrl>https://github.com/cdcavell/cdcavell.name</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <NeutralLanguage>English (United States)</NeutralLanguage>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="wwwroot\img\icon.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
