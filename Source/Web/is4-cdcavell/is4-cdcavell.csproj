@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>is4_cdcavell</RootNamespace>
-    <Version>1.0.1.2</Version>
+    <Version>1.0.1.3</Version>
 	<DocumentationFile>../../../Documentation/Source/$(AssemblyName).xml</DocumentationFile>
 	<UserSecretsId>d3cf6ddf-02cc-4800-b31d-64a3837fc362</UserSecretsId>
 	<ApplicationIcon>favicon.ico</ApplicationIcon>
@@ -17,8 +17,8 @@
 	<RepositoryUrl>https://github.com/cdcavell/cdcavell.name</RepositoryUrl>
 	<RepositoryType>Git</RepositoryType>
 	<NeutralLanguage>en-US</NeutralLanguage>
-	<AssemblyVersion>1.0.1.2</AssemblyVersion>
-	<FileVersion>1.0.1.2</FileVersion>
+	<AssemblyVersion>1.0.1.3</AssemblyVersion>
+	<FileVersion>1.0.1.3</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -30,15 +30,15 @@
     <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="5.0.0" />
     <PackageReference Include="IdentityServer4" Version="4.1.1" />
     <PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="5.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="5.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="5.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="5.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="5.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.0">
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
