@@ -38,7 +38,8 @@ $ git flow init -d
 
 | Build | Date | Description |
 |-------|------|-------------|
-| 1.0.2.0 | 01/16/2021 | __Add:__ Initial build Duende IdentityServer5
+| 1.0.2.1 | 01/17/2021 | __Update:__ Handle HttpRequestException as http status instead of application exception |
+| 1.0.2.0 | 01/16/2021 | __Add:__ Initial build Duende IdentityServer5 |
 | 1.0.1.3 | 01/16/2021 | __Update:__ Change wiki submodule branch from main to master <br />  __Update:__ Dependency update<br />&nbsp;&nbsp;&nbsp;&nbsp;_Microsoft.AspNetCore.Authentication.Facebook v5.0.2_<br />&nbsp;&nbsp;&nbsp;&nbsp;_Microsoft.AspNetCore.Authentication.Google v5.0.2_<br />&nbsp;&nbsp;&nbsp;&nbsp;_Microsoft.AspNetCore.Authentication.MicrosoftAccount v5.0.2_<br />&nbsp;&nbsp;&nbsp;&nbsp;_Microsoft.AspNetCore.Authentication.Twitter v5.0.2_<br />&nbsp;&nbsp;&nbsp;&nbsp;_Microsoft.AspNetCore.Identity.EntityFrameworkCore v5.0.2_<br />&nbsp;&nbsp;&nbsp;&nbsp;_Microsoft.EntityFrameworkCore v5.0.2_<br />&nbsp;&nbsp;&nbsp;&nbsp;_Microsoft.EntityFrameworkCore.Sqlite v5.0.2_<br />&nbsp;&nbsp;&nbsp;&nbsp;_Microsoft.EntityFrameworkCore.Tools v5.0.2_<br />&nbsp;&nbsp;&nbsp;&nbsp;_Microsoft.AspNetCore.Authentication.OpenIdConnect v5.0.2_ |
 | 1.0.1.2 | 11/29/2020 | __Update:__ Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |
 | 1.0.1.1 | 11/27/2020 | __Update:__ Convert master repository to main |
