@@ -82,7 +82,7 @@
 		<Exec Command="git commit -m &quot;Update wiki submodule&quot;" WorkingDirectory="../../../Documentation/Source/wiki/" ContinueOnError="true">
 			<Output TaskParameter="ExitCode" ItemName="ErrorCode" />
 		</Exec>
-		<Exec Command="git push origin main" WorkingDirectory="../../../Documentation/Source/wiki/" Condition="'@(ErrorCode)'=='0'" />
+		<Exec Command="git push origin master" WorkingDirectory="../../../Documentation/Source/wiki/" Condition="'@(ErrorCode)'=='0'" />
 	</Target>
 
 </Project>
