@@ -127,18 +127,24 @@ namespace dis5_cdcavell.Controllers
             var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
 
             // Avoid User-controlled bypass of sensitive method (CWE-807, CWE-247, CWE-350)
-            bool cancel;
-            switch (button)
+            //bool cancel;
+            //switch (button)
+            //{
+            //    case "login":
+            //        cancel = false;
+            //        break;
+            //    case "cancel":
+            //        cancel = true;
+            //        break;
+            //    default:
+            //        throw new InvalidParameterException();
+            //}
+            var cancel = button switch
             {
-                case "login":
-                    cancel = false;
-                    break;
-                case "cancel":
-                    cancel = true;
-                    break;
-                default:
-                    throw new InvalidParameterException();
-            }
+                "login" => false,
+                "cancel" => true,
+                _ => throw new InvalidParameterException()
+            };
 
             // the user clicked the "cancel" button
             if (cancel)

@@ -20,14 +20,14 @@ namespace dis5_cdcavell.Data
         /// &lt;br /&gt;
         /// To Initialize: dotnet ef migrations add InitialCreate
         /// &lt;br /&gt;
-        /// To Update:     dotnet ef migrations add UpdateDatabase
+        /// To Update:     dotnet ef migrations add UpdateDatabase_&lt;&lt;YYYY-MM-DD&gt;&gt;
         /// </summary>
         /// <param name="context">AspIdUsersDbContext</param>
         /// <method>Initialize(AspIdUsersDbContext context)</method>
         public static void Initialize(AspIdUsersDbContext context)
         {
             IEnumerable<string> pending = context.Database.GetPendingMigrations();
-            if (pending.Count() > 0)
+            if (pending.Any())
                 context.Database.Migrate();
         }
     }
