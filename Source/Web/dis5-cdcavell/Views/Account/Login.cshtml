@@ -1,0 +1,111 @@
+@model LoginViewModel
+
+<div class="login-page">
+    <div class="lead">
+        <h1>Login</h1>
+        <p>Choose how to login</p>
+    </div>
+
+    <partial name="_ValidationSummary" />
+
+    <div class="row">
+
+        @if (Model.EnableLocalLogin)
+        {
+            <div class="col-lg-12">
+                <div class="shadow card">
+                    <div class="card-header">
+                        <h2>Local Account</h2>
+                    </div>
+
+                    <div class="card-body">
+                        <form asp-route="Login">
+                            <input type="hidden" asp-for="ReturnUrl" />
+
+                            <div class="form-group">
+                                <label asp-for="Username"></label>
+                                <input class="form-control" placeholder="Username" asp-for="Username" autofocus>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Password"></label>
+                                <input type="password" class="form-control" placeholder="Password" asp-for="Password" autocomplete="off">
+                            </div>
+                            @if (Model.AllowRememberLogin)
+                            {
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" asp-for="RememberLogin">
+                                        <label class="form-check-label" asp-for="RememberLogin">
+                                            Remember My Login
+                                        </label>
+                                    </div>
+                                </div>
+                            }
+                            <button class="btn btn-primary" name="button" value="login">Login</button>
+                            <button class="btn btn-secondary" name="button" value="cancel">Cancel</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (Model.VisibleExternalProviders.Any())
+        {
+            <div class="col-lg-12">
+                <div class="shadow card">
+                    <div class="card-header">
+                        <h2>External Account</h2>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-inline">
+                            @foreach (var provider in Model.VisibleExternalProviders)
+                            {
+                                <li class="list-inline-item">
+                                    <a class="btn btn-secondary shadow-sm"
+                                       asp-controller="External"
+                                       asp-action="Challenge"
+                                       asp-route-scheme="@provider.AuthenticationScheme"
+                                       asp-route-returnUrl="@Model.ReturnUrl">
+                                        @provider.DisplayName
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                        <br />
+                        <h5>Use of Your Personal Data</h5>
+                        <p>We use Personal Data for the following purposes:</p>
+                        <ul>
+                            <li><strong>To provide and maintain our Service</strong>, including to monitor the usage of our Service.</li>
+                            <li><strong>To manage Your Account:</strong> to manage Your registration as a user of the Service. The Personal Data You provide can give You access to different functionalities of the Service that are available to You as a registered user.</li>
+                            <li><strong>For the performance of a contract:</strong> the development, compliance and undertaking of the purchase contract for the products, items or services You have purchased or of any other contract with Us through the Service.</li>
+                            <li><strong>To contact You:</strong> To contact You by email, telephone calls, SMS, or other equivalent forms of electronic communication, such as a mobile application's push notifications regarding updates or informative communications related to the functionalities, products or contracted services, including the security updates, when necessary or reasonable for their implementation.</li>
+                            <li><strong>To manage Your requests:</strong> To attend and manage Your requests to Us.</li>
+                        </ul>
+                        <br />
+                        <p><strong><i>Use of information received from Microsoft APIs will adhere to the <a class="text-decoration-none" href="https://docs.microsoft.com/en-us/legal/microsoft-apis/terms-of-use" rel="external nofollow noopener" target="_blank">Microsoft APIs Terms of Use</a>, including the <a class="text-decoration-none" href="https://docs.microsoft.com/en-us/legal/microsoft-apis/terms-of-use#5--your-compliance-with-applicable-privacy-and-data-protection-laws" rel="external nofollow noopener" target="_blank">Compliance with Applicable Privacy and Data Protection Laws requirements.</a></i></strong></p>
+                        <ul><li><i>Information on how to revoke access to personal information stored in your <a href="https://cdcavell.name/Home/Revoke?provider=microsoft">Microsoft account</a>.</i></li></ul>
+                        <br />
+                        <p><strong><i>Use of information received from Google APIs will adhere to the <a class="text-decoration-none" href="https://developers.google.com/terms/api-services-user-data-policy" rel="external nofollow noopener" target="_blank">Google API Services User Data Policy</a>, including the <a class="text-decoration-none" href="https://developers.google.com/terms/api-services-user-data-policy#limited-use" rel="external nofollow noopener" target="_blank">Limited Use requirements</a>.</i></strong></p>
+                        <ul><li><i>Information on how to revoke access to personal information stored in your <a class="text-decoration-none" href="https://cdcavell.name/Home/Revoke?provider=google">Google account</a>.</i></li></ul>
+                        <br />
+                        <p><strong><i>Use of information received from all other external providers will adhere to their respective terms of use, including the compliance with applicable privacy and data protection requirements.</i></strong></p>
+                        <ul>
+                            <li><i>Information on how to revoke access to personal information stored in your <a class="text-decoration-none" href="https://cdcavell.name/Home/Revoke?provider=github">GitHub account</a>.</i></li>
+                            <li><i>Information on how to revoke access to personal information stored in your <a class="text-decoration-none" href = "https://cdcavell.name/Home/Revoke?provider=twitter">Twitter account</a>.</i></li>
+                            <li><i>Information on how to revoke access to personal information stored in your <a class="text-decoration-none" href = "https://cdcavell.name/Home/Revoke?provider=facebook">Facebook account</a>.</i></li>
+                        </ul>
+                        <br />
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders.Any())
+        {
+            <div class="alert alert-warning">
+                <strong>Invalid login request</strong>
+                There are no login schemes configured for this request.
+            </div>
+        }
+    </div>
+</div>
