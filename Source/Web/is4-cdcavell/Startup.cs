@@ -38,8 +38,8 @@ namespace is4_cdcavell
     /// </revision>
     public class Startup
     {
-        private IConfiguration _configuration;
-        private IWebHostEnvironment _webHostEnvironment;
+        private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private Logger _logger;
 
         /// <summary>

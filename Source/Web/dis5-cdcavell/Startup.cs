@@ -1,14 +1,25 @@
 using CDCavell.ClassLibrary.Commons.Logging;
 using CDCavell.ClassLibrary.Web.Mvc.Filters;
+using CDCavell.ClassLibrary.Web.Security;
+using dis5_cdcavell.Data;
 using dis5_cdcavell.Filters;
+using dis5_cdcavell.Models.Account;
+using dis5_cdcavell.Models.AppSettings;
+using Duende.IdentityServer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Reflection;
 
 namespace dis5_cdcavell
 {
@@ -25,8 +36,8 @@ namespace dis5_cdcavell
     /// </revision>
     public class Startup
     {
-        private IConfiguration _configuration;
-        private IWebHostEnvironment _webHostEnvironment;
+        private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private Logger _logger;
 
         /// <summary>
@@ -48,6 +59,11 @@ namespace dis5_cdcavell
         /// <method>ConfigureServices(IServiceCollection services)</method>
         public void ConfigureServices(IServiceCollection services)
         {
+            // Register appsettings.json
+            AppSettings appSettings = new AppSettings();
+            _configuration.Bind("AppSettings", appSettings);
+            services.AddSingleton(appSettings);
+
             services.AddMvc();
             services.AddControllersWithViews();
 
@@ -59,6 +75,88 @@ namespace dis5_cdcavell
             services.AddScoped<ControllerActionLogFilter>();
             services.AddScoped<ControllerActionUserFilter>();
             services.AddScoped<ControllerActionPageFilter>();
+
+            // Register RsaKeyService
+            var rsa = new RsaKeyService(_webHostEnvironment, TimeSpan.FromDays(30));
+            services.AddSingleton<RsaKeyService>(provider => rsa);
+
+            services.AddDbContext<AspIdUsersDbContext>(options =>
+                options.UseSqlite(appSettings.ConnectionStrings.AspIdUsersConnection));
+
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<AspIdUsersDbContext>()
+                .AddDefaultTokenProviders();
+
+            var builder = services.AddIdentityServer(options =>
+            {
+                options.Events.RaiseErrorEvents = true;
+                options.Events.RaiseInformationEvents = true;
+                options.Events.RaiseFailureEvents = true;
+                options.Events.RaiseSuccessEvents = true;
+
+                options.EmitStaticAudienceClaim = true;
+            })
+                .AddAspNetIdentity<ApplicationUser>();
+
+            // in-memory, code config
+            builder.AddInMemoryIdentityResources(Config.IdentityResources);
+            builder.AddInMemoryApiScopes(Config.ApiScopes);
+            builder.AddInMemoryClients(Config.Clients);
+
+            // not recommended for production - you need to store your key material somewhere secure
+            // builder.AddDeveloperSigningCredential();
+            RsaSecurityKey key = rsa.GetKey();
+            builder.AddValidationKey(key);
+            builder.AddSigningCredential(key, SecurityAlgorithms.RsaSha512);
+
+            services.AddAuthentication()
+                .AddMicrosoftAccount("Microsoft", microsoftOptions =>
+                {
+                    microsoftOptions.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                    microsoftOptions.ClientId = appSettings.Authentication.Microsoft.ClientId;
+                    microsoftOptions.ClientSecret = appSettings.Authentication.Microsoft.ClientSecret;
+                })
+                .AddGoogle("Google", googleOptions =>
+                {
+                    googleOptions.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                    googleOptions.ClientId = appSettings.Authentication.Google.ClientId;
+                    googleOptions.ClientSecret = appSettings.Authentication.Google.ClientSecret;
+                })
+                .AddGitHub("GitHub", githubOptions =>
+                {
+                    githubOptions.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                    githubOptions.ClientId = appSettings.Authentication.GitHub.ClientId;
+                    githubOptions.ClientSecret = appSettings.Authentication.GitHub.ClientSecret;
+                })
+                .AddTwitter("Twitter", twitterOptions =>
+                {
+                    twitterOptions.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                    twitterOptions.ConsumerKey = appSettings.Authentication.Twitter.ConsumerAPIKey;
+                    twitterOptions.ConsumerSecret = appSettings.Authentication.Twitter.ConsumerSecret;
+                    twitterOptions.RetrieveUserDetails = true;
+                })
+                .AddFacebook("Facebook", facebookOptions =>
+                {
+                    facebookOptions.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                    facebookOptions.AppId = appSettings.Authentication.Facebook.AppId;
+                    facebookOptions.AppSecret = appSettings.Authentication.Facebook.AppSecret;
+                });
+
+            if (_webHostEnvironment.EnvironmentName.Equals("Production"))
+            {
+                services.AddHsts(options =>
+                {
+                    options.Preload = true;
+                    options.IncludeSubDomains = true;
+                    options.MaxAge = TimeSpan.FromDays(730);
+                });
+
+                services.AddHttpsRedirection(options =>
+                {
+                    options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
+                    options.HttpsPort = 443;
+                });
+            }
         }
 
         /// <summary>
@@ -70,22 +168,70 @@ namespace dis5_cdcavell
         /// <param name="lifetime">IHostApplicationLifetime</param>
         /// <param name="dbContext">AspIdUsersDbContext</param>
         /// <method>Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger&lt;Startup&gt; logger, IHostApplicationLifetime lifetime, AspIdUsersDbContext dbContext)</method>
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger, IHostApplicationLifetime lifetime)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger, IHostApplicationLifetime lifetime, AspIdUsersDbContext dbContext)
         {
-            if (env.IsDevelopment())
+            _logger = new Logger(logger);
+            _logger.Trace($"Configure(IApplicationBuilder: {app}, IWebHostEnvironment: {env}, ILogger<Startup> {logger}, IHostApplicationLifetime: {lifetime})");
+
+            AESGCM.Seed(_configuration);
+            DbInitializer.Initialize(dbContext);
+
+            lifetime.ApplicationStarted.Register(OnAppStarted);
+            lifetime.ApplicationStopping.Register(OnAppStopping);
+            lifetime.ApplicationStopped.Register(OnAppStopped);
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
-                app.UseDeveloperExceptionPage();
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+
+            app.UseExceptionHandler("/Home/Error/500");
+            app.UseStatusCodePagesWithRedirects("~/Home/Error/{0}");
+
+
+            if (env.EnvironmentName.Equals("Production"))
+            {
+                app.UseHsts();
+                app.UseHttpsRedirection();
             }
 
             app.UseRouting();
+            app.UseIdentityServer();
+            app.UseAuthorization();
 
+            app.UseStaticFiles();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                endpoints.MapDefaultControllerRoute();
             });
+        }
+
+        /// <summary>
+        /// Exposed IApplicationLifetime interface method.
+        /// </summary>
+        /// <method>OnAppStarted()</method>
+        public void OnAppStarted()
+        {
+            _logger.Information($"{Assembly.GetEntryAssembly().GetName().Name} Application Started");
+            _logger.Information($"Hosting Environment: {_webHostEnvironment.EnvironmentName}");
+        }
+
+        /// <summary>
+        /// Exposed IApplicationLifetime interface method.
+        /// </summary>
+        /// <method>OnAppStopping()</method>
+        public void OnAppStopping()
+        {
+            _logger.Information($"{Assembly.GetEntryAssembly().GetName().Name} Application Shutdown");
+        }
+
+        /// <summary>
+        /// Exposed IApplicationLifetime interface method.
+        /// </summary>
+        /// <method>OnAppStopped()</method>
+        public void OnAppStopped()
+        {
+            _logger.Information($"{Assembly.GetEntryAssembly().GetName().Name} Application Ended");
         }
     }
 }
