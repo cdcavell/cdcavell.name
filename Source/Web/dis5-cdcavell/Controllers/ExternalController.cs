@@ -112,7 +112,6 @@ namespace dis5_cdcavell.Controllers
             };
 
             return Challenge(props, scheme);
-
         }
 
         /// <summary>

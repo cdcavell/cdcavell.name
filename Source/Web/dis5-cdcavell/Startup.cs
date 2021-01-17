@@ -20,6 +20,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace dis5_cdcavell
 {
