@@ -22,6 +22,9 @@ Documentation/Source/*.dll
 Documentation/Source/*.json
 Source/Web/is4-cdcavell/tempkey.jwk
 Source/Web/is4-cdcavell/rsakey.json
+Source/Web/dis5-cdcavell/tempkey.jwk
+Source/Web/dis5-cdcavell/rsakey.json
+Source/Web/dis5-cdcavell/keys
 
 # Build results
 [Dd]ebug/

@@ -1,4 +1,4 @@
-# [cdcavell.name](https://cdcavell.name)
+ï»¿# [cdcavell.name](https://cdcavell.name)
 Personal Website for Christopher D. Cavell
 <hr />
 
@@ -38,13 +38,14 @@ $ git flow init -d
 
 | Build | Date | Description |
 |-------|------|-------------|
+| 1.0.2.0 | 01/16/2021 | __Add:__ Initial build Duende IdentityServer5
 | 1.0.1.3 | 01/16/2021 | __Update:__ Change wiki submodule branch from main to master <br />  __Update:__ Dependency update<br />&nbsp;&nbsp;&nbsp;&nbsp;_Microsoft.AspNetCore.Authentication.Facebook v5.0.2_<br />&nbsp;&nbsp;&nbsp;&nbsp;_Microsoft.AspNetCore.Authentication.Google v5.0.2_<br />&nbsp;&nbsp;&nbsp;&nbsp;_Microsoft.AspNetCore.Authentication.MicrosoftAccount v5.0.2_<br />&nbsp;&nbsp;&nbsp;&nbsp;_Microsoft.AspNetCore.Authentication.Twitter v5.0.2_<br />&nbsp;&nbsp;&nbsp;&nbsp;_Microsoft.AspNetCore.Identity.EntityFrameworkCore v5.0.2_<br />&nbsp;&nbsp;&nbsp;&nbsp;_Microsoft.EntityFrameworkCore v5.0.2_<br />&nbsp;&nbsp;&nbsp;&nbsp;_Microsoft.EntityFrameworkCore.Sqlite v5.0.2_<br />&nbsp;&nbsp;&nbsp;&nbsp;_Microsoft.EntityFrameworkCore.Tools v5.0.2_<br />&nbsp;&nbsp;&nbsp;&nbsp;_Microsoft.AspNetCore.Authentication.OpenIdConnect v5.0.2_ |
 | 1.0.1.2 | 11/29/2020 | __Update:__ Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |
 | 1.0.1.1 | 11/27/2020 | __Update:__ Convert master repository to main |
 | 1.0.1.0 | 11/27/2020 | __Update:__ Target Framework netcoreapp3.1 to net5.0 <br /> __Update:__ use cdcavell/automerge-action@v0.12.0 |
 | 1.0.0.9 | 11/22/2020 | __Add:__ Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) <br /> __Add:__ Blog Site link <br /> __Fix:__ Meta description length <br /> __Add:__ Ping Google with the location of sitemap <br /> __Update:__ allowed-branch version |
 | 1.0.0.8 | 11/01/2020 | __Update:__ Bing Search APIs will transition from Azure Cognitive Services to Azure Marketplace on 31 October 2023 [#152](https://github.com/cdcavell/cdcavell.name/issues/152) |
-| 1.0.0.7 | 10/31/2020 | __Fix:__ Eliminate render-blocking resources [#171](https://github.com/cdcavell/cdcavell.name/issues/171) <br /> __Fix:__ Serve static assets with an efficient cache policy [#172](https://github.com/cdcavell/cdcavell.name/issues/172) <br /> __Add:__ Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |
+| 1.0.0.7 | 10/31/2020 | __Fix:__ Eliminate render-blocking resources [#171](https://github.com/cdcavell/cdcavell.name/issues/171) <br /> __Fix:__ Serve static assets with an efficient cache policy [#172](https://github.com/cdcavell/cdcavell.name/issues/172) <br /> __Add:__ Integrate Bingï¿½s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |
 | 1.0.0.6 | 10/31/2020 | __Update:__ Convert Sitemap class to build sitemap.xml dynamic based on existing controllers in project [#145](https://github.com/cdcavell/cdcavell.name/issues/145) |
 | 1.0.0.5 | 10/31/2020 | __Add:__ EU General Data Protection Regulation (GDPR) support in ASP.NET Core [#161](https://github.com/cdcavell/cdcavell.name/issues/161) |
 | 1.0.0.4 | 10/30/2020 | __Add:__ Enforce HTTPS in ASP.NET Core [#158](https://github.com/cdcavell/cdcavell.name/issues/158) |
