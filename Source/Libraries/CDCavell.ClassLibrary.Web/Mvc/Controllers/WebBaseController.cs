@@ -8,8 +8,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net.Http;
 
 namespace CDCavell.ClassLibrary.Web.Mvc.Controllers
 {
@@ -22,6 +24,7 @@ namespace CDCavell.ClassLibrary.Web.Mvc.Controllers
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.0 | 10/12/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.2.1 | 01/17/2021 | Handle HttpRequestException as http status instead of application exception |~ 
     /// </revision>
     [Controller]
     [Authorize]
@@ -100,8 +103,17 @@ namespace CDCavell.ClassLibrary.Web.Mvc.Controllers
             var exceptionFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
             if (exceptionFeature != null)
             {
-                vm.Exception = exceptionFeature.Error;
-                _logger.Exception(exceptionFeature.Error, "Exception RequestId = " + requestId);
+                if (exceptionFeature.Error.GetType().IsAssignableFrom(typeof(HttpRequestException)))
+                {
+                    vm.StatusCode = (int)((HttpRequestException)exceptionFeature.Error).StatusCode.Value;
+                    vm.StatusMessage = exceptionFeature.Error.Message;
+                    _logger.Information(exceptionFeature.Error.Message + " RequestId = " + requestId);
+                }
+                else
+                {
+                    vm.Exception = exceptionFeature.Error;
+                    _logger.Exception(exceptionFeature.Error, "Exception RequestId = " + requestId);
+                }
             }
 
             return View("Error", vm);
