@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
@@ -71,6 +72,9 @@ namespace as_cdcavell
 
             services.AddDbContext<AuthorizationServiceDbContext>(options =>
                 options.UseSqlite(appSettings.ConnectionStrings.AuthorizationServiceConnection));
+
+            // Register IHttpContextAccessor
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             if (_webHostEnvironment.EnvironmentName.Equals("Production"))
             {
