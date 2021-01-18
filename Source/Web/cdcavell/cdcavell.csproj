@@ -3,13 +3,13 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
 	  <RootNamespace>cdcavell</RootNamespace>
-	  <Version>1.0.1.3</Version>
+	  <Version>1.0.2.2</Version>
 	  <DocumentationFile>../../../Documentation/Source/$(AssemblyName).xml</DocumentationFile>
 	  <UserSecretsId>7e0ff3e4-a0a2-4cb5-985c-85156cc56a57</UserSecretsId>
 	  <Authors>Christopher D. Cavell</Authors>
 	  <Product>Website</Product>
-	  <Description>Personal website for Christopher D. Cavell. An ongoing development of a Net Core 3.1 MVC application utilizing OAuth 2.0 framework for authentication. Built with Brock Allen &amp; Dominick Baier's IdentityServer4 v4.1.1. This version also includes Microsoft's Bing Custom Search API with Eugene Simakin's jQuery pagination plugin v1.4.2. Application can easily be changed to use SAML2P in place of OAuth 2.0 for authentication, with the Rsk.Saml SAML component from Rock Solid Knowledge.</Description>
-	  <Copyright>2020 - Christopher D. Cavell</Copyright>
+	  <Description>Personal website for Christopher D. Cavell. An ongoing development of an ASP.NET Core 5.0 MVC application utilizing Duende IdentityServer for authentication.</Description>
+	  <Copyright>2021 - Christopher D. Cavell</Copyright>
 	  <PackageLicenseFile>LICENSE</PackageLicenseFile>
 	  <PackageProjectUrl>https://cdcavell.name</PackageProjectUrl>
 	  <RepositoryType>Git</RepositoryType>
@@ -17,8 +17,8 @@
 	  <RepositoryUrl>https://github.com/cdcavell/cdcavell.name</RepositoryUrl>
 	  <NeutralLanguage>en-US</NeutralLanguage>
 	  <AssemblyName>CDCavell</AssemblyName>
-	  <AssemblyVersion>1.0.1.3</AssemblyVersion>
-	  <FileVersion>1.0.1.3</FileVersion>
+	  <AssemblyVersion>1.0.2.2</AssemblyVersion>
+	  <FileVersion>1.0.2.2</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -34,6 +34,7 @@
   <ItemGroup>
     <PackageReference Include="AspNetCore.SEOHelper" Version="1.0.1" />
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
+    <PackageReference Include="IdentityModel" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.Azure.CognitiveServices.Search.CustomSearch" Version="2.0.0" />
@@ -87,7 +88,7 @@
 		<Exec Command="git commit -m &quot;Update wiki submodule&quot;" WorkingDirectory="../../../Documentation/Source/wiki/" ContinueOnError="true">
 			<Output TaskParameter="ExitCode" ItemName="ErrorCode" />
 		</Exec>
-		<Exec Command="git push origin main" WorkingDirectory="../../../Documentation/Source/wiki/" Condition="'@(ErrorCode)'=='0'" />
+		<Exec Command="git push origin master" WorkingDirectory="../../../Documentation/Source/wiki/" Condition="'@(ErrorCode)'=='0'" />
 	</Target>
 
 </Project>
