@@ -7,6 +7,8 @@ using cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Commons.Logging;
 using CDCavell.ClassLibrary.Web.Mvc.Filters;
 using CDCavell.ClassLibrary.Web.Security;
+using IdentityModel;
+using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
@@ -27,6 +29,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -48,6 +51,7 @@ namespace cdcavell
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Serve static assets with an efficient cache policy [#172](https://github.com/cdcavell/cdcavell.name/issues/172) |~
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/11/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
+    /// | Christopher D. Cavell | 1.0.2.2 | 01/18/2021 | Convert GrantType from Implicit to Pkce |~ 
     /// </revision>
     public class Startup
     {
@@ -80,6 +84,14 @@ namespace cdcavell
             _configuration.Bind("AppSettings", appSettings);
             _appSettings = appSettings;
             services.AddSingleton(appSettings);
+
+            // cache authority discovery and add to DI
+            services.AddHttpClient();
+            services.AddSingleton<IDiscoveryCache>(options =>
+            {
+                var factory = options.GetRequiredService<IHttpClientFactory>();
+                return new DiscoveryCache(_appSettings.Authentication.IdP.Authority, () => factory.CreateClient());
+            });
 
             services.AddDbContext<CDCavellDbContext>(options =>
                 options.UseSqlite(appSettings.ConnectionStrings.CDCavellConnection));
@@ -152,13 +164,14 @@ namespace cdcavell
                     options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme; 
 
                     options.Authority = appSettings.Authentication.IdP.Authority;
-                    options.RequireHttpsMetadata = false;
+                    options.RequireHttpsMetadata = true;
 
                     options.ClientId = appSettings.Authentication.IdP.ClientId;
-                    options.ResponseType = OpenIdConnectResponseType.IdToken;
+                    options.ResponseType = OpenIdConnectResponseType.Code;
+                    options.ResponseMode = "form_post";
+
                     options.Scope.Clear();
                     options.Scope.Add("openid");
-                    options.Scope.Add("profile");
                     options.Scope.Add("email");
                     options.SaveTokens = true;
 
@@ -171,12 +184,52 @@ namespace cdcavell
 
                         OnTicketReceived = ticketReceivedContext =>
                         {
-                            var receivedClaims = ticketReceivedContext.Principal.Claims;
+                            // Get Access Token
+                            string accessToken = ticketReceivedContext.Properties.Items[".Token.access_token"];
+                            if (string.IsNullOrEmpty(accessToken))
+                            {
+                                _logger.Exception(new Exception("Invalid Access Token - Reomte IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
+                                ticketReceivedContext.HttpContext.Response.Redirect("/Home/Error/401");
+                                return Task.FromResult(ticketReceivedContext.Result);
+                            }
+
+                            // Get Authority Discovery Endpoint 
+                            DiscoveryCache discoveryCache = (DiscoveryCache)ticketReceivedContext.HttpContext
+                                .RequestServices.GetService(typeof(IDiscoveryCache));
+                            DiscoveryDocumentResponse discovery = discoveryCache.GetAsync().Result;
+                            if (discovery.IsError) 
+                            {
+                                _logger.Exception(new Exception(discovery.Error + " - Reomte IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
+                                ticketReceivedContext.HttpContext.Response.Redirect("/Home/Error/401");
+                                return Task.FromResult(ticketReceivedContext.Result);
+                            }
+
+                            // Get HttpClient
+                            IHttpClientFactory clientFactory = (IHttpClientFactory)ticketReceivedContext.HttpContext
+                                .RequestServices.GetService(typeof(IHttpClientFactory));
+                            HttpClient client = clientFactory.CreateClient();
+
+                            // Get UserInfo
+                            UserInfoResponse userInfoResponse = client.GetUserInfoAsync(new UserInfoRequest
+                            {
+                                Address = discovery.UserInfoEndpoint,
+                                Token = accessToken
+                            }).Result;
+                            if (userInfoResponse.IsError)
+                            {
+                                _logger.Exception(new Exception(userInfoResponse.Error + " - Reomte IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
+                                ticketReceivedContext.HttpContext.Response.Redirect("/Home/Error/401");
+                                return Task.FromResult(ticketReceivedContext.Result);
+                            }
+
+                            var receivedClaims = userInfoResponse.Claims;
                             var additionalClaims = new List<Claim>();
 
                             Claim emailClaim = receivedClaims.FirstOrDefault(x => x.Type == "email");
                             if (emailClaim != null)
                             {
+                                additionalClaims.Add(new Claim("email", emailClaim.Value.Clean()));
+
                                 CDCavellDbContext dbContext = (CDCavellDbContext)ticketReceivedContext.HttpContext
                                     .RequestServices.GetService(typeof(CDCavellDbContext));
 
