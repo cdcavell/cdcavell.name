@@ -15,6 +15,7 @@ namespace dis5_cdcavell
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.2.0 | 01/16/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.2.2 | 01/18/2020 | Convert GranType from Implicit to Pkce |~ 
     /// </revision>
     public static class Config
     {
@@ -32,7 +33,7 @@ namespace dis5_cdcavell
             new ApiScope[]
             {
                 new ApiScope("scope1"),
-                new ApiScope("scope2"),
+                new ApiScope("scope2")
             };
 
         /// <value>IEnumerable&lt;Client&gt;</value>
@@ -72,12 +73,28 @@ namespace dis5_cdcavell
                     }
                 },
 
+                // Token Access
+                new Client
+                {
+                    ClientId = "client",
+                    ClientSecrets = { new Secret("secret".Sha256()) },
+                    AllowedGrantTypes = new List<string>
+                    {
+                        GrantType.ClientCredentials
+                    },
+                    AllowedScopes = { "scope1" }
+                },
+
                 // OpenID Connect implicit flow client (MVC)
                 new Client
                 {
                     ClientId = "mvc",
                     ClientName = "MVC Client",
-                    AllowedGrantTypes = GrantTypes.Implicit,
+                    //AllowedGrantTypes = GrantTypes.Implicit,
+                    
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RequireClientSecret = false,
+                    RequirePkce = true,
 
                     // where to redirect to after login
                     RedirectUris = new List<string>
