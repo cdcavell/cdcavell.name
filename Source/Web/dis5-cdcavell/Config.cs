@@ -17,6 +17,7 @@ namespace dis5_cdcavell
     /// | Christopher D. Cavell | 1.0.2.0 | 01/16/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.2.2 | 01/18/2020 | Convert GrantType from Implicit to Pkce |~ 
     /// | Christopher D. Cavell | 1.0.2.2 | 01/18/2020 | Removed unused clients and scopes |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 01/18/2020 | Initial build Authorization Service |~ 
     /// </revision>
     public static class Config
     {
@@ -33,20 +34,47 @@ namespace dis5_cdcavell
         public static IEnumerable<ApiScope> ApiScopes =>
             new ApiScope[]
             {
-                new ApiScope("scope1"),
-                new ApiScope("scope2")
+                new ApiScope("Authorization.Service")
             };
 
         /// <value>IEnumerable&lt;Client&gt;</value>
         public static IEnumerable<Client> Clients =>
             new Client[]
             {
+                new Client
+                {
+                    ClientId = "Authorization.Service",
+                    ClientName = "Authorization Service",
+
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RequireClientSecret = false,
+                    RequirePkce = true,
+                    AllowOfflineAccess = true,
+
+                    // where to redirect to after login
+                    RedirectUris = new List<string>
+                    {
+                        "https://localhost:44349/signin-oidc",
+                    },
+
+                    // where to redirect to after logout
+                    PostLogoutRedirectUris = new List<string>
+                    {
+                        "https://localhost:44349/signout-callback-oidc",
+                    },
+
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Email,
+                        "Authorization.Service"
+                    }
+                },
                 // OpenID Connect interactive client using code flow + pkce (MVC)
                 new Client
                 {
-                    ClientId = "mvc",
-                    ClientName = "MVC Client",
-                    //AllowedGrantTypes = GrantTypes.Implicit,
+                    ClientId = "cdcavell.name",
+                    ClientName = "Personal Website of Christopher D. Cavell",
                     
                     AllowedGrantTypes = GrantTypes.Code,
                     RequireClientSecret = false,

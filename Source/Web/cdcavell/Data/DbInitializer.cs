@@ -13,6 +13,7 @@ namespace cdcavell.Data
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/11/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 01/18/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public static class DbInitializer
     {
@@ -28,7 +29,7 @@ namespace cdcavell.Data
         public static void Initialize(CDCavellDbContext context)
         {
             IEnumerable<string> pending = context.Database.GetPendingMigrations();
-            if (pending.Count() > 0)
+            if (pending.Any())
                 context.Database.Migrate(); 
         }
     }

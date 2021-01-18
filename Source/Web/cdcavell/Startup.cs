@@ -7,7 +7,6 @@ using cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Commons.Logging;
 using CDCavell.ClassLibrary.Web.Mvc.Filters;
 using CDCavell.ClassLibrary.Web.Security;
-using IdentityModel;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -335,6 +334,7 @@ namespace cdcavell
                 endpoints.MapDefaultControllerRoute();
             });
         }
+
         /// <summary>
         /// Exposed IApplicationLifetime interface method.
         /// </summary>
