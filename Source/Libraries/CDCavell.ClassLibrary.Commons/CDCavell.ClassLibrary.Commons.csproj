@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <Version>1.0.1.3</Version>
+    <Version>1.0.2.2</Version>
     <DocumentationFile>../../../Documentation/Source/$(AssemblyName).xml</DocumentationFile>
-    <Copyright>2020 - Christopher D. Cavell</Copyright>
+    <Copyright>2021 - Christopher D. Cavell</Copyright>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://cdcavell.name</PackageProjectUrl>
     <PackageIcon>icon.png</PackageIcon>
