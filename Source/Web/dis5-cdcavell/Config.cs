@@ -15,7 +15,7 @@ namespace dis5_cdcavell
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.2.0 | 01/16/2020 | Initial build |~ 
-    /// | Christopher D. Cavell | 1.0.2.2 | 01/18/2020 | Convert GranType from Implicit to Pkce |~ 
+    /// | Christopher D. Cavell | 1.0.2.2 | 01/18/2020 | Convert GrantType from Implicit to Pkce |~ 
     /// | Christopher D. Cavell | 1.0.2.2 | 01/18/2020 | Removed unused clients and scopes |~ 
     /// </revision>
     public static class Config

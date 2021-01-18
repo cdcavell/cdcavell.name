@@ -34,6 +34,7 @@
   <ItemGroup>
     <PackageReference Include="AspNetCore.SEOHelper" Version="1.0.1" />
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
+    <PackageReference Include="IdentityModel" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.Azure.CognitiveServices.Search.CustomSearch" Version="2.0.0" />
@@ -87,7 +88,7 @@
 		<Exec Command="git commit -m &quot;Update wiki submodule&quot;" WorkingDirectory="../../../Documentation/Source/wiki/" ContinueOnError="true">
 			<Output TaskParameter="ExitCode" ItemName="ErrorCode" />
 		</Exec>
-		<Exec Command="git push origin main" WorkingDirectory="../../../Documentation/Source/wiki/" Condition="'@(ErrorCode)'=='0'" />
+		<Exec Command="git push origin master" WorkingDirectory="../../../Documentation/Source/wiki/" Condition="'@(ErrorCode)'=='0'" />
 	</Target>
 
 </Project>
