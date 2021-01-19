@@ -7,6 +7,7 @@ using cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Commons.Logging;
 using CDCavell.ClassLibrary.Web.Http;
 using CDCavell.ClassLibrary.Web.Mvc.Filters;
+using CDCavell.ClassLibrary.Web.Mvc.Models.Authorization;
 using CDCavell.ClassLibrary.Web.Security;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
@@ -53,7 +54,7 @@ namespace cdcavell
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/11/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// | Christopher D. Cavell | 1.0.2.2 | 01/18/2021 | Convert GrantType from Implicit to Pkce |~ 
-    /// | Christopher D. Cavell | 1.0.3.0 | 10/18/2020 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 10/19/2020 | Initial build Authorization Service |~ 
     /// </revision>
     public class Startup
     {
@@ -195,25 +196,9 @@ namespace cdcavell
                                 return Task.FromResult(ticketReceivedContext.Result);
                             }
 
-                            // Get Authority Discovery Endpoint 
-                            DiscoveryCache discoveryCache = (DiscoveryCache)ticketReceivedContext.HttpContext
-                                .RequestServices.GetService(typeof(IDiscoveryCache));
-                            DiscoveryDocumentResponse discovery = discoveryCache.GetAsync().Result;
-                            if (discovery.IsError) 
-                            {
-                                _logger.Exception(new Exception(discovery.Error + " - Reomte IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
-                                ticketReceivedContext.HttpContext.Response.Redirect("/Home/Error/401");
-                                return Task.FromResult(ticketReceivedContext.Result);
-                            }
-
-                            // Get HttpClient
-                            IHttpClientFactory clientFactory = (IHttpClientFactory)ticketReceivedContext.HttpContext
-                                .RequestServices.GetService(typeof(IHttpClientFactory));
-                            HttpClient client = clientFactory.CreateClient();
-
-                            //TODO: Authorization Sercvice API Get Identity
+                            // Authorization Sercvice API Get User Authorization
                             JsonClient jsonClient = new JsonClient(_appSettings.Authorization.AuthorizationService.API, accessToken);
-                            HttpStatusCode statusCode = jsonClient.SendRequest(HttpMethod.Get, "Identity");
+                            HttpStatusCode statusCode = jsonClient.SendRequest(HttpMethod.Get, "Authorization");
                             if (!jsonClient.IsResponseSuccess)
                             {
                                 _logger.Exception(new Exception(jsonClient.GetResponseString() + " - Reomte IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
@@ -221,46 +206,34 @@ namespace cdcavell
                                 return Task.FromResult(ticketReceivedContext.Result);
                             }
 
-
-                            // Get UserInfo
-                            UserInfoResponse userInfoResponse = client.GetUserInfoAsync(new UserInfoRequest
+                            UserAuthorization userAuthorization = jsonClient.GetResponseObject<UserAuthorization>();
+                            if (string.IsNullOrEmpty(userAuthorization.Email))
                             {
-                                Address = discovery.UserInfoEndpoint,
-                                Token = accessToken
-                            }).Result;
-                            if (userInfoResponse.IsError)
-                            {
-                                _logger.Exception(new Exception(userInfoResponse.Error + " - Reomte IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
+                                _logger.Exception(new Exception("Email is null or empty - Reomte IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
                                 ticketReceivedContext.HttpContext.Response.Redirect("/Home/Error/401");
                                 return Task.FromResult(ticketReceivedContext.Result);
                             }
 
-                            var receivedClaims = userInfoResponse.Claims;
                             var additionalClaims = new List<Claim>();
+                            additionalClaims.Add(new Claim("email", userAuthorization.Email.Clean()));
 
-                            Claim emailClaim = receivedClaims.FirstOrDefault(x => x.Type == "email");
-                            if (emailClaim != null)
+                            CDCavellDbContext dbContext = (CDCavellDbContext)ticketReceivedContext.HttpContext
+                                .RequestServices.GetService(typeof(CDCavellDbContext));
+
+                            Registration registration = Registration.Get(userAuthorization.Email.Clean(), dbContext);
+                            if (registration != null)
                             {
-                                additionalClaims.Add(new Claim("email", emailClaim.Value.Clean()));
-
-                                CDCavellDbContext dbContext = (CDCavellDbContext)ticketReceivedContext.HttpContext
-                                    .RequestServices.GetService(typeof(CDCavellDbContext));
-
-                                Registration registration = Registration.Get(emailClaim.Value.Clean(), dbContext);
-                                if (registration != null)
-                                {
-                                    if (registration.IsActive)
-                                        additionalClaims.Add(new Claim("registration", "existing"));
-                                    else
-                                        additionalClaims.Add(new Claim("registration", "new"));
-
-                                    ticketReceivedContext.Principal.AddIdentity(new ClaimsIdentity(additionalClaims));
-                                }
+                                if (registration.IsActive)
+                                    additionalClaims.Add(new Claim("registration", "existing"));
                                 else
-                                {
                                     additionalClaims.Add(new Claim("registration", "new"));
-                                    ticketReceivedContext.Principal.AddIdentity(new ClaimsIdentity(additionalClaims));
-                                }
+
+                                ticketReceivedContext.Principal.AddIdentity(new ClaimsIdentity(additionalClaims));
+                            }
+                            else
+                            {
+                                additionalClaims.Add(new Claim("registration", "new"));
+                                ticketReceivedContext.Principal.AddIdentity(new ClaimsIdentity(additionalClaims));
                             }
 
                             return Task.FromResult(ticketReceivedContext.Result); 

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,7 +37,7 @@ namespace as_api_cdcavell
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 01/18/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 01/19/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class Startup
     {
@@ -124,38 +125,49 @@ namespace as_api_cdcavell
                             IHeaderDictionary requestHeaders = httpContext.Request.Headers;
                             SecurityToken securityToken = tokenContext.SecurityToken;
 
-                            // Get Access Token
-                            StringValues bearerToken;
-                            requestHeaders.TryGetValue("Authorization", out bearerToken);
-                            string accessToken = bearerToken.ToString().Substring(6).Trim();
-
-                            // Get Authority Discovery Endpoint 
-                            DiscoveryCache discoveryCache = (DiscoveryCache)httpContext
-                                .RequestServices.GetService(typeof(IDiscoveryCache));
-                            DiscoveryDocumentResponse discovery = discoveryCache.GetAsync().Result;
-                            if (discovery.IsError) throw new Exception(discovery.Error + " - Reomte IP: " + httpContext.GetRemoteAddress());
-
-                            // Get HttpClient
-                            IHttpClientFactory clientFactory = (IHttpClientFactory)httpContext
-                                .RequestServices.GetService(typeof(IHttpClientFactory));
-                            HttpClient client = clientFactory.CreateClient();
-
-                            // Get UserInfo
-                            UserInfoResponse userInfoResponse = client.GetUserInfoAsync(new UserInfoRequest
+                            try
                             {
-                                Address = discovery.UserInfoEndpoint,
-                                Token = accessToken
-                            }).Result;
-                            if (userInfoResponse.IsError) throw new Exception(userInfoResponse.Error + " - Reomte IP: " + httpContext.GetRemoteAddress());
+                                // Get Access Token
+                                StringValues bearerToken;
+                                requestHeaders.TryGetValue("Authorization", out bearerToken);
+                                string accessToken = bearerToken.ToString().Substring(6).Trim();
 
-                            var receivedClaims = userInfoResponse.Claims;
-                            var additionalClaims = new List<Claim>();
+                                // Get Authority Discovery Endpoint 
+                                DiscoveryCache discoveryCache = (DiscoveryCache)httpContext
+                                    .RequestServices.GetService(typeof(IDiscoveryCache));
+                                DiscoveryDocumentResponse discovery = discoveryCache.GetAsync().Result;
+                                if (discovery.IsError) throw new Exception(discovery.Error + " - Reomte IP: " + httpContext.GetRemoteAddress());
 
-                            Claim emailClaim = receivedClaims.FirstOrDefault(x => x.Type == "email");
-                            if (emailClaim != null)
+                                // Get HttpClient
+                                IHttpClientFactory clientFactory = (IHttpClientFactory)httpContext
+                                    .RequestServices.GetService(typeof(IHttpClientFactory));
+                                HttpClient client = clientFactory.CreateClient();
+
+                                // Get UserInfo
+                                UserInfoResponse userInfoResponse = client.GetUserInfoAsync(new UserInfoRequest
+                                {
+                                    Address = discovery.UserInfoEndpoint,
+                                    Token = accessToken
+                                }).Result;
+                                if (userInfoResponse.IsError) throw new Exception(userInfoResponse.Error + " - Reomte IP: " + httpContext.GetRemoteAddress());
+
+                                var receivedClaims = userInfoResponse.Claims;
+                                var additionalClaims = new List<Claim>();
+
+                                Claim emailClaim = receivedClaims.FirstOrDefault(x => x.Type == "email");
+                                if (emailClaim != null)
+                                {
+                                    additionalClaims.Add(new Claim("email", emailClaim.Value.Clean()));
+                                    tokenContext.Principal.AddIdentity(new ClaimsIdentity(additionalClaims));
+                                }
+                                else throw new Exception("Invalid/Missing email claim - Reomte IP: " + httpContext.GetRemoteAddress());
+
+                                tokenContext.Success();
+                            }
+                            catch (Exception exception)
                             {
-                                additionalClaims.Add(new Claim("email", emailClaim.Value.Clean()));
-                                tokenContext.Principal.AddIdentity(new ClaimsIdentity(additionalClaims));
+                                _logger.Exception(exception);
+                                tokenContext.Fail(exception);
                             }
 
                             return Task.FromResult(tokenContext.Result);
