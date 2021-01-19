@@ -34,7 +34,7 @@ namespace dis5_cdcavell
         public static IEnumerable<ApiScope> ApiScopes =>
             new ApiScope[]
             {
-                new ApiScope("Authorization.Service")
+                new ApiScope("Authorization.Service.API")
             };
 
         /// <value>IEnumerable&lt;Client&gt;</value>
@@ -43,8 +43,8 @@ namespace dis5_cdcavell
             {
                 new Client
                 {
-                    ClientId = "Authorization.Service",
-                    ClientName = "Authorization Service",
+                    ClientId = "Authorization.Service.API",
+                    ClientName = "Authorization Service API",
 
                     AllowedGrantTypes = GrantTypes.Code,
                     RequireClientSecret = false,
@@ -65,9 +65,7 @@ namespace dis5_cdcavell
 
                     AllowedScopes = new List<string>
                     {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Email,
-                        "Authorization.Service"
+                        "Authorization.Service.API"
                     }
                 },
                 // OpenID Connect interactive client using code flow + pkce (MVC)
@@ -99,7 +97,9 @@ namespace dis5_cdcavell
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Email
-                    }
+                    },
+
+                    AlwaysIncludeUserClaimsInIdToken = true
                 }
 
             };

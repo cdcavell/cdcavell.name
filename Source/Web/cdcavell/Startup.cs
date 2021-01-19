@@ -5,9 +5,11 @@ using cdcavell.Data;
 using cdcavell.Filters;
 using cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Commons.Logging;
+using CDCavell.ClassLibrary.Web.Http;
 using CDCavell.ClassLibrary.Web.Mvc.Filters;
 using CDCavell.ClassLibrary.Web.Security;
 using IdentityModel.Client;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
@@ -51,6 +53,7 @@ namespace cdcavell
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/11/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// | Christopher D. Cavell | 1.0.2.2 | 01/18/2021 | Convert GrantType from Implicit to Pkce |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 10/18/2020 | Initial build Authorization Service |~ 
     /// </revision>
     public class Startup
     {
@@ -207,6 +210,17 @@ namespace cdcavell
                             IHttpClientFactory clientFactory = (IHttpClientFactory)ticketReceivedContext.HttpContext
                                 .RequestServices.GetService(typeof(IHttpClientFactory));
                             HttpClient client = clientFactory.CreateClient();
+
+                            //TODO: Authorization Sercvice API Get Identity
+                            JsonClient jsonClient = new JsonClient(_appSettings.Authorization.AuthorizationService.API, accessToken);
+                            HttpStatusCode statusCode = jsonClient.SendRequest(HttpMethod.Get, "Identity");
+                            if (!jsonClient.IsResponseSuccess)
+                            {
+                                _logger.Exception(new Exception(jsonClient.GetResponseString() + " - Reomte IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
+                                ticketReceivedContext.HttpContext.Response.Redirect("/Home/Error/401");
+                                return Task.FromResult(ticketReceivedContext.Result);
+                            }
+
 
                             // Get UserInfo
                             UserInfoResponse userInfoResponse = client.GetUserInfoAsync(new UserInfoRequest

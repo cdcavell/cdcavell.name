@@ -3,6 +3,8 @@ using as_api_cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Commons.Logging;
 using CDCavell.ClassLibrary.Web.Mvc.Filters;
 using CDCavell.ClassLibrary.Web.Security;
+using IdentityModel.Client;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -13,8 +15,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
+using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
 using System.Reflection;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace as_api_cdcavell
 {
@@ -61,6 +70,14 @@ namespace as_api_cdcavell
             _appSettings = appSettings;
             services.AddSingleton(appSettings);
 
+            // cache authority discovery and add to DI
+            services.AddHttpClient();
+            services.AddSingleton<IDiscoveryCache>(options =>
+            {
+                var factory = options.GetRequiredService<IHttpClientFactory>();
+                return new DiscoveryCache(_appSettings.Authentication.IdP.Authority, () => factory.CreateClient());
+            });
+
             // Register DBContext
             services.AddDbContext<AuthorizationServiceDbContext>(options =>
                 options.UseSqlite(appSettings.ConnectionStrings.AuthorizationServiceConnection));
@@ -88,6 +105,63 @@ namespace as_api_cdcavell
             }
              
             services.AddControllers();
+
+            services.AddAuthentication("Bearer")
+                .AddJwtBearer("Bearer", options =>
+                {
+                    options.Authority = _appSettings.Authentication.IdP.Authority;
+
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateAudience = false
+                    };
+
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnTokenValidated = tokenContext =>
+                        {
+                            HttpContext httpContext = tokenContext.HttpContext;
+                            IHeaderDictionary requestHeaders = httpContext.Request.Headers;
+                            SecurityToken securityToken = tokenContext.SecurityToken;
+
+                            // Get Access Token
+                            StringValues bearerToken;
+                            requestHeaders.TryGetValue("Authorization", out bearerToken);
+                            string accessToken = bearerToken.ToString().Substring(6).Trim();
+
+                            // Get Authority Discovery Endpoint 
+                            DiscoveryCache discoveryCache = (DiscoveryCache)httpContext
+                                .RequestServices.GetService(typeof(IDiscoveryCache));
+                            DiscoveryDocumentResponse discovery = discoveryCache.GetAsync().Result;
+                            if (discovery.IsError) throw new Exception(discovery.Error + " - Reomte IP: " + httpContext.GetRemoteAddress());
+
+                            // Get HttpClient
+                            IHttpClientFactory clientFactory = (IHttpClientFactory)httpContext
+                                .RequestServices.GetService(typeof(IHttpClientFactory));
+                            HttpClient client = clientFactory.CreateClient();
+
+                            // Get UserInfo
+                            UserInfoResponse userInfoResponse = client.GetUserInfoAsync(new UserInfoRequest
+                            {
+                                Address = discovery.UserInfoEndpoint,
+                                Token = accessToken
+                            }).Result;
+                            if (userInfoResponse.IsError) throw new Exception(userInfoResponse.Error + " - Reomte IP: " + httpContext.GetRemoteAddress());
+
+                            var receivedClaims = userInfoResponse.Claims;
+                            var additionalClaims = new List<Claim>();
+
+                            Claim emailClaim = receivedClaims.FirstOrDefault(x => x.Type == "email");
+                            if (emailClaim != null)
+                            {
+                                additionalClaims.Add(new Claim("email", emailClaim.Value.Clean()));
+                                tokenContext.Principal.AddIdentity(new ClaimsIdentity(additionalClaims));
+                            }
+
+                            return Task.FromResult(tokenContext.Result);
+                        }
+                    };
+                });
         }
 
         /// <summary>
@@ -130,7 +204,7 @@ namespace as_api_cdcavell
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

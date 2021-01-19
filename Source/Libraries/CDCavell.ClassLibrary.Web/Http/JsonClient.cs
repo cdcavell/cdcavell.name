@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace CDCavell.ClassLibrary.Web.Http
@@ -31,6 +32,7 @@ namespace CDCavell.ClassLibrary.Web.Http
     /// | Christopher D. Cavell | 1.0.0.0 | 10/12/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/08/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// | Christopher D. Cavell | 1.0.1.0 | 11/25/2020 | Update: Target Framework netcoreapp3.1 to net5.0 |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 01/18/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class JsonClient
     {
@@ -51,6 +53,9 @@ namespace CDCavell.ClassLibrary.Web.Http
         /// <value>TimeSpan</value>
         public TimeSpan TimeOut { get; set; } = TimeSpan.FromMinutes(1);
 
+        /// <value>string</value>
+        public string BearerToken { get; set; }
+
         /// <summary>
         /// Constructor method
         /// </summary>
@@ -67,6 +72,30 @@ namespace CDCavell.ClassLibrary.Web.Http
             _baseUrl = baseUrl;
 
             _headers = new List<KeyValuePair<string, string>>();
+        }
+
+
+        /// <summary>
+        /// Constructor method
+        /// </summary>
+        /// <param name="baseUrl">string</param>
+        /// <param name="bearerToken">string</param>
+        /// <method>JsonClient(string baseUrl)</method>
+        public JsonClient(string baseUrl, string bearerToken) : this(baseUrl)
+        {
+            this.BearerToken = bearerToken;
+        }
+
+        /// <summary>
+        /// Send request ignoring self signed certificate errors
+        /// </summary>
+        /// <param name="httpMethod">HttpMethod</param>
+        /// <param name="requestUri">string</param>
+        /// <returns>HttpStatusCode</returns>
+        /// <method>SendRequest(HttpMethod httpMethod, string requestUri)</method>
+        public HttpStatusCode SendRequest(HttpMethod httpMethod, string requestUri)
+        {
+            return SendRequest(httpMethod, requestUri, null);
         }
 
         /// <summary>
@@ -103,6 +132,11 @@ namespace CDCavell.ClassLibrary.Web.Http
                     clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
 
                 using var client = new HttpClient(clientHandler);
+                {
+                    // Adding any bearer token for request here
+                    if (!string.IsNullOrEmpty(BearerToken))
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", BearerToken);
+
                     HttpRequestMessage request = new HttpRequestMessage(httpMethod, _baseUrl + requestUri);
                     request.Options.Set(new HttpRequestOptionsKey<TimeSpan>("RequestTimeout"), TimeOut);
                     request.Content = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json");
@@ -125,7 +159,7 @@ namespace CDCavell.ClassLibrary.Web.Http
 
                     // clear any additional request headers that may have been set
                     _headers.Clear();
-                
+                }
             }
             return _statusCode;
         }

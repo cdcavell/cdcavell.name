@@ -1,5 +1,6 @@
 ﻿using CDCavell.ClassLibrary.Commons.Logging;
 using CDCavell.ClassLibrary.Web.Mvc.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,7 @@ namespace CDCavell.ClassLibrary.Web.Mvc.Controllers
     /// | Christopher D. Cavell | 1.0.3.0 | 01/18/2021 | Initial build Authorization Service |~ 
     /// </revision>
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
     [ServiceFilter(typeof(ControllerActionLogFilter))]
     public abstract partial class ApiBaseController<T> : ControllerBase where T : ApiBaseController<T>

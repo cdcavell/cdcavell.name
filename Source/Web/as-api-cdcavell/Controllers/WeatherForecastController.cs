@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace as_api_cdcavell.Controllers
 {
+    [AllowAnonymous]
     public class WeatherForecastController : ApplicationBaseController<WeatherForecastController>
     {
         private static readonly string[] Summaries = new[]
