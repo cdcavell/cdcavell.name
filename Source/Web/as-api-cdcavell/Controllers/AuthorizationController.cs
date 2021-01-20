@@ -12,7 +12,7 @@ using System.Security.Claims;
 
 namespace as_api_cdcavell.Controllers
 {
-    /// <class>IdentityController</class>
+    /// <class>AuthorizationController</class>
     /// <summary>
     /// User authorization controller class
     /// </summary>
