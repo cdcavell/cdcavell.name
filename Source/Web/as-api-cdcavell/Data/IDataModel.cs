@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace as_api_cdcavell.Data
 {
+    /// <class>IDataModel&lt;T&gt;</class>
     /// <summary>
     /// DataModel Interface
     /// </summary>
@@ -12,7 +13,6 @@ namespace as_api_cdcavell.Data
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 01/18/2021 | Initial build Authorization Service |~ 
     /// </revision>
-    /// <class>IDataModel&lt;T&gt;</class>
     public interface IDataModel<T>
     {
         /// <value>int</value>

@@ -18,7 +18,6 @@ namespace as_api_cdcavell.Controllers
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 01/18/2021 | Initial build Authorization Service |~ 
     /// </revision>
-    /// <class>ApplicationBaseController&lt;T&gt;</class>
     public abstract partial class ApplicationBaseController<T> : ApiBaseController<ApplicationBaseController<T>> where T : ApplicationBaseController<T>
     {
         /// <value>AppSettings</value>

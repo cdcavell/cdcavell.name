@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace as_api_cdcavell.Data
 {
+    /// <class>DataModel&lt;T&gt;</class>
     /// <summary>
     /// Authorization Service DataModel base class
     /// </summary>
@@ -12,7 +13,6 @@ namespace as_api_cdcavell.Data
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 01/18/2021 | Initial build Authorization Service |~ 
     /// </revision>
-    /// <class>DataModel&lt;T&gt;</class>
     public abstract partial class DataModel<T> : IDataModel<DataModel<T>> where T : DataModel<T>
     {
         /// <value>int</value>

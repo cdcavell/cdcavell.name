@@ -32,7 +32,7 @@ namespace as_api_cdcavell.Controllers
         /// <param name="httpContextAccessor">IHttpContextAccessor</param>
         /// <param name="authorizationService">IAuthorizationService</param>
         /// <param name="appSettings">AppSettings</param>
-        /// <param name="dbContext">CDCavellDbContext</param>
+        /// <param name="dbContext">AuthorizationServiceDbContext</param>
         /// <method>
         /// public AuthorizationController(
         ///     ILogger&lt;AuthorizationController&gt; logger,
