@@ -3,7 +3,7 @@
 namespace CDCavell.ClassLibrary.Web.Mvc.Models.Authorization
 {
     /// <summary>
-    /// User Identity global model
+    /// User Authorization global model
     /// </summary>
     /// <revision>
     /// __Revisions:__~~

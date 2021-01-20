@@ -18,7 +18,7 @@ namespace as_api_cdcavell.Data
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 01/18/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 01/19/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class AuthorizationServiceDbContext : DbContext
     {
@@ -58,6 +58,15 @@ namespace as_api_cdcavell.Data
 
         /// <value>DbSet&lt;AuditHistory&gt;</value>
         public DbSet<AuditHistory> AuditHistory { get; set; }
+        /// <value>DbSet&lt;Registration&gt;</value>
+        public DbSet<Registration> Registration { get; set; }
+        /// <value>DbSet&lt;Role&gt;</value>
+        public DbSet<Role> Role { get; set; }
+        /// <value>DbSet&lt;Permission&gt;</value>
+        public DbSet<Permission> Permission { get; set; }
+        /// <value>DbSet&lt;RolePermission&gt;</value>
+        public DbSet<RolePermission> RolePermission { get; set; }
+
         /// <summary>
         /// OnModelCreating method
         /// </summary>
