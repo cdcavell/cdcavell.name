@@ -12,6 +12,7 @@ namespace as_api_cdcavell.Data
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 01/18/2021 | Initial build Authorization Service |~ 
     /// </revision>
+    /// <class>DataModel&lt;T&gt;</class>
     public abstract partial class DataModel<T> : IDataModel<DataModel<T>> where T : DataModel<T>
     {
         /// <value>int</value>
@@ -52,6 +53,7 @@ namespace as_api_cdcavell.Data
         /// Delete record
         /// </summary>
         /// <param name="dbContext"></param>
+        /// <method>Delete(AuthorizationServiceDbContext dbContext)</method>
         public void Delete(AuthorizationServiceDbContext dbContext)
         {
             if (!this.IsNew)

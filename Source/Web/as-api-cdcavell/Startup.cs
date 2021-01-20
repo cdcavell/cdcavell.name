@@ -184,7 +184,7 @@ namespace as_api_cdcavell
         /// <param name="logger">ILogger&lt;Startup&gt;</param>
         /// <param name="lifetime">IHostApplicationLifetime</param>
         /// <param name="dbContext">CDCavellDbContext</param>
-        /// <method>Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger&lt;Startup&gt; logger, IHostApplicationLifetime lifetime, CDCavellDbContext dbContext)</method>
+        /// <method>Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger&lt;Startup&gt; logger, IHostApplicationLifetime lifetime, AuthorizationServiceDbContext dbContext)</method>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger, IHostApplicationLifetime lifetime, AuthorizationServiceDbContext dbContext)
         {
             _logger = new Logger(logger);
