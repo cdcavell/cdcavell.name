@@ -11,7 +11,7 @@ namespace as_api_cdcavell.Data
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 01/18/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 01/21/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public static class DbInitializer
     {
@@ -29,6 +29,26 @@ namespace as_api_cdcavell.Data
             IEnumerable<string> pending = context.Database.GetPendingMigrations();
             if (pending.Any())
                 context.Database.Migrate();
+
+            // Look for any Status.
+            if (!context.Status.Any())
+            {
+                var statuses = new Status[]
+                {
+                    new Status { Description = "Request" },
+                    new Status { Description = "Approved" },
+                    new Status { Description = "Denied" },
+                    new Status { Description = "Revoked" },
+                    new Status { Description = "Retired" }
+                };
+
+                foreach (Status status in statuses)
+                {
+                    context.Status.Add(status);
+                }
+
+                context.SaveChanges();
+            }
         }
     }
 }
