@@ -17,9 +17,8 @@
 	  <RepositoryUrl>https://github.com/cdcavell/cdcavell.name</RepositoryUrl>
 	  <NeutralLanguage>en-US</NeutralLanguage>
 	  <AssemblyName>CDCavell</AssemblyName>
-	  <AssemblyVersion>1.0.2.2</AssemblyVersion>
-	  <FileVersion>1.0.2.2</FileVersion>
-	  <PackageLicenseExpression></PackageLicenseExpression>
+	  <AssemblyVersion>1.0.3.0</AssemblyVersion>
+	  <FileVersion>1.0.3.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
