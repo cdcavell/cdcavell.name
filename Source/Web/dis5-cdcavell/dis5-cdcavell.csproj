@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>dis5_cdcavell</RootNamespace>
-    <Version>1.0.2.2</Version>
+    <Version>1.0.2.3</Version>
     <Authors>Christopher D. Cavell</Authors>
     <Product>Website</Product>
     <Description>Duende IdentityServer5 OAuth 2.0 framework authentication</Description>
@@ -42,8 +42,8 @@
 
 	<ItemGroup>
 	  <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="5.0.0" />
-	  <PackageReference Include="Duende.IdentityServer" Version="5.0.0" />
-	  <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="5.0.0" />
+	  <PackageReference Include="Duende.IdentityServer" Version="5.0.1" />
+	  <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="5.0.1" />
 	  <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="5.0.2" />
 	  <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.2" />
 	  <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="5.0.2" />
