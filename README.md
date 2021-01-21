@@ -38,7 +38,7 @@ $ git flow init -d
 
 | Build | Date | Description |
 |-------|------|-------------|
-| 1.0.3.0 | 01/19/2021 | __Add:__ Initial build Authorization Service |
+| 1.0.3.0 | 01/20/2021 | __Add:__ Initial build Authorization Service |
 | 1.0.2.2 | 01/18/2021 | __Update:__ Convert GrantType from Implicit to Pkce |
 | 1.0.2.1 | 01/17/2021 | __Update:__ Handle HttpRequestException as http status instead of application exception |
 | 1.0.2.0 | 01/16/2021 | __Add:__ Initial build Duende IdentityServer5 |

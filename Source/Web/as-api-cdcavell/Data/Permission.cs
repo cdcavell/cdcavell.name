@@ -10,7 +10,7 @@ namespace as_api_cdcavell.Data
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 01/19/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 01/20/2021 | Initial build Authorization Service |~ 
     /// </revision>
     [Table("Permission")]
     public class Permission : DataModel<Permission>
@@ -21,9 +21,9 @@ namespace as_api_cdcavell.Data
         public string Description { get; set; }
 
 
-        /// <value>int</value>
+        /// <value>long</value>
         [Required]
-        public int RoleId { get; set; }
+        public long RoleId { get; set; }
         /// <value>Role</value>
         [ForeignKey("RoleId")]
         public Role Role { get; set; }

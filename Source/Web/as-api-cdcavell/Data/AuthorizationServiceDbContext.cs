@@ -18,7 +18,7 @@ namespace as_api_cdcavell.Data
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 01/19/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 01/20/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class AuthorizationServiceDbContext : DbContext
     {
@@ -32,7 +32,7 @@ namespace as_api_cdcavell.Data
         /// <param name="logger">ILogger&lt;CDCavellDbContext&gt;</param>
         /// <param name="httpContextAccessor">IHttpContextAccessor</param>
         /// <param name="options">DbContextOptions</param>
-        /// <method>CDCavellDdContext(ILogger&lt;CDCavellDbContext&gt; logger, IHttpContextAccessor httpContextAccessor, DbContextOptions&lt;CDCavellDbContext&gt; options) : base(options)</method>
+        /// <method>CDCavellDdContext(ILogger&lt;CDCavellDbContext&gt; logger, IHttpContextAccessor httpContextAccessor, DbContextOptions&lt;AuthorizationServiceDbContext&gt; options) : base(options)</method>
         public AuthorizationServiceDbContext(ILogger<AuthorizationServiceDbContext> logger, IHttpContextAccessor httpContextAccessor, DbContextOptions<AuthorizationServiceDbContext> options)
             : base(options)
         {
@@ -58,7 +58,9 @@ namespace as_api_cdcavell.Data
 
         /// <value>DbSet&lt;AuditHistory&gt;</value>
         public DbSet<AuditHistory> AuditHistory { get; set; }
-        /// <value>DbSet&lt;Registration&gt;</value>
+        /// <value>DbSet&lt;Resource&gt;</value>
+        public DbSet<Resource> Resource { get; set; }
+        /// <value>DbSet&lt;Role&gt;</value>
         public DbSet<Registration> Registration { get; set; }
         /// <value>DbSet&lt;Role&gt;</value>
         public DbSet<Role> Role { get; set; }
@@ -66,6 +68,11 @@ namespace as_api_cdcavell.Data
         public DbSet<Permission> Permission { get; set; }
         /// <value>DbSet&lt;RolePermission&gt;</value>
         public DbSet<RolePermission> RolePermission { get; set; }
+        /// <value>DbSet&lt;Status&gt;</value>
+        public DbSet<Status> Status { get; set; }
+        /// <value>DbSet&lt;History&gt;</value>
+        public DbSet<History> History { get; set; }
+
 
         /// <summary>
         /// OnModelCreating method
@@ -74,6 +81,30 @@ namespace as_api_cdcavell.Data
         /// <method>OnModelCreating(ModelBuilder builder)</method>
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<Registration>()
+                .HasIndex(x => new { x.Email })
+                .IsUnique();
+
+            builder.Entity<Resource>()
+                .HasIndex(x => new { x.ClientId })
+                .IsUnique();
+
+            builder.Entity<Role>()
+                .HasIndex(x => new { x.Description, x.ResourceId })
+                .IsUnique();
+
+            builder.Entity<Permission>()
+                .HasIndex(x => new { x.Description, x.RoleId })
+                .IsUnique();
+
+            builder.Entity<RolePermission>()
+                .HasIndex(x => new { x.RegistrationId, x.RoleId, x.PermissionId })
+                .IsUnique();
+
+            builder.Entity<Status>()
+                .HasIndex(x => new { x.Description })
+                .IsUnique();
+
             base.OnModelCreating(builder);
         }
 

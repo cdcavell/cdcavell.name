@@ -17,10 +17,10 @@ namespace as_api_cdcavell.Data
     [Table("AuditHistory")]
     public class AuditHistory
     {
-        /// <value>int</value>
+        /// <value>long</value>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public long Id { get; set; }
         /// <value>string</value>
         [DataType(DataType.Text)]
         public string ModifiedBy { get; set; }

@@ -18,9 +18,9 @@ namespace as_api_cdcavell.Data
         /// <summary>
         /// Initialize method
         /// &lt;br /&gt;
-        /// To Initialize: dotnet ef migrations add InitialCreate
+        /// To Initialize: dotnet ef migrations add InitialCreate --project as-api-cdcavell.csproj --context AuthorizationServiceDbContext
         /// &lt;br /&gt;
-        /// To Update:     dotnet ef migrations add UpdateDatabase_&lt;&lt;YYYY-MM-DD&gt;&gt;
+        /// To Update:     dotnet ef migrations add UpdateDatabase_&lt;&lt;YYYY-MM-DD&gt;&gt;  --project as-api-cdcavell.csproj --context AuthorizationServiceDbContext
         /// </summary>
         /// <param name="context">CDCavellDdContext</param>
         /// <method>Initialize(MigrateDdContext context)</method>
@@ -28,7 +28,7 @@ namespace as_api_cdcavell.Data
         {
             IEnumerable<string> pending = context.Database.GetPendingMigrations();
             if (pending.Any())
-                context.Database.Migrate(); 
+                context.Database.Migrate();
         }
     }
 }

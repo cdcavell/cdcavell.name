@@ -1,4 +1,5 @@
-﻿using Org.BouncyCastle.Asn1.Esf;
+﻿using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Asn1.Esf;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -16,7 +17,7 @@ namespace as_api_cdcavell.Data
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 01/19/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 01/20/2021 | Initial build Authorization Service |~ 
     /// </revision>
     [Table("Registration")]
     public class Registration : DataModel<Registration>
@@ -48,22 +49,26 @@ namespace as_api_cdcavell.Data
         [Display(Name = "Approved Date")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime? ApprovedDate { get; set; } = DateTime.MinValue;
-        /// <value>string</value>
-        [AllowNull]
-        [DataType(DataType.EmailAddress)]
-        [Display(Name = "Approved By")]
-        public string ApprovedBy { get; set; }
+
+        /// <value>long</value>
+        public long ApprovedById { get; set; }
+        /// <value>Registration</value>
+        [ForeignKey("ApprovedById")]
+        public Registration ApprovedBy { get; set; }
+
         /// <value>DateTime?</value>
         [AllowNull]
         [DataType(DataType.DateTime)]
         [Display(Name = "Revoked Date")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime? RevokedDate { get; set; } = DateTime.MinValue;
-        /// <value>string</value>
-        [AllowNull]
-        [DataType(DataType.EmailAddress)]
-        [Display(Name = "Revoked By")]
-        public string RevokedBy { get; set; }
+
+        /// <value>long</value>
+        public long RevokedById { get; set; }
+        /// <value>Registration</value>
+        [ForeignKey("RevokedById")]
+        public Registration RevokedBy { get; set; }
+
         /// <value>bool</value>
         [NotMapped]
         public bool IsRegistered
@@ -128,11 +133,14 @@ namespace as_api_cdcavell.Data
                 if (IsRevoked)
                     return "Account Revoked";
 
-                return "Pending Approval";
+                if (IsPending)
+                    return "Pending Approval";
+
+                return "Not Registered";
             }
         }
 
-        /// <value>ICollection&lt;Role&gt;</value>
+        /// <value>List&lt;RolePermission&gt;</value>
         public List<RolePermission> RolePermissions { get; set; }
 
 
@@ -151,9 +159,11 @@ namespace as_api_cdcavell.Data
         /// <method>Get(string emailAddress, AuthorizationServiceDbContext dbContext)</method>
         public static Registration Get(string emailAddress, AuthorizationServiceDbContext dbContext)
         {
-            return dbContext.Registration
+            Registration registration = dbContext.Registration
                 .Where(x => x.Email == emailAddress.Trim().Clean())
                 .FirstOrDefault();
+
+            return registration;
         }
 
         #endregion

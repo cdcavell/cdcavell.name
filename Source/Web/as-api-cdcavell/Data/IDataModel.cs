@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace as_api_cdcavell.Data
@@ -11,12 +12,12 @@ namespace as_api_cdcavell.Data
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 01/18/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 01/20/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public interface IDataModel<T>
     {
-        /// <value>int</value>
-        int Id { get; set; }
+        /// <value>long</value>
+        long Id { get; set; }
 
         /// <value>bool</value>
         bool IsNew { get; }
