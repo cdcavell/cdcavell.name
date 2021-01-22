@@ -26,6 +26,7 @@ namespace cdcavell.Controllers
     /// | Christopher D. Cavell | 1.0.0.0 | 10/19/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/12/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 01/22/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class AccountController : ApplicationBaseController<AccountController>
     {
@@ -70,19 +71,21 @@ namespace cdcavell.Controllers
         {
             UserViewModel user = (UserViewModel)ViewData["UserViewModel"];
 
-            AccountViewModel model = new AccountViewModel();
-            model.Registration = Data.Registration.Get(user.Email, _dbContext);
+            //AccountViewModel model = new AccountViewModel();
+            //model.Registration = Data.Registration.Get(user.Email, _dbContext);
 
-            if (model.Registration != null)
-            {
-                return View(model);
-            }
+            //if (model.Registration != null)
+            //{
+            //    return View(model);
+            //}
 
-            var isNewRegistration = _authorizationService.AuthorizeAsync(User, "NewRegistration").Result;
-            if (isNewRegistration.Succeeded)
-                return RedirectToAction("Registration", "Account");
+            //var isNewRegistration = _authorizationService.AuthorizeAsync(User, "NewRegistration").Result;
+            //if (isNewRegistration.Succeeded)
+            //    return RedirectToAction("Registration", "Account");
 
-            return RedirectToAction("Logout", "Account");
+            //return RedirectToAction("Logout", "Account");
+
+            return RedirectToAction("Index", "Home");
         }
 
         /// <summary>
@@ -94,11 +97,11 @@ namespace cdcavell.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            var isNewRegistration = _authorizationService.AuthorizeAsync(User, "NewRegistration").Result;
-            if (isNewRegistration.Succeeded)
-            {
-                return RedirectToAction("Registration", "Account");
-            }
+            //var isNewRegistration = _authorizationService.AuthorizeAsync(User, "NewRegistration").Result;
+            //if (isNewRegistration.Succeeded)
+            //{
+            //    return RedirectToAction("Registration", "Account");
+            //}
 
             return RedirectToAction("Index", "Account");
         }
@@ -149,20 +152,20 @@ namespace cdcavell.Controllers
         {
             UserViewModel user = (UserViewModel)ViewData["UserViewModel"];
 
-            Registration registration = Data.Registration.Get(user.Email, _dbContext);
-            if (registration == null)
-            {
-                AccountViewModel model = new AccountViewModel();
-                model.Registration = new Registration();
-                model.Registration.Email = user.Email;
+            //Registration registration = Data.Registration.Get(user.Email, _dbContext);
+            //if (registration == null)
+            //{
+            //    AccountViewModel model = new AccountViewModel();
+            //    model.Registration = new Registration();
+            //    model.Registration.Email = user.Email;
 
-                return View(model);
-            }
+            //    return View(model);
+            //}
 
-            if (registration.IsPending)
+            //if (registration.IsPending)
                 return RedirectToAction("Index", "Account");
 
-            return RedirectToAction("Logout", "Account");
+            //return RedirectToAction("Logout", "Account");
         }
 
         /// <summary>
@@ -178,11 +181,11 @@ namespace cdcavell.Controllers
         {
             if (ModelState.IsValid)
             {
-                model.Registration.Email = model.Registration.Email.Trim().Clean();
-                model.Registration.FirstName = model.Registration.FirstName.Trim().Clean();
-                model.Registration.LastName = model.Registration.LastName.Trim().Clean();
-                model.Registration.RequestDate = DateTime.Now;
-                model.Registration.AddUpdate(_dbContext);
+                //model.Registration.Email = model.Registration.Email.Trim().Clean();
+                //model.Registration.FirstName = model.Registration.FirstName.Trim().Clean();
+                //model.Registration.LastName = model.Registration.LastName.Trim().Clean();
+                //model.Registration.RequestDate = DateTime.Now;
+                //model.Registration.AddUpdate(_dbContext);
 
                 return RedirectToAction("Index", "Account");
             }
@@ -203,7 +206,7 @@ namespace cdcavell.Controllers
         {
             if (ModelState.IsValid)
             {
-                model.Registration.Delete(_dbContext);
+                //model.Registration.Delete(_dbContext);
                 return RedirectToAction("Logout", "Account");
             }
 

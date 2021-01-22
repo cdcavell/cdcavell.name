@@ -10,7 +10,6 @@ using CDCavell.ClassLibrary.Web.Mvc.Filters;
 using CDCavell.ClassLibrary.Web.Mvc.Models.Authorization;
 using CDCavell.ClassLibrary.Web.Security;
 using IdentityModel.Client;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
@@ -29,7 +28,6 @@ using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
@@ -54,7 +52,7 @@ namespace cdcavell
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/11/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// | Christopher D. Cavell | 1.0.2.2 | 01/18/2021 | Convert GrantType from Implicit to Pkce |~ 
-    /// | Christopher D. Cavell | 1.0.3.0 | 10/19/2020 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 10/22/2020 | Initial build Authorization Service |~ 
     /// </revision>
     public class Startup
     {
@@ -119,28 +117,15 @@ namespace cdcavell
                 {
                     policy.Requirements.Add(new AuthenticatedRequirement(true));
                 });
-                options.AddPolicy("NewRegistration", policy =>
-                {
-                    policy.Requirements.Add(new AuthenticatedRequirement(true));
-                    policy.Requirements.Add(new NewRegistrationRequirement(true));
-                });
-                options.AddPolicy("ExistingRegistration", policy =>
-                {
-                    policy.Requirements.Add(new AuthenticatedRequirement(true));
-                    policy.Requirements.Add(new ExistingRegistrationRequirement(true));
-                });
                 options.AddPolicy("Administration", policy =>
                 {
                     policy.Requirements.Add(new AuthenticatedRequirement(true));
-                    policy.Requirements.Add(new ExistingRegistrationRequirement(true));
                     policy.Requirements.Add(new AdministrationRequirement(true));
                 });
             });
 
             // Registered authorization handlers
             services.AddTransient<IAuthorizationHandler, AuthenticatedHandler>();
-            services.AddTransient<IAuthorizationHandler, NewRegistrationHandler>();
-            services.AddTransient<IAuthorizationHandler, ExistingRegistrationHandler>();
             services.AddTransient<IAuthorizationHandler, AdministrationHandler>();
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
@@ -217,24 +202,24 @@ namespace cdcavell
                             var additionalClaims = new List<Claim>();
                             additionalClaims.Add(new Claim("email", userAuthorization.Email.Clean()));
 
-                            CDCavellDbContext dbContext = (CDCavellDbContext)ticketReceivedContext.HttpContext
-                                .RequestServices.GetService(typeof(CDCavellDbContext));
+                            //CDCavellDbContext dbContext = (CDCavellDbContext)ticketReceivedContext.HttpContext
+                            //    .RequestServices.GetService(typeof(CDCavellDbContext));
 
-                            Registration registration = Registration.Get(userAuthorization.Email.Clean(), dbContext);
-                            if (registration != null)
-                            {
-                                if (registration.IsActive)
-                                    additionalClaims.Add(new Claim("registration", "existing"));
-                                else
-                                    additionalClaims.Add(new Claim("registration", "new"));
+                            //Registration registration = Registration.Get(userAuthorization.Email.Clean(), dbContext);
+                            //if (registration != null)
+                            //{
+                            //    if (registration.IsActive)
+                            //        additionalClaims.Add(new Claim("registration", "existing"));
+                            //    else
+                            //        additionalClaims.Add(new Claim("registration", "new"));
 
-                                ticketReceivedContext.Principal.AddIdentity(new ClaimsIdentity(additionalClaims));
-                            }
-                            else
-                            {
-                                additionalClaims.Add(new Claim("registration", "new"));
-                                ticketReceivedContext.Principal.AddIdentity(new ClaimsIdentity(additionalClaims));
-                            }
+                            //    ticketReceivedContext.Principal.AddIdentity(new ClaimsIdentity(additionalClaims));
+                            //}
+                            //else
+                            //{
+                            //    additionalClaims.Add(new Claim("registration", "new"));
+                            //    ticketReceivedContext.Principal.AddIdentity(new ClaimsIdentity(additionalClaims));
+                            //}
 
                             return Task.FromResult(ticketReceivedContext.Result); 
                         }

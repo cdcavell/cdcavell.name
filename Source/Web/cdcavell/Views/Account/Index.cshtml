@@ -13,38 +13,38 @@
             </p>
             <div class="form-group row m-0 p-0">
                 <div class="col-sm-1 col-md-1 p-1">
-                    @Html.LabelFor(model => model.Registration.Email)
+                    @*@Html.LabelFor(model => model.Registration.Email)*@
                 </div>
                 <div class="col-sm-11 col-md-11">
-                    @Html.TextBoxFor(model => model.Registration.Email, new { @readonly = "readonly", @class = "form-control form-control-sm m-0" })
+                   @* @Html.TextBoxFor(model => model.Registration.Email, new { @readonly = "readonly", @class = "form-control form-control-sm m-0" })*@
                 </div>
             </div>
             <div class="form-group row m-0 p-0">
                 <div class="col-sm-1 col-md-1 p-1">
-                    @Html.LabelFor(model => model.Registration.RequestDate)
+                    @*@Html.LabelFor(model => model.Registration.RequestDate)*@
                 </div>
                 <div class="col-sm-5 col-md-5">
-                    @Html.TextBoxFor(model => model.Registration.RequestDate, "{0:MMM dd, yyyy}", new { @readonly = "readonly", @class = "form-control form-control-sm m-0" })
+                    @*@Html.TextBoxFor(model => model.Registration.RequestDate, "{0:MMM dd, yyyy}", new { @readonly = "readonly", @class = "form-control form-control-sm m-0" })*@
                 </div>
                 <div class="col-sm-1 col-md-1 p-1">
-                    @Html.LabelFor(model => model.Registration.Status)
+                   @* @Html.LabelFor(model => model.Registration.Status)*@
                 </div>
                 <div class="col-sm-5 col-md-5">
-                    @Html.TextBoxFor(model => model.Registration.Status, new { @readonly = "readonly", @class = "form-control form-control-sm m-0" })
+                    @*@Html.TextBoxFor(model => model.Registration.Status, new { @readonly = "readonly", @class = "form-control form-control-sm m-0" })*@
                 </div>
             </div>
             <div class="form-group row m-0 p-0">
                 <div class="col-sm-1 col-md-1 p-1">
-                    @Html.LabelFor(model => model.Registration.FirstName)
+                    @*@Html.LabelFor(model => model.Registration.FirstName)*@
                 </div>
                 <div class="col-sm-5 col-md-5">
-                    @Html.TextBoxFor(model => model.Registration.FirstName, new { @readonly = "readonly", @class = "form-control form-control-sm m-0" })
+                    @*@Html.TextBoxFor(model => model.Registration.FirstName, new { @readonly = "readonly", @class = "form-control form-control-sm m-0" })*@
                 </div>
                 <div class="col-sm-1 col-md-1 p-1">
-                    @Html.LabelFor(model => model.Registration.LastName)
+                    @*@Html.LabelFor(model => model.Registration.LastName)*@
                 </div>
                 <div class="col-sm-5 col-md-5">
-                    @Html.TextBoxFor(model => model.Registration.LastName, new { @readonly = "readonly", @class = "form-control form-control-sm m-0" })
+                    @*@Html.TextBoxFor(model => model.Registration.LastName, new { @readonly = "readonly", @class = "form-control form-control-sm m-0" })*@
                 </div>
             </div>
         </div>
@@ -60,7 +60,7 @@
         </div>
     </div>       
 
-    @Html.HiddenFor(model => model.Registration.Id);
+   @* @Html.HiddenFor(model => model.Registration.Id); *@
 }
 
 @section scripts {
