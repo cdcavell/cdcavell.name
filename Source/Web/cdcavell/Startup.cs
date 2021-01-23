@@ -177,7 +177,8 @@ namespace cdcavell
                             if (string.IsNullOrEmpty(accessToken))
                             {
                                 _logger.Exception(new Exception("Invalid Access Token - Reomte IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
-                                ticketReceivedContext.HttpContext.Response.Redirect("/Home/Error/401");
+                                ticketReceivedContext.HttpContext.Response.Redirect("/Home/Error/7001");
+                                ticketReceivedContext.HandleResponse();
                                 return Task.FromResult(ticketReceivedContext.Result);
                             }
 
@@ -187,7 +188,8 @@ namespace cdcavell
                             if (!jsonClient.IsResponseSuccess)
                             {
                                 _logger.Exception(new Exception(jsonClient.GetResponseString() + " - Reomte IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
-                                ticketReceivedContext.HttpContext.Response.Redirect("/Home/Error/401");
+                                ticketReceivedContext.HttpContext.Response.Redirect("/Home/Error/7002");
+                                ticketReceivedContext.HandleResponse();
                                 return Task.FromResult(ticketReceivedContext.Result);
                             }
 
@@ -195,7 +197,8 @@ namespace cdcavell
                             if (string.IsNullOrEmpty(userAuthorization.Email))
                             {
                                 _logger.Exception(new Exception("Email is null or empty - Reomte IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
-                                ticketReceivedContext.HttpContext.Response.Redirect("/Home/Error/401");
+                                ticketReceivedContext.HttpContext.Response.Redirect("/Home/Error/7003");
+                                ticketReceivedContext.HandleResponse();
                                 return Task.FromResult(ticketReceivedContext.Result);
                             }
 
