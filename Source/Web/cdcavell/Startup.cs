@@ -208,28 +208,18 @@ namespace cdcavell
 
                             Data.Authorization authorization = new Data.Authorization();
                             authorization.Guid = Guid.NewGuid().ToString();
+                            authorization.Created = DateTime.Now;
                             authorization.Object = jsonClient.GetResponseString();
                             authorization.AddUpdate(dbContext);
 
                             var additionalClaims = new List<Claim>();
-                            additionalClaims.Add(new Claim("email", userAuthorization.Email.Clean()));
-                            additionalClaims.Add(new Claim("authorization", authorization.Guid));
+                            if (!ticketReceivedContext.Principal.HasClaim("email", userAuthorization.Email.Clean()))
+                                additionalClaims.Add(new Claim("email", userAuthorization.Email.Clean()));
 
-                            //Registration registration = Registration.Get(userAuthorization.Email.Clean(), dbContext);
-                            //if (registration != null)
-                            //{
-                            //    if (registration.IsActive)
-                            //        additionalClaims.Add(new Claim("registration", "existing"));
-                            //    else
-                            //        additionalClaims.Add(new Claim("registration", "new"));
+                            if (!ticketReceivedContext.Principal.HasClaim("authorization", authorization.Guid))
+                                additionalClaims.Add(new Claim("authorization", authorization.Guid));
 
-                            //    ticketReceivedContext.Principal.AddIdentity(new ClaimsIdentity(additionalClaims));
-                            //}
-                            //else
-                            //{
-                            //    additionalClaims.Add(new Claim("registration", "new"));
-                            //    ticketReceivedContext.Principal.AddIdentity(new ClaimsIdentity(additionalClaims));
-                            //}
+                            ticketReceivedContext.Principal.AddIdentity(new ClaimsIdentity(additionalClaims));
 
                             return Task.FromResult(ticketReceivedContext.Result); 
                         }

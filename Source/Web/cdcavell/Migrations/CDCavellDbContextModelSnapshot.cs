@@ -57,6 +57,9 @@ namespace cdcavell.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Guid")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -66,6 +69,9 @@ namespace cdcavell.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Guid")
+                        .IsUnique();
 
                     b.ToTable("Authorization");
                 });

@@ -1,8 +1,8 @@
 ﻿using cdcavell.Data;
 using cdcavell.Models.AppSettings;
+using CDCavell.ClassLibrary.Web.Mvc.Models.Authorization;
 using Microsoft.AspNetCore.Authorization;
-using System;
-using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -18,6 +18,7 @@ namespace cdcavell.Authorization
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.0 | 10/18/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/11/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 10/23/2020 | Initial build Authorization Service |~ 
     /// </revision>
     public class AuthenticatedHandler : AuthorizationHandler<AuthenticatedRequirement>
     {
@@ -48,10 +49,13 @@ namespace cdcavell.Authorization
             var user = context.User;
             if (user.Identity.IsAuthenticated)
             {
-                List<Claim> roles = user.Claims.Where(x => x.Type == "email").ToList();
-                if (roles != null && roles.Count > 0)
+                Claim emailClaim = user.Claims.Where(x => x.Type == "email").FirstOrDefault();
+                if (emailClaim != null)
                 {
-                    context.Succeed(requirement);
+                    UserAuthorization userAuthorization = Data.Authorization.GetUser(user.Claims, _dbContext);
+                    if (!string.IsNullOrEmpty(userAuthorization.Email))
+                        if (userAuthorization.Email == emailClaim.Value)
+                            context.Succeed(requirement);
                 }
             }
 

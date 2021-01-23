@@ -72,6 +72,10 @@ namespace cdcavell.Data
         /// <method>OnModelCreating(ModelBuilder builder)</method>
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<Authorization>()
+                .HasIndex(x => x.Guid)
+                .IsUnique();
+
             base.OnModelCreating(builder);
         }
 
