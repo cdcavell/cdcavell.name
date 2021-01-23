@@ -17,7 +17,7 @@ namespace as_api_cdcavell.Data
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 01/20/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 01/23/2021 | Initial build Authorization Service |~ 
     /// </revision>
     [Table("Registration")]
     public class Registration : DataModel<Registration>
@@ -162,6 +162,9 @@ namespace as_api_cdcavell.Data
             Registration registration = dbContext.Registration
                 .Where(x => x.Email == emailAddress.Trim().Clean())
                 .FirstOrDefault();
+
+            if (registration == null)
+                registration = new Registration();
 
             return registration;
         }

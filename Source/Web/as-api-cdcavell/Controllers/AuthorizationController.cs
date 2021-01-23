@@ -20,7 +20,7 @@ namespace as_api_cdcavell.Controllers
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 01/19/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 01/23/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class AuthorizationController : ApplicationBaseController<AuthorizationController>
     {
@@ -66,6 +66,12 @@ namespace as_api_cdcavell.Controllers
             userAuthorization.DateTimeRequsted = DateTime.Now;
             userAuthorization.Email = User.Claims.Where(x => x.Type == "email").Select(x => x.Value).FirstOrDefault();
 
+            Data.Registration registration = Data.Registration.Get(userAuthorization.Email, _dbContext);
+            userAuthorization.RegistrationId = registration.Id;
+            userAuthorization.RegistrationStatus = registration.Status;
+            userAuthorization.FirstName = registration.FirstName;
+            userAuthorization.LastName = registration.LastName;
+            
             return new JsonResult(userAuthorization);
         }
     }

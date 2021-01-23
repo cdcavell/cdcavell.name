@@ -196,6 +196,8 @@ namespace cdcavell
                                 return Task.FromResult(ticketReceivedContext.Result);
                             }
 
+                            //TODO: If new UserAuthorization then redirect to new registration process
+
                             // Harden User Authorization
                             CDCavellDbContext dbContext = (CDCavellDbContext)ticketReceivedContext.HttpContext
                                 .RequestServices.GetService(typeof(CDCavellDbContext));
