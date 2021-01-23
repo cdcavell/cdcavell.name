@@ -14,7 +14,7 @@ namespace cdcavell.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.9");
+                .HasAnnotation("ProductVersion", "5.0.2");
 
             modelBuilder.Entity("cdcavell.Data.AuditHistory", b =>
                 {
@@ -51,106 +51,23 @@ namespace cdcavell.Migrations
                     b.ToTable("AuditHistory");
                 });
 
-            modelBuilder.Entity("cdcavell.Data.Permission", b =>
+            modelBuilder.Entity("cdcavell.Data.Authorization", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Guid")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("Permission");
-                });
-
-            modelBuilder.Entity("cdcavell.Data.Registration", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("ApprovedBy")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("ApprovedDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("RequestDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("RevokedBy")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("RevokedDate")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.ToTable("Registration");
-                });
-
-            modelBuilder.Entity("cdcavell.Data.Role", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Description")
+                    b.Property<string>("Object")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Role");
-                });
-
-            modelBuilder.Entity("cdcavell.Data.RolePermission", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("PermissionId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("RegistrationId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PermissionId");
-
-                    b.HasIndex("RegistrationId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("RolePermission");
+                    b.ToTable("Authorization");
                 });
 
             modelBuilder.Entity("cdcavell.Data.SiteMap", b =>
@@ -173,36 +90,6 @@ namespace cdcavell.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SiteMap");
-                });
-
-            modelBuilder.Entity("cdcavell.Data.Permission", b =>
-                {
-                    b.HasOne("cdcavell.Data.Role", "Role")
-                        .WithMany("Permissions")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("cdcavell.Data.RolePermission", b =>
-                {
-                    b.HasOne("cdcavell.Data.Permission", "Permission")
-                        .WithMany()
-                        .HasForeignKey("PermissionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("cdcavell.Data.Registration", "Registration")
-                        .WithMany("RolePermissions")
-                        .HasForeignKey("RegistrationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("cdcavell.Data.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

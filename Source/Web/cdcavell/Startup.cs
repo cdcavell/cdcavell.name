@@ -202,11 +202,18 @@ namespace cdcavell
                                 return Task.FromResult(ticketReceivedContext.Result);
                             }
 
+                            // Harden User Authorization
+                            CDCavellDbContext dbContext = (CDCavellDbContext)ticketReceivedContext.HttpContext
+                                .RequestServices.GetService(typeof(CDCavellDbContext));
+
+                            Data.Authorization authorization = new Data.Authorization();
+                            authorization.Guid = Guid.NewGuid().ToString();
+                            authorization.Object = jsonClient.GetResponseString();
+                            authorization.AddUpdate(dbContext);
+
                             var additionalClaims = new List<Claim>();
                             additionalClaims.Add(new Claim("email", userAuthorization.Email.Clean()));
-
-                            //CDCavellDbContext dbContext = (CDCavellDbContext)ticketReceivedContext.HttpContext
-                            //    .RequestServices.GetService(typeof(CDCavellDbContext));
+                            additionalClaims.Add(new Claim("authorization", authorization.Guid));
 
                             //Registration registration = Registration.Get(userAuthorization.Email.Clean(), dbContext);
                             //if (registration != null)
