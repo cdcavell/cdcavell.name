@@ -21,11 +21,6 @@
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle text-decoration-none text-light" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@userModel.Email <span class="caret"></span></a>
                         <ul class="dropdown-menu m-0 p-0">
-                            @if ((await AuthorizationService.AuthorizeAsync(User, "Administration")).Succeeded) 
-                            {
-                                <li><a class="dropdown-item" asp-action="Index" asp-controller="Administration">Administration</a></li>
-                                <li class="dropdown-divider m-0 p-0"></li>
-                            }
                             @if ((await AuthorizationService.AuthorizeAsync(User, "Authenticated")).Succeeded) 
                             { 
                                 <li><a class="dropdown-item" asp-action="Index" asp-controller="Account">Account Information</a></li>

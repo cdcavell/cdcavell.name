@@ -32,7 +32,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dis5-cdcavell", "Source\Web\dis5-cdcavell\dis5-cdcavell.csproj", "{8F52F627-9052-4951-812C-17949554CF13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "as-api-cdcavell", "Source\Web\as-api-cdcavell\as-api-cdcavell.csproj", "{B2853F21-ED4E-4F1A-A295-00CE71A571BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "as-api-cdcavell", "Source\Web\as-api-cdcavell\as-api-cdcavell.csproj", "{B2853F21-ED4E-4F1A-A295-00CE71A571BC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AzureParameters", "AzureParameters", "{CC0E55D4-3305-47DA-8647-B6345843AB02}"
+	ProjectSection(SolutionItems) = preProject
+		Source\AzureParameters\as-api-cdcavell.json = Source\AzureParameters\as-api-cdcavell.json
+		Source\AzureParameters\cdcavell.name.json = Source\AzureParameters\cdcavell.name.json
+		Source\AzureParameters\dis5-cdcavell.json = Source\AzureParameters\dis5-cdcavell.json
+		Source\AzureParameters\is4-cdcavell.json = Source\AzureParameters\is4-cdcavell.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

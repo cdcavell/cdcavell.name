@@ -1,4 +1,4 @@
-﻿@model AccountViewModel
+﻿@model UserAuthorization
 
 <h1 class="h2 mb-1">
     Account Information
@@ -13,10 +13,10 @@
             </p>
             <div class="form-group row m-0 p-0">
                 <div class="col-sm-1 col-md-1 p-1">
-                    @*@Html.LabelFor(model => model.Registration.Email)*@
+                    @Html.LabelFor(model => model.Email)
                 </div>
                 <div class="col-sm-11 col-md-11">
-                   @* @Html.TextBoxFor(model => model.Registration.Email, new { @readonly = "readonly", @class = "form-control form-control-sm m-0" })*@
+                   @Html.TextBoxFor(model => model.Email, new { @readonly = "readonly", @class = "form-control form-control-sm m-0" })
                 </div>
             </div>
             <div class="form-group row m-0 p-0">

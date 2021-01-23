@@ -117,16 +117,10 @@ namespace cdcavell
                 {
                     policy.Requirements.Add(new AuthenticatedRequirement(true));
                 });
-                options.AddPolicy("Administration", policy =>
-                {
-                    policy.Requirements.Add(new AuthenticatedRequirement(true));
-                    policy.Requirements.Add(new AdministrationRequirement(true));
-                });
             });
 
             // Registered authorization handlers
             services.AddTransient<IAuthorizationHandler, AuthenticatedHandler>();
-            services.AddTransient<IAuthorizationHandler, AdministrationHandler>();
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 

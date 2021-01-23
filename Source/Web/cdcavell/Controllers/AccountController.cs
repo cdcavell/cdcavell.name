@@ -3,6 +3,7 @@ using cdcavell.Models.Account;
 using cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Web.Http;
 using CDCavell.ClassLibrary.Web.Mvc.Models;
+using CDCavell.ClassLibrary.Web.Mvc.Models.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -71,23 +72,8 @@ namespace cdcavell.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            UserViewModel user = (UserViewModel)ViewData["UserViewModel"];
-
-            //AccountViewModel model = new AccountViewModel();
-            //model.Registration = Data.Registration.Get(user.Email, _dbContext);
-
-            //if (model.Registration != null)
-            //{
-            //    return View(model);
-            //}
-
-            //var isNewRegistration = _authorizationService.AuthorizeAsync(User, "NewRegistration").Result;
-            //if (isNewRegistration.Succeeded)
-            //    return RedirectToAction("Registration", "Account");
-
-            //return RedirectToAction("Logout", "Account");
-
-            return RedirectToAction("Index", "Home");
+            UserAuthorization userAuthorization = Data.Authorization.GetUser(User.Claims, _dbContext);
+            return View(userAuthorization);
         }
 
         /// <summary>
@@ -99,12 +85,6 @@ namespace cdcavell.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            //var isNewRegistration = _authorizationService.AuthorizeAsync(User, "NewRegistration").Result;
-            //if (isNewRegistration.Succeeded)
-            //{
-            //    return RedirectToAction("Registration", "Account");
-            //}
-
             return RedirectToAction("Index", "Account");
         }
 
@@ -141,78 +121,6 @@ namespace cdcavell.Controllers
             }
 
             return BadRequest("Invalid request");
-        }
-
-        /// <summary>
-        /// Registration HttpGet method
-        /// </summary>
-        /// <returns>IActionResult</returns>
-        /// <method>Registration()</method>
-        [Authorize(Policy = "NewRegistration")]
-        [HttpGet]
-        public IActionResult Registration()
-        {
-            UserViewModel user = (UserViewModel)ViewData["UserViewModel"];
-
-            //Registration registration = Data.Registration.Get(user.Email, _dbContext);
-            //if (registration == null)
-            //{
-            //    AccountViewModel model = new AccountViewModel();
-            //    model.Registration = new Registration();
-            //    model.Registration.Email = user.Email;
-
-            //    return View(model);
-            //}
-
-            //if (registration.IsPending)
-                return RedirectToAction("Index", "Account");
-
-            //return RedirectToAction("Logout", "Account");
-        }
-
-        /// <summary>
-        /// Registration HttpPost method
-        /// </summary>
-        /// <param name="model">AccountViewModel</param>
-        /// <returns>IActionResult</returns>
-        /// <method>Registration(AccountViewModel model)</method>
-        [Authorize(Policy = "NewRegistration")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Registration(AccountViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                //model.Registration.Email = model.Registration.Email.Trim().Clean();
-                //model.Registration.FirstName = model.Registration.FirstName.Trim().Clean();
-                //model.Registration.LastName = model.Registration.LastName.Trim().Clean();
-                //model.Registration.RequestDate = DateTime.Now;
-                //model.Registration.AddUpdate(_dbContext);
-
-                return RedirectToAction("Index", "Account");
-            }
-
-            return View(model);
-        }
-
-        /// <summary>
-        /// Delete Account
-        /// </summary>
-        /// <param name="model">AccountViewModel</param>
-        /// <returns>IActionResult</returns>
-        /// <method>Delete(AccountViewModel model)</method>
-        [Authorize(Policy = "Authenticated")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Delete(AccountViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                //model.Registration.Delete(_dbContext);
-                return RedirectToAction("Logout", "Account");
-            }
-
-            return View(model);
         }
 
         /// <summary>

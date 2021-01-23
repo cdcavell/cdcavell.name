@@ -44,6 +44,7 @@ namespace cdcavell.Data
         /// <summary>
         /// Add/Update record
         /// </summary>
+        /// <param name="dbContext">CDCavellDbContext</param>
         /// <method>AddUpdate(CDCavellDbContext dbContext)</method>
         public override void AddUpdate(CDCavellDbContext dbContext)
         {
@@ -63,7 +64,7 @@ namespace cdcavell.Data
         /// <param name="claims">IEnumerable&lt;Claim&gt;</param>
         /// <param name="dbContext">CDCavellDbContext</param>
         /// <returns>Authorization</returns>
-        /// <method>Get(IEnumerable&lt;Claim&gt; claims, CDCavellDbContext dbContext)</method>
+        /// <method>GetRecord(IEnumerable&lt;Claim&gt; claims, CDCavellDbContext dbContext)</method>
         public static Authorization GetRecord(IEnumerable<Claim> claims, CDCavellDbContext dbContext)
         {
             Authorization authorization = null;
