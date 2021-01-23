@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CDCavell.ClassLibrary.Web.Security;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace cdcavell.Data
@@ -19,9 +20,16 @@ namespace cdcavell.Data
         [Required]
         [DataType(DataType.Text)]
         public string Guid { get; set; }
+
+        private string _object;
+
         /// <value>string</value>
         [Required]
         [DataType(DataType.Text)]
-        public string Object { get; set; }
+        public string Object 
+        { 
+            get { return AESGCM.Decrypt(_object); } 
+            set { _object = AESGCM.Encrypt(value); }
+        }
     }
 }
