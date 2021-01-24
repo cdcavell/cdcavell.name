@@ -25,6 +25,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.Net.Http.Headers;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -32,6 +33,7 @@ using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace cdcavell
@@ -187,7 +189,12 @@ namespace cdcavell
                                 return Task.FromResult(ticketReceivedContext.Result);
                             }
 
-                            UserAuthorization userAuthorization = jsonClient.GetResponseObject<UserAuthorization>();
+                            string responseString = jsonClient.GetResponseString();
+                            string decodeString = Encoding.UTF8.GetString(Convert.FromBase64String(responseString));
+                            string jsonString = AESGCM.Decrypt(decodeString, accessToken);
+                            UserAuthorization userAuthorization = JsonConvert.DeserializeObject<UserAuthorization>(jsonString);
+
+                            //UserAuthorization userAuthorization = jsonClient.GetResponseObject<UserAuthorization>();
                             if (string.IsNullOrEmpty(userAuthorization.Email))
                             {
                                 _logger.Exception(new Exception("Email is null or empty - Reomte IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));

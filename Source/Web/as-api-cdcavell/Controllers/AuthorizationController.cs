@@ -1,14 +1,16 @@
-﻿using CDCavell.ClassLibrary.Web.Mvc.Models.Authorization;
-using as_api_cdcavell.Data;
+﻿using as_api_cdcavell.Data;
 using as_api_cdcavell.Models.AppSettings;
+using CDCavell.ClassLibrary.Web.Mvc.Models.Authorization;
+using CDCavell.ClassLibrary.Web.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Linq;
+using Newtonsoft.Json;
 using System;
-using System.Security.Claims;
+using System.Linq;
+using System.Text;
 
 namespace as_api_cdcavell.Controllers
 {
@@ -60,6 +62,13 @@ namespace as_api_cdcavell.Controllers
         [HttpGet]
         public IActionResult Get()
         {
+            IHeaderDictionary headers = _httpContextAccessor.HttpContext.Request.Headers;
+            string accessToken = headers.Where(x => x.Key == "Authorization").Select(x => x.Value).FirstOrDefault();
+            if (string.IsNullOrEmpty(accessToken))
+                return BadRequest("Invalid access token");
+
+            accessToken = accessToken.Substring(7);
+
             UserAuthorization userAuthorization = new UserAuthorization();
             userAuthorization.ClientId = User.Claims.Where(x => x.Type == "client_id").Select(x => x.Value).FirstOrDefault();
             userAuthorization.IdentityProvider = User.Claims.Where(x => x.Type == "http://schemas.microsoft.com/identity/claims/identityprovider").Select(x => x.Value).FirstOrDefault();
@@ -71,8 +80,10 @@ namespace as_api_cdcavell.Controllers
             userAuthorization.RegistrationStatus = registration.Status;
             userAuthorization.FirstName = registration.FirstName;
             userAuthorization.LastName = registration.LastName;
-            
-            return new JsonResult(userAuthorization);
+
+            string encryptString = AESGCM.Encrypt(JsonConvert.SerializeObject(userAuthorization), accessToken);
+            string encodeString = Convert.ToBase64String(Encoding.UTF8.GetBytes(encryptString));
+            return new JsonResult(encodeString);
         }
     }
 }

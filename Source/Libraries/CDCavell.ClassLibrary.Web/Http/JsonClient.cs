@@ -183,7 +183,7 @@ namespace CDCavell.ClassLibrary.Web.Http
         public string GetResponseString()
         {
             if (!string.IsNullOrEmpty(_returnMessage))
-                return _returnMessage;
+                return _returnMessage.Trim('"');
 
             return string.Empty;
         }
