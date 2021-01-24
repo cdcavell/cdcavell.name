@@ -1,10 +1,12 @@
 ﻿using CDCavell.ClassLibrary.Web.Mvc.Models.Authorization;
 using CDCavell.ClassLibrary.Web.Security;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Security.Claims;
 
@@ -17,7 +19,7 @@ namespace cdcavell.Data
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 10/23/2020 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 10/24/2020 | Initial build Authorization Service |~ 
     /// </revision>
     [Table("Authorization")]
     public class Authorization : DataModel<Authorization>
@@ -61,6 +63,15 @@ namespace cdcavell.Data
             if (query.Count() > 0)
                 dbContext.Authorization.RemoveRange(query);
 
+            // Update Id sequence in SQLite
+            // For SQL Server use raw query DBCC CHECKIDENT ('table_name', RESEED, 1)
+            long maxSequence = dbContext.Authorization.Count();
+            if (maxSequence > 0)
+                maxSequence = dbContext.Authorization.Max(x => x.Id);
+
+            dbContext.Database.ExecuteSqlInterpolated($"UPDATE sqlite_sequence SET seq = {maxSequence} WHERE name = 'Authorization'");
+
+            // Add/update record
             base.AddUpdate(dbContext);
         }
 
