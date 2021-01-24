@@ -177,7 +177,7 @@ namespace cdcavell
                                 return Task.FromResult(ticketReceivedContext.Result);
                             }
 
-                            // Authorization Sercvice API Get User Authorization
+                            // Authorization Service API Get User Authorization
                             JsonClient jsonClient = new JsonClient(_appSettings.Authorization.AuthorizationService.API, accessToken);
                             HttpStatusCode statusCode = jsonClient.SendRequest(HttpMethod.Get, "Authorization");
                             if (!jsonClient.IsResponseSuccess)
