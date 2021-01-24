@@ -32,7 +32,7 @@ namespace CDCavell.ClassLibrary.Web.Http
     /// | Christopher D. Cavell | 1.0.0.0 | 10/12/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/08/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// | Christopher D. Cavell | 1.0.1.0 | 11/25/2020 | Update: Target Framework netcoreapp3.1 to net5.0 |~ 
-    /// | Christopher D. Cavell | 1.0.3.0 | 01/22/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 01/23/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class JsonClient
     {
@@ -183,7 +183,7 @@ namespace CDCavell.ClassLibrary.Web.Http
         public string GetResponseString()
         {
             if (!string.IsNullOrEmpty(_returnMessage))
-                return _returnMessage.Trim('"');
+                return _returnMessage;
 
             return string.Empty;
         }

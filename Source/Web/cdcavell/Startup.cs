@@ -189,12 +189,8 @@ namespace cdcavell
                                 return Task.FromResult(ticketReceivedContext.Result);
                             }
 
-                            string responseString = jsonClient.GetResponseString();
-                            string decodeString = Encoding.UTF8.GetString(Convert.FromBase64String(responseString));
-                            string jsonString = AESGCM.Decrypt(decodeString, accessToken);
+                            string jsonString = AESGCM.Decrypt(jsonClient.GetResponseObject<string>(), accessToken);
                             UserAuthorization userAuthorization = JsonConvert.DeserializeObject<UserAuthorization>(jsonString);
-
-                            //UserAuthorization userAuthorization = jsonClient.GetResponseObject<UserAuthorization>();
                             if (string.IsNullOrEmpty(userAuthorization.Email))
                             {
                                 _logger.Exception(new Exception("Email is null or empty - Reomte IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
@@ -205,14 +201,15 @@ namespace cdcavell
 
                             //TODO: If new UserAuthorization then redirect to new registration process
 
-                            // Harden User Authorization
+                            // Get dbContext
                             CDCavellDbContext dbContext = (CDCavellDbContext)ticketReceivedContext.HttpContext
                                 .RequestServices.GetService(typeof(CDCavellDbContext));
 
+                            // Harden User Authorization
                             Data.Authorization authorization = new Data.Authorization();
                             authorization.Guid = Guid.NewGuid().ToString();
                             authorization.Created = DateTime.Now;
-                            authorization.Object = jsonClient.GetResponseString();
+                            authorization.UserAuthorization = userAuthorization;
                             authorization.AddUpdate(dbContext);
 
                             var additionalClaims = new List<Claim>();

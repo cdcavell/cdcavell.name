@@ -81,9 +81,9 @@ namespace as_api_cdcavell.Controllers
             userAuthorization.FirstName = registration.FirstName;
             userAuthorization.LastName = registration.LastName;
 
-            string encryptString = AESGCM.Encrypt(JsonConvert.SerializeObject(userAuthorization), accessToken);
-            string encodeString = Convert.ToBase64String(Encoding.UTF8.GetBytes(encryptString));
-            return new JsonResult(encodeString);
+            string jsonString = JsonConvert.SerializeObject(userAuthorization);
+            string encryptString = AESGCM.Encrypt(jsonString, accessToken);
+            return new JsonResult(encryptString);
         }
     }
 }

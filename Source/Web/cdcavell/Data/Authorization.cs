@@ -41,6 +41,14 @@ namespace cdcavell.Data
             set { _object = AESGCM.Encrypt(value); }
         }
 
+        /// <value>UserAuthorization</value>
+        [NotMapped]
+        public UserAuthorization UserAuthorization
+        {
+            get { return JsonConvert.DeserializeObject<UserAuthorization>(Object); }
+            set { Object = JsonConvert.SerializeObject(value); }
+        }
+
         /// <summary>
         /// Add/Update record
         /// </summary>
@@ -98,7 +106,7 @@ namespace cdcavell.Data
                     .FirstOrDefault();
 
                 if (authorization != null)
-                    userAuthorization = JsonConvert.DeserializeObject<UserAuthorization>(authorization.Object);
+                    userAuthorization = authorization.UserAuthorization;
             }
 
             return userAuthorization;
