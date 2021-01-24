@@ -33,7 +33,6 @@ using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace cdcavell
@@ -54,7 +53,7 @@ namespace cdcavell
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/11/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// | Christopher D. Cavell | 1.0.2.2 | 01/18/2021 | Convert GrantType from Implicit to Pkce |~ 
-    /// | Christopher D. Cavell | 1.0.3.0 | 10/23/2020 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 10/24/2020 | Initial build Authorization Service |~ 
     /// </revision>
     public class Startup
     {
@@ -172,7 +171,7 @@ namespace cdcavell
                             string accessToken = ticketReceivedContext.Properties.Items[".Token.access_token"];
                             if (string.IsNullOrEmpty(accessToken))
                             {
-                                _logger.Exception(new Exception("Invalid Access Token - Reomte IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
+                                _logger.Exception(new Exception("Invalid Access Token - Remote IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
                                 ticketReceivedContext.HttpContext.Response.Redirect("/Home/Error/7001");
                                 ticketReceivedContext.HandleResponse();
                                 return Task.FromResult(ticketReceivedContext.Result);
@@ -183,7 +182,7 @@ namespace cdcavell
                             HttpStatusCode statusCode = jsonClient.SendRequest(HttpMethod.Get, "Authorization");
                             if (!jsonClient.IsResponseSuccess)
                             {
-                                _logger.Exception(new Exception(jsonClient.GetResponseString() + " - Reomte IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
+                                _logger.Exception(new Exception(jsonClient.GetResponseString() + " - Remote IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
                                 ticketReceivedContext.HttpContext.Response.Redirect("/Home/Error/7002");
                                 ticketReceivedContext.HandleResponse();
                                 return Task.FromResult(ticketReceivedContext.Result);
@@ -193,7 +192,7 @@ namespace cdcavell
                             UserAuthorization userAuthorization = JsonConvert.DeserializeObject<UserAuthorization>(jsonString);
                             if (string.IsNullOrEmpty(userAuthorization.Email))
                             {
-                                _logger.Exception(new Exception("Email is null or empty - Reomte IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
+                                _logger.Exception(new Exception("Email is null or empty - Remote IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
                                 ticketReceivedContext.HttpContext.Response.Redirect("/Home/Error/7003");
                                 ticketReceivedContext.HandleResponse();
                                 return Task.FromResult(ticketReceivedContext.Result);
