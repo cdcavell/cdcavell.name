@@ -146,6 +146,8 @@ namespace as_ui_cdcavell
                     options.Scope.Clear();
                     options.Scope.Add("openid");
                     options.Scope.Add("email");
+                    options.Scope.Add("Authorization.Service.API.Read");
+                    options.Scope.Add("Authorization.Service.API.Write");
                     options.SaveTokens = true;
 
                     options.Events = new OpenIdConnectEvents
@@ -291,10 +293,7 @@ namespace as_ui_cdcavell
             app.UseCookiePolicy();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                endpoints.MapDefaultControllerRoute();
             });
         }
 

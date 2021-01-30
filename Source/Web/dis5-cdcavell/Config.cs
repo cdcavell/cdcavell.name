@@ -17,7 +17,7 @@ namespace dis5_cdcavell
     /// | Christopher D. Cavell | 1.0.2.0 | 01/16/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.2.2 | 01/18/2020 | Convert GrantType from Implicit to Pkce |~ 
     /// | Christopher D. Cavell | 1.0.2.2 | 01/18/2020 | Removed unused clients and scopes |~ 
-    /// | Christopher D. Cavell | 1.0.3.0 | 01/18/2020 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 01/30/2020 | Initial build Authorization Service |~ 
     /// </revision>
     public static class Config
     {
@@ -34,7 +34,8 @@ namespace dis5_cdcavell
         public static IEnumerable<ApiScope> ApiScopes =>
             new ApiScope[]
             {
-                new ApiScope("Authorization.Service.API")
+                new ApiScope("Authorization.Service.API.Read"),
+                new ApiScope("Authorization.Service.API.Write")
             };
 
         /// <value>IEnumerable&lt;Client&gt;</value>
@@ -43,8 +44,8 @@ namespace dis5_cdcavell
             {
                 new Client
                 {
-                    ClientId = "Authorization.Service.API",
-                    ClientName = "Authorization Service API",
+                    ClientId = "Authorization.Service.UI",
+                    ClientName = "Authorization Service UI",
 
                     AllowedGrantTypes = GrantTypes.Code,
                     RequireClientSecret = false,
@@ -54,18 +55,23 @@ namespace dis5_cdcavell
                     // where to redirect to after login
                     RedirectUris = new List<string>
                     {
-                        "https://localhost:44349/signin-oidc",
+                        "https://localhost:44305/signin-oidc",
+                        "https://as-ui-cdcavell.azurewebsites.net/signin-oidc"
                     },
 
                     // where to redirect to after logout
                     PostLogoutRedirectUris = new List<string>
                     {
-                        "https://localhost:44349/signout-callback-oidc",
+                        "https://localhost:44305/signout-callback-oidc",
+                        "https://as-ui-cdcavell.azurewebsites.net/signout-callback-oidc"
                     },
 
                     AllowedScopes = new List<string>
                     {
-                        "Authorization.Service.API"
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Email,
+                        "Authorization.Service.API.Read",
+                        "Authorization.Service.API.Write"
                     }
                 },
                 // OpenID Connect interactive client using code flow + pkce (MVC)
@@ -96,7 +102,8 @@ namespace dis5_cdcavell
                     AllowedScopes = new List<string>
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Email
+                        IdentityServerConstants.StandardScopes.Email,
+                        "Authorization.Service.API.Read"
                     },
 
                     AlwaysIncludeUserClaimsInIdToken = true

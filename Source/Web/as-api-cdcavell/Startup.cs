@@ -1,3 +1,4 @@
+using as_api_cdcavell.Authorization;
 using as_api_cdcavell.Data;
 using as_api_cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Commons.Logging;
@@ -5,6 +6,7 @@ using CDCavell.ClassLibrary.Web.Mvc.Filters;
 using CDCavell.ClassLibrary.Web.Security;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -106,6 +108,30 @@ namespace as_api_cdcavell
              
             services.AddControllers();
 
+            // Register Application Authorization
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Authenticated", policy =>
+                {
+                    policy.Requirements.Add(new AuthenticatedRequirement(true));
+                });
+                options.AddPolicy("Read", policy =>
+                {
+                    policy.Requirements.Add(new AuthenticatedRequirement(true));
+                    policy.Requirements.Add(new ReadRequirement(true));
+                });
+                options.AddPolicy("Write", policy =>
+                {
+                    policy.Requirements.Add(new AuthenticatedRequirement(true));
+                    policy.Requirements.Add(new WriteRequirement(true));
+                });
+            });
+
+            // Registered authorization handlers
+            services.AddTransient<IAuthorizationHandler, AuthenticatedHandler>();
+            services.AddTransient<IAuthorizationHandler, ReadHandler>();
+            services.AddTransient<IAuthorizationHandler, WriteHandler>();
+
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>
                 {
@@ -157,6 +183,24 @@ namespace as_api_cdcavell
                                 if (emailClaim != null)
                                 {
                                     additionalClaims.Add(new Claim("email", emailClaim.Value.Clean()));
+
+                                    // Get Scopes
+                                    Claim readClaim = tokenContext.Principal.Claims
+                                        .Where(x => x.Type == "scope")
+                                        .Where(x => x.Value == "Authorization.API.Read")
+                                        .FirstOrDefault();
+
+                                    if (readClaim != null)
+                                        additionalClaims.Add(new Claim("scope", readClaim.Value.Clean()));
+
+                                    Claim writeClaim = tokenContext.Principal.Claims
+                                        .Where(x => x.Type == "scope")
+                                        .Where(x => x.Value == "Authorization.API.Write")
+                                        .FirstOrDefault();
+
+                                    if (writeClaim != null)
+                                        additionalClaims.Add(new Claim("scope", writeClaim.Value.Clean()));
+
                                     tokenContext.Principal.AddIdentity(new ClaimsIdentity(additionalClaims));
                                 }
                                 else throw new Exception("Invalid/Missing email claim - Reomte IP: " + httpContext.GetRemoteAddress());

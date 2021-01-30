@@ -60,6 +60,7 @@ namespace as_api_cdcavell.Controllers
         /// Get action method
         /// </summary>
         [HttpGet]
+        [Authorize(Policy = "Read")]
         public IActionResult Get()
         {
             IHeaderDictionary headers = _httpContextAccessor.HttpContext.Request.Headers;

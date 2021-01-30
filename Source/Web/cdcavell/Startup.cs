@@ -156,6 +156,7 @@ namespace cdcavell
                     options.Scope.Clear();
                     options.Scope.Add("openid");
                     options.Scope.Add("email");
+                    options.Scope.Add("Authorization.Service.API.Read");
                     options.SaveTokens = true;
 
                     options.Events = new OpenIdConnectEvents
