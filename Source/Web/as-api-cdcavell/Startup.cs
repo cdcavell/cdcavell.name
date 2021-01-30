@@ -1,5 +1,4 @@
 using as_api_cdcavell.Data;
-using as_api_cdcavell.Filters;
 using as_api_cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Commons.Logging;
 using CDCavell.ClassLibrary.Web.Mvc.Filters;
@@ -10,7 +9,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -88,7 +86,6 @@ namespace as_api_cdcavell
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             // Register controller fillters
-            services.AddScoped<SecurityHeadersAttribute>();
             services.AddScoped<ControllerActionLogFilter>();
 
             if (_webHostEnvironment.EnvironmentName.Equals("Production"))

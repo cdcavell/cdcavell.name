@@ -13,7 +13,5 @@
     {
         /// <value>IdP</value>
         public IdP IdP { get; set; }
-        /// <value>reCAPTCHA</value>
-        public reCAPTCHA reCAPTCHA { get; set; }
     }
 }

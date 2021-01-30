@@ -11,7 +11,7 @@
 	  <Copyright>2021 - Christopher D. Cavell</Copyright>
 	  <PackageLicenseFile>LICENSE</PackageLicenseFile>
       <PackageIcon>icon.png</PackageIcon>
-	  <PackageProjectUrl>https://as-cdcavell.azurewebsites.net</PackageProjectUrl>
+	  <PackageProjectUrl>https://as-api-cdcavell.azurewebsites.net</PackageProjectUrl>
 	  <RepositoryUrl>https://github.com/cdcavell/cdcavell.name</RepositoryUrl>
 	  <RepositoryType>Git</RepositoryType>
 	  <NeutralLanguage>English (United States)</NeutralLanguage>

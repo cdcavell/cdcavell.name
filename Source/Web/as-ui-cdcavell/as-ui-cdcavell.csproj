@@ -1,0 +1,78 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>as_ui_cdcavell</RootNamespace>
+	  <DocumentationFile>../../../Documentation/Source/$(AssemblyName).xml</DocumentationFile>
+	  <Version>1.0.3.0</Version>
+	  <Authors>Christopher D. Cavell</Authors>
+	  <Product>UI</Product>
+	  <Description>Authorization Service</Description>
+	  <Copyright>2021 - Christopher D. Cavell</Copyright>
+	  <PackageLicenseFile>LICENSE</PackageLicenseFile>
+	  <PackageIcon>icon.png</PackageIcon>
+	  <PackageProjectUrl>https://as-ui-cdcavell.azurewebsites.net</PackageProjectUrl>
+	  <RepositoryUrl>https://github.com/cdcavell/cdcavell.name</RepositoryUrl>
+	  <RepositoryType>Git</RepositoryType>
+	  <NeutralLanguage>English (United States)</NeutralLanguage>
+	  <UserSecretsId>868f97e2-6d0c-40b4-8f5e-b06322c3ecaf</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\img\icon.png" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\..\LICENSE">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+		<None Include="..\..\Web\cdcavell\wwwroot\img\icon.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+		<None Include="wwwroot\img\icon.png">
+		  <PackagePath></PackagePath>
+		  <Pack>True</Pack>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="IdentityModel" Version="5.0.0" />
+	  <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.2" />
+	  <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.2" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.2" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.2">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	  <PackageReference Include="Microsoft.Extensions.Logging.ApplicationInsights" Version="2.16.0" />
+	  <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.8.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\Libraries\CDCavell.ClassLibrary.Web\CDCavell.ClassLibrary.Web.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<_findDllFile Include="../../../Documentation/Source/XmlToMarkdown.dll" />
+		<_findJsonFile Include="../../../Documentation/Source/XmlToMarkdown.runtimeconfig.json" />
+		<_findLibraryFile Include="../../../Documentation/Source/CDCavell.ClassLibrary.Commons.dll" />
+	</ItemGroup>
+
+	<Target Name="BuildXmlToMarkdown" AfterTargets="AfterBuild" DependsOnTargets="AfterBuild" Condition="Exists('@(_findDllFile)') AND Exists('@(_findJsonFile)') AND Exists('@(_findLibraryFile)')">
+		<Exec Command="cd ../../../Documentation/Source/" />
+		<Exec Command="dotnet XmlToMarkdown.dll Transform.xsl" WorkingDirectory="../../../Documentation/Source/" />
+	</Target>
+
+	<Target Name="UpdateWiki" AfterTargets="BuildXmlToMarkdown" DependsOnTargets="BuildXmlToMarkdown" Condition="Exists('@(_findDllFile)')&#xD;&#xA;                 AND Exists('@(_findJsonFile)') &#xD;&#xA;                 AND Exists('@(_findLibraryFile)')">
+		<Exec Command="cd ../../../Documentation/Source/wiki/" />
+		<Exec Command="git add ." WorkingDirectory="../../../Documentation/Source/wiki/" />
+		<Exec Command="git commit -m &quot;Update wiki submodule&quot;" WorkingDirectory="../../../Documentation/Source/wiki/" ContinueOnError="true">
+			<Output TaskParameter="ExitCode" ItemName="ErrorCode" />
+		</Exec>
+		<Exec Command="git push origin master" WorkingDirectory="../../../Documentation/Source/wiki/" Condition="'@(ErrorCode)'=='0'" />
+	</Target>
+
+</Project>
