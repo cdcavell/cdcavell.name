@@ -1,4 +1,5 @@
 using as_api_cdcavell.Data;
+using as_api_cdcavell.Filters;
 using as_api_cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Commons.Logging;
 using CDCavell.ClassLibrary.Web.Mvc.Filters;
@@ -37,7 +38,7 @@ namespace as_api_cdcavell
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 01/20/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 01/30/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class Startup
     {
@@ -87,6 +88,7 @@ namespace as_api_cdcavell
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             // Register controller fillters
+            services.AddScoped<SecurityHeadersAttribute>();
             services.AddScoped<ControllerActionLogFilter>();
 
             if (_webHostEnvironment.EnvironmentName.Equals("Production"))
