@@ -45,7 +45,7 @@ namespace as_ui_cdcavell
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 01/30/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 01/31/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class Startup
     {
@@ -109,15 +109,10 @@ namespace as_ui_cdcavell
                 {
                     policy.Requirements.Add(new AuthenticatedRequirement(true));
                 });
-                options.AddPolicy("Registration", policy =>
-                {
-                    policy.Requirements.Add(new RegistrationRequirement(true));
-                });
             });
 
             // Registered authorization handlers
             services.AddTransient<IAuthorizationHandler, AuthenticatedHandler>();
-            services.AddTransient<IAuthorizationHandler, RegistrationHandler>();
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 

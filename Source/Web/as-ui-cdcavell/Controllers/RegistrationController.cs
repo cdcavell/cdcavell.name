@@ -6,10 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace as_ui_cdcavell.Controllers
 {
@@ -20,7 +17,7 @@ namespace as_ui_cdcavell.Controllers
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 01/30/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 01/31/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class RegistrationController : ApplicationBaseController<RegistrationController>
     {
@@ -59,10 +56,24 @@ namespace as_ui_cdcavell.Controllers
         /// </summary>
         /// <returns>IActionResult</returns>
         /// <method>Index()</method>
-        [Authorize(Policy = "Registration")]
-        [HttpPost]
+        [Authorize(Policy = "Authenticated")]
+        [HttpGet]
         public IActionResult Index()
         {
+            string emailClaim = User.Claims.Where(x => x.Type == "email").Select(x => x.Value).FirstOrDefault();
+            if (string.IsNullOrEmpty(emailClaim))
+                return BadRequest("Invalid Email");
+
+            string authClaim = User.Claims.Where(x => x.Type == "authorization").Select(x => x.Value).FirstOrDefault();
+            if (string.IsNullOrEmpty(authClaim)) 
+                return BadRequest("Invalid Authorization");
+
+            Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
+            if (!emailClaim.Equals(authorization.UserAuthorization.Email))
+                return BadRequest("Invalid Email");
+            if (!authClaim.Equals(authorization.Guid))
+                return BadRequest("Invalid Authorization");
+
             RegistrationIndexModel model = new RegistrationIndexModel();
             return View(model);
         }

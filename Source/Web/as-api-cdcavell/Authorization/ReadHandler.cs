@@ -16,7 +16,7 @@ namespace as_api_cdcavell.Authorization
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 01/30/2020 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 01/31/2020 | Initial build Authorization Service |~ 
     /// </revision>
     public class ReadHandler : AuthorizationHandler<ReadRequirement>
     {
@@ -50,17 +50,12 @@ namespace as_api_cdcavell.Authorization
                 Claim emailClaim = user.Claims.Where(x => x.Type == "email").FirstOrDefault();
                 if (emailClaim != null)
                 {
-                    as_api_cdcavell.Data.Registration registration = as_api_cdcavell.Data.Registration
-                        .Get(emailClaim.Value, _dbContext);
-                    if (registration.IsActive)
-                    {
-                        Claim readClaim = user.Claims.Where(x => x.Type == "scope")
-                            .Where(x => x.Value == "Authorization.Service.API.Read")
-                            .FirstOrDefault();
+                    Claim readClaim = user.Claims.Where(x => x.Type == "scope")
+                        .Where(x => x.Value == "Authorization.Service.API.Read")
+                        .FirstOrDefault();
 
-                        if (readClaim != null)
-                            context.Succeed(requirement);
-                    }
+                    if (readClaim != null)
+                        context.Succeed(requirement);
                 }
             }
 

@@ -53,7 +53,7 @@ namespace cdcavell
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/11/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// | Christopher D. Cavell | 1.0.2.2 | 01/18/2021 | Convert GrantType from Implicit to Pkce |~ 
-    /// | Christopher D. Cavell | 1.0.3.0 | 10/24/2020 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 01/31/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class Startup
     {
@@ -186,6 +186,7 @@ namespace cdcavell
                                 _logger.Exception(new Exception(jsonClient.GetResponseString() + " - Remote IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
                                 ticketReceivedContext.HttpContext.Response.Redirect("/Home/Error/7002");
                                 ticketReceivedContext.HandleResponse();
+                                return Task.FromResult(ticketReceivedContext.Result);
                             }
 
                             string jsonString = AESGCM.Decrypt(jsonClient.GetResponseObject<string>(), accessToken);
@@ -194,11 +195,8 @@ namespace cdcavell
                             {
                                 string url = _appSettings.Authorization.AuthorizationService.UI.TrimEnd('/').TrimEnd('\\');
                                 url += "/Registration/Index";
-
-                                FormPost formPost = new FormPost(ticketReceivedContext.Response);
-                                formPost.Add("email", registrationCheck.Email);
-                                formPost.Add("host", ticketReceivedContext.Request.Host.ToString());
-                                formPost.Submit(url);
+                                ticketReceivedContext.HttpContext.Response.Redirect(url);
+                                ticketReceivedContext.HandleResponse();
                                 return Task.FromResult(ticketReceivedContext.Result);
                             }
 
