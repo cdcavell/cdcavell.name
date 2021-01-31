@@ -33,7 +33,6 @@ using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace cdcavell
@@ -193,20 +192,13 @@ namespace cdcavell
                             RegistrationCheck registrationCheck = JsonConvert.DeserializeObject<RegistrationCheck>(jsonString);
                             if (!registrationCheck.IsRegistered)
                             {
-                                StringBuilder sb = new StringBuilder();
-                                sb.Append("<html>");
-                                sb.AppendFormat(@"<body onload='document.forms[""form""].submit()'>");
-                                sb.AppendFormat("<form name='form' action='{0}/Registration/Index' method='post'>", _appSettings.Authorization.AuthorizationService.UI.TrimEnd('/').TrimEnd('\\'));
-                                sb.AppendFormat("<input type='hidden' name='email' value='{0}'>", registrationCheck.Email);
-                                sb.AppendFormat("<input type='hidden' name='host' value='{0}'>", ticketReceivedContext.Request.Host);
-                                sb.Append("</form></body></html>");
+                                string url = _appSettings.Authorization.AuthorizationService.UI.TrimEnd('/').TrimEnd('\\');
+                                url += "/Registration/Index";
 
-                                byte[] buffer = Encoding.ASCII.GetBytes(sb.ToString());
-
-                                ticketReceivedContext.Response.Clear();
-                                ticketReceivedContext.Response.ContentType = "text/HTML";
-                                ticketReceivedContext.Response.BodyWriter.WriteAsync(buffer);
-                                ticketReceivedContext.HandleResponse();
+                                FormPost formPost = new FormPost(ticketReceivedContext.Response);
+                                formPost.Add("email", registrationCheck.Email);
+                                formPost.Add("host", ticketReceivedContext.Request.Host.ToString());
+                                formPost.Submit(url);
                                 return Task.FromResult(ticketReceivedContext.Result);
                             }
 
