@@ -47,15 +47,25 @@ namespace as_ui_cdcavell.Authorization
         /// <returns>Task</returns>
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, RegistrationRequirement requirement)
         {
-            HttpRequest request = _httpContextAccessor.HttpContext.Request;
-            IFormCollection form = request.Form;
-
-            string email = form.Where(x => x.Key == "email").Select(x => x.Value).FirstOrDefault();
-            if (!string.IsNullOrEmpty(email))
+            IHeaderDictionary headers = _httpContextAccessor.HttpContext.Request.Headers;
+            string referer = headers.Where(x => x.Key == "Referer").Select(x => x.Value).FirstOrDefault();
+            if (!string.IsNullOrEmpty(referer))
             {
-                List<IAuthorizationRequirement> pendingRequirements = context.PendingRequirements.ToList();
-                foreach (IAuthorizationRequirement authorizationRequirement in pendingRequirements)
-                    context.Succeed(authorizationRequirement);
+                if (_httpContextAccessor.HttpContext.Request.HasFormContentType)
+                {
+                    IFormCollection form = _httpContextAccessor.HttpContext.Request.Form;
+                    string host = form.Where(x => x.Key == "host").Select(x => x.Value).FirstOrDefault();
+                    string email = form.Where(x => x.Key == "email").Select(x => x.Value).FirstOrDefault();
+
+                    if (!string.IsNullOrEmpty(host))
+                        if (referer.Contains(host))
+                            if (!string.IsNullOrEmpty(email))
+                            {
+                                List<IAuthorizationRequirement> pendingRequirements = context.PendingRequirements.ToList();
+                                foreach (IAuthorizationRequirement authorizationRequirement in pendingRequirements)
+                                    context.Succeed(authorizationRequirement);
+                            }
+                }
             }
 
             return Task.CompletedTask;

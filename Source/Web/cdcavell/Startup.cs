@@ -198,6 +198,7 @@ namespace cdcavell
                                 sb.AppendFormat(@"<body onload='document.forms[""form""].submit()'>");
                                 sb.AppendFormat("<form name='form' action='{0}/Registration/Index' method='post'>", _appSettings.Authorization.AuthorizationService.UI.TrimEnd('/').TrimEnd('\\'));
                                 sb.AppendFormat("<input type='hidden' name='email' value='{0}'>", registrationCheck.Email);
+                                sb.AppendFormat("<input type='hidden' name='host' value='{0}'>", ticketReceivedContext.Request.Host);
                                 sb.Append("</form></body></html>");
 
                                 byte[] buffer = Encoding.ASCII.GetBytes(sb.ToString());
@@ -205,7 +206,6 @@ namespace cdcavell
                                 ticketReceivedContext.Response.Clear();
                                 ticketReceivedContext.Response.ContentType = "text/HTML";
                                 ticketReceivedContext.Response.BodyWriter.WriteAsync(buffer);
-                                ticketReceivedContext.Response.CompleteAsync();
                                 ticketReceivedContext.HandleResponse();
                                 return Task.FromResult(ticketReceivedContext.Result);
                             }

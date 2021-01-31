@@ -21,5 +21,7 @@ namespace CDCavell.ClassLibrary.Web.Mvc.Models.Authorization
         public bool IsRegistered { get; set; }
         /// <value>string</value>
         public string Email { get; set; }
+        /// <value>string</value>
+        public string Authorization { get; set; }
     }
 }
