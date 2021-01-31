@@ -48,12 +48,7 @@ namespace as_api_cdcavell.Authorization
             {
                 Claim emailClaim = user.Claims.Where(x => x.Type == "email").FirstOrDefault();
                 if (emailClaim != null)
-                {
-                    as_api_cdcavell.Data.Registration registration = as_api_cdcavell.Data.Registration
-                        .Get(emailClaim.Value, _dbContext);
-                    if (registration.IsActive)
-                        context.Succeed(requirement);
-                }
+                    context.Succeed(requirement);
             }
 
             return Task.CompletedTask;

@@ -190,8 +190,6 @@ namespace as_ui_cdcavell
                                 return Task.FromResult(ticketReceivedContext.Result);
                             }
 
-                            //TODO: If new UserAuthorization then redirect to new registration process
-
                             // Get dbContext
                             AuthorizationUiDbContext dbContext = (AuthorizationUiDbContext)ticketReceivedContext.HttpContext
                                 .RequestServices.GetService(typeof(AuthorizationUiDbContext));

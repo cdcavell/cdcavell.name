@@ -33,6 +33,7 @@ using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace cdcavell
@@ -178,9 +179,39 @@ namespace cdcavell
                                 return Task.FromResult(ticketReceivedContext.Result);
                             }
 
-                            // Authorization Service API Get User Authorization
+                            // Authorization Service API Get If User Is Registered
                             JsonClient jsonClient = new JsonClient(_appSettings.Authorization.AuthorizationService.API, accessToken);
-                            HttpStatusCode statusCode = jsonClient.SendRequest(HttpMethod.Get, "Authorization");
+                            HttpStatusCode statusCode = jsonClient.SendRequest(HttpMethod.Get, "Registration");
+                            if (!jsonClient.IsResponseSuccess)
+                            {
+                                _logger.Exception(new Exception(jsonClient.GetResponseString() + " - Remote IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
+                                ticketReceivedContext.HttpContext.Response.Redirect("/Home/Error/7002");
+                                ticketReceivedContext.HandleResponse();
+                            }
+
+                            string jsonString = AESGCM.Decrypt(jsonClient.GetResponseObject<string>(), accessToken);
+                            RegistrationCheck registrationCheck = JsonConvert.DeserializeObject<RegistrationCheck>(jsonString);
+                            if (!registrationCheck.IsRegistered)
+                            {
+                                StringBuilder sb = new StringBuilder();
+                                sb.Append("<html>");
+                                sb.AppendFormat(@"<body onload='document.forms[""form""].submit()'>");
+                                sb.AppendFormat("<form name='form' action='{0}/Registration/Index' method='post'>", _appSettings.Authorization.AuthorizationService.UI.TrimEnd('/').TrimEnd('\\'));
+                                sb.AppendFormat("<input type='hidden' name='email' value='{0}'>", registrationCheck.Email);
+                                sb.Append("</form></body></html>");
+
+                                byte[] buffer = Encoding.ASCII.GetBytes(sb.ToString());
+
+                                ticketReceivedContext.Response.Clear();
+                                ticketReceivedContext.Response.ContentType = "text/HTML";
+                                ticketReceivedContext.Response.BodyWriter.WriteAsync(buffer);
+                                ticketReceivedContext.Response.CompleteAsync();
+                                ticketReceivedContext.HandleResponse();
+                                return Task.FromResult(ticketReceivedContext.Result);
+                            }
+
+                            // Authorization Service API Get User Authorization
+                            statusCode = jsonClient.SendRequest(HttpMethod.Get, "Authorization");
                             if (!jsonClient.IsResponseSuccess)
                             {
                                 _logger.Exception(new Exception(jsonClient.GetResponseString() + " - Remote IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
@@ -189,7 +220,7 @@ namespace cdcavell
                                 return Task.FromResult(ticketReceivedContext.Result);
                             }
 
-                            string jsonString = AESGCM.Decrypt(jsonClient.GetResponseObject<string>(), accessToken);
+                            jsonString = AESGCM.Decrypt(jsonClient.GetResponseObject<string>(), accessToken);
                             UserAuthorization userAuthorization = JsonConvert.DeserializeObject<UserAuthorization>(jsonString);
                             if (string.IsNullOrEmpty(userAuthorization.Email))
                             {
@@ -198,8 +229,6 @@ namespace cdcavell
                                 ticketReceivedContext.HandleResponse();
                                 return Task.FromResult(ticketReceivedContext.Result);
                             }
-
-                            //TODO: If new UserAuthorization then redirect to new registration process
 
                             // Get dbContext
                             CDCavellDbContext dbContext = (CDCavellDbContext)ticketReceivedContext.HttpContext
