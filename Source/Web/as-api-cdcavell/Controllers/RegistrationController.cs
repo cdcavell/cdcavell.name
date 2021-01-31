@@ -24,7 +24,7 @@ namespace as_api_cdcavell.Controllers
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 01/30/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 01/31/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class RegistrationController : ApplicationBaseController<RegistrationController>
     {
@@ -88,6 +88,16 @@ namespace as_api_cdcavell.Controllers
             string jsonString = JsonConvert.SerializeObject(registrationCheck);
             string encryptString = AESGCM.Encrypt(jsonString, accessToken);
             return new JsonResult(encryptString);
+        }
+
+        /// <summary>
+        /// Put action method
+        /// </summary>
+        [HttpPut]
+        [Authorize(Policy = "Write")]
+        public IActionResult Put()
+        {
+            return Ok();
         }
     }
 }

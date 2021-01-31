@@ -1,13 +1,17 @@
 ﻿using as_ui_cdcavell.Data;
 using as_ui_cdcavell.Models.AppSettings;
 using as_ui_cdcavell.Models.Registration;
+using CDCavell.ClassLibrary.Web.Http;
 using CDCavell.ClassLibrary.Web.Mvc.Models.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 
 namespace as_ui_cdcavell.Controllers
 {
@@ -95,7 +99,34 @@ namespace as_ui_cdcavell.Controllers
         {
             if (ModelState.IsValid)
             {
-                return Error(400);
+                string emailClaim = User.Claims.Where(x => x.Type == "email").Select(x => x.Value).FirstOrDefault();
+                if (string.IsNullOrEmpty(emailClaim))
+                    return Error(400);
+
+                string authClaim = User.Claims.Where(x => x.Type == "authorization").Select(x => x.Value).FirstOrDefault();
+                if (string.IsNullOrEmpty(authClaim))
+                    return Error(400);
+
+                Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
+                if (!authClaim.Equals(authorization.Guid))
+                    return Error(400);
+
+                UserAuthorization userAuthorization = authorization.UserAuthorization;
+                if (!emailClaim.Equals(userAuthorization.Email))
+                    return Error(400);
+
+                userAuthorization.FirstName = model.FirstName.Clean();
+                userAuthorization.LastName = model.LastName.Clean();
+
+                JsonClient jsonClient = new JsonClient(_appSettings.Authorization.AuthorizationService.API, authorization.AccessToken);
+                HttpStatusCode statusCode = jsonClient.SendRequest(HttpMethod.Put, "Registration");
+                if (!jsonClient.IsResponseSuccess)
+                {
+                    _logger.Exception(new Exception(jsonClient.GetResponseString()));
+                    return Error(7004);
+                }
+
+                return Ok("Put Succeeded");
             }
 
             return View(model);
