@@ -18,7 +18,7 @@ namespace cdcavell.Data
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 10/24/2020 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 01/31/2021 | Initial build Authorization Service |~ 
     /// </revision>
     [Table("Authorization")]
     public class Authorization : DataModel<Authorization>
@@ -31,6 +31,24 @@ namespace cdcavell.Data
         [Required]
         [DataType(DataType.DateTime)]
         public DateTime Created { get; set; }
+
+        private string _token;
+        /// <value>string</value>
+        [Required]
+        [DataType(DataType.Text)]
+        public string Token
+        {
+            get { return AESGCM.Decrypt(_token); }
+            set { _token = AESGCM.Encrypt(value); }
+        }
+
+        /// <value>string</value>
+        [NotMapped]
+        public string AccessToken
+        {
+            get { return JsonConvert.DeserializeObject<string>(Token); }
+            set { Token = JsonConvert.SerializeObject(value); }
+        }
 
         private string _object;
         /// <value>string</value>

@@ -1,5 +1,6 @@
 ﻿using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
+using System;
 using System.Collections.Generic;
 
 namespace dis5_cdcavell
@@ -17,7 +18,7 @@ namespace dis5_cdcavell
     /// | Christopher D. Cavell | 1.0.2.0 | 01/16/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.2.2 | 01/18/2020 | Convert GrantType from Implicit to Pkce |~ 
     /// | Christopher D. Cavell | 1.0.2.2 | 01/18/2020 | Removed unused clients and scopes |~ 
-    /// | Christopher D. Cavell | 1.0.3.0 | 01/30/2020 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 01/31/2020 | Initial build Authorization Service |~ 
     /// </revision>
     public static class Config
     {
@@ -72,7 +73,9 @@ namespace dis5_cdcavell
                         IdentityServerConstants.StandardScopes.Email,
                         "Authorization.Service.API.Read",
                         "Authorization.Service.API.Write"
-                    }
+                    },
+
+                    AccessTokenLifetime = Convert.ToInt32((new TimeSpan(1,0,0,0)).TotalSeconds)
                 },
                 // OpenID Connect interactive client using code flow + pkce (MVC)
                 new Client
@@ -106,7 +109,8 @@ namespace dis5_cdcavell
                         "Authorization.Service.API.Read"
                     },
 
-                    AlwaysIncludeUserClaimsInIdToken = true
+                    AlwaysIncludeUserClaimsInIdToken = true,
+                    AccessTokenLifetime = Convert.ToInt32((new TimeSpan(1,0,0,0)).TotalSeconds)
                 }
 
             };

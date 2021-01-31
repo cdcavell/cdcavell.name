@@ -227,6 +227,7 @@ namespace cdcavell
                             // Harden User Authorization
                             Data.Authorization authorization = new Data.Authorization();
                             authorization.Guid = Guid.NewGuid().ToString();
+                            authorization.AccessToken = accessToken;
                             authorization.Created = DateTime.Now;
                             authorization.UserAuthorization = userAuthorization;
                             authorization.AddUpdate(dbContext);
