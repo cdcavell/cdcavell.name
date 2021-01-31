@@ -59,7 +59,7 @@ namespace as_ui_cdcavell.Controllers
         /// </summary>
         /// <returns>IActionResult</returns>
         /// <method>Index()</method>
-        [AllowAnonymous]
+        [Authorize(Policy = "Registration")]
         [HttpPost]
         public IActionResult Index()
         {

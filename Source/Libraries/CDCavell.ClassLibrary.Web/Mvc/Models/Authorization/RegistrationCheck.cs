@@ -18,10 +18,8 @@ namespace CDCavell.ClassLibrary.Web.Mvc.Models.Authorization
     public class RegistrationCheck
     {
         /// <value>bool</value>
-        [Required]
         public bool IsRegistered { get; set; }
         /// <value>string</value>
-        [Required]
         public string Email { get; set; }
     }
 }

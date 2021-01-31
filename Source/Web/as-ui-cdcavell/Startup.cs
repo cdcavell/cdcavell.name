@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -108,10 +109,15 @@ namespace as_ui_cdcavell
                 {
                     policy.Requirements.Add(new AuthenticatedRequirement(true));
                 });
+                options.AddPolicy("Registration", policy =>
+                {
+                    policy.Requirements.Add(new RegistrationRequirement(true));
+                });
             });
 
             // Registered authorization handlers
             services.AddTransient<IAuthorizationHandler, AuthenticatedHandler>();
+            services.AddTransient<IAuthorizationHandler, RegistrationHandler>();
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
