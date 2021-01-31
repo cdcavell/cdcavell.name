@@ -3,11 +3,13 @@ using as_ui_cdcavell.Models.AppSettings;
 using as_ui_cdcavell.Models.Registration;
 using CDCavell.ClassLibrary.Web.Http;
 using CDCavell.ClassLibrary.Web.Mvc.Models.Authorization;
+using CDCavell.ClassLibrary.Web.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Net;
@@ -119,12 +121,18 @@ namespace as_ui_cdcavell.Controllers
                 userAuthorization.LastName = model.LastName.Clean();
 
                 JsonClient jsonClient = new JsonClient(_appSettings.Authorization.AuthorizationService.API, authorization.AccessToken);
-                HttpStatusCode statusCode = jsonClient.SendRequest(HttpMethod.Put, "Registration");
+                HttpStatusCode statusCode = jsonClient.SendRequest(HttpMethod.Put, "Registration", userAuthorization);
                 if (!jsonClient.IsResponseSuccess)
                 {
                     _logger.Exception(new Exception(jsonClient.GetResponseString()));
                     return Error(7004);
                 }
+
+                string jsonString = AESGCM.Decrypt(jsonClient.GetResponseObject<string>(), authorization.AccessToken);
+                userAuthorization = JsonConvert.DeserializeObject<UserAuthorization>(jsonString);
+
+                authorization.UserAuthorization = userAuthorization;
+                authorization.AddUpdate(_dbContext);
 
                 return Ok("Put Succeeded");
             }

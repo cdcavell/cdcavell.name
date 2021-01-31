@@ -17,7 +17,7 @@ namespace as_api_cdcavell.Data
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 01/23/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 01/31/2021 | Initial build Authorization Service |~ 
     /// </revision>
     [Table("Registration")]
     public class Registration : DataModel<Registration>
@@ -50,11 +50,12 @@ namespace as_api_cdcavell.Data
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime? ApprovedDate { get; set; } = DateTime.MinValue;
 
-        /// <value>long</value>
-        public long ApprovedById { get; set; }
+        /// <value>long?</value>
+        [AllowNull]
+        public long? ApprovedById { get; set; }
         /// <value>Registration</value>
         [ForeignKey("ApprovedById")]
-        public Registration ApprovedBy { get; set; }
+        public virtual Registration ApprovedBy { get; set; }
 
         /// <value>DateTime?</value>
         [AllowNull]
@@ -63,11 +64,12 @@ namespace as_api_cdcavell.Data
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime? RevokedDate { get; set; } = DateTime.MinValue;
 
-        /// <value>long</value>
-        public long RevokedById { get; set; }
+        /// <value>long?</value>
+        [AllowNull]
+        public long? RevokedById { get; set; }
         /// <value>Registration</value>
         [ForeignKey("RevokedById")]
-        public Registration RevokedBy { get; set; }
+        public virtual Registration RevokedBy { get; set; }
 
         /// <value>bool</value>
         [NotMapped]

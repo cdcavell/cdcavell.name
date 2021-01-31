@@ -62,7 +62,7 @@ namespace as_api_cdcavell.Controllers
         /// Get action method
         /// </summary>
         [HttpGet]
-        [Authorize(Policy = "Authenticated")]
+        [Authorize(Policy = "Read")]
         public IActionResult Get()
         {
             IHeaderDictionary headers = _httpContextAccessor.HttpContext.Request.Headers;
@@ -95,9 +95,35 @@ namespace as_api_cdcavell.Controllers
         /// </summary>
         [HttpPut]
         [Authorize(Policy = "Write")]
-        public IActionResult Put()
+        public IActionResult Put(UserAuthorization userAuthorization)
         {
-            return Ok();
+            IHeaderDictionary headers = _httpContextAccessor.HttpContext.Request.Headers;
+            string accessToken = headers.Where(x => x.Key == "Authorization").Select(x => x.Value).FirstOrDefault();
+            if (string.IsNullOrEmpty(accessToken))
+                return BadRequest("Invalid access token");
+
+            accessToken = accessToken.Substring(7);
+
+            Data.Registration registration = Data.Registration.Get(
+                userAuthorization.Email.Clean(),
+                _dbContext
+            );
+
+            if (registration.IsNew)
+            {
+                registration.Email = userAuthorization.Email.Clean();
+                registration.FirstName = userAuthorization.FirstName.Clean();
+                registration.LastName = userAuthorization.LastName.Clean();
+                registration.RequestDate = DateTime.Now;
+                registration.AddUpdate(_dbContext);
+            }
+
+            userAuthorization.RegistrationId = registration.Id;
+            userAuthorization.RegistrationStatus = registration.Status;
+
+            string jsonString = JsonConvert.SerializeObject(userAuthorization);
+            string encryptString = AESGCM.Encrypt(jsonString, accessToken);
+            return new JsonResult(encryptString);
         }
     }
 }

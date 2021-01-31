@@ -113,7 +113,7 @@ namespace as_api_cdcavell.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("ApprovedById")
+                    b.Property<long?>("ApprovedById")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("ApprovedDate")
@@ -134,7 +134,7 @@ namespace as_api_cdcavell.Migrations
                     b.Property<DateTime?>("RequestDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("RevokedById")
+                    b.Property<long?>("RevokedById")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("RevokedDate")
@@ -294,15 +294,11 @@ namespace as_api_cdcavell.Migrations
                 {
                     b.HasOne("as_api_cdcavell.Data.Registration", "ApprovedBy")
                         .WithMany()
-                        .HasForeignKey("ApprovedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ApprovedById");
 
                     b.HasOne("as_api_cdcavell.Data.Registration", "RevokedBy")
                         .WithMany()
-                        .HasForeignKey("RevokedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RevokedById");
 
                     b.Navigation("ApprovedBy");
 
