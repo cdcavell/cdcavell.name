@@ -1,6 +1,5 @@
 ﻿using as_ui_cdcavell.Data;
 using as_ui_cdcavell.Models.AppSettings;
-using as_ui_cdcavell.Models.Home;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -16,7 +15,7 @@ namespace as_ui_cdcavell.Controllers
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 01/30/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 01/31/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class HomeController : ApplicationBaseController<HomeController>
     {
@@ -59,8 +58,7 @@ namespace as_ui_cdcavell.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            HomeIndexModel model = new HomeIndexModel();
-            return View(model);
+            return Redirect(_appSettings.Authorization.AuthorizationService.IndexReturn);
         }
     }
 }

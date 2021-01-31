@@ -1,6 +1,7 @@
 ﻿using as_ui_cdcavell.Data;
 using as_ui_cdcavell.Models.AppSettings;
 using as_ui_cdcavell.Models.Registration;
+using CDCavell.ClassLibrary.Web.Mvc.Models.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -52,7 +53,7 @@ namespace as_ui_cdcavell.Controllers
         }
 
         /// <summary>
-        /// Index method
+        /// New Registration HttpGet method
         /// </summary>
         /// <returns>IActionResult</returns>
         /// <method>Index()</method>
@@ -62,19 +63,41 @@ namespace as_ui_cdcavell.Controllers
         {
             string emailClaim = User.Claims.Where(x => x.Type == "email").Select(x => x.Value).FirstOrDefault();
             if (string.IsNullOrEmpty(emailClaim))
-                return BadRequest("Invalid Email");
+                return Error(400);
 
             string authClaim = User.Claims.Where(x => x.Type == "authorization").Select(x => x.Value).FirstOrDefault();
-            if (string.IsNullOrEmpty(authClaim)) 
-                return BadRequest("Invalid Authorization");
+            if (string.IsNullOrEmpty(authClaim))
+                return Error(400);
 
             Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
-            if (!emailClaim.Equals(authorization.UserAuthorization.Email))
-                return BadRequest("Invalid Email");
             if (!authClaim.Equals(authorization.Guid))
-                return BadRequest("Invalid Authorization");
+                return Error(400);
+
+            UserAuthorization userAuthorization = authorization.UserAuthorization;
+            if (!emailClaim.Equals(userAuthorization.Email))
+                return Error(400);
 
             RegistrationIndexModel model = new RegistrationIndexModel();
+            model.Email = userAuthorization.Email;
+
+            return View(model);
+        }
+
+        /// <summary>
+        /// New Registration HttpPost method
+        /// </summary>
+        /// <returns>IActionResult</returns>
+        /// <method>Index(RegistrationIndexModel model)</method>
+        [Authorize(Policy = "Authenticated")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Index(RegistrationIndexModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                return Error(400);
+            }
+
             return View(model);
         }
     }
