@@ -63,7 +63,7 @@ namespace as_ui_cdcavell.Controllers
         [HttpPost]
         public IActionResult Index()
         {
-            IndexModel model = new IndexModel();
+            RegistrationIndexModel model = new RegistrationIndexModel();
             return View(model);
         }
     }

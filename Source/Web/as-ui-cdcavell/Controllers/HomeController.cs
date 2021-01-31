@@ -59,7 +59,7 @@ namespace as_ui_cdcavell.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            IndexModel model = new IndexModel();
+            HomeIndexModel model = new HomeIndexModel();
             return View(model);
         }
     }
