@@ -12,6 +12,7 @@ namespace System
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.0 | 10/11/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public static class StringExtensions
     {
@@ -101,6 +102,24 @@ namespace System
         public static string CleanJsonResult(this string value)
         {
             return value.Replace("\\", string.Empty).Trim(new char[1] { '"' });
+        }
+
+        /// <summary>
+        /// Strip suffix from end of string
+        /// </summary>
+        /// <param name="input">this string</param>
+        /// <param name="suffixToRemove">string</param>
+        /// <param name="comparisonType">StringComparison</param>
+        /// <returns>string</returns>
+        /// <method>TrimEnd(this string input, string suffixToRemove, StringComparison comparisonType = StringComparison.CurrentCulture)</method>
+        public static string TrimEnd(this string input, string suffixToRemove, StringComparison comparisonType = StringComparison.CurrentCulture)
+        {
+            if (suffixToRemove != null && input.EndsWith(suffixToRemove, comparisonType))
+            {
+                return input.Substring(0, input.Length - suffixToRemove.Length);
+            }
+
+            return input;
         }
     }
 }

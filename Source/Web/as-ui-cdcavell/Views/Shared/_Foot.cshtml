@@ -14,10 +14,13 @@
             </a>
         </div>
         <div class="col d-flex justify-content-end btn-group m-0 mr-2 p-0">
-            <a class="btn-link text-decoration-none m-0 mr-2 p-0" href="https://cdcavell.name/Home/PrivacyPolicy">
+            <a class="btn-link text-decoration-none m-0 mr-2 p-0" asp-action="WithdrawConsent" asp-controller="Home">
+                Withdraw Cookie Consent
+            </a><span class="mr-2"> | </span>
+            <a class="btn-link text-decoration-none m-0 mr-2 p-0" asp-action="PrivacyPolicy" asp-controller="Home">
                 Privacy Policy
             </a> |
-            <a class="btn-link text-decoration-none m-0 ml-2 mr-2 p-0" href="https://cdcavell.name/Home/TermsOfService">
+            <a class="btn-link text-decoration-none m-0 mx-2 p-0" asp-action="TermsOfService" asp-controller="Home">
                 Terms of Service
             </a> |
             <a class="btn-link text-decoration-none m-0 mx-2 p-0" href="https://blog.cdcavell.name" rel="external nofollow noopener" target="_blank">

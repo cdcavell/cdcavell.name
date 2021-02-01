@@ -114,15 +114,18 @@ namespace as_ui_cdcavell.Controllers
                 userAuthorization.Registration.FirstName = model.FirstName.Clean();
                 userAuthorization.Registration.LastName = model.LastName.Clean();
 
+                string jsonString = JsonConvert.SerializeObject(userAuthorization);
+                string encryptString = AESGCM.Encrypt(jsonString, authorization.AccessToken);
+
                 JsonClient jsonClient = new JsonClient(_appSettings.Authorization.AuthorizationService.API, authorization.AccessToken);
-                HttpStatusCode statusCode = jsonClient.SendRequest(HttpMethod.Put, "Registration", userAuthorization);
+                HttpStatusCode statusCode = jsonClient.SendRequest(HttpMethod.Put, "Registration", encryptString);
                 if (!jsonClient.IsResponseSuccess)
                 {
                     _logger.Exception(new Exception(jsonClient.GetResponseString()));
                     return Error(7004);
                 }
 
-                string jsonString = AESGCM.Decrypt(jsonClient.GetResponseObject<string>(), authorization.AccessToken);
+                jsonString = AESGCM.Decrypt(jsonClient.GetResponseObject<string>(), authorization.AccessToken);
                 userAuthorization = JsonConvert.DeserializeObject<UserAuthorization>(jsonString);
 
                 authorization.UserAuthorization = userAuthorization;
@@ -168,6 +171,52 @@ namespace as_ui_cdcavell.Controllers
             model.LastName = userAuthorization.Registration.LastName;
             model.RequestDate = userAuthorization.Registration.RequestDate;
             model.Status = userAuthorization.Registration.Status;
+
+            return View(model);
+        }
+
+        /// <summary>
+        /// Delete Account
+        /// </summary>
+        /// <param name="model">RegistrationIndexModel</param>
+        /// <returns>IActionResult</returns>
+        /// <method>Delete(RegistrationIndexModel model)</method>
+        [Authorize(Policy = "Authenticated")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(RegistrationIndexModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                string emailClaim = User.Claims.Where(x => x.Type == "email").Select(x => x.Value).FirstOrDefault();
+                if (string.IsNullOrEmpty(emailClaim))
+                    return Error(400);
+
+                if (!emailClaim.Equals(model.Email))
+                    return Error(400);
+
+                string authClaim = User.Claims.Where(x => x.Type == "authorization").Select(x => x.Value).FirstOrDefault();
+                if (string.IsNullOrEmpty(authClaim))
+                    return Error(400);
+
+                Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
+                if (authorization.UserAuthorization.Registration.IsRegistered)
+                {
+                    UserAuthorization userAuthorization = authorization.UserAuthorization;
+                    string jsonString = JsonConvert.SerializeObject(userAuthorization);
+                    string encryptString = AESGCM.Encrypt(jsonString, authorization.AccessToken);
+
+                    JsonClient jsonClient = new JsonClient(_appSettings.Authorization.AuthorizationService.API, authorization.AccessToken);
+                    HttpStatusCode statusCode = jsonClient.SendRequest(HttpMethod.Delete, "Registration", encryptString);
+                    if (!jsonClient.IsResponseSuccess)
+                    {
+                        _logger.Exception(new Exception(jsonClient.GetResponseString()));
+                        return Error(7005);
+                    }
+                }
+
+                return RedirectToAction("Logout", "Account");
+            }
 
             return View(model);
         }

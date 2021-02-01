@@ -120,37 +120,6 @@ namespace as_ui_cdcavell.Controllers
         }
 
         /// <summary>
-        /// Delete Account
-        /// </summary>
-        /// <param name="model">AccountViewModel</param>
-        /// <returns>IActionResult</returns>
-        /// <method>Delete(AccountViewModel model)</method>
-        [Authorize(Policy = "Authenticated")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Delete(UserAuthorization model)
-        {
-            if (ModelState.IsValid)
-            {
-                //TODO: Call Authorization Service API - Delete Registration
-
-                Claim authorizationClaim = User.Claims.Where(x => x.Type == "authorization").FirstOrDefault();
-                if (authorizationClaim != null)
-                {
-                    Data.Authorization authorization = _dbContext.Authorization
-                    .Where(x => x.Guid == authorizationClaim.Value.ToString())
-                    .FirstOrDefault();
-
-                    authorization.Delete(_dbContext);
-                }
-
-                return RedirectToAction("Logout", "Account");
-            }
-
-            return View(model);
-        }
-
-        /// <summary>
         /// Logout method
         /// </summary>
         /// <returns>IActionResult</returns>

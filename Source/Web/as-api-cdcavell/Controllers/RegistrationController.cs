@@ -93,16 +93,20 @@ namespace as_api_cdcavell.Controllers
         /// <summary>
         /// Put action method
         /// </summary>
+        /// <param name="encryptObject">object</param>
         [HttpPut]
         [Authorize(Policy = "Write")]
-        public IActionResult Put(UserAuthorization userAuthorization)
+        public IActionResult Put(object encryptObject)
         {
             IHeaderDictionary headers = _httpContextAccessor.HttpContext.Request.Headers;
             string accessToken = headers.Where(x => x.Key == "Authorization").Select(x => x.Value).FirstOrDefault();
             if (string.IsNullOrEmpty(accessToken))
-                return BadRequest("Invalid access token");
+                return BadRequest("Invalid Authorization");
 
             accessToken = accessToken.Substring(7);
+
+            string jsonString = AESGCM.Decrypt(encryptObject.ToString(), accessToken);
+            UserAuthorization userAuthorization = JsonConvert.DeserializeObject<UserAuthorization>(jsonString);
 
             Data.Registration registration = Data.Registration.Get(
                 userAuthorization.Email.Clean(),
@@ -128,9 +132,37 @@ namespace as_api_cdcavell.Controllers
             userAuthorization.Registration.RevokedDate = registration.RevokedDate;
             userAuthorization.Registration.RevokedBy = (registration.RevokedBy != null) ? registration.RevokedBy.Email : string.Empty;
 
-            string jsonString = JsonConvert.SerializeObject(userAuthorization);
+            jsonString = JsonConvert.SerializeObject(userAuthorization);
             string encryptString = AESGCM.Encrypt(jsonString, accessToken);
             return new JsonResult(encryptString);
+        }
+
+        /// <summary>
+        /// Put action method
+        /// </summary>
+        /// <param name="encryptObject">object</param>
+        [HttpDelete]
+        [Authorize(Policy = "Write")]
+        public IActionResult Delete(object encryptObject)
+        {
+            IHeaderDictionary headers = _httpContextAccessor.HttpContext.Request.Headers;
+            string accessToken = headers.Where(x => x.Key == "Authorization").Select(x => x.Value).FirstOrDefault();
+            if (string.IsNullOrEmpty(accessToken))
+                return BadRequest("Invalid Authorization");
+
+            accessToken = accessToken.Substring(7);
+
+            string jsonString = AESGCM.Decrypt(encryptObject.ToString(), accessToken);
+            UserAuthorization userAuthorization = JsonConvert.DeserializeObject<UserAuthorization>(jsonString);
+
+            Data.Registration registration = Data.Registration.Get(
+                userAuthorization.Email.Clean(),
+                _dbContext
+            );
+
+            registration.Delete(_dbContext);
+
+            return Ok();
         }
     }
 }

@@ -61,16 +61,7 @@ namespace as_ui_cdcavell.Authorization
                     UserAuthorization userAuthorization = Data.Authorization.GetUser(user.Claims, _dbContext);
                     if (!string.IsNullOrEmpty(userAuthorization.Email))
                         if (userAuthorization.Email == emailClaim.Value)
-                        {
                             context.Succeed(requirement);
-                            return Task.CompletedTask;
-                        }
-
-                    // inconsistent state so force logout
-                    _httpContextAccessor.HttpContext.Response.Clear();
-                    _httpContextAccessor.HttpContext.Response.Redirect("/Account/Logout");
-                    context.Succeed(requirement);
-                    return Task.CompletedTask;
                 }
             }
 

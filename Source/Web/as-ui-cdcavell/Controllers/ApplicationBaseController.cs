@@ -99,6 +99,9 @@ namespace as_ui_cdcavell.Controllers
                 case 7004:
                     vm.StatusMessage = "Error in saving information. ";
                     goto case 7000;
+                case 7005:
+                    vm.StatusMessage = "Error in deleting information. ";
+                    goto case 7000;
                 case 7000:
                     vm.StatusMessage += "System has logged you off.";
                     HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme).Wait();

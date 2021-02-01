@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace as_ui_cdcavell.Controllers
 {
@@ -15,7 +16,7 @@ namespace as_ui_cdcavell.Controllers
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 01/31/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class HomeController : ApplicationBaseController<HomeController>
     {
@@ -59,6 +60,66 @@ namespace as_ui_cdcavell.Controllers
         public IActionResult Index()
         {
             return Redirect(_appSettings.Authorization.AuthorizationService.IndexReturn);
+        }
+
+        /// <summary>
+        /// Privacy policy
+        /// </summary>
+        /// <returns>IActionResult</returns>
+        /// <method>PrivacyPolicy()</method>
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult PrivacyPolicy()
+        {
+            string url = _appSettings.Authorization.AuthorizationService.IndexReturn.ToLower();
+            url = url.TrimEnd('/').TrimEnd("/home/index");
+            url += "/Home/PrivacyPolicy";
+            return Redirect(url);
+        }
+
+        /// <summary>
+        /// Terms of service
+        /// </summary>
+        /// <returns>IActionResult</returns>
+        /// <method>TermsOfService()</method>
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult TermsOfService()
+        {
+            string url = _appSettings.Authorization.AuthorizationService.IndexReturn.ToLower();
+            url = url.TrimEnd('/').TrimEnd("/home/index");
+            url += "/Home/TermsOfService";
+            return Redirect(url);
+        }
+
+        /// <summary>
+        /// Withdraw cookie consent
+        /// </summary>
+        /// <returns>IActionResult</returns>
+        /// <method>WithdrawConsent()</method>
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult WithdrawConsent()
+        {
+            string url = _appSettings.Authorization.AuthorizationService.IndexReturn.ToLower();
+            url = url.TrimEnd('/').TrimEnd("/home/index");
+            url += "/Home/WithdrawConsent";
+            return Redirect(url);
+        }
+
+        /// <summary>
+        /// Search get method
+        /// </summary>
+        /// <returns>IActionResult</returns>
+        /// <method>Search()</method>
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult Search()
+        {
+            string url = _appSettings.Authorization.AuthorizationService.IndexReturn.ToLower();
+            url = url.TrimEnd('/').TrimEnd("/home/index");
+            url += "/Home/Search";
+            return Redirect(url);
         }
     }
 }
