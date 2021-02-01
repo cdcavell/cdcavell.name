@@ -170,7 +170,7 @@ namespace cdcavell.Controllers
                 authorization.Delete(_dbContext);
 
                 HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                return SignOut(CookieAuthenticationDefaults.AuthenticationScheme, "oidc");
+                var signOut = SignOut(CookieAuthenticationDefaults.AuthenticationScheme, "oidc");
             }
 
             return RedirectToAction("Index", "Home");
