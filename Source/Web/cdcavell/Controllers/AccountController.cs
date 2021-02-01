@@ -28,7 +28,7 @@ namespace cdcavell.Controllers
     /// | Christopher D. Cavell | 1.0.0.0 | 10/19/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/12/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
-    /// | Christopher D. Cavell | 1.0.3.0 | 01/31/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class AccountController : ApplicationBaseController<AccountController>
     {
@@ -170,7 +170,7 @@ namespace cdcavell.Controllers
                 authorization.Delete(_dbContext);
 
                 HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                var signOut = SignOut(CookieAuthenticationDefaults.AuthenticationScheme, "oidc");
+                SignOut(CookieAuthenticationDefaults.AuthenticationScheme, "oidc");
             }
 
             return RedirectToAction("Index", "Home");

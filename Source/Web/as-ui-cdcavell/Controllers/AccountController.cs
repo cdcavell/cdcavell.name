@@ -166,7 +166,7 @@ namespace as_ui_cdcavell.Controllers
                 authorization.Delete(_dbContext);
 
                 HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                var signOut = SignOut(CookieAuthenticationDefaults.AuthenticationScheme, "oidc");
+                SignOut(CookieAuthenticationDefaults.AuthenticationScheme, "oidc");
             }
 
             return RedirectToAction("Index", "Home");
