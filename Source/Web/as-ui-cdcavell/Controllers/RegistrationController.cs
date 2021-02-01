@@ -76,15 +76,11 @@ namespace as_ui_cdcavell.Controllers
                 return Error(400);
 
             Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
-            if (!authClaim.Equals(authorization.Guid))
-                return Error(400);
-
-            UserAuthorization userAuthorization = authorization.UserAuthorization;
-            if (!emailClaim.Equals(userAuthorization.Email))
-                return Error(400);
+            if (!authorization.UserAuthorization.RegistrationStatus.Equals("Not Registered", StringComparison.OrdinalIgnoreCase))
+                return RedirectToAction("Status", "Registration");
 
             RegistrationIndexModel model = new RegistrationIndexModel();
-            model.Email = userAuthorization.Email;
+            model.Email = emailClaim;
 
             return View(model);
         }
@@ -110,13 +106,11 @@ namespace as_ui_cdcavell.Controllers
                     return Error(400);
 
                 Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
-                if (!authClaim.Equals(authorization.Guid))
-                    return Error(400);
+                if (!authorization.UserAuthorization.RegistrationStatus.Equals("Not Registered", StringComparison.OrdinalIgnoreCase))
+                    return RedirectToAction("Status", "Registration");
 
-                UserAuthorization userAuthorization = authorization.UserAuthorization;
-                if (!emailClaim.Equals(userAuthorization.Email))
-                    return Error(400);
-
+                UserAuthorization userAuthorization = new UserAuthorization();
+                userAuthorization.Email = model.Email.Clean();
                 userAuthorization.FirstName = model.FirstName.Clean();
                 userAuthorization.LastName = model.LastName.Clean();
 
@@ -134,8 +128,45 @@ namespace as_ui_cdcavell.Controllers
                 authorization.UserAuthorization = userAuthorization;
                 authorization.AddUpdate(_dbContext);
 
-                return Ok("Put Succeeded");
+                return RedirectToAction("Status", "Registration");
             }
+
+            return View(model);
+        }
+
+        /// <summary>
+        /// Registration Status HttpGet method
+        /// </summary>
+        /// <returns>IActionResult</returns>
+        /// <method>Index()</method>
+        [Authorize(Policy = "Authenticated")]
+        [HttpGet]
+        public IActionResult Status()
+        {
+            string emailClaim = User.Claims.Where(x => x.Type == "email").Select(x => x.Value).FirstOrDefault();
+            if (string.IsNullOrEmpty(emailClaim))
+                return Error(400);
+
+            string authClaim = User.Claims.Where(x => x.Type == "authorization").Select(x => x.Value).FirstOrDefault();
+            if (string.IsNullOrEmpty(authClaim))
+                return Error(400);
+
+            Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
+            if (!authClaim.Equals(authorization.Guid))
+                return Error(400);
+
+            UserAuthorization userAuthorization = authorization.UserAuthorization;
+            if (userAuthorization.RegistrationStatus.Equals("Not Registered", StringComparison.OrdinalIgnoreCase))
+                return RedirectToAction("Index", "Registration");
+
+            if (!emailClaim.Equals(userAuthorization.Email))
+                return Error(400);
+
+            RegistrationIndexModel model = new RegistrationIndexModel();
+            model.Email = userAuthorization.Email;
+            model.FirstName = userAuthorization.FirstName;
+            model.LastName = userAuthorization.LastName;
+            model.Status = userAuthorization.RegistrationStatus;
 
             return View(model);
         }

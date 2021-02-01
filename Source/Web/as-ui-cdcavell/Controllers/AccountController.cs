@@ -25,7 +25,7 @@ namespace as_ui_cdcavell.Controllers
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 01/30/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 01/31/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class AccountController : ApplicationBaseController<AccountController>
     {
@@ -166,7 +166,7 @@ namespace as_ui_cdcavell.Controllers
                 authorization.Delete(_dbContext);
 
                 HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                return SignOut(CookieAuthenticationDefaults.AuthenticationScheme, "oidc");
+                var signOut = SignOut(CookieAuthenticationDefaults.AuthenticationScheme, "oidc");
             }
 
             return RedirectToAction("Index", "Home");

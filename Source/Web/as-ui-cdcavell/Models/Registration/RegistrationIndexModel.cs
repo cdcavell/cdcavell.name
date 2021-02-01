@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace as_ui_cdcavell.Models.Registration
 {
@@ -28,5 +30,18 @@ namespace as_ui_cdcavell.Models.Registration
         [DataType(DataType.Text)]
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
+        /// <value>DateTime?</value>
+        [AllowNull]
+        [DataType(DataType.DateTime)]
+        [Display(Name = "Request Date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        public DateTime? RequestDate { get; set; } = DateTime.MinValue;
+
+        /// <value>string</value>
+        [AllowNull]
+        [DataType(DataType.Text)]
+        [Display(Name = "Status")]
+        public string Status { get; set; }
+
     }
 }
