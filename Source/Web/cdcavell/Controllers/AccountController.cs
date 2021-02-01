@@ -169,7 +169,7 @@ namespace cdcavell.Controllers
                 Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
                 authorization.Delete(_dbContext);
 
-                HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme).Wait();
                 SignOut(CookieAuthenticationDefaults.AuthenticationScheme, "oidc");
             }
 

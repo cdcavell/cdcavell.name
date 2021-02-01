@@ -14,10 +14,13 @@ namespace CDCavell.ClassLibrary.Web.Mvc.Models.Authorization
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 01/19/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class Registration
     {
+        /// <value>long</value>
+        [Display(Name = "Registration Id")]
+        public long RegistrationId { get; set; }
         /// <value>string</value>
         [DataType(DataType.EmailAddress)]
         [Display(Name = "Email")]
@@ -46,7 +49,7 @@ namespace CDCavell.ClassLibrary.Web.Mvc.Models.Authorization
         [AllowNull]
         [DataType(DataType.EmailAddress)]
         [Display(Name = "Approved By")]
-        public string ApprovedBy { get; set; }
+        public string ApprovedBy { get; set; } = string.Empty;
         /// <value>DateTime?</value>
         [AllowNull]
         [DataType(DataType.DateTime)]
@@ -57,7 +60,7 @@ namespace CDCavell.ClassLibrary.Web.Mvc.Models.Authorization
         [AllowNull]
         [DataType(DataType.EmailAddress)]
         [Display(Name = "Revoked By")]
-        public string RevokedBy { get; set; }
+        public string RevokedBy { get; set; } = string.Empty;
         /// <value>bool</value>
         [NotMapped]
         public bool IsRegistered
@@ -92,8 +95,9 @@ namespace CDCavell.ClassLibrary.Web.Mvc.Models.Authorization
             {
                 if (ApprovedDate == DateTime.MinValue)
                     if (RevokedDate == DateTime.MinValue)
-                        if (!string.IsNullOrEmpty(Email))
-                            return true;
+                        if (RequestDate > DateTime.MinValue)
+                            if (!string.IsNullOrEmpty(Email))
+                                return true;
 
                 return false;
             }

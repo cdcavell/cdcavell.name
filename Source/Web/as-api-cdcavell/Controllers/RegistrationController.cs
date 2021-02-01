@@ -24,7 +24,7 @@ namespace as_api_cdcavell.Controllers
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 01/31/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class RegistrationController : ApplicationBaseController<RegistrationController>
     {
@@ -111,15 +111,22 @@ namespace as_api_cdcavell.Controllers
 
             if (registration.IsNew)
             {
-                registration.Email = userAuthorization.Email.Clean();
-                registration.FirstName = userAuthorization.FirstName.Clean();
-                registration.LastName = userAuthorization.LastName.Clean();
+                registration.Email = userAuthorization.Registration.Email.Clean();
+                registration.FirstName = userAuthorization.Registration.FirstName.Clean();
+                registration.LastName = userAuthorization.Registration.LastName.Clean();
                 registration.RequestDate = DateTime.Now;
                 registration.AddUpdate(_dbContext);
             }
 
-            userAuthorization.RegistrationId = registration.Id;
-            userAuthorization.RegistrationStatus = registration.Status;
+            userAuthorization.Registration.RegistrationId = registration.Id;
+            userAuthorization.Registration.Email = registration.Email;
+            userAuthorization.Registration.FirstName = registration.FirstName;
+            userAuthorization.Registration.LastName = registration.LastName;
+            userAuthorization.Registration.RequestDate = registration.RequestDate;
+            userAuthorization.Registration.ApprovedDate = registration.ApprovedDate;
+            userAuthorization.Registration.ApprovedBy = (registration.ApprovedBy != null) ? registration.ApprovedBy.Email : string.Empty;
+            userAuthorization.Registration.RevokedDate = registration.RevokedDate;
+            userAuthorization.Registration.RevokedBy = (registration.RevokedBy != null) ? registration.RevokedBy.Email : string.Empty;
 
             string jsonString = JsonConvert.SerializeObject(userAuthorization);
             string encryptString = AESGCM.Encrypt(jsonString, accessToken);

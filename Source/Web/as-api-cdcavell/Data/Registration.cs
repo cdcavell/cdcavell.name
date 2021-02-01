@@ -17,7 +17,7 @@ namespace as_api_cdcavell.Data
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 01/31/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
     /// </revision>
     [Table("Registration")]
     public class Registration : DataModel<Registration>
@@ -105,8 +105,9 @@ namespace as_api_cdcavell.Data
             {
                 if (ApprovedDate == DateTime.MinValue)
                     if (RevokedDate == DateTime.MinValue)
-                        if (!string.IsNullOrEmpty(Email))
-                            return true;
+                        if (RequestDate > DateTime.MinValue)
+                            if (!string.IsNullOrEmpty(Email))
+                                return true;
 
                 return false;
             }

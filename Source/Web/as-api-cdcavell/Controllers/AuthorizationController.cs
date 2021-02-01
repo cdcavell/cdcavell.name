@@ -22,7 +22,7 @@ namespace as_api_cdcavell.Controllers
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 01/23/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class AuthorizationController : ApplicationBaseController<AuthorizationController>
     {
@@ -74,13 +74,17 @@ namespace as_api_cdcavell.Controllers
             userAuthorization.ClientId = User.Claims.Where(x => x.Type == "client_id").Select(x => x.Value).FirstOrDefault();
             userAuthorization.IdentityProvider = User.Claims.Where(x => x.Type == "http://schemas.microsoft.com/identity/claims/identityprovider").Select(x => x.Value).FirstOrDefault();
             userAuthorization.DateTimeRequsted = DateTime.Now;
-            userAuthorization.Email = User.Claims.Where(x => x.Type == "email").Select(x => x.Value).FirstOrDefault();
+            userAuthorization.Registration.Email = User.Claims.Where(x => x.Type == "email").Select(x => x.Value).FirstOrDefault();
 
             Data.Registration registration = Data.Registration.Get(userAuthorization.Email, _dbContext);
-            userAuthorization.RegistrationId = registration.Id;
-            userAuthorization.RegistrationStatus = registration.Status;
-            userAuthorization.FirstName = registration.FirstName;
-            userAuthorization.LastName = registration.LastName;
+            userAuthorization.Registration.RegistrationId = registration.Id;
+            userAuthorization.Registration.FirstName = registration.FirstName;
+            userAuthorization.Registration.LastName = registration.LastName;
+            userAuthorization.Registration.RequestDate = registration.RequestDate;
+            userAuthorization.Registration.ApprovedDate = registration.ApprovedDate;
+            userAuthorization.Registration.ApprovedBy = (registration.ApprovedBy != null) ? registration.ApprovedBy.Email : string.Empty;
+            userAuthorization.Registration.RevokedDate = registration.RevokedDate;
+            userAuthorization.Registration.RevokedBy = (registration.RevokedBy != null) ? registration.RevokedBy.Email : string.Empty;
 
             string jsonString = JsonConvert.SerializeObject(userAuthorization);
             string encryptString = AESGCM.Encrypt(jsonString, accessToken);

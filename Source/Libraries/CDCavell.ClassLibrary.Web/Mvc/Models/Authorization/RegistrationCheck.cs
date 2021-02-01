@@ -13,7 +13,7 @@ namespace CDCavell.ClassLibrary.Web.Mvc.Models.Authorization
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 01/30/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class RegistrationCheck
     {
@@ -21,7 +21,5 @@ namespace CDCavell.ClassLibrary.Web.Mvc.Models.Authorization
         public bool IsRegistered { get; set; }
         /// <value>string</value>
         public string Email { get; set; }
-        /// <value>string</value>
-        public string Authorization { get; set; }
     }
 }

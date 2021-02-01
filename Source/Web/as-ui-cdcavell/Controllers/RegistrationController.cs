@@ -24,7 +24,7 @@ namespace as_ui_cdcavell.Controllers
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 01/31/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class RegistrationController : ApplicationBaseController<RegistrationController>
     {
@@ -76,7 +76,7 @@ namespace as_ui_cdcavell.Controllers
                 return Error(400);
 
             Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
-            if (!authorization.UserAuthorization.RegistrationStatus.Equals("Not Registered", StringComparison.OrdinalIgnoreCase))
+            if (authorization.UserAuthorization.Registration.IsRegistered)
                 return RedirectToAction("Status", "Registration");
 
             RegistrationIndexModel model = new RegistrationIndexModel();
@@ -106,13 +106,13 @@ namespace as_ui_cdcavell.Controllers
                     return Error(400);
 
                 Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
-                if (!authorization.UserAuthorization.RegistrationStatus.Equals("Not Registered", StringComparison.OrdinalIgnoreCase))
+                if (authorization.UserAuthorization.Registration.IsRegistered)
                     return RedirectToAction("Status", "Registration");
 
                 UserAuthorization userAuthorization = new UserAuthorization();
-                userAuthorization.Email = model.Email.Clean();
-                userAuthorization.FirstName = model.FirstName.Clean();
-                userAuthorization.LastName = model.LastName.Clean();
+                userAuthorization.Registration.Email = model.Email.Clean();
+                userAuthorization.Registration.FirstName = model.FirstName.Clean();
+                userAuthorization.Registration.LastName = model.LastName.Clean();
 
                 JsonClient jsonClient = new JsonClient(_appSettings.Authorization.AuthorizationService.API, authorization.AccessToken);
                 HttpStatusCode statusCode = jsonClient.SendRequest(HttpMethod.Put, "Registration", userAuthorization);
@@ -156,17 +156,18 @@ namespace as_ui_cdcavell.Controllers
                 return Error(400);
 
             UserAuthorization userAuthorization = authorization.UserAuthorization;
-            if (userAuthorization.RegistrationStatus.Equals("Not Registered", StringComparison.OrdinalIgnoreCase))
+            if (!userAuthorization.Registration.IsRegistered)
                 return RedirectToAction("Index", "Registration");
 
             if (!emailClaim.Equals(userAuthorization.Email))
                 return Error(400);
 
             RegistrationIndexModel model = new RegistrationIndexModel();
-            model.Email = userAuthorization.Email;
-            model.FirstName = userAuthorization.FirstName;
-            model.LastName = userAuthorization.LastName;
-            model.Status = userAuthorization.RegistrationStatus;
+            model.Email = userAuthorization.Registration.Email;
+            model.FirstName = userAuthorization.Registration.FirstName;
+            model.LastName = userAuthorization.Registration.LastName;
+            model.RequestDate = userAuthorization.Registration.RequestDate;
+            model.Status = userAuthorization.Registration.Status;
 
             return View(model);
         }
