@@ -11,6 +11,7 @@ namespace cdcavell.Data
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.9 | 11/12/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 10/23/2020 | Initial build Authorization Service |~ 
     /// </revision>
     public abstract partial class DataModel<T> : IDataModel<DataModel<T>> where T : DataModel<T>
     {
@@ -38,7 +39,7 @@ namespace cdcavell.Data
         /// Add/Update record
         /// </summary>
         /// <method>AddUpdate(CDCavellDbContext dbContext)</method>
-        public void AddUpdate(CDCavellDbContext dbContext)
+        public virtual void AddUpdate(CDCavellDbContext dbContext)
         {
             if (this.IsNew)
                 dbContext.Add<DataModel<T>>(this);
@@ -52,7 +53,7 @@ namespace cdcavell.Data
         /// Delete record
         /// </summary>
         /// <param name="dbContext"></param>
-        public void Delete(CDCavellDbContext dbContext)
+        public virtual void Delete(CDCavellDbContext dbContext)
         {
             if (!this.IsNew)
             {

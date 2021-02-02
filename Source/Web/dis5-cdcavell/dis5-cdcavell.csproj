@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>dis5_cdcavell</RootNamespace>
-    <Version>1.0.2.3</Version>
+    <Version>1.0.3.0</Version>
     <Authors>Christopher D. Cavell</Authors>
     <Product>Website</Product>
     <Description>Duende IdentityServer5 OAuth 2.0 framework authentication</Description>

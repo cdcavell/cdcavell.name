@@ -35,6 +35,7 @@ namespace dis5_cdcavell.Controllers
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.2.0 | 01/16/2021 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 02/02/2021 | Initial build Authorization Service |~ 
     /// </revision>
     [AllowAnonymous]
     public class AccountController : ApplicationBaseController<AccountController>
@@ -383,7 +384,7 @@ namespace dis5_cdcavell.Controllers
             var vm = new LoggedOutViewModel
             {
                 AutomaticRedirectAfterSignOut = AccountOptions.AutomaticRedirectAfterSignOut,
-                PostLogoutRedirectUri = logout?.PostLogoutRedirectUri,
+                PostLogoutRedirectUri = string.IsNullOrEmpty(logout?.PostLogoutRedirectUri) ? "/Home/Index" : logout?.PostLogoutRedirectUri,
                 ClientName = string.IsNullOrEmpty(logout?.ClientName) ? logout?.ClientId : logout?.ClientName,
                 SignOutIframeUrl = logout?.SignOutIFrameUrl,
                 LogoutId = logoutId
