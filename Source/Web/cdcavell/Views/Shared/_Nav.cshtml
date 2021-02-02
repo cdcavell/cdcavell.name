@@ -16,7 +16,7 @@
         </div>
          <div id="navbar" class="navbar-collapse collapse w-75 justify-content-end">
              <ul class="nav navbar-nav m-1">
-                 @if (userModel.IsAuthenticated)
+                 @if (User.Identity.IsAuthenticated)
                  {
                     @if ((await AuthorizationService.AuthorizeAsync(User, "Authenticated")).Succeeded)
                     { 

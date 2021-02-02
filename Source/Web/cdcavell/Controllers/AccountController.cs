@@ -15,6 +15,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace cdcavell.Controllers
 {
@@ -79,12 +80,16 @@ namespace cdcavell.Controllers
         /// <summary>
         /// Login method
         /// </summary>
-        /// <returns>IActionResult</returns>
-        /// <method>Login()</method>
+        /// <returns>Task&lt;IActionResult&gt;</returns>
+        /// <method>IActionResult Login()</method>
         [Authorize(Policy = "Authenticated")]
         [HttpGet]
         public IActionResult Login()
         {
+            //TODO: Fix Authorization accross sites
+            // https://mcguirev10.com/2018/01/12/persistent-login-with-identityserver.html
+            // return View();
+
             return RedirectToAction("Index", "Account");
         }
 

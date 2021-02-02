@@ -53,7 +53,7 @@ namespace cdcavell
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/11/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// | Christopher D. Cavell | 1.0.2.2 | 01/18/2021 | Convert GrantType from Implicit to Pkce |~ 
-    /// | Christopher D. Cavell | 1.0.3.0 | 01/31/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class Startup
     {
@@ -97,9 +97,6 @@ namespace cdcavell
 
             services.AddDbContext<CDCavellDbContext>(options =>
                 options.UseSqlite(appSettings.ConnectionStrings.CDCavellConnection));
-
-            services.AddMvc();
-            services.AddControllersWithViews();
 
             // Register IHttpContextAccessor
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -178,9 +175,9 @@ namespace cdcavell
                                 return Task.FromResult(ticketReceivedContext.Result);
                             }
 
-                            // Authorization Service API Get If User Is Registered
+                            // Authorization Service API Get User Authorization
                             JsonClient jsonClient = new JsonClient(_appSettings.Authorization.AuthorizationService.API, accessToken);
-                            HttpStatusCode statusCode = jsonClient.SendRequest(HttpMethod.Get, "Registration");
+                            HttpStatusCode statusCode = jsonClient.SendRequest(HttpMethod.Get, "Authorization");
                             if (!jsonClient.IsResponseSuccess)
                             {
                                 _logger.Exception(new Exception(jsonClient.GetResponseString() + " - Remote IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
@@ -190,27 +187,6 @@ namespace cdcavell
                             }
 
                             string jsonString = AESGCM.Decrypt(jsonClient.GetResponseObject<string>(), accessToken);
-                            RegistrationCheck registrationCheck = JsonConvert.DeserializeObject<RegistrationCheck>(jsonString);
-                            if (!registrationCheck.IsRegistered)
-                            {
-                                string url = _appSettings.Authorization.AuthorizationService.UI.TrimEnd('/').TrimEnd('\\');
-                                url += "/Registration/Index";
-                                ticketReceivedContext.HttpContext.Response.Redirect(url);
-                                ticketReceivedContext.HandleResponse();
-                                return Task.FromResult(ticketReceivedContext.Result);
-                            }
-
-                            // Authorization Service API Get User Authorization
-                            statusCode = jsonClient.SendRequest(HttpMethod.Get, "Authorization");
-                            if (!jsonClient.IsResponseSuccess)
-                            {
-                                _logger.Exception(new Exception(jsonClient.GetResponseString() + " - Remote IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
-                                ticketReceivedContext.HttpContext.Response.Redirect("/Home/Error/7002");
-                                ticketReceivedContext.HandleResponse();
-                                return Task.FromResult(ticketReceivedContext.Result);
-                            }
-
-                            jsonString = AESGCM.Decrypt(jsonClient.GetResponseObject<string>(), accessToken);
                             UserAuthorization userAuthorization = JsonConvert.DeserializeObject<UserAuthorization>(jsonString);
                             if (string.IsNullOrEmpty(userAuthorization.Email))
                             {
@@ -268,6 +244,9 @@ namespace cdcavell
                 options.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None;
                 options.ConsentCookie.Expiration = TimeSpan.FromDays(30);
             });
+
+            services.AddMvc();
+            services.AddControllersWithViews();
         }
 
         /// <summary>

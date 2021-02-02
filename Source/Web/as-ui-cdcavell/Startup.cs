@@ -15,7 +15,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -45,7 +44,7 @@ namespace as_ui_cdcavell
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 01/31/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class Startup
     {
@@ -89,9 +88,6 @@ namespace as_ui_cdcavell
 
             services.AddDbContext<AuthorizationUiDbContext>(options =>
                 options.UseSqlite(appSettings.ConnectionStrings.AuthorizationUiConnection));
-
-            services.AddMvc();
-            services.AddControllersWithViews();
 
             // Register IHttpContextAccessor
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -239,6 +235,9 @@ namespace as_ui_cdcavell
                 options.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None;
                 options.ConsentCookie.Expiration = TimeSpan.FromDays(30);
             });
+
+            services.AddMvc();
+            services.AddControllersWithViews();
         }
 
         /// <summary>
