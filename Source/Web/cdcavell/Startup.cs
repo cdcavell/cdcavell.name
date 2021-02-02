@@ -128,6 +128,7 @@ namespace cdcavell
                 options.DefaultChallengeScheme = "oidc";
             })
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, cookieOptions => {
+                    cookieOptions.Cookie.Name = Assembly.GetEntryAssembly().GetName().Name;
                     cookieOptions.Events.OnRedirectToAccessDenied = context =>
                     {
                         context.Response.StatusCode = (int)(HttpStatusCode.Unauthorized);
