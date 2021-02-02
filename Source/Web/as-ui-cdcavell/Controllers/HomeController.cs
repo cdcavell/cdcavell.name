@@ -59,7 +59,7 @@ namespace as_ui_cdcavell.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            return Redirect(_appSettings.Authorization.AuthorizationService.IndexReturn);
+            return Redirect(_appSettings.Application.MainSiteUrlTrim);
         }
 
         /// <summary>
@@ -71,10 +71,7 @@ namespace as_ui_cdcavell.Controllers
         [HttpGet]
         public IActionResult PrivacyPolicy()
         {
-            string url = _appSettings.Authorization.AuthorizationService.IndexReturn.ToLower();
-            url = url.TrimEnd('/').TrimEnd("/home/index");
-            url += "/Home/PrivacyPolicy";
-            return Redirect(url);
+            return Redirect(_appSettings.Application.MainSiteUrlTrim + "/Home/PrivacyPolicy");
         }
 
         /// <summary>
@@ -86,10 +83,7 @@ namespace as_ui_cdcavell.Controllers
         [HttpGet]
         public IActionResult TermsOfService()
         {
-            string url = _appSettings.Authorization.AuthorizationService.IndexReturn.ToLower();
-            url = url.TrimEnd('/').TrimEnd("/home/index");
-            url += "/Home/TermsOfService";
-            return Redirect(url);
+            return Redirect(_appSettings.Application.MainSiteUrlTrim + "/Home/TermsOfService");
         }
 
         /// <summary>
@@ -101,10 +95,7 @@ namespace as_ui_cdcavell.Controllers
         [HttpGet]
         public IActionResult WithdrawConsent()
         {
-            string url = _appSettings.Authorization.AuthorizationService.IndexReturn.ToLower();
-            url = url.TrimEnd('/').TrimEnd("/home/index");
-            url += "/Home/WithdrawConsent";
-            return Redirect(url);
+            return Redirect(_appSettings.Application.MainSiteUrlTrim + "/Home/WithdrawConsent");
         }
 
         /// <summary>
@@ -116,10 +107,7 @@ namespace as_ui_cdcavell.Controllers
         [HttpGet]
         public IActionResult Search()
         {
-            string url = _appSettings.Authorization.AuthorizationService.IndexReturn.ToLower();
-            url = url.TrimEnd('/').TrimEnd("/home/index");
-            url += "/Home/Search";
-            return Redirect(url);
+            return Redirect(_appSettings.Application.MainSiteUrlTrim + "/Home/Search");
         }
     }
 }

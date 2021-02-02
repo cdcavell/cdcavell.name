@@ -15,7 +15,5 @@
         public string API { get; set; }
         /// <value>string</value>
         public string UI { get; set; }
-        /// <value>string</value>
-        public string IndexReturn { get; set; }
     }
 }

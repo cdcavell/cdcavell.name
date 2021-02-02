@@ -45,6 +45,40 @@ namespace dis5_cdcavell
             {
                 new Client
                 {
+                    ClientId = "Authorization.Service.UI.DEV",
+                    ClientName = "Authorization Service UI [Development]",
+
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RequireClientSecret = false,
+                    RequirePkce = true,
+                    AllowOfflineAccess = true,
+
+                    // where to redirect to after login
+                    RedirectUris = new List<string>
+                    {
+                        "https://localhost:44305/signin-oidc",
+                    },
+
+                    // where to redirect to after logout
+                    PostLogoutRedirectUris = new List<string>
+                    {
+                        "https://localhost:44305/signout-callback-oidc",
+                    },
+                    FrontChannelLogoutUri = "https://localhost:44305/Account/FrontChannelLogout",
+                    FrontChannelLogoutSessionRequired = true,
+
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Email,
+                        "Authorization.Service.API.Read",
+                        "Authorization.Service.API.Write"
+                    },
+
+                    AccessTokenLifetime = Convert.ToInt32((new TimeSpan(1,0,0,0)).TotalSeconds)
+                },
+                new Client
+                {
                     ClientId = "Authorization.Service.UI",
                     ClientName = "Authorization Service UI",
 
@@ -79,7 +113,40 @@ namespace dis5_cdcavell
 
                     AccessTokenLifetime = Convert.ToInt32((new TimeSpan(1,0,0,0)).TotalSeconds)
                 },
-                // OpenID Connect interactive client using code flow + pkce (MVC)
+                new Client
+                {
+                    ClientId = "cdcavell.name.DEV",
+                    ClientName = "Personal Website of Christopher D. Cavell [Development]",
+
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RequireClientSecret = false,
+                    RequirePkce = true,
+                    AllowOfflineAccess = true,
+
+                    // where to redirect to after login
+                    RedirectUris = new List<string>
+                    {
+                        "https://localhost:44349/signin-oidc",
+                    },
+
+                    // where to redirect to after logout
+                    PostLogoutRedirectUris = new List<string>
+                    {
+                        "https://localhost:44349/signout-callback-oidc",
+                    },
+                    FrontChannelLogoutSessionRequired = true,
+                    FrontChannelLogoutUri = "https://localhost:44349/Account/FrontChannelLogout",
+
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Email,
+                        "Authorization.Service.API.Read"
+                    },
+
+                    AlwaysIncludeUserClaimsInIdToken = true,
+                    AccessTokenLifetime = Convert.ToInt32((new TimeSpan(1,0,0,0)).TotalSeconds)
+                },
                 new Client
                 {
                     ClientId = "cdcavell.name",
