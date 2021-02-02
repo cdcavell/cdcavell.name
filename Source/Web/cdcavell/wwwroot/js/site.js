@@ -1,5 +1,5 @@
 ﻿/*!
-  * Licensed under MIT (https://github.com/cdcavell/cdcavell.name/blob/master/LICENSE)
+  * Licensed under MIT (https://github.com/cdcavell/cdcavell.name/blob/main/LICENSE)
   * 
   *  Revisions:
   *  ----------------------------------------------------------------------------------------------------
@@ -7,11 +7,12 @@
   * |-----------------------|---------|--------------|-----------------------------------------------------
   * | Christopher D. Cavell | 1.0.0.0 | 10/28/2020   | Initial build 
   * | Christopher D. Cavell | 1.0.0.9 | 11/08/2020   | Implement Registration/Roles/Permissions [#183]
+  * | Christopher D. Cavell | 1.0.3.0 | 01/30/2021   | Initial build Authorization Service
   *
   */
 
-console.log('-- Loading site.js (https://github.com/cdcavell/cdcavell.name/blob/master/Source/Web/cdcavell/wwwroot/js/site.js) --');
-console.log('Licensed under MIT (https://github.com/cdcavell/cdcavell.name/blob/master/LICENSE)');
+console.log('-- Loading site.js (https://github.com/cdcavell/cdcavell.name/blob/main/Source/Web/cdcavell/wwwroot/js/site.js) --');
+console.log('Licensed under MIT (https://github.com/cdcavell/cdcavell.name/blob/main/LICENSE)');
 
 $(function() {
 

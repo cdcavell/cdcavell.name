@@ -26,6 +26,9 @@ Source/Web/dis5-cdcavell/tempkey.jwk
 Source/Web/dis5-cdcavell/rsakey.json
 Source/Web/dis5-cdcavell/keys
 
+# Microsoft Azure Application Parameters
+Source/AzureParameters/
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/

@@ -40,7 +40,7 @@ namespace cdcavell.Classes
         /// <summary>
         /// Constructor method
         /// </summary>
-        /// <param name="logger">ILogger&lt;AdministrationController&gt;</param>
+        /// <param name="logger">Logger</param>
         /// <param name="webHostEnvironment">IWebHostEnvironment</param>
         /// <param name="appSettings">AppSettings</param>
         /// <method>

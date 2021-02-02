@@ -24,6 +24,7 @@ namespace CDCavell.ClassLibrary.Web.Security
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.0 | 05/16/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 01/23/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class AESGCM
     {
@@ -346,6 +347,17 @@ namespace CDCavell.ClassLibrary.Web.Security
             return SimpleEncryptWithPassword(plainText, InternalPassword);
         }
 
+        /// <summary>
+        /// Method to encrypt plain text string with given password
+        /// </summary>
+        /// <param name="plainText">string</param>
+        /// <param name="password">string</param>
+        /// <returns>string</returns>
+        /// <method>Encrypt(string plainText, string password)</method>
+        public static string Encrypt(string plainText, string password)
+        {
+            return SimpleEncryptWithPassword(plainText, password);
+        }
 
         /// <summary>
         /// Method to decrypt encrypted string to plain text
@@ -356,6 +368,18 @@ namespace CDCavell.ClassLibrary.Web.Security
         public static string Decrypt(string encryptedText)
         {
             return SimpleDecryptWithPassword(encryptedText, InternalPassword);
+        }
+
+        /// <summary>
+        /// Method to decrypt encrypted string to plain text with given password
+        /// </summary>
+        /// <param name="encryptedText">string</param>
+        /// <param name="password">string</param>
+        /// <returns>string</returns>
+        /// <method>Decrypt(string encryptedText, string password)</method>
+        public static string Decrypt(string encryptedText, string password)
+        {
+            return SimpleDecryptWithPassword(encryptedText, password);
         }
 
         /// <summary>

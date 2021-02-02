@@ -17,6 +17,7 @@ namespace CDCavell.ClassLibrary.Web.Mvc.Filters
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.0 | 10/12/2020 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 01/19/2021 | Initial build Authorization Service |~ 
     /// </revision>
     [AttributeUsage(AttributeTargets.Class)]
     public class ControllerActionLogFilter : ActionFilterAttribute
@@ -35,9 +36,8 @@ namespace CDCavell.ClassLibrary.Web.Mvc.Filters
             _httpContextAccessor = httpContextAccessor;
 
             var user = _httpContextAccessor.HttpContext.User;
-            Claim nameClaim = (user != null) ? user.FindFirst(ClaimTypes.Name) ?? user.FindFirst("name") : null;
-            Claim userIdClaim = (user != null) ? user.FindFirst("user_id") : null;
-            _userName = ((nameClaim != null) ? nameClaim.Value : "Anonymous") + " (" + ((userIdClaim != null) ? userIdClaim.Value : string.Empty) + ")";
+            Claim emailClaim = (user != null) ? user.FindFirst(ClaimTypes.Email) ?? user.FindFirst("email") : null;
+            _userName = (emailClaim != null) ? emailClaim.Value : "Anonymous";
         }
 
         /// <summary>

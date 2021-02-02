@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using dis5_cdcavell.Models.AppSettings;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,22 +16,28 @@ namespace dis5_cdcavell.Controllers
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.2.0 | 01/16/2021 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 02/02/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class HomeController : ApplicationBaseController<HomeController>
     {
+        private AppSettings _appSettings;
+
         /// <summary>
         /// Constructor method
         /// </summary>
         /// <param name="logger">ILogger</param>
         /// <param name="webHostEnvironment">IWebHostEnvironment</param>
         /// <param name="httpContextAccessor">IHttpContextAccessor</param>
+        /// <param name="appSettings">AppSettings</param>
         /// <method>HomeController(ILogger&lt;HomeController&gt; logger, IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor)</method>
         public HomeController(
             ILogger<HomeController> logger,
             IWebHostEnvironment webHostEnvironment,
-            IHttpContextAccessor httpContextAccessor
+            IHttpContextAccessor httpContextAccessor,
+            AppSettings appSettings
         ) : base(logger, webHostEnvironment, httpContextAccessor)
         {
+            _appSettings = appSettings;
         }
 
         /// <summary>
@@ -42,14 +49,16 @@ namespace dis5_cdcavell.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            if (_webHostEnvironment.IsDevelopment())
-            {
-                // only show in development
-                return View();
-            }
+            //if (_webHostEnvironment.IsDevelopment())
+            //{
+            //    // only show in development
+            //    return View();
+            //}
 
-            _logger.Information("Homepage is disabled in production. Redirecting https://cdcavell.name.");
-            return Redirect("https://cdcavell.name");
+            //_logger.Information("Homepage is disabled in production. Redirecting https://cdcavell.name.");
+            //return Redirect("https://cdcavell.name");
+
+            return Redirect(_appSettings.Application.MainSiteUrlTrim);
         }
     }
 }

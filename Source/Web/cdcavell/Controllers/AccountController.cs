@@ -2,7 +2,9 @@
 using cdcavell.Models.Account;
 using cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Web.Http;
-using CDCavell.ClassLibrary.Web.Mvc.Models;
+using CDCavell.ClassLibrary.Web.Mvc.Models.Authorization;
+using IdentityModel;
+using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -11,8 +13,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Claims;
+using System.Security.Principal;
+using System.Threading.Tasks;
 
 namespace cdcavell.Controllers
 {
@@ -26,6 +32,7 @@ namespace cdcavell.Controllers
     /// | Christopher D. Cavell | 1.0.0.0 | 10/19/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/12/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 02/02/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class AccountController : ApplicationBaseController<AccountController>
     {
@@ -68,38 +75,20 @@ namespace cdcavell.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            UserViewModel user = (UserViewModel)ViewData["UserViewModel"];
-
-            AccountViewModel model = new AccountViewModel();
-            model.Registration = Data.Registration.Get(user.Email, _dbContext);
-
-            if (model.Registration != null)
-            {
-                return View(model);
-            }
-
-            var isNewRegistration = _authorizationService.AuthorizeAsync(User, "NewRegistration").Result;
-            if (isNewRegistration.Succeeded)
-                return RedirectToAction("Registration", "Account");
-
-            return RedirectToAction("Logout", "Account");
+            string url = _appSettings.Authorization.AuthorizationService.UI.TrimEnd('/').TrimEnd('\\');
+            url += "/Registration/Status";
+            return Redirect(url);
         }
 
         /// <summary>
         /// Login method
         /// </summary>
-        /// <returns>IActionResult</returns>
-        /// <method>Login()</method>
+        /// <returns>Task&lt;IActionResult&gt;</returns>
+        /// <method>IActionResult Login()</method>
         [Authorize(Policy = "Authenticated")]
         [HttpGet]
         public IActionResult Login()
         {
-            var isNewRegistration = _authorizationService.AuthorizeAsync(User, "NewRegistration").Result;
-            if (isNewRegistration.Succeeded)
-            {
-                return RedirectToAction("Registration", "Account");
-            }
-
             return RedirectToAction("Index", "Account");
         }
 
@@ -139,93 +128,54 @@ namespace cdcavell.Controllers
         }
 
         /// <summary>
-        /// Registration HttpGet method
-        /// </summary>
-        /// <returns>IActionResult</returns>
-        /// <method>Registration()</method>
-        [Authorize(Policy = "NewRegistration")]
-        [HttpGet]
-        public IActionResult Registration()
-        {
-            UserViewModel user = (UserViewModel)ViewData["UserViewModel"];
-
-            Registration registration = Data.Registration.Get(user.Email, _dbContext);
-            if (registration == null)
-            {
-                AccountViewModel model = new AccountViewModel();
-                model.Registration = new Registration();
-                model.Registration.Email = user.Email;
-
-                return View(model);
-            }
-
-            if (registration.IsPending)
-                return RedirectToAction("Index", "Account");
-
-            return RedirectToAction("Logout", "Account");
-        }
-
-        /// <summary>
-        /// Registration HttpPost method
-        /// </summary>
-        /// <param name="model">AccountViewModel</param>
-        /// <returns>IActionResult</returns>
-        /// <method>Registration(AccountViewModel model)</method>
-        [Authorize(Policy = "NewRegistration")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Registration(AccountViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                model.Registration.Email = model.Registration.Email.Trim().Clean();
-                model.Registration.FirstName = model.Registration.FirstName.Trim().Clean();
-                model.Registration.LastName = model.Registration.LastName.Trim().Clean();
-                model.Registration.RequestDate = DateTime.Now;
-                model.Registration.AddUpdate(_dbContext);
-
-                return RedirectToAction("Index", "Account");
-            }
-
-            return View(model);
-        }
-
-        /// <summary>
-        /// Delete Account
-        /// </summary>
-        /// <param name="model">AccountViewModel</param>
-        /// <returns>IActionResult</returns>
-        /// <method>Delete(AccountViewModel model)</method>
-        [Authorize(Policy = "Authenticated")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Delete(AccountViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                model.Registration.Delete(_dbContext);
-                return RedirectToAction("Logout", "Account");
-            }
-
-            return View(model);
-        }
-
-        /// <summary>
         /// Logout method
         /// </summary>
-        /// <returns>IActionResult</returns>
+        /// <returns>Task&lt;IActionResult&gt;</returns>
         /// <method>Logout()</method>
         [AllowAnonymous]
         [HttpGet]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
             if (User.Identity.IsAuthenticated)
             {
-                HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                return SignOut(CookieAuthenticationDefaults.AuthenticationScheme, "oidc");
+                // Remove Authorization record
+                Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
+                authorization.Delete(_dbContext);
+
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                SignOut(CookieAuthenticationDefaults.AuthenticationScheme, "oidc");
+
+                DiscoveryCache discoveryCache = (DiscoveryCache)HttpContext
+                    .RequestServices.GetService(typeof(IDiscoveryCache));
+                DiscoveryDocumentResponse discovery = discoveryCache.GetAsync().Result;
+                if (!discovery.IsError)
+                    return Redirect(discovery.EndSessionEndpoint);
             }
 
             return RedirectToAction("Index", "Home");
+        }
+
+        /// <summary>
+        /// Front Channel SLO Logout method
+        /// &lt;br /&gt;&lt;br /&gt;
+        /// https://andersonnjen.com/2019/03/22/identityserver4-global-logout/
+        /// </summary>
+        /// <returns>Task&lt;IActionResult&gt;</returns>
+        /// <method>FrontChannelLogout(string sid)</method>
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> FrontChannelLogout(string sid)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var currentSid = User.FindFirst("sid")?.Value ?? "";
+                if (string.Equals(currentSid, sid, StringComparison.Ordinal))
+                {
+                    await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                }
+            }
+
+            return NoContent();
         }
     }
 }

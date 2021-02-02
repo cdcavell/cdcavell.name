@@ -5,9 +5,10 @@ using cdcavell.Data;
 using cdcavell.Filters;
 using cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Commons.Logging;
+using CDCavell.ClassLibrary.Web.Http;
 using CDCavell.ClassLibrary.Web.Mvc.Filters;
+using CDCavell.ClassLibrary.Web.Mvc.Models.Authorization;
 using CDCavell.ClassLibrary.Web.Security;
-using IdentityModel;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -24,10 +25,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.Net.Http.Headers;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
@@ -52,6 +53,7 @@ namespace cdcavell
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/11/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// | Christopher D. Cavell | 1.0.2.2 | 01/18/2021 | Convert GrantType from Implicit to Pkce |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class Startup
     {
@@ -96,9 +98,6 @@ namespace cdcavell
             services.AddDbContext<CDCavellDbContext>(options =>
                 options.UseSqlite(appSettings.ConnectionStrings.CDCavellConnection));
 
-            services.AddMvc();
-            services.AddControllersWithViews();
-
             // Register IHttpContextAccessor
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -116,29 +115,10 @@ namespace cdcavell
                 {
                     policy.Requirements.Add(new AuthenticatedRequirement(true));
                 });
-                options.AddPolicy("NewRegistration", policy =>
-                {
-                    policy.Requirements.Add(new AuthenticatedRequirement(true));
-                    policy.Requirements.Add(new NewRegistrationRequirement(true));
-                });
-                options.AddPolicy("ExistingRegistration", policy =>
-                {
-                    policy.Requirements.Add(new AuthenticatedRequirement(true));
-                    policy.Requirements.Add(new ExistingRegistrationRequirement(true));
-                });
-                options.AddPolicy("Administration", policy =>
-                {
-                    policy.Requirements.Add(new AuthenticatedRequirement(true));
-                    policy.Requirements.Add(new ExistingRegistrationRequirement(true));
-                    policy.Requirements.Add(new AdministrationRequirement(true));
-                });
             });
 
             // Registered authorization handlers
             services.AddTransient<IAuthorizationHandler, AuthenticatedHandler>();
-            services.AddTransient<IAuthorizationHandler, NewRegistrationHandler>();
-            services.AddTransient<IAuthorizationHandler, ExistingRegistrationHandler>();
-            services.AddTransient<IAuthorizationHandler, AdministrationHandler>();
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -148,6 +128,7 @@ namespace cdcavell
                 options.DefaultChallengeScheme = "oidc";
             })
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, cookieOptions => {
+                    cookieOptions.Cookie.Name = Assembly.GetEntryAssembly().GetName().Name;
                     cookieOptions.Events.OnRedirectToAccessDenied = context =>
                     {
                         context.Response.StatusCode = (int)(HttpStatusCode.Unauthorized);
@@ -161,7 +142,7 @@ namespace cdcavell
                 })
                 .AddOpenIdConnect("oidc", options =>
                 {
-                    options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme; 
+                    options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 
                     options.Authority = appSettings.Authentication.IdP.Authority;
                     options.RequireHttpsMetadata = true;
@@ -173,6 +154,7 @@ namespace cdcavell
                     options.Scope.Clear();
                     options.Scope.Add("openid");
                     options.Scope.Add("email");
+                    options.Scope.Add("Authorization.Service.API.Read");
                     options.SaveTokens = true;
 
                     options.Events = new OpenIdConnectEvents
@@ -188,67 +170,53 @@ namespace cdcavell
                             string accessToken = ticketReceivedContext.Properties.Items[".Token.access_token"];
                             if (string.IsNullOrEmpty(accessToken))
                             {
-                                _logger.Exception(new Exception("Invalid Access Token - Reomte IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
-                                ticketReceivedContext.HttpContext.Response.Redirect("/Home/Error/401");
+                                _logger.Exception(new Exception("Invalid Access Token - Remote IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
+                                ticketReceivedContext.HttpContext.Response.Redirect("/Home/Error/7001");
+                                ticketReceivedContext.HandleResponse();
                                 return Task.FromResult(ticketReceivedContext.Result);
                             }
 
-                            // Get Authority Discovery Endpoint 
-                            DiscoveryCache discoveryCache = (DiscoveryCache)ticketReceivedContext.HttpContext
-                                .RequestServices.GetService(typeof(IDiscoveryCache));
-                            DiscoveryDocumentResponse discovery = discoveryCache.GetAsync().Result;
-                            if (discovery.IsError) 
+                            // Authorization Service API Get User Authorization
+                            JsonClient jsonClient = new JsonClient(_appSettings.Authorization.AuthorizationService.API, accessToken);
+                            HttpStatusCode statusCode = jsonClient.SendRequest(HttpMethod.Get, "Authorization");
+                            if (!jsonClient.IsResponseSuccess)
                             {
-                                _logger.Exception(new Exception(discovery.Error + " - Reomte IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
-                                ticketReceivedContext.HttpContext.Response.Redirect("/Home/Error/401");
+                                _logger.Exception(new Exception(jsonClient.GetResponseString() + " - Remote IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
+                                ticketReceivedContext.HttpContext.Response.Redirect("/Home/Error/7002");
+                                ticketReceivedContext.HandleResponse();
                                 return Task.FromResult(ticketReceivedContext.Result);
                             }
 
-                            // Get HttpClient
-                            IHttpClientFactory clientFactory = (IHttpClientFactory)ticketReceivedContext.HttpContext
-                                .RequestServices.GetService(typeof(IHttpClientFactory));
-                            HttpClient client = clientFactory.CreateClient();
-
-                            // Get UserInfo
-                            UserInfoResponse userInfoResponse = client.GetUserInfoAsync(new UserInfoRequest
+                            string jsonString = AESGCM.Decrypt(jsonClient.GetResponseObject<string>(), accessToken);
+                            UserAuthorization userAuthorization = JsonConvert.DeserializeObject<UserAuthorization>(jsonString);
+                            if (string.IsNullOrEmpty(userAuthorization.Email))
                             {
-                                Address = discovery.UserInfoEndpoint,
-                                Token = accessToken
-                            }).Result;
-                            if (userInfoResponse.IsError)
-                            {
-                                _logger.Exception(new Exception(userInfoResponse.Error + " - Reomte IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
-                                ticketReceivedContext.HttpContext.Response.Redirect("/Home/Error/401");
+                                _logger.Exception(new Exception("Email is null or empty - Remote IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
+                                ticketReceivedContext.HttpContext.Response.Redirect("/Home/Error/7003");
+                                ticketReceivedContext.HandleResponse();
                                 return Task.FromResult(ticketReceivedContext.Result);
                             }
 
-                            var receivedClaims = userInfoResponse.Claims;
+                            // Get dbContext
+                            CDCavellDbContext dbContext = (CDCavellDbContext)ticketReceivedContext.HttpContext
+                                .RequestServices.GetService(typeof(CDCavellDbContext));
+
+                            // Harden User Authorization
+                            Data.Authorization authorization = new Data.Authorization();
+                            authorization.Guid = Guid.NewGuid().ToString();
+                            authorization.AccessToken = accessToken;
+                            authorization.Created = DateTime.Now;
+                            authorization.UserAuthorization = userAuthorization;
+                            authorization.AddUpdate(dbContext);
+
                             var additionalClaims = new List<Claim>();
+                            if (!ticketReceivedContext.Principal.HasClaim("email", userAuthorization.Email.Clean()))
+                                additionalClaims.Add(new Claim("email", userAuthorization.Email.Clean()));
 
-                            Claim emailClaim = receivedClaims.FirstOrDefault(x => x.Type == "email");
-                            if (emailClaim != null)
-                            {
-                                additionalClaims.Add(new Claim("email", emailClaim.Value.Clean()));
+                            if (!ticketReceivedContext.Principal.HasClaim("authorization", authorization.Guid))
+                                additionalClaims.Add(new Claim("authorization", authorization.Guid));
 
-                                CDCavellDbContext dbContext = (CDCavellDbContext)ticketReceivedContext.HttpContext
-                                    .RequestServices.GetService(typeof(CDCavellDbContext));
-
-                                Registration registration = Registration.Get(emailClaim.Value.Clean(), dbContext);
-                                if (registration != null)
-                                {
-                                    if (registration.IsActive)
-                                        additionalClaims.Add(new Claim("registration", "existing"));
-                                    else
-                                        additionalClaims.Add(new Claim("registration", "new"));
-
-                                    ticketReceivedContext.Principal.AddIdentity(new ClaimsIdentity(additionalClaims));
-                                }
-                                else
-                                {
-                                    additionalClaims.Add(new Claim("registration", "new"));
-                                    ticketReceivedContext.Principal.AddIdentity(new ClaimsIdentity(additionalClaims));
-                                }
-                            }
+                            ticketReceivedContext.Principal.AddIdentity(new ClaimsIdentity(additionalClaims));
 
                             return Task.FromResult(ticketReceivedContext.Result); 
                         }
@@ -277,6 +245,9 @@ namespace cdcavell
                 options.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None;
                 options.ConsentCookie.Expiration = TimeSpan.FromDays(30);
             });
+
+            services.AddMvc();
+            services.AddControllersWithViews();
         }
 
         /// <summary>
@@ -335,6 +306,7 @@ namespace cdcavell
                 endpoints.MapDefaultControllerRoute();
             });
         }
+
         /// <summary>
         /// Exposed IApplicationLifetime interface method.
         /// </summary>
