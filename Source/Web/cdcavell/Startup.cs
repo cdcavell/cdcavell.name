@@ -142,7 +142,7 @@ namespace cdcavell
                 })
                 .AddOpenIdConnect("oidc", options =>
                 {
-                    options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme; 
+                    options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 
                     options.Authority = appSettings.Authentication.IdP.Authority;
                     options.RequireHttpsMetadata = true;

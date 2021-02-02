@@ -4,6 +4,7 @@ using cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Web.Http;
 using CDCavell.ClassLibrary.Web.Mvc.Models.Authorization;
 using IdentityModel;
+using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -31,7 +32,7 @@ namespace cdcavell.Controllers
     /// | Christopher D. Cavell | 1.0.0.0 | 10/19/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/12/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
-    /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 02/02/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class AccountController : ApplicationBaseController<AccountController>
     {
@@ -129,11 +130,11 @@ namespace cdcavell.Controllers
         /// <summary>
         /// Logout method
         /// </summary>
-        /// <returns>IActionResult</returns>
+        /// <returns>Task&lt;IActionResult&gt;</returns>
         /// <method>Logout()</method>
         [AllowAnonymous]
         [HttpGet]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -141,11 +142,40 @@ namespace cdcavell.Controllers
                 Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
                 authorization.Delete(_dbContext);
 
-                HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme).Wait();
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
                 SignOut(CookieAuthenticationDefaults.AuthenticationScheme, "oidc");
+
+                DiscoveryCache discoveryCache = (DiscoveryCache)HttpContext
+                    .RequestServices.GetService(typeof(IDiscoveryCache));
+                DiscoveryDocumentResponse discovery = discoveryCache.GetAsync().Result;
+                if (!discovery.IsError)
+                    return Redirect(discovery.EndSessionEndpoint);
             }
 
             return RedirectToAction("Index", "Home");
+        }
+
+        /// <summary>
+        /// Front Channel SLO Logout method
+        /// &lt;br /&gt;&lt;br /&gt;
+        /// https://andersonnjen.com/2019/03/22/identityserver4-global-logout/
+        /// </summary>
+        /// <returns>Task&lt;IActionResult&gt;</returns>
+        /// <method>FrontChannelLogout(string sid)</method>
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> FrontChannelLogout(string sid)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var currentSid = User.FindFirst("sid")?.Value ?? "";
+                if (string.Equals(currentSid, sid, StringComparison.Ordinal))
+                {
+                    await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                }
+            }
+
+            return NoContent();
         }
     }
 }

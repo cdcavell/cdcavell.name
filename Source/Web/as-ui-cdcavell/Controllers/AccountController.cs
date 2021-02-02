@@ -3,6 +3,7 @@ using as_ui_cdcavell.Models.Account;
 using as_ui_cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Web.Http;
 using CDCavell.ClassLibrary.Web.Mvc.Models.Authorization;
+using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -15,6 +16,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace as_ui_cdcavell.Controllers
 {
@@ -25,7 +27,7 @@ namespace as_ui_cdcavell.Controllers
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 02/02/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class AccountController : ApplicationBaseController<AccountController>
     {
@@ -68,8 +70,7 @@ namespace as_ui_cdcavell.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            UserAuthorization userAuthorization = Data.Authorization.GetUser(User.Claims, _dbContext);
-            return View(userAuthorization);
+            return RedirectToAction("Status", "Registration");
         }
 
         /// <summary>
@@ -122,11 +123,11 @@ namespace as_ui_cdcavell.Controllers
         /// <summary>
         /// Logout method
         /// </summary>
-        /// <returns>IActionResult</returns>
+        /// <returns>Task&lt;IActionResult&gt;</returns>
         /// <method>Logout()</method>
         [AllowAnonymous]
         [HttpGet]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -134,11 +135,40 @@ namespace as_ui_cdcavell.Controllers
                 Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
                 authorization.Delete(_dbContext);
 
-                HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme).Wait();
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
                 SignOut(CookieAuthenticationDefaults.AuthenticationScheme, "oidc");
+
+                DiscoveryCache discoveryCache = (DiscoveryCache)HttpContext
+                    .RequestServices.GetService(typeof(IDiscoveryCache));
+                DiscoveryDocumentResponse discovery = discoveryCache.GetAsync().Result;
+                if (!discovery.IsError)
+                    return Redirect(discovery.EndSessionEndpoint);
             }
 
             return RedirectToAction("Index", "Home");
+        }
+
+        /// <summary>
+        /// Front Channel SLO Logout method
+        /// <&lt;br /&gt;&lt;br /&gt;
+        /// https://andersonnjen.com/2019/03/22/identityserver4-global-logout/
+        /// </summary>
+        /// <returns>Task&lt;IActionResult&gt;</returns>
+        /// <method>FrontChannelLogout(string sid)</method>
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> FrontChannelLogout(string sid)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var currentSid = User.FindFirst("sid")?.Value ?? "";
+                if (string.Equals(currentSid, sid, StringComparison.Ordinal))
+                {
+                    await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                }
+            }
+
+            return NoContent();
         }
     }
 }

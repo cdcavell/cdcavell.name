@@ -63,6 +63,7 @@
 
 	<ItemGroup>
 	  <Folder Include="Models\Home\" />
+	  <Folder Include="Views\Account\" />
 	  <Folder Include="Views\Home\" />
 	</ItemGroup>
 
