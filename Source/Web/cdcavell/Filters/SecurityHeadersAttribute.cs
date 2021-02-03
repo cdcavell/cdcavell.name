@@ -23,6 +23,7 @@ namespace cdcavell.Filters
     /// | Christopher D. Cavell | 1.0.0.1 | 10/29/2020 | Remove YouTubeVideos (Not Implemented) |~ 
     /// | Christopher D. Cavell | 1.0.0.3 | 10/30/2020 | Issue #150 Content-Security-Policy HTTP header: Bad content security policy |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/12/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 02/02/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class SecurityHeadersAttribute : ActionFilterAttribute
     {
@@ -69,7 +70,7 @@ namespace cdcavell.Filters
                 csp += "img-src 'self' https://*.mm.bing.net data:; ";
                 csp += "object-src 'none'; ";
                 csp += "frame-ancestors 'self'; ";
-                csp += "frame-src 'self' https://www.google.com; ";
+                csp += "frame-src 'self' https://dis5-cdcavell.azurewebsites.net https://www.google.com; ";
                 csp += "sandbox allow-modals allow-forms allow-same-origin allow-scripts allow-popups; ";
                 csp += "base-uri 'self'; ";
                 csp += "style-src 'self' 'nonce-" + _StyleNonce + "'; ";
@@ -113,15 +114,15 @@ namespace cdcavell.Filters
                 // Permissions-Policy (https://scotthelme.co.uk/goodbye-feature-policy-and-hello-permissions-policy/)
                 var pp = "geolocation=(self), ";
                 pp += "midi=(self), ";
-                pp += "notifications=(self), ";
-                pp += "push=(self), ";
+                //pp += "notifications=(self), ";
+                //pp += "push=(self), ";
                 pp += "sync-xhr=(self), ";
                 pp += "microphone=(self), ";
                 pp += "camera=(self), ";
                 pp += "magnetometer=(self), ";
                 pp += "gyroscope=(self), ";
-                pp += "speaker=(self), ";
-                pp += "vibrate=(self), ";
+                //pp += "speaker=(self), ";
+                //pp += "vibrate=(self), ";
                 pp += "fullscreen=(self), ";
                 pp += "payment=(self) ";
 

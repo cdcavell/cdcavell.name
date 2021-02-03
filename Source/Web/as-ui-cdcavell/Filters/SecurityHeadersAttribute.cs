@@ -18,7 +18,7 @@ namespace as_ui_cdcavell.Filters
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 01/30/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 02/02/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class SecurityHeadersAttribute : ActionFilterAttribute
     {
@@ -65,7 +65,7 @@ namespace as_ui_cdcavell.Filters
                 csp += "img-src 'self' https://*.mm.bing.net data:; ";
                 csp += "object-src 'none'; ";
                 csp += "frame-ancestors 'self'; ";
-                csp += "frame-src 'self' https://www.google.com; ";
+                csp += "frame-src 'self' https://dis5-cdcavell.azurewebsites.net https://www.google.com; ";
                 csp += "sandbox allow-modals allow-forms allow-same-origin allow-scripts allow-popups; ";
                 csp += "base-uri 'self'; ";
                 csp += "style-src 'self' 'nonce-" + _StyleNonce + "'; ";
@@ -109,15 +109,15 @@ namespace as_ui_cdcavell.Filters
                 // Permissions-Policy (https://scotthelme.co.uk/goodbye-feature-policy-and-hello-permissions-policy/)
                 var pp = "geolocation=(self), ";
                 pp += "midi=(self), ";
-                pp += "notifications=(self), ";
-                pp += "push=(self), ";
+                //pp += "notifications=(self), ";
+                //pp += "push=(self), ";
                 pp += "sync-xhr=(self), ";
                 pp += "microphone=(self), ";
                 pp += "camera=(self), ";
                 pp += "magnetometer=(self), ";
                 pp += "gyroscope=(self), ";
-                pp += "speaker=(self), ";
-                pp += "vibrate=(self), ";
+                //pp += "speaker=(self), ";
+                //pp += "vibrate=(self), ";
                 pp += "fullscreen=(self), ";
                 pp += "payment=(self) ";
 
