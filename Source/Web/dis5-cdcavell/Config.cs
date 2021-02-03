@@ -90,14 +90,12 @@ namespace dis5_cdcavell
                     // where to redirect to after login
                     RedirectUris = new List<string>
                     {
-                        "https://localhost:44305/signin-oidc",
                         "https://as-ui-cdcavell.azurewebsites.net/signin-oidc"
                     },
 
                     // where to redirect to after logout
                     PostLogoutRedirectUris = new List<string>
                     {
-                        "https://localhost:44305/signout-callback-oidc",
                         "https://as-ui-cdcavell.azurewebsites.net/signout-callback-oidc"
                     },
                     FrontChannelLogoutUri = "https://as-ui-cdcavell.azurewebsites.net/Account/FrontChannelLogout",
@@ -160,14 +158,12 @@ namespace dis5_cdcavell
                     // where to redirect to after login
                     RedirectUris = new List<string>
                     { 
-                        "https://localhost:44349/signin-oidc",
                         "https://cdcavell.name/signin-oidc"
                     },
 
                     // where to redirect to after logout
                     PostLogoutRedirectUris = new List<string>
                     { 
-                        "https://localhost:44349/signout-callback-oidc",
                         "https://cdcavell.name/signout-callback-oidc"
                     },
                     FrontChannelLogoutSessionRequired = true,
