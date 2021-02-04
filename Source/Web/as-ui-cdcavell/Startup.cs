@@ -44,7 +44,7 @@ namespace as_ui_cdcavell
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 02/04/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class Startup
     {
@@ -119,6 +119,7 @@ namespace as_ui_cdcavell
             })
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, cookieOptions => {
                     cookieOptions.Cookie.Name = Assembly.GetEntryAssembly().GetName().Name;
+                    cookieOptions.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None;
                     cookieOptions.Events.OnRedirectToAccessDenied = context =>
                     {
                         context.Response.StatusCode = (int)(HttpStatusCode.Unauthorized);
