@@ -18,7 +18,7 @@ namespace as_ui_cdcavell.Filters
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 02/02/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 02/04/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class SecurityHeadersAttribute : ActionFilterAttribute
     {
@@ -64,8 +64,8 @@ namespace as_ui_cdcavell.Filters
                 var csp = "default-src 'self'; ";
                 csp += "img-src 'self' https://*.mm.bing.net data:; ";
                 csp += "object-src 'none'; ";
-                csp += "frame-ancestors 'self'; ";
-                csp += "frame-src 'self' https://dis5-cdcavell.azurewebsites.net https://www.google.com; ";
+                csp += "frame-ancestors 'self' https://dis5-cdcavell.azurewebsites.net; ";
+                csp += "frame-src 'self' https://www.google.com; ";
                 csp += "sandbox allow-modals allow-forms allow-same-origin allow-scripts allow-popups; ";
                 csp += "base-uri 'self'; ";
                 csp += "style-src 'self' 'nonce-" + _StyleNonce + "'; ";
