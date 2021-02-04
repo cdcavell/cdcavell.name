@@ -27,7 +27,7 @@ namespace as_ui_cdcavell.Controllers
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 02/02/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 02/04/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class AccountController : ApplicationBaseController<AccountController>
     {
@@ -136,7 +136,8 @@ namespace as_ui_cdcavell.Controllers
                 authorization.Delete(_dbContext);
 
                 await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                SignOut(CookieAuthenticationDefaults.AuthenticationScheme, "oidc");
+                //SignOut(CookieAuthenticationDefaults.AuthenticationScheme, "oidc");
+                await HttpContext.SignOutAsync("oidc");
 
                 DiscoveryCache discoveryCache = (DiscoveryCache)HttpContext
                     .RequestServices.GetService(typeof(IDiscoveryCache));
