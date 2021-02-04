@@ -135,9 +135,9 @@ namespace as_ui_cdcavell.Controllers
                 Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
                 authorization.Delete(_dbContext);
 
-                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                //SignOut(CookieAuthenticationDefaults.AuthenticationScheme, "oidc");
-                await HttpContext.SignOutAsync("oidc");
+                //await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                ////SignOut(CookieAuthenticationDefaults.AuthenticationScheme, "oidc");
+                //await HttpContext.SignOutAsync("oidc");
 
                 DiscoveryCache discoveryCache = (DiscoveryCache)HttpContext
                     .RequestServices.GetService(typeof(IDiscoveryCache));
