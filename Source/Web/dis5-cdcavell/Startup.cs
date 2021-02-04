@@ -6,6 +6,7 @@ using dis5_cdcavell.Filters;
 using dis5_cdcavell.Models.Account;
 using dis5_cdcavell.Models.AppSettings;
 using Duende.IdentityServer;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -34,6 +35,7 @@ namespace dis5_cdcavell
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.2.0 | 01/16/2021 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 02/04/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class Startup
     {
@@ -110,7 +112,15 @@ namespace dis5_cdcavell
             builder.AddValidationKey(key);
             builder.AddSigningCredential(key, SecurityAlgorithms.RsaSha512);
 
-            services.AddAuthentication()
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            })
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, cookieOptions =>
+                {
+                    cookieOptions.Cookie.Name = Assembly.GetEntryAssembly().GetName().Name;
+                    cookieOptions.Cookie.SameSite = SameSiteMode.None;
+                })
                 .AddMicrosoftAccount("Microsoft", microsoftOptions =>
                 {
                     microsoftOptions.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
