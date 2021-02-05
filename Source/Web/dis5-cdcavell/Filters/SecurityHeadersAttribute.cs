@@ -51,8 +51,7 @@ namespace dis5_cdcavell.Filters
                 var csp = "default-src 'self'; ";
                 csp += "img-src 'self' data:; ";
                 csp += "object-src 'none'; ";
-                csp += "frame-ancestors 'self' https://cdcavell.name https://as-ui-cdcavell.azurewebsites.net; ";
-                csp += "frame-src 'self'; ";
+                csp += "frame-ancestors 'none'; ";
                 csp += "sandbox allow-forms allow-same-origin allow-scripts allow-popups; ";
                 csp += "base-uri 'self'; ";
                 csp += "style-src 'self' 'nonce-" + _StyleNonce + "'; ";
