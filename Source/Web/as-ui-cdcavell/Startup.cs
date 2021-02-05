@@ -119,6 +119,9 @@ namespace as_ui_cdcavell
             })
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, cookieOptions => {
                     cookieOptions.Cookie.Name = Assembly.GetEntryAssembly().GetName().Name;
+                    cookieOptions.Cookie.HttpOnly = true;
+                    cookieOptions.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                    cookieOptions.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None;
                     cookieOptions.Events.OnRedirectToAccessDenied = context =>
                     {
                         context.Response.StatusCode = (int)(HttpStatusCode.Unauthorized);
