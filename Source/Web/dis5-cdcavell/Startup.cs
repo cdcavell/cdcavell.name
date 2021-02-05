@@ -21,7 +21,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace dis5_cdcavell
 {
@@ -144,6 +143,15 @@ namespace dis5_cdcavell
                     facebookOptions.AppId = appSettings.Authentication.Facebook.AppId;
                     facebookOptions.AppSecret = appSettings.Authentication.Facebook.AppSecret;
                 });
+
+            // Override the CookieAuthenticationOptions for DefaultCookieAuthenticationScheme
+            // https://github.com/IdentityServer/IdentityServer4/blob/c30de032ec1dedc3b17dfa342043850638e84b43/src/IdentityServer4/src/Configuration/DependencyInjection/ConfigureInternalCookieOptions.cs#L28
+            services.Configure<CookieAuthenticationOptions>(IdentityServerConstants.DefaultCookieAuthenticationScheme, options =>
+            {
+                options.Cookie.SameSite = SameSiteMode.None;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.IsEssential = true;
+            });
 
             if (_webHostEnvironment.EnvironmentName.Equals("Production"))
             {
