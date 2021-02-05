@@ -112,13 +112,7 @@ namespace dis5_cdcavell
             builder.AddValidationKey(key);
             builder.AddSigningCredential(key, SecurityAlgorithms.RsaSha512);
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
-                {
-                    options.Cookie.HttpOnly = true;
-                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                    options.Cookie.SameSite = SameSiteMode.None;
-                })
+            services.AddAuthentication()
                 .AddMicrosoftAccount("Microsoft", microsoftOptions =>
                 {
                     microsoftOptions.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
