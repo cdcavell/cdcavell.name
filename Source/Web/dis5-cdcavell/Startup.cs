@@ -215,12 +215,11 @@ namespace dis5_cdcavell
                 app.UseHttpsRedirection();
             }
 
-            app.UseSession();
-
             app.UseRouting();
             app.UseIdentityServer();
             app.UseAuthorization();
 
+            app.UseSession();
             app.UseStaticFiles();
             app.UseEndpoints(endpoints =>
             {
