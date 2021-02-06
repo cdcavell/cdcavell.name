@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
@@ -25,6 +26,7 @@ namespace as_ui_cdcavell.Controllers
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/06/2021 | Utilize Redis Cache |~
     /// </revision>
     public class RegistrationController : ApplicationBaseController<RegistrationController>
     {
@@ -37,6 +39,7 @@ namespace as_ui_cdcavell.Controllers
         /// <param name="authorizationService">IAuthorizationService</param>
         /// <param name="appSettings">AppSettings</param>
         /// <param name="dbContext">AuthorizationUiDbContext</param>
+        /// <param name="cache">IDistributedCache</param>
         /// <method>
         /// public RegistrationController(
         ///     ILogger&lt;HomeController&gt; logger,
@@ -44,8 +47,9 @@ namespace as_ui_cdcavell.Controllers
         ///     IHttpContextAccessor httpContextAccessor,
         ///     IAuthorizationService authorizationService,
         ///     AppSettings appSettings,
-        ///     AuthorizationUiDbContext dbContext
-        /// ) : base(logger, webHostEnvironment, httpContextAccessor, authorizationService, appSettings, dbContext)
+        ///     AuthorizationUiDbContext dbContext,
+        ///     IDistributedCache cache
+        /// ) : base(logger, webHostEnvironment, httpContextAccessor, authorizationService, appSettings, dbContext, cache)
         /// </method>
         public RegistrationController(
             ILogger<RegistrationController> logger,
@@ -53,8 +57,9 @@ namespace as_ui_cdcavell.Controllers
             IHttpContextAccessor httpContextAccessor,
             IAuthorizationService authorizationService,
             AppSettings appSettings,
-            AuthorizationUiDbContext dbContext
-        ) : base(logger, webHostEnvironment, httpContextAccessor, authorizationService, appSettings, dbContext)
+            AuthorizationUiDbContext dbContext,
+            IDistributedCache cache
+        ) : base(logger, webHostEnvironment, httpContextAccessor, authorizationService, appSettings, dbContext, cache)
         {
         }
 
