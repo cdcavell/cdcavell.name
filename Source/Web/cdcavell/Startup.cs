@@ -254,6 +254,8 @@ namespace cdcavell
 
             services.AddMvc();
             services.AddControllersWithViews();
+
+            services.AddDistributedMemoryCache();
             services.AddSession();
         }
 

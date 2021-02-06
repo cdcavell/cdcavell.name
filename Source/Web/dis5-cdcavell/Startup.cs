@@ -74,6 +74,8 @@ namespace dis5_cdcavell
 
             services.AddMvc();
             services.AddControllersWithViews();
+
+            services.AddDistributedMemoryCache();
             services.AddSession();
 
             // Register IHttpContextAccessor
