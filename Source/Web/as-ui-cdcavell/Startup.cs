@@ -245,6 +245,8 @@ namespace as_ui_cdcavell
 
             services.AddMvc();
             services.AddControllersWithViews();
+
+            services.AddDistributedMemoryCache();
             services.AddSession();
         }
 
@@ -283,12 +285,11 @@ namespace as_ui_cdcavell
                 app.UseHttpsRedirection();
             }
 
-            app.UseSession();
-
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseSession();
             app.UseStaticFiles(new StaticFileOptions
             {
                 OnPrepareResponse = ctx =>
