@@ -74,6 +74,7 @@ namespace dis5_cdcavell
 
             services.AddMvc();
             services.AddControllersWithViews();
+            services.AddSession();
 
             // Register IHttpContextAccessor
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
