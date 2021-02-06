@@ -39,6 +39,7 @@ namespace as_api_cdcavell
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/06/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/06/2021 | Utilize Redis Cache |~
     /// </revision>
     public class Startup
     {
@@ -72,18 +73,18 @@ namespace as_api_cdcavell
             _appSettings = appSettings;
             services.AddSingleton(appSettings);
 
+            services.AddDistributedRedisCache(options =>
+            {
+                options.Configuration = _appSettings.ConnectionStrings.RedisCacheConnection;
+                options.InstanceName = _appSettings.AssemblyName;
+            });
+
             // cache authority discovery and add to DI
             services.AddHttpClient();
             services.AddSingleton<IDiscoveryCache>(options =>
             {
                 var factory = options.GetRequiredService<IHttpClientFactory>();
                 return new DiscoveryCache(_appSettings.Authentication.IdP.Authority, () => factory.CreateClient());
-            });
-
-            services.AddDistributedRedisCache(options =>
-            {
-                options.Configuration = _appSettings.ConnectionStrings.RedisCacheConnection;
-                options.InstanceName = _appSettings.AssemblyName;
             });
 
             // Register DBContext
