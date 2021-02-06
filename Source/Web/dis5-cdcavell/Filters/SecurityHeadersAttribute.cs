@@ -49,7 +49,7 @@ namespace dis5_cdcavell.Filters
 
                 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
                 var csp = "default-src 'self'; ";
-                csp += "img-src 'self' data:image/svg+xml; ";
+                csp += "img-src 'self' https://as-ui-cdcavell.azurewebsites.net https://cdcavell.name data:; ";
                 csp += "object-src 'none'; ";
                 csp += "frame-ancestors 'none'; ";
                 csp += "sandbox allow-forms allow-same-origin allow-scripts allow-popups; ";
