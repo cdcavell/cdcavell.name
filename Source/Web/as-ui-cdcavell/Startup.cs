@@ -245,6 +245,7 @@ namespace as_ui_cdcavell
 
             services.AddMvc();
             services.AddControllersWithViews();
+            services.AddSession();
         }
 
         /// <summary>
