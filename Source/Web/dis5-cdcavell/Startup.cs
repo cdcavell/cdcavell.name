@@ -35,6 +35,7 @@ namespace dis5_cdcavell
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.2.0 | 01/16/2021 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.3.0 | 02/06/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/06/2021 | Utilize Redis Cache |~
     /// </revision>
     public class Startup
     {
@@ -74,9 +75,6 @@ namespace dis5_cdcavell
 
             services.AddMvc();
             services.AddControllersWithViews();
-
-            services.AddDistributedMemoryCache();
-            services.AddSession();
 
             // Register IHttpContextAccessor
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -221,7 +219,6 @@ namespace dis5_cdcavell
             app.UseIdentityServer();
             app.UseAuthorization();
 
-            app.UseSession();
             app.UseStaticFiles();
             app.UseEndpoints(endpoints =>
             {
