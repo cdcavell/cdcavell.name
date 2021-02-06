@@ -13,7 +13,7 @@ namespace dis5_cdcavell.Options
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.2.0 | 01/16/2021 | Initial build |~ 
-    /// | Christopher D. Cavell | 1.0.3.0 | 02/05/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 02/06/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class AccountOptions
     {
@@ -25,9 +25,9 @@ namespace dis5_cdcavell.Options
         public static TimeSpan RememberMeLoginDuration = TimeSpan.FromDays(30);
 
         /// <value>bool</value>
-        public static bool ShowLogoutPrompt = true;
+        public static bool ShowLogoutPrompt = false;
         /// <value>bool</value>
-        public static bool AutomaticRedirectAfterSignOut = false;
+        public static bool AutomaticRedirectAfterSignOut = true;
 
         /// <value>string</value>
         public static string InvalidCredentialsErrorMessage = "Invalid username or password";
