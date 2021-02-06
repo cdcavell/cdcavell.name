@@ -109,6 +109,8 @@ namespace dis5_cdcavell
             })
                 .AddAspNetIdentity<ApplicationUser>();
 
+            builder.AddInMemoryCaching();
+
             // in-memory, code config
             builder.AddInMemoryIdentityResources(Config.IdentityResources);
             builder.AddInMemoryApiScopes(Config.ApiScopes);
