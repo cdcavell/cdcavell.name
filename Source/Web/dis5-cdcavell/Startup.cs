@@ -34,7 +34,7 @@ namespace dis5_cdcavell
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.2.0 | 01/16/2021 | Initial build |~ 
-    /// | Christopher D. Cavell | 1.0.3.0 | 02/04/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 02/06/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class Startup
     {
@@ -65,6 +65,12 @@ namespace dis5_cdcavell
             AppSettings appSettings = new AppSettings();
             _configuration.Bind("AppSettings", appSettings);
             services.AddSingleton(appSettings);
+
+            services.AddDistributedRedisCache(options =>
+            {
+                options.Configuration = appSettings.ConnectionStrings.RedisCacheConnection;
+                options.InstanceName = appSettings.AssemblyName;
+            });
 
             services.AddMvc();
             services.AddControllersWithViews();

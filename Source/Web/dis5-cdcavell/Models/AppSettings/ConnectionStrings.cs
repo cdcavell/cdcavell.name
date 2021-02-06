@@ -13,10 +13,13 @@ namespace dis5_cdcavell.Models.AppSettings
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.2.0 | 01/16/2021 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 02/05/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class ConnectionStrings
     {
         /// <value>string</value>
         public string AspIdUsersConnection { get; set; }
+        /// <value>string</value>
+        public string RedisCacheConnection { get; set; }
     }
 }

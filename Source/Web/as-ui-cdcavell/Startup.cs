@@ -44,7 +44,7 @@ namespace as_ui_cdcavell
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.0 | 02/04/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 02/06/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class Startup
     {
@@ -77,6 +77,12 @@ namespace as_ui_cdcavell
             _configuration.Bind("AppSettings", appSettings);
             _appSettings = appSettings;
             services.AddSingleton(appSettings);
+
+            services.AddDistributedRedisCache(options =>
+            {
+                options.Configuration = _appSettings.ConnectionStrings.RedisCacheConnection;
+                options.InstanceName = _appSettings.AssemblyName;
+            });
 
             // cache authority discovery and add to DI
             services.AddHttpClient();
