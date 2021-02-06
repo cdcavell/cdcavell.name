@@ -18,7 +18,7 @@ namespace dis5_cdcavell.Filters
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.2.0 | 01/16/2021 | Initial build |~ 
-    /// | Christopher D. Cavell | 1.0.3.0 | 02/04/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 02/05/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public class SecurityHeadersAttribute : ActionFilterAttribute
     {
@@ -49,7 +49,7 @@ namespace dis5_cdcavell.Filters
 
                 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
                 var csp = "default-src 'self'; ";
-                csp += "img-src 'self' data:; ";
+                csp += "img-src 'self' data:image/svg+xml; ";
                 csp += "object-src 'none'; ";
                 csp += "frame-ancestors 'none'; ";
                 csp += "sandbox allow-forms allow-same-origin allow-scripts allow-popups; ";
