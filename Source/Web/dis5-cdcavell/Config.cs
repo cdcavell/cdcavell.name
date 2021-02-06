@@ -18,7 +18,7 @@ namespace dis5_cdcavell
     /// | Christopher D. Cavell | 1.0.2.0 | 01/16/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.2.2 | 01/18/2020 | Convert GrantType from Implicit to Pkce |~ 
     /// | Christopher D. Cavell | 1.0.2.2 | 01/18/2020 | Removed unused clients and scopes |~ 
-    /// | Christopher D. Cavell | 1.0.3.0 | 02/02/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.0 | 02/06/2021 | Initial build Authorization Service |~ 
     /// </revision>
     public static class Config
     {
@@ -90,15 +90,15 @@ namespace dis5_cdcavell
                     // where to redirect to after login
                     RedirectUris = new List<string>
                     {
-                        "https://as-ui-cdcavell.azurewebsites.net/signin-oidc"
+                        "https://as-ui.cdcavell.name/signin-oidc"
                     },
 
                     // where to redirect to after logout
                     PostLogoutRedirectUris = new List<string>
                     {
-                        "https://as-ui-cdcavell.azurewebsites.net/signout-callback-oidc"
+                        "https://as-ui.cdcavell.name/signout-callback-oidc"
                     },
-                    FrontChannelLogoutUri = "https://as-ui-cdcavell.azurewebsites.net/Account/FrontChannelLogout",
+                    FrontChannelLogoutUri = "https://as-ui.cdcavell.name/Account/FrontChannelLogout",
                     FrontChannelLogoutSessionRequired = true,
 
                     AllowedScopes = new List<string>
