@@ -262,8 +262,6 @@ namespace as_api_cdcavell
                 app.UseHttpsRedirection();
             }
 
-            app.UseSession();
-
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
