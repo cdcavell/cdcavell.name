@@ -7,7 +7,6 @@ using CDCavell.ClassLibrary.Web.Http;
 using CDCavell.ClassLibrary.Web.Mvc.Filters;
 using CDCavell.ClassLibrary.Web.Mvc.Models.Authorization;
 using CDCavell.ClassLibrary.Web.Security;
-using EFCoreSecondLevelCacheInterceptor;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -46,7 +45,7 @@ namespace as_ui_cdcavell
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/06/2021 | Initial build Authorization Service |~ 
-    /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | Utilize Redis Cache |~
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | Utilize Redis Cache - Not implemented |~
     /// </revision>
     public class Startup
     {
@@ -80,12 +79,6 @@ namespace as_ui_cdcavell
             _appSettings = appSettings;
             services.AddSingleton(appSettings);
 
-            services.AddDistributedRedisCache(options =>
-            {
-                options.Configuration = _appSettings.ConnectionStrings.RedisCacheConnection;
-                options.InstanceName = _appSettings.AssemblyName;
-            });
-
             // cache authority discovery and add to DI
             services.AddHttpClient();
             services.AddSingleton<IDiscoveryCache>(options =>
@@ -96,12 +89,6 @@ namespace as_ui_cdcavell
 
             services.AddDbContext<AuthorizationUiDbContext>(options =>
                 options.UseSqlite(appSettings.ConnectionStrings.AuthorizationUiConnection));
-
-            services.AddEFSecondLevelCache(options =>
-            {
-                options.UseMemoryCacheProvider().DisableLogging(true);
-                options.CacheAllQueries(CacheExpirationMode.Sliding, TimeSpan.FromMinutes(30));
-            });
 
             // Register IHttpContextAccessor
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
