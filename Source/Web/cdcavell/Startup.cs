@@ -9,6 +9,7 @@ using CDCavell.ClassLibrary.Web.Http;
 using CDCavell.ClassLibrary.Web.Mvc.Filters;
 using CDCavell.ClassLibrary.Web.Mvc.Models.Authorization;
 using CDCavell.ClassLibrary.Web.Security;
+using EFCoreSecondLevelCacheInterceptor;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -54,7 +55,7 @@ namespace cdcavell
     /// | Christopher D. Cavell | 1.0.0.9 | 11/11/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// | Christopher D. Cavell | 1.0.2.2 | 01/18/2021 | Convert GrantType from Implicit to Pkce |~ 
     /// | Christopher D. Cavell | 1.0.3.0 | 02/06/2021 | Initial build Authorization Service |~ 
-    /// | Christopher D. Cavell | 1.0.3.1 | 02/06/2021 | Utilize Redis Cache |~
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | Utilize Redis Cache |~
     /// </revision>
     public class Startup
     {
@@ -104,6 +105,12 @@ namespace cdcavell
 
             services.AddDbContext<CDCavellDbContext>(options =>
                 options.UseSqlite(appSettings.ConnectionStrings.CDCavellConnection));
+
+            services.AddEFSecondLevelCache(options =>
+            {
+                options.UseMemoryCacheProvider().DisableLogging(true);
+                options.CacheAllQueries(CacheExpirationMode.Sliding, TimeSpan.FromMinutes(30));
+            });
 
             // Register IHttpContextAccessor
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
