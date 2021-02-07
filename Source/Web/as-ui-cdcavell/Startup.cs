@@ -200,24 +200,9 @@ namespace as_ui_cdcavell
                             ticketReceivedContext.HttpContext.Session.Encrypt("AccessToken", accessToken);
                             ticketReceivedContext.HttpContext.Session.Encrypt<UserAuthorization>("UserAuthorization", userAuthorization);
 
-                            // Get dbContext
-                            AuthorizationUiDbContext dbContext = (AuthorizationUiDbContext)ticketReceivedContext.HttpContext
-                                .RequestServices.GetService(typeof(AuthorizationUiDbContext));
-
-                            // Harden User Authorization
-                            Data.Authorization authorization = new Data.Authorization();
-                            authorization.Guid = Guid.NewGuid().ToString();
-                            authorization.AccessToken = accessToken;
-                            authorization.Created = DateTime.Now;
-                            authorization.UserAuthorization = userAuthorization;
-                            authorization.AddUpdate(dbContext);
-
                             var additionalClaims = new List<Claim>();
                             if (!ticketReceivedContext.Principal.HasClaim("email", userAuthorization.Email.Clean()))
                                 additionalClaims.Add(new Claim("email", userAuthorization.Email.Clean()));
-
-                            if (!ticketReceivedContext.Principal.HasClaim("authorization", authorization.Guid))
-                                additionalClaims.Add(new Claim("authorization", authorization.Guid));
 
                             ticketReceivedContext.Principal.AddIdentity(new ClaimsIdentity(additionalClaims));
 

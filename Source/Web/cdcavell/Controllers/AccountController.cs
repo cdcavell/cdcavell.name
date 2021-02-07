@@ -138,10 +138,6 @@ namespace cdcavell.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                // Remove Authorization record
-                Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
-                authorization.Delete(_dbContext);
-
                 DiscoveryCache discoveryCache = (DiscoveryCache)HttpContext
                     .RequestServices.GetService(typeof(IDiscoveryCache));
                 DiscoveryDocumentResponse discovery = discoveryCache.GetAsync().Result;
