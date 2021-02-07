@@ -2,6 +2,7 @@
 using cdcavell.Models.AppSettings;
 using cdcavell.Models.Home;
 using cdcavell.Models.Home.Search;
+using CDCavell.ClassLibrary.Web.Mvc.Models.Authorization;
 using CDCavell.ClassLibrary.Web.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;

@@ -100,17 +100,12 @@ namespace cdcavell.Controllers
             {
                 case 7001:
                     vm.StatusMessage = "An invalid access token was received. ";
-                    goto case 7000;
+                    break;
                 case 7002:
                     vm.StatusMessage = "Unable to access Authorization Service. ";
-                    goto case 7000;
+                    break;
                 case 7003:
                     vm.StatusMessage = "Invalid or missing email returned. ";
-                    goto case 7000;
-                case 7000:
-                    vm.StatusMessage += "System has logged you off.";
-                    HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme).Wait();
-                    SignOut(CookieAuthenticationDefaults.AuthenticationScheme, "oidc");
                     break;
             }
 

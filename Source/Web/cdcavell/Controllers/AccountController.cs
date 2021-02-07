@@ -130,18 +130,14 @@ namespace cdcavell.Controllers
         /// <summary>
         /// Logout method
         /// </summary>
-        /// <returns>Task&lt;IActionResult&gt;</returns>
+        /// <returns>IActionResult</returns>
         /// <method>Logout()</method>
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> Logout()
+        public IActionResult Logout()
         {
             if (User.Identity.IsAuthenticated)
             {
-                // Remove Authorization record
-                Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
-                authorization.Delete(_dbContext);
-
                 DiscoveryCache discoveryCache = (DiscoveryCache)HttpContext
                     .RequestServices.GetService(typeof(IDiscoveryCache));
                 DiscoveryDocumentResponse discovery = discoveryCache.GetAsync().Result;
@@ -163,6 +159,9 @@ namespace cdcavell.Controllers
         [HttpGet]
         public async Task<IActionResult> FrontChannelLogout(string sid)
         {
+            HttpContext.Session.Clear();
+            await HttpContext.Session.CommitAsync();
+
             if (User.Identity.IsAuthenticated)
             {
                 var currentSid = User.FindFirst("sid")?.Value ?? "";
