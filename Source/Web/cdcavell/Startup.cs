@@ -291,6 +291,8 @@ namespace cdcavell
                 app.UseHttpsRedirection();
             }
 
+            app.UseCookiePolicy();
+
             app.UseRouting();
             app.UseSession();
             app.UseAuthentication();
@@ -305,7 +307,6 @@ namespace cdcavell
                 }
             });
 
-            app.UseCookiePolicy();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
