@@ -6,9 +6,6 @@ using dis5_cdcavell.Filters;
 using dis5_cdcavell.Models.Account;
 using dis5_cdcavell.Models.AppSettings;
 using Duende.IdentityServer;
-using Duende.IdentityServer.Services;
-using Duende.IdentityServer.Stores;
-using EFCoreSecondLevelCacheInterceptor;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -16,7 +13,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -39,7 +35,7 @@ namespace dis5_cdcavell
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.2.0 | 01/16/2021 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.3.0 | 02/06/2021 | Initial build Authorization Service |~ 
-    /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | Utilize Redis Cache |~
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | Utilize Redis Cache - Not implemented |~
     /// </revision>
     public class Startup
     {
@@ -71,12 +67,6 @@ namespace dis5_cdcavell
             _configuration.Bind("AppSettings", appSettings);
             services.AddSingleton(appSettings);
 
-            services.AddDistributedRedisCache(options =>
-            {
-                options.Configuration = appSettings.ConnectionStrings.RedisCacheConnection;
-                options.InstanceName = appSettings.AssemblyName;
-            });
-
             services.AddMvc();
             services.AddControllersWithViews();
 
@@ -96,12 +86,6 @@ namespace dis5_cdcavell
             services.AddDbContext<AspIdUsersDbContext>(options =>
                 options.UseSqlite(appSettings.ConnectionStrings.AspIdUsersConnection));
 
-            services.AddEFSecondLevelCache(options =>
-            {
-                options.UseMemoryCacheProvider().DisableLogging(true);
-                options.CacheAllQueries(CacheExpirationMode.Sliding, TimeSpan.FromMinutes(30));
-            });
-
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AspIdUsersDbContext>()
                 .AddDefaultTokenProviders();
@@ -115,7 +99,6 @@ namespace dis5_cdcavell
 
                 options.EmitStaticAudienceClaim = true;
             })
-                .AddInMemoryCaching()
                 .AddAspNetIdentity<ApplicationUser>();
 
             // in-memory, code config
