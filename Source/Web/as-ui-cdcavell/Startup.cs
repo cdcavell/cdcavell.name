@@ -45,6 +45,7 @@ namespace as_ui_cdcavell
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/06/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/06/2021 | Utilize Redis Cache |~
     /// </revision>
     public class Startup
     {
@@ -245,9 +246,6 @@ namespace as_ui_cdcavell
 
             services.AddMvc();
             services.AddControllersWithViews();
-
-            services.AddDistributedMemoryCache();
-            services.AddSession();
         }
 
         /// <summary>
@@ -289,7 +287,6 @@ namespace as_ui_cdcavell
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseSession();
             app.UseStaticFiles(new StaticFileOptions
             {
                 OnPrepareResponse = ctx =>

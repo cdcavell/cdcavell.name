@@ -2,8 +2,6 @@
 using cdcavell.Models.Account;
 using cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Web.Http;
-using CDCavell.ClassLibrary.Web.Mvc.Models.Authorization;
-using IdentityModel;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -11,13 +9,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Security.Claims;
-using System.Security.Principal;
 using System.Threading.Tasks;
 
 namespace cdcavell.Controllers
@@ -33,6 +29,7 @@ namespace cdcavell.Controllers
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/12/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// | Christopher D. Cavell | 1.0.3.0 | 02/04/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/06/2021 | Utilize Redis Cache |~
     /// </revision>
     public class AccountController : ApplicationBaseController<AccountController>
     {
@@ -45,6 +42,7 @@ namespace cdcavell.Controllers
         /// <param name="authorizationService">IAuthorizationService</param>
         /// <param name="appSettings">AppSettings</param>
         /// <param name="dbContext">CDCavellDbContext</param>
+        /// <param name="cache">IDistributedCache</param>
         /// <method>
         /// AccountController(
         ///     ILogger&lt;AccountController&gt; logger, 
@@ -52,8 +50,9 @@ namespace cdcavell.Controllers
         ///     IHttpContextAccessor httpContextAccessor,
         ///     IAuthorizationService authorizationService,
         ///     AppSettings appSettings,
-        ///     CDCavellDbContext dbContext
-        /// ) : base(logger, webHostEnvironment, httpContextAccessor, appSettings, dbContext)
+        ///     CDCavellDbContext dbContext,
+        ///     IDistributedCache cache
+        /// ) : base(logger, webHostEnvironment, httpContextAccessor, authorizationService, appSettings, dbContext, cache)
         /// </method>
         public AccountController(
             ILogger<AccountController> logger,
@@ -61,8 +60,9 @@ namespace cdcavell.Controllers
             IHttpContextAccessor httpContextAccessor,
             IAuthorizationService authorizationService,
             AppSettings appSettings,
-            CDCavellDbContext dbContext
-        ) : base(logger, webHostEnvironment, httpContextAccessor, authorizationService, appSettings, dbContext)
+            CDCavellDbContext dbContext,
+            IDistributedCache cache
+        ) : base(logger, webHostEnvironment, httpContextAccessor, authorizationService, appSettings, dbContext, cache)
         {
         }
 
@@ -141,10 +141,6 @@ namespace cdcavell.Controllers
                 // Remove Authorization record
                 Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
                 authorization.Delete(_dbContext);
-
-                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                //SignOut(CookieAuthenticationDefaults.AuthenticationScheme, "oidc");
-                await HttpContext.SignOutAsync("oidc");
 
                 DiscoveryCache discoveryCache = (DiscoveryCache)HttpContext
                     .RequestServices.GetService(typeof(IDiscoveryCache));
