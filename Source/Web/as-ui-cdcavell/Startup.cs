@@ -234,13 +234,6 @@ namespace as_ui_cdcavell
                 });
             }
 
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None;
-                options.ConsentCookie.Expiration = TimeSpan.FromDays(30);
-            });
-
             services.AddMvc();
             services.AddControllersWithViews();
         }
@@ -295,7 +288,6 @@ namespace as_ui_cdcavell
                 }
             });
 
-            app.UseCookiePolicy();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
