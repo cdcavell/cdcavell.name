@@ -88,6 +88,7 @@ namespace cdcavell
             _appSettings = appSettings;
             services.AddSingleton(appSettings);
 
+            services.AddSession();
             services.AddDistributedRedisCache(options =>
             {
                 options.Configuration = _appSettings.ConnectionStrings.RedisCacheConnection;
@@ -204,6 +205,10 @@ namespace cdcavell
                                 return Task.FromResult(ticketReceivedContext.Result);
                             }
 
+                            // Store in Session
+                            ticketReceivedContext.HttpContext.Session.Encrypt("AccessToken", accessToken);
+                            ticketReceivedContext.HttpContext.Session.Encrypt<UserAuthorization>("UserAuthorization", userAuthorization);
+
                             // Get dbContext
                             CDCavellDbContext dbContext = (CDCavellDbContext)ticketReceivedContext.HttpContext
                                 .RequestServices.GetService(typeof(CDCavellDbContext));
@@ -295,6 +300,7 @@ namespace cdcavell
             }
 
             app.UseRouting();
+            app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
 

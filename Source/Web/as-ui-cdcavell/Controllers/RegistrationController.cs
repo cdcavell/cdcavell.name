@@ -159,6 +159,7 @@ namespace as_ui_cdcavell.Controllers
             if (string.IsNullOrEmpty(authClaim))
                 return Error(400);
 
+            var test = HttpContext.Session.Decrypt<UserAuthorization>("UserAuthorization").Result;
             Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
             if (!authClaim.Equals(authorization.Guid))
                 return Error(400);

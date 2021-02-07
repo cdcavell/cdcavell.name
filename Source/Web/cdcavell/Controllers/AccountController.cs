@@ -163,6 +163,9 @@ namespace cdcavell.Controllers
         [HttpGet]
         public async Task<IActionResult> FrontChannelLogout(string sid)
         {
+            HttpContext.Session.Clear();
+            await HttpContext.Session.CommitAsync();
+
             if (User.Identity.IsAuthenticated)
             {
                 var currentSid = User.FindFirst("sid")?.Value ?? "";

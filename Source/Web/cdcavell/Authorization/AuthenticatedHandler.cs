@@ -55,6 +55,7 @@ namespace cdcavell.Authorization
                 Claim emailClaim = user.Claims.Where(x => x.Type == "email").FirstOrDefault();
                 if (emailClaim != null)
                 {
+                    var test = _httpContextAccessor.HttpContext.Session.Decrypt<UserAuthorization>("UserAuthorization").Result;
                     UserAuthorization userAuthorization = Data.Authorization.GetUser(user.Claims, _dbContext);
                     if (!string.IsNullOrEmpty(userAuthorization.Email))
                         if (userAuthorization.Email == emailClaim.Value)
