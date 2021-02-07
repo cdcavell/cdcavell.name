@@ -34,6 +34,7 @@
   <ItemGroup>
     <PackageReference Include="AspNetCore.SEOHelper" Version="1.0.1" />
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
+    <PackageReference Include="EFCoreSecondLevelCacheInterceptor" Version="2.4.0" />
     <PackageReference Include="IdentityModel" Version="5.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
