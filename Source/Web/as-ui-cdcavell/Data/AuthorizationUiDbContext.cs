@@ -19,6 +19,7 @@ namespace as_ui_cdcavell.Data
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 01/30/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/06/2021 | Utilize Redis Cache |~
     /// </revision>
     public class AuthorizationUiDbContext : DbContext
     {
@@ -58,8 +59,6 @@ namespace as_ui_cdcavell.Data
 
         /// <value>DbSet&lt;AuditHistory&gt;</value>
         public DbSet<AuditHistory> AuditHistory { get; set; }
-        /// <value>DbSet&lt;Authorization&gt;</value>
-        public DbSet<Authorization> Authorization { get; set; }
 
         /// <summary>
         /// OnModelCreating method
@@ -68,10 +67,6 @@ namespace as_ui_cdcavell.Data
         /// <method>OnModelCreating(ModelBuilder builder)</method>
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Authorization>()
-                .HasIndex(x => x.Guid)
-                .IsUnique();
-
             base.OnModelCreating(builder);
         }
 

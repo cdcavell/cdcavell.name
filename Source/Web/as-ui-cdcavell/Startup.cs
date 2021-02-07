@@ -79,6 +79,14 @@ namespace as_ui_cdcavell
             _appSettings = appSettings;
             services.AddSingleton(appSettings);
 
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(5);
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict;
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
             services.AddDistributedRedisCache(options =>
             {
                 options.Configuration = _appSettings.ConnectionStrings.RedisCacheConnection;
@@ -195,24 +203,13 @@ namespace as_ui_cdcavell
                                 return Task.FromResult(ticketReceivedContext.Result);
                             }
 
-                            // Get dbContext
-                            AuthorizationUiDbContext dbContext = (AuthorizationUiDbContext)ticketReceivedContext.HttpContext
-                                .RequestServices.GetService(typeof(AuthorizationUiDbContext));
-
-                            // Harden User Authorization
-                            Data.Authorization authorization = new Data.Authorization();
-                            authorization.Guid = Guid.NewGuid().ToString();
-                            authorization.AccessToken = accessToken;
-                            authorization.Created = DateTime.Now;
-                            authorization.UserAuthorization = userAuthorization;
-                            authorization.AddUpdate(dbContext);
+                            // Store in Session
+                            ticketReceivedContext.HttpContext.Session.Encrypt("AccessToken", accessToken);
+                            ticketReceivedContext.HttpContext.Session.Encrypt<UserAuthorization>("UserAuthorization", userAuthorization);
 
                             var additionalClaims = new List<Claim>();
                             if (!ticketReceivedContext.Principal.HasClaim("email", userAuthorization.Email.Clean()))
                                 additionalClaims.Add(new Claim("email", userAuthorization.Email.Clean()));
-
-                            if (!ticketReceivedContext.Principal.HasClaim("authorization", authorization.Guid))
-                                additionalClaims.Add(new Claim("authorization", authorization.Guid));
 
                             ticketReceivedContext.Principal.AddIdentity(new ClaimsIdentity(additionalClaims));
 
@@ -284,6 +281,7 @@ namespace as_ui_cdcavell
             }
 
             app.UseRouting();
+            app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
 

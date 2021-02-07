@@ -19,6 +19,7 @@ namespace cdcavell.Authorization
     /// | Christopher D. Cavell | 1.0.0.0 | 10/18/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/11/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/06/2021 | Utilize Redis Cache |~
     /// </revision>
     public class AuthenticatedHandler : AuthorizationHandler<AuthenticatedRequirement>
     {
@@ -55,10 +56,11 @@ namespace cdcavell.Authorization
                 Claim emailClaim = user.Claims.Where(x => x.Type == "email").FirstOrDefault();
                 if (emailClaim != null)
                 {
-                    UserAuthorization userAuthorization = Data.Authorization.GetUser(user.Claims, _dbContext);
-                    if (!string.IsNullOrEmpty(userAuthorization.Email))
-                        if (userAuthorization.Email == emailClaim.Value)
-                            context.Succeed(requirement);
+                    UserAuthorization userAuthorization = _httpContextAccessor.HttpContext.Session.Decrypt<UserAuthorization>("UserAuthorization").Result;
+                    if (userAuthorization != null)
+                        if (!string.IsNullOrEmpty(userAuthorization.Email))
+                            if (userAuthorization.Email == emailClaim.Value)
+                                context.Succeed(requirement);
                 }
             }
 
