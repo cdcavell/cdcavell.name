@@ -18,6 +18,7 @@ namespace as_ui_cdcavell
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 01/30/2021 | Initial build Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | Add ApplicationInsights |~
     /// </revision>
     public class Program
     {
@@ -66,17 +67,18 @@ namespace as_ui_cdcavell
         /// <method>CreateHostBuilder(string[] args)</method>
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureLogging(logging =>
+                .ConfigureLogging((hostingContext, logging) =>
                 {
                     logging.ClearProviders();
                     logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
                     logging.AddConsole();
 
+                    var appInsightKey = hostingContext.Configuration["AppSettings:ConnectionStrings:ApplicationInsightsConnection"];
                     // Providing an instrumentation key here is required if you're using
                     // standalone package Microsoft.Extensions.Logging.ApplicationInsights
                     // or if you want to capture logs from early in the application startup 
                     // pipeline from Startup.cs or Program.cs itself.
-                    logging.AddApplicationInsights("ikey");
+                    logging.AddApplicationInsights(appInsightKey);
                     // Adding the filter below to ensure logs of all severity from Program.cs
                     // is sent to ApplicationInsights.
                     logging.AddFilter<Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider>
