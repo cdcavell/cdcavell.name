@@ -3,8 +3,6 @@ using as_ui_cdcavell.Filters;
 using as_ui_cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Web.Mvc.Controllers;
 using CDCavell.ClassLibrary.Web.Mvc.Models;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -24,6 +22,7 @@ namespace as_ui_cdcavell.Controllers
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | Utilize Redis Cache |~ 
     /// </revision>
     [ServiceFilter(typeof(SecurityHeadersAttribute))]
     public abstract partial class ApplicationBaseController<T> : WebBaseController<ApplicationBaseController<T>> where T : ApplicationBaseController<T>
@@ -89,23 +88,18 @@ namespace as_ui_cdcavell.Controllers
             {
                 case 7001:
                     vm.StatusMessage = "An invalid access token was received. ";
-                    goto case 7000;
+                    break;
                 case 7002:
                     vm.StatusMessage = "Unable to access Authorization Service. ";
-                    goto case 7000;
+                    break;
                 case 7003:
                     vm.StatusMessage = "Invalid or missing email returned. ";
-                    goto case 7000;
+                    break;
                 case 7004:
                     vm.StatusMessage = "Error in saving information. ";
-                    goto case 7000;
+                    break;
                 case 7005:
                     vm.StatusMessage = "Error in deleting information. ";
-                    goto case 7000;
-                case 7000:
-                    vm.StatusMessage += "System has logged you off.";
-                    HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme).Wait();
-                    SignOut(CookieAuthenticationDefaults.AuthenticationScheme, "oidc");
                     break;
             }
 

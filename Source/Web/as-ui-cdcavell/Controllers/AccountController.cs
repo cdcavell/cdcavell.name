@@ -28,6 +28,7 @@ namespace as_ui_cdcavell.Controllers
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/04/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | Utilize Redis Cache |~ 
     /// </revision>
     public class AccountController : ApplicationBaseController<AccountController>
     {
@@ -123,22 +124,14 @@ namespace as_ui_cdcavell.Controllers
         /// <summary>
         /// Logout method
         /// </summary>
-        /// <returns>Task&lt;IActionResult&gt;</returns>
+        /// <returns>IActionResult</returns>
         /// <method>Logout()</method>
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> Logout()
+        public IActionResult Logout()
         {
             if (User.Identity.IsAuthenticated)
             {
-                // Remove Authorization record
-                Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
-                authorization.Delete(_dbContext);
-
-                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                //SignOut(CookieAuthenticationDefaults.AuthenticationScheme, "oidc");
-                await HttpContext.SignOutAsync("oidc");
-
                 DiscoveryCache discoveryCache = (DiscoveryCache)HttpContext
                     .RequestServices.GetService(typeof(IDiscoveryCache));
                 DiscoveryDocumentResponse discovery = discoveryCache.GetAsync().Result;
@@ -151,7 +144,7 @@ namespace as_ui_cdcavell.Controllers
 
         /// <summary>
         /// Front Channel SLO Logout method
-        /// <&lt;br /&gt;&lt;br /&gt;
+        /// &lt;br /&gt;&lt;br /&gt;
         /// https://andersonnjen.com/2019/03/22/identityserver4-global-logout/
         /// </summary>
         /// <returns>Task&lt;IActionResult&gt;</returns>
@@ -162,10 +155,15 @@ namespace as_ui_cdcavell.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
+                // Remove Authorization record
+                Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
+                authorization.Delete(_dbContext);
+
                 var currentSid = User.FindFirst("sid")?.Value ?? "";
                 if (string.Equals(currentSid, sid, StringComparison.Ordinal))
                 {
                     await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                    await HttpContext.SignOutAsync("oidc");
                 }
             }
 
