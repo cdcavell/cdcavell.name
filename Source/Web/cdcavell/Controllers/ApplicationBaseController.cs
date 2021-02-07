@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.Net;
@@ -28,7 +27,6 @@ namespace cdcavell.Controllers
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/04/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
-    /// | Christopher D. Cavell | 1.0.3.1 | 02/06/2021 | Utilize Redis Cache |~
     /// </revision>
     [ServiceFilter(typeof(SecurityHeadersAttribute))]
     public abstract partial class ApplicationBaseController<T> : WebBaseController<ApplicationBaseController<T>> where T : ApplicationBaseController<T>
@@ -39,8 +37,6 @@ namespace cdcavell.Controllers
         public CDCavellDbContext _dbContext;
         /// <value>IAuthorizationService</value>
         public IAuthorizationService _authorizationService;
-        /// <value>IDistributedCache</value>
-        public IDistributedCache _cache;
 
         /// <summary>
         /// Constructor method
@@ -51,7 +47,6 @@ namespace cdcavell.Controllers
         /// <param name="authorizationService">IAuthorizationService</param>
         /// <param name="appSettings">AppSettings</param>
         /// <param name="dbContext">CDCavellDbContext</param>
-        /// <param name="cache">IDistributedCache</param>
         /// <method>
         /// ApplicationBaseController(
         ///     ILogger&lt;T&gt; logger, 
@@ -59,8 +54,7 @@ namespace cdcavell.Controllers
         ///     IHttpContextAccessor httpContextAccessor,
         ///     IAuthorizationService,
         ///     AppSettings appSettings,
-        ///     CDCavellDbContext dbContext,
-        ///     IDistributedCache cache
+        ///     CDCavellDbContext dbContext
         /// )
         /// </method>
         protected ApplicationBaseController(
@@ -69,14 +63,12 @@ namespace cdcavell.Controllers
             IHttpContextAccessor httpContextAccessor,
             IAuthorizationService authorizationService,
             AppSettings appSettings,
-            CDCavellDbContext dbContext,
-            IDistributedCache cache
+            CDCavellDbContext dbContext
         ) : base(logger, webHostEnvironment, httpContextAccessor)
         {
             _appSettings = appSettings;
             _dbContext = dbContext;
             _authorizationService = authorizationService;
-            _cache = cache;
         }
 
         /// <summary>
@@ -100,12 +92,17 @@ namespace cdcavell.Controllers
             {
                 case 7001:
                     vm.StatusMessage = "An invalid access token was received. ";
-                    break;
+                    goto case 7000;
                 case 7002:
                     vm.StatusMessage = "Unable to access Authorization Service. ";
-                    break;
+                    goto case 7000;
                 case 7003:
                     vm.StatusMessage = "Invalid or missing email returned. ";
+                    goto case 7000;
+                case 7000:
+                    vm.StatusMessage += "System has logged you off.";
+                    HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme).Wait();
+                    SignOut(CookieAuthenticationDefaults.AuthenticationScheme, "oidc");
                     break;
             }
 

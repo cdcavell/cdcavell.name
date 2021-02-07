@@ -51,6 +51,35 @@ namespace cdcavell.Migrations
                     b.ToTable("AuditHistory");
                 });
 
+            modelBuilder.Entity("cdcavell.Data.Authorization", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Guid")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Object")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Guid")
+                        .IsUnique();
+
+                    b.ToTable("Authorization");
+                });
+
             modelBuilder.Entity("cdcavell.Data.SiteMap", b =>
                 {
                     b.Property<int>("Id")
