@@ -79,7 +79,14 @@ namespace as_ui_cdcavell
             _appSettings = appSettings;
             services.AddSingleton(appSettings);
 
-            services.AddSession();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(5);
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict;
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
             services.AddDistributedRedisCache(options =>
             {
                 options.Configuration = _appSettings.ConnectionStrings.RedisCacheConnection;
