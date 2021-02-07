@@ -54,6 +54,7 @@ namespace cdcavell
     /// | Christopher D. Cavell | 1.0.0.9 | 11/11/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// | Christopher D. Cavell | 1.0.2.2 | 01/18/2021 | Convert GrantType from Implicit to Pkce |~ 
     /// | Christopher D. Cavell | 1.0.3.0 | 02/06/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/06/2021 | Utilize Redis Cache |~
     /// </revision>
     public class Startup
     {
@@ -254,9 +255,6 @@ namespace cdcavell
 
             services.AddMvc();
             services.AddControllersWithViews();
-
-            services.AddDistributedMemoryCache();
-            services.AddSession();
         }
 
         /// <summary>
@@ -300,7 +298,6 @@ namespace cdcavell
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseSession();
             app.UseStaticFiles(new StaticFileOptions {
                 OnPrepareResponse = ctx =>
                 {
