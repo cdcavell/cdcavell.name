@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -54,7 +55,7 @@ namespace cdcavell
     /// | Christopher D. Cavell | 1.0.0.9 | 11/11/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// | Christopher D. Cavell | 1.0.2.2 | 01/18/2021 | Convert GrantType from Implicit to Pkce |~ 
     /// | Christopher D. Cavell | 1.0.3.0 | 02/06/2021 | Initial build Authorization Service |~ 
-    /// | Christopher D. Cavell | 1.0.3.1 | 02/06/2021 | Utilize Redis Cache |~
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | Utilize Redis Cache |~
     /// </revision>
     public class Startup
     {
@@ -212,13 +213,23 @@ namespace cdcavell
                                 return Task.FromResult(ticketReceivedContext.Result);
                             }
 
-                            // Store in Session
-                            ticketReceivedContext.HttpContext.Session.Encrypt("AccessToken", accessToken);
-                            ticketReceivedContext.HttpContext.Session.Encrypt<UserAuthorization>("UserAuthorization", userAuthorization);
+                            // Get dbContext
+                            CDCavellDbContext dbContext = (CDCavellDbContext)ticketReceivedContext.HttpContext
+                                .RequestServices.GetService(typeof(CDCavellDbContext));
+                            // Harden User Authorization
+                            Data.Authorization authorization = new Data.Authorization();
+                            authorization.Guid = Guid.NewGuid().ToString();
+                            authorization.AccessToken = accessToken;
+                            authorization.Created = DateTime.Now;
+                            authorization.UserAuthorization = userAuthorization;
+                            authorization.AddUpdate(dbContext);
 
                             var additionalClaims = new List<Claim>();
                             if (!ticketReceivedContext.Principal.HasClaim("email", userAuthorization.Email.Clean()))
                                 additionalClaims.Add(new Claim("email", userAuthorization.Email.Clean()));
+
+                            if (!ticketReceivedContext.Principal.HasClaim("authorization", authorization.Guid))
+                                additionalClaims.Add(new Claim("authorization", authorization.Guid));
 
                             ticketReceivedContext.Principal.AddIdentity(new ClaimsIdentity(additionalClaims));
 
