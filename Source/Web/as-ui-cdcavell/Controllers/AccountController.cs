@@ -125,11 +125,11 @@ namespace as_ui_cdcavell.Controllers
         /// <summary>
         /// Logout method
         /// </summary>
-        /// <returns>Task&lt;IActionResult&gt;</returns>
+        /// <returns>IActionResult</returns>
         /// <method>Logout()</method>
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> Logout()
+        public IActionResult Logout()
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -149,7 +149,7 @@ namespace as_ui_cdcavell.Controllers
 
         /// <summary>
         /// Front Channel SLO Logout method
-        /// <&lt;br /&gt;&lt;br /&gt;
+        /// &lt;br /&gt;&lt;br /&gt;
         /// https://andersonnjen.com/2019/03/22/identityserver4-global-logout/
         /// </summary>
         /// <returns>Task&lt;IActionResult&gt;</returns>

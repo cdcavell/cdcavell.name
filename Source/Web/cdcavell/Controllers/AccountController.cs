@@ -130,11 +130,11 @@ namespace cdcavell.Controllers
         /// <summary>
         /// Logout method
         /// </summary>
-        /// <returns>Task&lt;IActionResult&gt;</returns>
+        /// <returns>IActionResult</returns>
         /// <method>Logout()</method>
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> Logout()
+        public IActionResult Logout()
         {
             if (User.Identity.IsAuthenticated)
             {
