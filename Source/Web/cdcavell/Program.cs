@@ -20,6 +20,7 @@ namespace cdcavell
     /// | Christopher D. Cavell | 1.0.0.0 | 10/28/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/03/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | Add ApplicationInsights |~
     /// </revision>
     public class Program
     {
@@ -68,17 +69,18 @@ namespace cdcavell
         /// <method>CreateHostBuilder(string[] args)</method>
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureLogging(logging =>
+                .ConfigureLogging((hostingContext, logging) =>
                 {
                     logging.ClearProviders();
                     logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
                     logging.AddConsole();
 
+                    var appInsightKey = hostingContext.Configuration["AppSettings:ConnectionStrings:ApplicationInsightsConnection"];
                     // Providing an instrumentation key here is required if you're using
                     // standalone package Microsoft.Extensions.Logging.ApplicationInsights
                     // or if you want to capture logs from early in the application startup 
                     // pipeline from Startup.cs or Program.cs itself.
-                    logging.AddApplicationInsights("ikey");
+                    logging.AddApplicationInsights(appInsightKey);
                     // Adding the filter below to ensure logs of all severity from Program.cs
                     // is sent to ApplicationInsights.
                     logging.AddFilter<Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider>
