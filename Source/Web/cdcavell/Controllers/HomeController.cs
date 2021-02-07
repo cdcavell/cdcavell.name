@@ -2,14 +2,12 @@
 using cdcavell.Models.AppSettings;
 using cdcavell.Models.Home;
 using cdcavell.Models.Home.Search;
-using CDCavell.ClassLibrary.Web.Mvc.Models.Authorization;
 using CDCavell.ClassLibrary.Web.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Net;
@@ -30,7 +28,6 @@ namespace cdcavell.Controllers
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
     /// | Christopher D. Cavell | 1.0.0.8 | 11/01/2020 | Bing Search APIs will transition from Azure Cognitive Services to Azure Marketplace on 31 October 2023 [#152](https://github.com/cdcavell/cdcavell.name/issues/152) |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/04/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
-    /// | Christopher D. Cavell | 1.0.3.1 | 02/06/2021 | Utilize Redis Cache |~
     /// </revision>
     public class HomeController : ApplicationBaseController<HomeController>
     {
@@ -43,7 +40,6 @@ namespace cdcavell.Controllers
         /// <param name="authorizationService">IAuthorizationService</param>
         /// <param name="appSettings">AppSettings</param>
         /// <param name="dbContext">CDCavellDbContext</param>
-        /// <param name="cache">IDistributedCache</param>
         /// <method>
         /// public HomeController(
         ///     ILogger&lt;HomeController&gt; logger,
@@ -51,9 +47,8 @@ namespace cdcavell.Controllers
         ///     IHttpContextAccessor httpContextAccessor,
         ///     IAuthorizationService authorizationService,
         ///     AppSettings appSettings,
-        ///     CDCavellDbContext dbContext,
-        ///     IDistributedCache cache
-        /// ) : base(logger, webHostEnvironment, httpContextAccessor, authorizationService, appSettings, dbContext, cache)
+        ///     CDCavellDbContext dbContext
+        /// ) : base(logger, webHostEnvironment, httpContextAccessor, authorizationService, appSettings, dbContext)
         /// </method>
         public HomeController(
             ILogger<HomeController> logger,
@@ -61,9 +56,8 @@ namespace cdcavell.Controllers
             IHttpContextAccessor httpContextAccessor,
             IAuthorizationService authorizationService,
             AppSettings appSettings,
-            CDCavellDbContext dbContext,
-            IDistributedCache cache
-        ) : base(logger, webHostEnvironment, httpContextAccessor, authorizationService, appSettings, dbContext, cache)
+            CDCavellDbContext dbContext
+        ) : base(logger, webHostEnvironment, httpContextAccessor, authorizationService, appSettings, dbContext)
         {
         }
 

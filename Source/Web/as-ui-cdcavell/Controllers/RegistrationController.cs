@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
@@ -26,7 +25,6 @@ namespace as_ui_cdcavell.Controllers
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
-    /// | Christopher D. Cavell | 1.0.3.1 | 02/06/2021 | Utilize Redis Cache |~
     /// </revision>
     public class RegistrationController : ApplicationBaseController<RegistrationController>
     {
@@ -39,7 +37,6 @@ namespace as_ui_cdcavell.Controllers
         /// <param name="authorizationService">IAuthorizationService</param>
         /// <param name="appSettings">AppSettings</param>
         /// <param name="dbContext">AuthorizationUiDbContext</param>
-        /// <param name="cache">IDistributedCache</param>
         /// <method>
         /// public RegistrationController(
         ///     ILogger&lt;HomeController&gt; logger,
@@ -47,9 +44,8 @@ namespace as_ui_cdcavell.Controllers
         ///     IHttpContextAccessor httpContextAccessor,
         ///     IAuthorizationService authorizationService,
         ///     AppSettings appSettings,
-        ///     AuthorizationUiDbContext dbContext,
-        ///     IDistributedCache cache
-        /// ) : base(logger, webHostEnvironment, httpContextAccessor, authorizationService, appSettings, dbContext, cache)
+        ///     AuthorizationUiDbContext dbContext
+        /// ) : base(logger, webHostEnvironment, httpContextAccessor, authorizationService, appSettings, dbContext)
         /// </method>
         public RegistrationController(
             ILogger<RegistrationController> logger,
@@ -57,9 +53,8 @@ namespace as_ui_cdcavell.Controllers
             IHttpContextAccessor httpContextAccessor,
             IAuthorizationService authorizationService,
             AppSettings appSettings,
-            AuthorizationUiDbContext dbContext,
-            IDistributedCache cache
-        ) : base(logger, webHostEnvironment, httpContextAccessor, authorizationService, appSettings, dbContext, cache)
+            AuthorizationUiDbContext dbContext
+        ) : base(logger, webHostEnvironment, httpContextAccessor, authorizationService, appSettings, dbContext)
         {
         }
 
@@ -76,10 +71,13 @@ namespace as_ui_cdcavell.Controllers
             if (string.IsNullOrEmpty(emailClaim))
                 return Error(400);
 
-            UserAuthorization userAuthorization = HttpContext.Session.Decrypt<UserAuthorization>("UserAuthorization").Result;
-            if (userAuthorization != null)
-                if (userAuthorization.Registration.IsRegistered)
-                    return RedirectToAction("Status", "Registration");
+            string authClaim = User.Claims.Where(x => x.Type == "authorization").Select(x => x.Value).FirstOrDefault();
+            if (string.IsNullOrEmpty(authClaim))
+                return Error(400);
+
+            Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
+            if (authorization.UserAuthorization.Registration.IsRegistered)
+                return RedirectToAction("Status", "Registration");
 
             RegistrationIndexModel model = new RegistrationIndexModel();
             model.Email = emailClaim;
@@ -103,24 +101,23 @@ namespace as_ui_cdcavell.Controllers
                 if (string.IsNullOrEmpty(emailClaim))
                     return Error(400);
 
-                string accessToken = HttpContext.Session.Decrypt<string>("AccessToken").Result;
-                if (string.IsNullOrEmpty(accessToken))
+                string authClaim = User.Claims.Where(x => x.Type == "authorization").Select(x => x.Value).FirstOrDefault();
+                if (string.IsNullOrEmpty(authClaim))
                     return Error(400);
 
-                UserAuthorization userAuthorization = HttpContext.Session.Decrypt<UserAuthorization>("UserAuthorization").Result;
-                if (userAuthorization != null)
-                    if (userAuthorization.Registration.IsRegistered)
-                        return RedirectToAction("Status", "Registration");
+                Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
+                if (authorization.UserAuthorization.Registration.IsRegistered)
+                    return RedirectToAction("Status", "Registration");
 
-                userAuthorization = new UserAuthorization();
+                UserAuthorization userAuthorization = new UserAuthorization();
                 userAuthorization.Registration.Email = model.Email.Clean();
                 userAuthorization.Registration.FirstName = model.FirstName.Clean();
                 userAuthorization.Registration.LastName = model.LastName.Clean();
 
                 string jsonString = JsonConvert.SerializeObject(userAuthorization);
-                string encryptString = AESGCM.Encrypt(jsonString, accessToken);
+                string encryptString = AESGCM.Encrypt(jsonString, authorization.AccessToken);
 
-                JsonClient jsonClient = new JsonClient(_appSettings.Authorization.AuthorizationService.API, accessToken);
+                JsonClient jsonClient = new JsonClient(_appSettings.Authorization.AuthorizationService.API, authorization.AccessToken);
                 HttpStatusCode statusCode = jsonClient.SendRequest(HttpMethod.Put, "Registration", encryptString);
                 if (!jsonClient.IsResponseSuccess)
                 {
@@ -128,10 +125,11 @@ namespace as_ui_cdcavell.Controllers
                     return Error(7004);
                 }
 
-                jsonString = AESGCM.Decrypt(jsonClient.GetResponseObject<string>(), accessToken);
+                jsonString = AESGCM.Decrypt(jsonClient.GetResponseObject<string>(), authorization.AccessToken);
                 userAuthorization = JsonConvert.DeserializeObject<UserAuthorization>(jsonString);
 
-                HttpContext.Session.Encrypt<UserAuthorization>("UserAuthorization", userAuthorization);
+                authorization.UserAuthorization = userAuthorization;
+                authorization.AddUpdate(_dbContext);
 
                 return RedirectToAction("Status", "Registration");
             }
@@ -152,10 +150,17 @@ namespace as_ui_cdcavell.Controllers
             if (string.IsNullOrEmpty(emailClaim))
                 return Error(400);
 
-            UserAuthorization userAuthorization = HttpContext.Session.Decrypt<UserAuthorization>("UserAuthorization").Result;
-            if (userAuthorization != null)
-                if (!userAuthorization.Registration.IsRegistered)
-                    return RedirectToAction("Index", "Registration");
+            string authClaim = User.Claims.Where(x => x.Type == "authorization").Select(x => x.Value).FirstOrDefault();
+            if (string.IsNullOrEmpty(authClaim))
+                return Error(400);
+
+            Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
+            if (!authClaim.Equals(authorization.Guid))
+                return Error(400);
+
+            UserAuthorization userAuthorization = authorization.UserAuthorization;
+            if (!userAuthorization.Registration.IsRegistered)
+                return RedirectToAction("Index", "Registration");
 
             if (!emailClaim.Equals(userAuthorization.Email))
                 return Error(400);
@@ -190,25 +195,25 @@ namespace as_ui_cdcavell.Controllers
                 if (!emailClaim.Equals(model.Email))
                     return Error(400);
 
-                string accessToken = HttpContext.Session.Decrypt<string>("AccessToken").Result;
-                if (string.IsNullOrEmpty(accessToken))
+                string authClaim = User.Claims.Where(x => x.Type == "authorization").Select(x => x.Value).FirstOrDefault();
+                if (string.IsNullOrEmpty(authClaim))
                     return Error(400);
 
-                UserAuthorization userAuthorization = HttpContext.Session.Decrypt<UserAuthorization>("UserAuthorization").Result;
-                if (userAuthorization != null)
-                    if (userAuthorization.Registration.IsRegistered)
-                    {
-                        string jsonString = JsonConvert.SerializeObject(userAuthorization);
-                        string encryptString = AESGCM.Encrypt(jsonString, accessToken);
+                Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
+                if (authorization.UserAuthorization.Registration.IsRegistered)
+                {
+                    UserAuthorization userAuthorization = authorization.UserAuthorization;
+                    string jsonString = JsonConvert.SerializeObject(userAuthorization);
+                    string encryptString = AESGCM.Encrypt(jsonString, authorization.AccessToken);
 
-                        JsonClient jsonClient = new JsonClient(_appSettings.Authorization.AuthorizationService.API, accessToken);
-                        HttpStatusCode statusCode = jsonClient.SendRequest(HttpMethod.Delete, "Registration", encryptString);
-                        if (!jsonClient.IsResponseSuccess)
-                        {
-                            _logger.Exception(new Exception(jsonClient.GetResponseString()));
-                            return Error(7005);
-                        }
+                    JsonClient jsonClient = new JsonClient(_appSettings.Authorization.AuthorizationService.API, authorization.AccessToken);
+                    HttpStatusCode statusCode = jsonClient.SendRequest(HttpMethod.Delete, "Registration", encryptString);
+                    if (!jsonClient.IsResponseSuccess)
+                    {
+                        _logger.Exception(new Exception(jsonClient.GetResponseString()));
+                        return Error(7005);
                     }
+                }
 
                 return RedirectToAction("Logout", "Account");
             }

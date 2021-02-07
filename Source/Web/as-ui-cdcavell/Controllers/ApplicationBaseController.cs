@@ -3,13 +3,10 @@ using as_ui_cdcavell.Filters;
 using as_ui_cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Web.Mvc.Controllers;
 using CDCavell.ClassLibrary.Web.Mvc.Models;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.Net;
@@ -25,7 +22,7 @@ namespace as_ui_cdcavell.Controllers
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
-    /// | Christopher D. Cavell | 1.0.3.1 | 02/06/2021 | Utilize Redis Cache |~
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | Utilize Redis Cache |~ 
     /// </revision>
     [ServiceFilter(typeof(SecurityHeadersAttribute))]
     public abstract partial class ApplicationBaseController<T> : WebBaseController<ApplicationBaseController<T>> where T : ApplicationBaseController<T>
@@ -36,8 +33,6 @@ namespace as_ui_cdcavell.Controllers
         public AuthorizationUiDbContext _dbContext;
         /// <value>IAuthorizationService</value>
         public IAuthorizationService _authorizationService;
-        /// <value>IDistributedCache</value>
-        public IDistributedCache _cache;
 
         /// <summary>
         /// Constructor method
@@ -48,7 +43,6 @@ namespace as_ui_cdcavell.Controllers
         /// <param name="authorizationService">IAuthorizationService</param>
         /// <param name="appSettings">AppSettings</param>
         /// <param name="dbContext">AuthorizationUiDbContext</param>
-        /// <param name="cache">IDistributedCache</param>
         /// <method>
         /// ApplicationBaseController(
         ///     ILogger&lt;T&gt; logger, 
@@ -56,8 +50,7 @@ namespace as_ui_cdcavell.Controllers
         ///     IHttpContextAccessor httpContextAccessor,
         ///     IAuthorizationService,
         ///     AppSettings appSettings,
-        ///     AuthorizationUiDbContext dbContext,
-        ///     IDistributedCache cache
+        ///     AuthorizationUiDbContext dbContext
         /// )
         /// </method>
         protected ApplicationBaseController(
@@ -66,14 +59,12 @@ namespace as_ui_cdcavell.Controllers
             IHttpContextAccessor httpContextAccessor,
             IAuthorizationService authorizationService,
             AppSettings appSettings,
-            AuthorizationUiDbContext dbContext,
-            IDistributedCache cache
+            AuthorizationUiDbContext dbContext
         ) : base(logger, webHostEnvironment, httpContextAccessor)
         {
             _appSettings = appSettings;
             _dbContext = dbContext;
             _authorizationService = authorizationService;
-            _cache = cache;
         }
 
         /// <summary>

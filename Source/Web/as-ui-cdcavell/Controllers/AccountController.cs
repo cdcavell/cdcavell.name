@@ -2,6 +2,7 @@
 using as_ui_cdcavell.Models.Account;
 using as_ui_cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Web.Http;
+using CDCavell.ClassLibrary.Web.Mvc.Models.Authorization;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -9,11 +10,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace as_ui_cdcavell.Controllers
@@ -26,7 +28,7 @@ namespace as_ui_cdcavell.Controllers
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/04/2021 | Initial build Authorization Service |~ 
-    /// | Christopher D. Cavell | 1.0.3.1 | 02/06/2021 | Utilize Redis Cache |~
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | Utilize Redis Cache |~ 
     /// </revision>
     public class AccountController : ApplicationBaseController<AccountController>
     {
@@ -39,7 +41,6 @@ namespace as_ui_cdcavell.Controllers
         /// <param name="authorizationService">IAuthorizationService</param>
         /// <param name="appSettings">AppSettings</param>
         /// <param name="dbContext">AuthorizationUiDbContext</param>
-        /// <param name="cache">IDistributedCache</param>
         /// <method>
         /// AccountController(
         ///     ILogger&lt;AccountController&gt; logger, 
@@ -47,9 +48,8 @@ namespace as_ui_cdcavell.Controllers
         ///     IHttpContextAccessor httpContextAccessor,
         ///     IAuthorizationService authorizationService,
         ///     AppSettings appSettings,
-        ///     AuthorizationUiDbContext dbContext,
-        ///     IDistributedCache cache
-        /// ) : base(logger, webHostEnvironment, httpContextAccessor, appSettings, dbContext, cache)
+        ///     AuthorizationUiDbContext dbContext
+        /// ) : base(logger, webHostEnvironment, httpContextAccessor, appSettings, dbContext)
         /// </method>
         public AccountController(
             ILogger<AccountController> logger,
@@ -57,9 +57,8 @@ namespace as_ui_cdcavell.Controllers
             IHttpContextAccessor httpContextAccessor,
             IAuthorizationService authorizationService,
             AppSettings appSettings,
-            AuthorizationUiDbContext dbContext,
-            IDistributedCache cache
-        ) : base(logger, webHostEnvironment, httpContextAccessor, authorizationService, appSettings, dbContext, cache)
+            AuthorizationUiDbContext dbContext
+        ) : base(logger, webHostEnvironment, httpContextAccessor, authorizationService, appSettings, dbContext)
         {
         }
 
@@ -154,15 +153,17 @@ namespace as_ui_cdcavell.Controllers
         [HttpGet]
         public async Task<IActionResult> FrontChannelLogout(string sid)
         {
-            HttpContext.Session.Clear();
-            await HttpContext.Session.CommitAsync();
-
             if (User.Identity.IsAuthenticated)
             {
+                // Remove Authorization record
+                Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
+                authorization.Delete(_dbContext);
+
                 var currentSid = User.FindFirst("sid")?.Value ?? "";
                 if (string.Equals(currentSid, sid, StringComparison.Ordinal))
                 {
                     await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                    await HttpContext.SignOutAsync("oidc");
                 }
             }
 

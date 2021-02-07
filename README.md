@@ -38,7 +38,7 @@ $ git flow init -d
 
 | Build | Date | Description |
 |-------|------|-------------|
-| 1.0.3.1 | 02/06/2021 | __Update:__ Utilize Redis Cache |
+| 1.0.3.1 | 02/07/2021 | __Update:__ Utilize Redis Cache |
 | 1.0.3.0 | 02/06/2021 | __Add:__ Initial build Authorization Service |
 | 1.0.2.3 | 01/21/2021 | __Update:__ Update Duende software libraries v5.0.1 |
 | 1.0.2.2 | 01/18/2021 | __Update:__ Convert GrantType from Implicit to Pkce |
