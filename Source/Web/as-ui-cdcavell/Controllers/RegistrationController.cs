@@ -2,8 +2,8 @@
 using as_ui_cdcavell.Models.AppSettings;
 using as_ui_cdcavell.Models.Registration;
 using CDCavell.ClassLibrary.Web.Http;
-using CDCavell.ClassLibrary.Web.Mvc.Models.Authorization;
 using CDCavell.ClassLibrary.Web.Security;
+using CDCavell.ClassLibrary.Web.Services.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -26,7 +26,7 @@ namespace as_ui_cdcavell.Controllers
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
-    /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | User Authorization Web Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/08/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class RegistrationController : ApplicationBaseController<RegistrationController>
     {
@@ -111,7 +111,7 @@ namespace as_ui_cdcavell.Controllers
                 if (authorization.UserAuthorization.Registration.IsRegistered)
                     return RedirectToAction("Status", "Registration");
 
-                UserAuthorization userAuthorization = new UserAuthorization();
+                UserAuthorizationModel userAuthorization = new UserAuthorizationModel();
                 userAuthorization.Registration.Email = model.Email.Clean();
                 userAuthorization.Registration.FirstName = model.FirstName.Clean();
                 userAuthorization.Registration.LastName = model.LastName.Clean();
@@ -124,11 +124,11 @@ namespace as_ui_cdcavell.Controllers
                 if (!jsonClient.IsResponseSuccess)
                 {
                     _logger.Exception(new Exception(jsonClient.GetResponseString()));
-                    return Error(7004);
+                    return Error(400);
                 }
 
                 jsonString = AESGCM.Decrypt(jsonClient.GetResponseObject<string>(), authorization.AccessToken);
-                userAuthorization = JsonConvert.DeserializeObject<UserAuthorization>(jsonString);
+                userAuthorization = JsonConvert.DeserializeObject<UserAuthorizationModel>(jsonString);
 
                 authorization.UserAuthorization = userAuthorization;
                 authorization.AddUpdate(_dbContext);
@@ -160,7 +160,7 @@ namespace as_ui_cdcavell.Controllers
             if (!authClaim.Equals(authorization.Guid))
                 return Error(400);
 
-            UserAuthorization userAuthorization = authorization.UserAuthorization;
+            UserAuthorizationModel userAuthorization = authorization.UserAuthorization;
             if (!userAuthorization.Registration.IsRegistered)
                 return RedirectToAction("Index", "Registration");
 
@@ -204,7 +204,7 @@ namespace as_ui_cdcavell.Controllers
                 Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
                 if (authorization.UserAuthorization.Registration.IsRegistered)
                 {
-                    UserAuthorization userAuthorization = authorization.UserAuthorization;
+                    UserAuthorizationModel userAuthorization = authorization.UserAuthorization;
                     string jsonString = JsonConvert.SerializeObject(userAuthorization);
                     string encryptString = AESGCM.Encrypt(jsonString, authorization.AccessToken);
 
@@ -213,7 +213,7 @@ namespace as_ui_cdcavell.Controllers
                     if (!jsonClient.IsResponseSuccess)
                     {
                         _logger.Exception(new Exception(jsonClient.GetResponseString()));
-                        return Error(7005);
+                        return Error(500);
                     }
                 }
 

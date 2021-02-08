@@ -1,7 +1,7 @@
 ﻿using as_api_cdcavell.Data;
 using as_api_cdcavell.Models.AppSettings;
-using CDCavell.ClassLibrary.Web.Mvc.Models.Authorization;
 using CDCavell.ClassLibrary.Web.Security;
+using CDCavell.ClassLibrary.Web.Services.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -10,7 +10,6 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
-using System.Text;
 
 namespace as_api_cdcavell.Controllers
 {
@@ -23,6 +22,7 @@ namespace as_api_cdcavell.Controllers
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/08/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class AuthorizationController : ApplicationBaseController<AuthorizationController>
     {
@@ -70,7 +70,7 @@ namespace as_api_cdcavell.Controllers
 
             accessToken = accessToken.Substring(7);
 
-            UserAuthorization userAuthorization = new UserAuthorization();
+            UserAuthorizationModel userAuthorization = new UserAuthorizationModel();
             userAuthorization.ClientId = User.Claims.Where(x => x.Type == "client_id").Select(x => x.Value).FirstOrDefault();
             userAuthorization.IdentityProvider = User.Claims.Where(x => x.Type == "http://schemas.microsoft.com/identity/claims/identityprovider").Select(x => x.Value).FirstOrDefault();
             userAuthorization.DateTimeRequsted = DateTime.Now;

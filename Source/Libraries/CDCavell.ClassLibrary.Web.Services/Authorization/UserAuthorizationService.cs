@@ -25,19 +25,19 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
     public class UserAuthorizationService : IUserAuthorizationService
     {
         private Logger _logger;
-        private readonly HttpContext _httpContext;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly string _authorizationServiceAPI;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="httpContext">HttpContext</param>
         /// <param name="logger">ILogger&lt;UserAuthorizationService&gt;</param>
+        /// <param name="httpContextAccessor">IHttpContextAccessor</param>
         /// <param name="options">IOptions&lt;UserAuthorizationServiceOptionss&gt;</param>
-        /// <method>UserAuthorizationService(ILogger&lt;UserAuthorizationService&gt; logger, HttpContext httpContext, IOptions&lt;UserAuthorizationServiceOptionss&gt; options)</method>
-        public UserAuthorizationService(ILogger<UserAuthorizationService> logger, HttpContext httpContext, IOptions<UserAuthorizationServiceOptions> options)
+        /// <method>UserAuthorizationService(ILogger&lt;UserAuthorizationService&gt; logger, IHttpContextAccessor httpContextAccessor, IOptions&lt;UserAuthorizationServiceOptionss&gt; options)</method>
+        public UserAuthorizationService(ILogger<UserAuthorizationService> logger, IHttpContextAccessor httpContextAccessor, IOptions<UserAuthorizationServiceOptions> options)
         {
-            _httpContext = httpContext;
+            _httpContextAccessor = httpContextAccessor;
             _logger = new Logger(logger);
             _authorizationServiceAPI = options.Value.AuthorizationServiceAPI;
         }
@@ -59,6 +59,8 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
             UserAuthorizationModel userAuthorization = JsonConvert.DeserializeObject<UserAuthorizationModel>(jsonString);
             if (string.IsNullOrEmpty(userAuthorization.Email))
                 ThrowException("Email is null or empty - Remote IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress());
+
+            userAuthorization.AccessToken = accessToken;
 
             return userAuthorization;
         }

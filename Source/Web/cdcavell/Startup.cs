@@ -5,13 +5,10 @@ using cdcavell.Data;
 using cdcavell.Filters;
 using cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Commons.Logging;
-using CDCavell.ClassLibrary.Web.Http;
 using CDCavell.ClassLibrary.Web.Mvc.Filters;
-using CDCavell.ClassLibrary.Web.Mvc.Models.Authorization;
 using CDCavell.ClassLibrary.Web.Security;
 using CDCavell.ClassLibrary.Web.Services.Authorization;
 using IdentityModel.Client;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
@@ -19,16 +16,15 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.Net.Http.Headers;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -58,6 +54,7 @@ namespace cdcavell
     /// | Christopher D. Cavell | 1.0.2.2 | 01/18/2021 | Convert GrantType from Implicit to Pkce |~ 
     /// | Christopher D. Cavell | 1.0.3.0 | 02/06/2021 | Initial build Authorization Service |~ 
     /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | Utilize Redis Cache - Not implemented |~
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/08/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class Startup
     {
@@ -131,6 +128,7 @@ namespace cdcavell
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
+            IdentityModelEventSource.ShowPII = true;
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme; 
@@ -168,70 +166,43 @@ namespace cdcavell
 
                     options.Events = new OpenIdConnectEvents
                     {
-                        OnRedirectToIdentityProvider = redirectContext =>
-                        {
-                            return Task.FromResult(0);
-                        },
-
                         OnTicketReceived = ticketReceivedContext =>
                         {
-                            // Get User Authorization Web Service
-                            UserAuthorizationService userAuthorizationService = (UserAuthorizationService)ticketReceivedContext.HttpContext
-                                .RequestServices.GetService(typeof(UserAuthorizationService));
-
-                            var test = userAuthorizationService.InitialAuthorization(ticketReceivedContext).Result;
-
-                            // Get Access Token
-                            string accessToken = ticketReceivedContext.Properties.Items[".Token.access_token"];
-                            if (string.IsNullOrEmpty(accessToken))
+                            try
                             {
-                                _logger.Exception(new Exception("Invalid Access Token - Remote IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
-                                ticketReceivedContext.HttpContext.Response.Redirect("/Home/Error/7001");
-                                ticketReceivedContext.HandleResponse();
-                                return Task.FromResult(ticketReceivedContext.Result);
-                            }
+                                // Get User Authorization Web Service
+                                UserAuthorizationService userAuthorizationService = (UserAuthorizationService)ticketReceivedContext.HttpContext
+                                    .RequestServices.GetService(typeof(IUserAuthorizationService));
 
-                            // Authorization Service API Get User Authorization
-                            JsonClient jsonClient = new JsonClient(_appSettings.Authorization.AuthorizationService.API, accessToken);
-                            HttpStatusCode statusCode = jsonClient.SendRequest(HttpMethod.Get, "Authorization").Result;
-                            if (!jsonClient.IsResponseSuccess)
+                                UserAuthorizationModel userAuthorization = userAuthorizationService.InitialAuthorization(ticketReceivedContext).Result;
+
+                                // Get dbContext
+                                CDCavellDbContext dbContext = (CDCavellDbContext)ticketReceivedContext.HttpContext
+                                    .RequestServices.GetService(typeof(CDCavellDbContext));
+
+                                // Harden User Authorization
+                                Data.Authorization authorization = new Data.Authorization();
+                                authorization.Guid = Guid.NewGuid().ToString();
+                                authorization.AccessToken = userAuthorization.AccessToken;
+                                authorization.Created = DateTime.Now;
+                                authorization.UserAuthorization = userAuthorization;
+                                authorization.AddUpdate(dbContext);
+
+                                var additionalClaims = new List<Claim>();
+                                if (!ticketReceivedContext.Principal.HasClaim("email", userAuthorization.Email.Clean()))
+                                    additionalClaims.Add(new Claim("email", userAuthorization.Email.Clean()));
+
+                                if (!ticketReceivedContext.Principal.HasClaim("authorization", authorization.Guid))
+                                    additionalClaims.Add(new Claim("authorization", authorization.Guid));
+
+                                ticketReceivedContext.Principal.AddIdentity(new ClaimsIdentity(additionalClaims));
+                            }
+                            catch (Exception exception)
                             {
-                                _logger.Exception(new Exception(jsonClient.GetResponseString() + " - Remote IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
-                                ticketReceivedContext.HttpContext.Response.Redirect("/Home/Error/7002");
+                                _logger.Exception(exception);
+                                ticketReceivedContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
                                 ticketReceivedContext.HandleResponse();
-                                return Task.FromResult(ticketReceivedContext.Result);
                             }
-
-                            string jsonString = AESGCM.Decrypt(jsonClient.GetResponseObject<string>(), accessToken);
-                            UserAuthorization userAuthorization = JsonConvert.DeserializeObject<UserAuthorization>(jsonString);
-                            if (string.IsNullOrEmpty(userAuthorization.Email))
-                            {
-                                _logger.Exception(new Exception("Email is null or empty - Remote IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));
-                                ticketReceivedContext.HttpContext.Response.Redirect("/Home/Error/7003");
-                                ticketReceivedContext.HandleResponse();
-                                return Task.FromResult(ticketReceivedContext.Result);
-                            }
-
-                            // Get dbContext
-                            CDCavellDbContext dbContext = (CDCavellDbContext)ticketReceivedContext.HttpContext
-                                .RequestServices.GetService(typeof(CDCavellDbContext));
-
-                            // Harden User Authorization
-                            Data.Authorization authorization = new Data.Authorization();
-                            authorization.Guid = Guid.NewGuid().ToString();
-                            authorization.AccessToken = accessToken;
-                            authorization.Created = DateTime.Now;
-                            authorization.UserAuthorization = userAuthorization;
-                            authorization.AddUpdate(dbContext);
-
-                            var additionalClaims = new List<Claim>();
-                            if (!ticketReceivedContext.Principal.HasClaim("email", userAuthorization.Email.Clean()))
-                                additionalClaims.Add(new Claim("email", userAuthorization.Email.Clean()));
-
-                            if (!ticketReceivedContext.Principal.HasClaim("authorization", authorization.Guid))
-                                additionalClaims.Add(new Claim("authorization", authorization.Guid));
-
-                            ticketReceivedContext.Principal.AddIdentity(new ClaimsIdentity(additionalClaims));
 
                             return Task.FromResult(ticketReceivedContext.Result); 
                         }

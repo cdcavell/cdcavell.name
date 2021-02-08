@@ -1,13 +1,8 @@
-﻿using as_ui_cdcavell.Authorization;
-using as_ui_cdcavell.Data;
+﻿using as_ui_cdcavell.Data;
 using as_ui_cdcavell.Models.AppSettings;
-using CDCavell.ClassLibrary.Web.Mvc.Models.Authorization;
+using CDCavell.ClassLibrary.Web.Services.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Routing;
-using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -22,6 +17,7 @@ namespace as_ui_cdcavell.Authorization
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 01/31/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/08/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class AuthenticatedHandler : AuthorizationHandler<AuthenticatedRequirement>
     {
@@ -58,7 +54,7 @@ namespace as_ui_cdcavell.Authorization
                 Claim emailClaim = user.Claims.Where(x => x.Type == "email").FirstOrDefault();
                 if (emailClaim != null)
                 {
-                    UserAuthorization userAuthorization = Data.Authorization.GetUser(user.Claims, _dbContext);
+                    UserAuthorizationModel userAuthorization = Data.Authorization.GetUser(user.Claims, _dbContext);
                     if (!string.IsNullOrEmpty(userAuthorization.Email))
                         if (userAuthorization.Email == emailClaim.Value)
                             context.Succeed(requirement);

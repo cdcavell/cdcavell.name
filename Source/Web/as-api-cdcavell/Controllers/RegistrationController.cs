@@ -1,7 +1,7 @@
 ﻿using as_api_cdcavell.Data;
 using as_api_cdcavell.Models.AppSettings;
-using CDCavell.ClassLibrary.Web.Mvc.Models.Authorization;
 using CDCavell.ClassLibrary.Web.Security;
+using CDCavell.ClassLibrary.Web.Services.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -9,10 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace as_api_cdcavell.Controllers
 {
@@ -25,6 +22,7 @@ namespace as_api_cdcavell.Controllers
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/08/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class RegistrationController : ApplicationBaseController<RegistrationController>
     {
@@ -106,7 +104,7 @@ namespace as_api_cdcavell.Controllers
             accessToken = accessToken.Substring(7);
 
             string jsonString = AESGCM.Decrypt(encryptObject.ToString(), accessToken);
-            UserAuthorization userAuthorization = JsonConvert.DeserializeObject<UserAuthorization>(jsonString);
+            UserAuthorizationModel userAuthorization = JsonConvert.DeserializeObject<UserAuthorizationModel>(jsonString);
 
             Data.Registration registration = Data.Registration.Get(
                 userAuthorization.Email.Clean(),
@@ -153,7 +151,7 @@ namespace as_api_cdcavell.Controllers
             accessToken = accessToken.Substring(7);
 
             string jsonString = AESGCM.Decrypt(encryptObject.ToString(), accessToken);
-            UserAuthorization userAuthorization = JsonConvert.DeserializeObject<UserAuthorization>(jsonString);
+            UserAuthorizationModel userAuthorization = JsonConvert.DeserializeObject<UserAuthorizationModel>(jsonString);
 
             Data.Registration registration = Data.Registration.Get(
                 userAuthorization.Email.Clean(),
