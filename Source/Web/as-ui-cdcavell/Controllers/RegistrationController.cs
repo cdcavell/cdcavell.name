@@ -14,6 +14,7 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace as_ui_cdcavell.Controllers
 {
@@ -25,6 +26,7 @@ namespace as_ui_cdcavell.Controllers
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class RegistrationController : ApplicationBaseController<RegistrationController>
     {
@@ -88,12 +90,12 @@ namespace as_ui_cdcavell.Controllers
         /// <summary>
         /// New Registration HttpPost method
         /// </summary>
-        /// <returns>IActionResult</returns>
+        /// <returns>Task&lt;IActionResult&gt;</returns>
         /// <method>Index(RegistrationIndexModel model)</method>
         [Authorize(Policy = "Authenticated")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Index(RegistrationIndexModel model)
+        public async Task<IActionResult> Index(RegistrationIndexModel model)
         {
             if (ModelState.IsValid)
             {
@@ -118,7 +120,7 @@ namespace as_ui_cdcavell.Controllers
                 string encryptString = AESGCM.Encrypt(jsonString, authorization.AccessToken);
 
                 JsonClient jsonClient = new JsonClient(_appSettings.Authorization.AuthorizationService.API, authorization.AccessToken);
-                HttpStatusCode statusCode = jsonClient.SendRequest(HttpMethod.Put, "Registration", encryptString);
+                HttpStatusCode statusCode = await jsonClient.SendRequest(HttpMethod.Put, "Registration", encryptString);
                 if (!jsonClient.IsResponseSuccess)
                 {
                     _logger.Exception(new Exception(jsonClient.GetResponseString()));
@@ -179,12 +181,12 @@ namespace as_ui_cdcavell.Controllers
         /// Delete Account
         /// </summary>
         /// <param name="model">RegistrationIndexModel</param>
-        /// <returns>IActionResult</returns>
+        /// <returns>Task&lt;IActionResult&gt;</returns>
         /// <method>Delete(RegistrationIndexModel model)</method>
         [Authorize(Policy = "Authenticated")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(RegistrationIndexModel model)
+        public async Task<IActionResult> Delete(RegistrationIndexModel model)
         {
             if (ModelState.IsValid)
             {
@@ -207,7 +209,7 @@ namespace as_ui_cdcavell.Controllers
                     string encryptString = AESGCM.Encrypt(jsonString, authorization.AccessToken);
 
                     JsonClient jsonClient = new JsonClient(_appSettings.Authorization.AuthorizationService.API, authorization.AccessToken);
-                    HttpStatusCode statusCode = jsonClient.SendRequest(HttpMethod.Delete, "Registration", encryptString);
+                    HttpStatusCode statusCode = await jsonClient.SendRequest(HttpMethod.Delete, "Registration", encryptString);
                     if (!jsonClient.IsResponseSuccess)
                     {
                         _logger.Exception(new Exception(jsonClient.GetResponseString()));

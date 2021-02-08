@@ -9,7 +9,9 @@ using CDCavell.ClassLibrary.Web.Http;
 using CDCavell.ClassLibrary.Web.Mvc.Filters;
 using CDCavell.ClassLibrary.Web.Mvc.Models.Authorization;
 using CDCavell.ClassLibrary.Web.Security;
+using CDCavell.ClassLibrary.Web.Services.Authorization;
 using IdentityModel.Client;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
@@ -17,6 +19,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -108,6 +111,11 @@ namespace cdcavell
             services.AddScoped<ControllerActionUserFilter>();
             services.AddScoped<ControllerActionPageFilter>();
 
+            // Register Web Services
+            services.AddUserAuthorizationService(options =>
+            {
+                options.AuthorizationServiceAPI = _appSettings.Authorization.AuthorizationService.API;
+            });
 
             // Register Application Authorization
             services.AddAuthorization(options =>
@@ -167,6 +175,12 @@ namespace cdcavell
 
                         OnTicketReceived = ticketReceivedContext =>
                         {
+                            // Get User Authorization Web Service
+                            UserAuthorizationService userAuthorizationService = (UserAuthorizationService)ticketReceivedContext.HttpContext
+                                .RequestServices.GetService(typeof(UserAuthorizationService));
+
+                            var test = userAuthorizationService.InitialAuthorization(ticketReceivedContext).Result;
+
                             // Get Access Token
                             string accessToken = ticketReceivedContext.Properties.Items[".Token.access_token"];
                             if (string.IsNullOrEmpty(accessToken))
@@ -179,7 +193,7 @@ namespace cdcavell
 
                             // Authorization Service API Get User Authorization
                             JsonClient jsonClient = new JsonClient(_appSettings.Authorization.AuthorizationService.API, accessToken);
-                            HttpStatusCode statusCode = jsonClient.SendRequest(HttpMethod.Get, "Authorization");
+                            HttpStatusCode statusCode = jsonClient.SendRequest(HttpMethod.Get, "Authorization").Result;
                             if (!jsonClient.IsResponseSuccess)
                             {
                                 _logger.Exception(new Exception(jsonClient.GetResponseString() + " - Remote IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));

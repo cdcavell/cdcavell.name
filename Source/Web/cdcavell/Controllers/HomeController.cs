@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace cdcavell.Controllers
 {
@@ -28,6 +29,7 @@ namespace cdcavell.Controllers
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
     /// | Christopher D. Cavell | 1.0.0.8 | 11/01/2020 | Bing Search APIs will transition from Azure Cognitive Services to Azure Marketplace on 31 October 2023 [#152](https://github.com/cdcavell/cdcavell.name/issues/152) |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/04/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class HomeController : ApplicationBaseController<HomeController>
     {
@@ -156,12 +158,12 @@ namespace cdcavell.Controllers
         /// <summary>
         /// Handle postback from Search request method
         /// </summary>
-        /// <returns>IActionResult</returns>
+        /// <returns>Task&lt;IActionResult&gt;</returns>
         /// <method>Search()</method>
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Search(SearchModel model)
+        public async Task<IActionResult> Search(SearchModel model)
         {
             if (ModelState.IsValid)
             {
@@ -185,7 +187,7 @@ namespace cdcavell.Controllers
                             _appSettings.Authentication.BingWebSearch.CustomConfigId
                         );
 
-                        model.WebResult = bingWebSearch.Search("Web", model.SearchRequest);
+                        model.WebResult = await bingWebSearch.Search("Web", model.SearchRequest);
                         if (model.WebResult.StatusCode == HttpStatusCode.OK)
                         {
                             model.StatusCode = model.WebResult.StatusCode;
@@ -193,7 +195,7 @@ namespace cdcavell.Controllers
                         }
 
 
-                        model.ImageResult = bingWebSearch.Search("Image", model.SearchRequest);
+                        model.ImageResult = await bingWebSearch.Search("Image", model.SearchRequest);
                         if (model.ImageResult.StatusCode == HttpStatusCode.OK)
                         {
                             model.StatusCode = model.ImageResult.StatusCode;
@@ -201,7 +203,7 @@ namespace cdcavell.Controllers
                                 model.ImageActive = "active";
                         }
 
-                        model.VideoResult = bingWebSearch.Search("Video", model.SearchRequest);
+                        model.VideoResult = await bingWebSearch.Search("Video", model.SearchRequest);
                         if (model.VideoResult.StatusCode == HttpStatusCode.OK)
                         {
                             model.StatusCode = model.VideoResult.StatusCode;

@@ -46,6 +46,7 @@ namespace as_ui_cdcavell
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/06/2021 | Initial build Authorization Service |~ 
     /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | Utilize Redis Cache - Not implemented |~
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class Startup
     {
@@ -170,7 +171,7 @@ namespace as_ui_cdcavell
 
                             // Authorization Service API Get User Authorization
                             JsonClient jsonClient = new JsonClient(_appSettings.Authorization.AuthorizationService.API, accessToken);
-                            HttpStatusCode statusCode = jsonClient.SendRequest(HttpMethod.Get, "Authorization");
+                            HttpStatusCode statusCode = jsonClient.SendRequest(HttpMethod.Get, "Authorization").Result;
                             if (!jsonClient.IsResponseSuccess)
                             {
                                 _logger.Exception(new Exception(jsonClient.GetResponseString() + " - Remote IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress()));

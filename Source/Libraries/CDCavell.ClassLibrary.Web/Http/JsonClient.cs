@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace CDCavell.ClassLibrary.Web.Http
 {
@@ -33,6 +34,7 @@ namespace CDCavell.ClassLibrary.Web.Http
     /// | Christopher D. Cavell | 1.0.0.9 | 11/08/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// | Christopher D. Cavell | 1.0.1.0 | 11/25/2020 | Update: Target Framework netcoreapp3.1 to net5.0 |~ 
     /// | Christopher D. Cavell | 1.0.3.0 | 01/23/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class JsonClient
     {
@@ -91,11 +93,11 @@ namespace CDCavell.ClassLibrary.Web.Http
         /// </summary>
         /// <param name="httpMethod">HttpMethod</param>
         /// <param name="requestUri">string</param>
-        /// <returns>HttpStatusCode</returns>
+        /// <returns>Task&lt;HttpStatusCode&gt;</returns>
         /// <method>SendRequest(HttpMethod httpMethod, string requestUri)</method>
-        public HttpStatusCode SendRequest(HttpMethod httpMethod, string requestUri)
+        public async Task<HttpStatusCode> SendRequest(HttpMethod httpMethod, string requestUri)
         {
-            return SendRequest(httpMethod, requestUri, null);
+            return await SendRequest(httpMethod, requestUri, null);
         }
 
         /// <summary>
@@ -104,11 +106,11 @@ namespace CDCavell.ClassLibrary.Web.Http
         /// <param name="httpMethod">HttpMethod</param>
         /// <param name="requestUri">string</param>
         /// <param name="content">object</param>
-        /// <returns>HttpStatusCode</returns>
+        /// <returns>Task&lt;HttpStatusCode&gt;</returns>
         /// <method>SendRequest(HttpMethod httpMethod, string requestUri, object content)</method>
-        public HttpStatusCode SendRequest(HttpMethod httpMethod, string requestUri, object content)
+        public async Task<HttpStatusCode> SendRequest(HttpMethod httpMethod, string requestUri, object content)
         {
-            return SendRequest(httpMethod, requestUri, content, true);
+            return await SendRequest(httpMethod, requestUri, content, true);
         }
 
         /// <summary>
@@ -118,9 +120,9 @@ namespace CDCavell.ClassLibrary.Web.Http
         /// <param name="requestUri">string</param>
         /// <param name="content">object</param>
         /// <param name="ignoreSelfSignedError">bool</param>
-        /// <returns>HttpStatusCode</returns>
+        /// <returns>Task&lt;HttpStatusCode&gt;</returns>
         /// <method>SendRequest(HttpMethod httpMethod, string requestUri, object content, bool ignoreSelfSignedError)</method>
-        public HttpStatusCode SendRequest(HttpMethod httpMethod, string requestUri, object content, bool ignoreSelfSignedError)
+        public async Task<HttpStatusCode> SendRequest(HttpMethod httpMethod, string requestUri, object content, bool ignoreSelfSignedError)
         {
             _statusCode = HttpStatusCode.BadRequest;
             using (HttpClientHandler clientHandler = new HttpClientHandler())
@@ -148,12 +150,12 @@ namespace CDCavell.ClassLibrary.Web.Http
 
                     try
                     {
-                        HttpResponseMessage response = client.SendAsync(request).Result;
+                        HttpResponseMessage response = await client.SendAsync(request);
                         _statusCode = response.StatusCode;
 
                         if (response.IsSuccessStatusCode)
                         {
-                            _returnMessage = response.Content.ReadAsStringAsync().Result;
+                            _returnMessage = await response.Content.ReadAsStringAsync();
                             _responseSuccess = true;
                         }
                         else
