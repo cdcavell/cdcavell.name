@@ -65,7 +65,7 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
         /// <param name="logger">ILogger&lt;UserAuthorizationService&gt;</param>
         /// <param name="httpContextAccessor">IHttpContextAccessor</param>
         /// <param name="options">IOptions&lt;UserAuthorizationServiceOptionss&gt;</param>
-        /// <method>UserAuthorizationService(ILogger&lt;UserAuthorizationService&gt; logger, IHttpContextAccessor httpContextAccessor, IOptions&lt;UserAuthorizationServiceOptionss&gt; options)</method>
+        /// <method>UserAuthorizationService(ILogger&lt;UserAuthorizationService&gt; logger, IHttpContextAccessor httpContextAccessor, IOptions&lt;UserAuthorizationServiceOptions&gt; options)</method>
         public UserAuthorizationService(ILogger<UserAuthorizationService> logger, IHttpContextAccessor httpContextAccessor, IOptions<UserAuthorizationServiceOptions> options)
         {
             _httpContextAccessor = httpContextAccessor;
