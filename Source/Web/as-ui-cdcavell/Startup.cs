@@ -165,6 +165,7 @@ namespace as_ui_cdcavell
                                     .RequestServices.GetService(typeof(IUserAuthorizationService));
 
                                 UserAuthorizationModel userAuthorization = userAuthorizationService.InitialAuthorization(ticketReceivedContext).Result;
+                                ticketReceivedContext.Principal.AddIdentity(new ClaimsIdentity(userAuthorizationService.AdditionalClaims));
 
                                 // Get dbContext
                                 AuthorizationUiDbContext dbContext = (AuthorizationUiDbContext)ticketReceivedContext.HttpContext
@@ -172,20 +173,11 @@ namespace as_ui_cdcavell
 
                                 // Harden User Authorization
                                 Data.Authorization authorization = new Data.Authorization();
-                                authorization.Guid = Guid.NewGuid().ToString();
-                                authorization.AccessToken = userAuthorization.AccessToken;
+                                authorization.Guid = userAuthorizationService.Guid;
+                                authorization.AccessToken = userAuthorizationService.AccessToken;
                                 authorization.Created = DateTime.Now;
                                 authorization.UserAuthorization = userAuthorization;
                                 authorization.AddUpdate(dbContext);
-
-                                var additionalClaims = new List<Claim>();
-                                if (!ticketReceivedContext.Principal.HasClaim("email", userAuthorization.Email.Clean()))
-                                    additionalClaims.Add(new Claim("email", userAuthorization.Email.Clean()));
-
-                                if (!ticketReceivedContext.Principal.HasClaim("authorization", authorization.Guid))
-                                    additionalClaims.Add(new Claim("authorization", authorization.Guid));
-
-                                ticketReceivedContext.Principal.AddIdentity(new ClaimsIdentity(additionalClaims));
                             }
                             catch (Exception exception)
                             {

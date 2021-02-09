@@ -16,8 +16,6 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
         /// <value>string</value>
         public string ClientId { get; set; }
         /// <value>string</value>
-        public string AccessToken { get; set; }
-        /// <value>string</value>
         public string IdentityProvider { get; set; }
         /// <value>string</value>
         public DateTime DateTimeRequsted { get; set; }
