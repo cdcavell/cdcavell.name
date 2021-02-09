@@ -1,7 +1,10 @@
-﻿using CDCavell.ClassLibrary.Commons.Logging;
+﻿using cdcavell.Data;
+using cdcavell.Models.AppSettings;
+using CDCavell.ClassLibrary.Commons.Logging;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -28,9 +31,17 @@ namespace cdcavell.Services.Authorization
         /// </summary>
         /// <param name="logger">ILogger&lt;UserAuthorizationService&gt;</param>
         /// <param name="httpContextAccessor">IHttpContextAccessor</param>
+        /// <param name="appSettings">AppSettings</param>
+        /// <param name="dbContext">CDCavellDbContext</param>
         /// <param name="options">IOptions&lt;UserAuthorizationServiceOptionss&gt;</param>
         /// <method>ApplicationAuthorizationService(ILogger&lt;UserAuthorizationService&gt; logger, IHttpContextAccessor httpContextAccessor, IOptions&lt;ApplicationrAuthorizationServiceOptions&gt; options)</method>
-        public ApplicationAuthorizationService(ILogger<ApplicationAuthorizationService> logger, IHttpContextAccessor httpContextAccessor, IOptions<ApplicationAuthorizationServiceOptions> options)
+        public ApplicationAuthorizationService(
+            ILogger<ApplicationAuthorizationService> logger, 
+            IHttpContextAccessor httpContextAccessor,
+            AppSettings appSettings,
+            CDCavellDbContext dbContext,
+            IOptions<ApplicationAuthorizationServiceOptions> options
+        )
         {
             _httpContextAccessor = httpContextAccessor;
             _logger = new Logger(logger);
