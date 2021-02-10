@@ -1,5 +1,5 @@
-﻿using CDCavell.ClassLibrary.Web.Mvc.Models.Authorization;
-using CDCavell.ClassLibrary.Web.Security;
+﻿using CDCavell.ClassLibrary.Web.Security;
+using CDCavell.ClassLibrary.Web.Services.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
@@ -19,6 +19,7 @@ namespace as_ui_cdcavell.Data
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 01/31/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/08/2021 | User Authorization Web Service |~ 
     /// </revision>
     [Table("Authorization")]
     public class Authorization : DataModel<Authorization>
@@ -62,9 +63,9 @@ namespace as_ui_cdcavell.Data
 
         /// <value>UserAuthorization</value>
         [NotMapped]
-        public UserAuthorization UserAuthorization
+        public UserAuthorizationModel UserAuthorization
         {
-            get { return JsonConvert.DeserializeObject<UserAuthorization>(Object); }
+            get { return JsonConvert.DeserializeObject<UserAuthorizationModel>(Object); }
             set { Object = JsonConvert.SerializeObject(value); }
         }
 
@@ -123,9 +124,9 @@ namespace as_ui_cdcavell.Data
         /// <param name="dbContext">AuthorizationUiDbContext</param>
         /// <returns>UserAuthorization</returns>
         /// <method>UserAuthorization GetUser(IEnumerable&lt;Claim&gt; claims, AuthorizationUiDbContext dbContext)</method>
-        public static UserAuthorization GetUser(IEnumerable<Claim> claims, AuthorizationUiDbContext dbContext)
+        public static UserAuthorizationModel GetUser(IEnumerable<Claim> claims, AuthorizationUiDbContext dbContext)
         {
-            UserAuthorization userAuthorization = new UserAuthorization();
+            UserAuthorizationModel userAuthorization = new UserAuthorizationModel();
             Claim authorizationClaim = claims.Where(x => x.Type == "authorization").FirstOrDefault();
             if (authorizationClaim != null)
             {

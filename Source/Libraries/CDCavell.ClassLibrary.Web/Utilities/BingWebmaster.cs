@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace CDCavell.ClassLibrary.Web.Utilities
 {
@@ -17,6 +18,7 @@ namespace CDCavell.ClassLibrary.Web.Utilities
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class BingWebmaster
     {
@@ -37,8 +39,9 @@ namespace CDCavell.ClassLibrary.Web.Utilities
         /// <summary>
         /// Get url submission quota
         /// </summary>
+        /// <returns>Task&lt;UrlSubmissionQuota&gt;</returns>
         /// <method>BingWebmaster(string apiKey)</method>
-        public UrlSubmissionQuota GetUrlSubmission(string siteUrl)
+        public async Task<UrlSubmissionQuota> GetUrlSubmission(string siteUrl)
         {
             string url = "GetUrlSubmissionQuota?siteUrl="
                 + siteUrl.Clean()
@@ -46,7 +49,7 @@ namespace CDCavell.ClassLibrary.Web.Utilities
                 + _apiKey;
 
             JsonClient client = new JsonClient(_bingWebmasterUrl);
-            HttpStatusCode statusCode = client.SendRequest(HttpMethod.Get, url, string.Empty);
+            HttpStatusCode statusCode = await client.SendRequest(HttpMethod.Get, url, string.Empty);
 
             UrlSubmissionQuota quota = new UrlSubmissionQuota();
             if (client.IsResponseSuccess)
@@ -72,14 +75,15 @@ namespace CDCavell.ClassLibrary.Web.Utilities
         /// </summary>
         /// <param name="siteUrl">string</param>
         /// <param name="submitUrl">string</param>
+        /// <returns>Task&lt;HttpStatusCode&gt;</returns>
         /// <method>SubmitUrl(string siteUrl, string submitUrl)</method>
-        public HttpStatusCode SubmitUrl(string siteUrl, string submitUrl)
+        public async Task<HttpStatusCode> SubmitUrl(string siteUrl, string submitUrl)
         {
             string postUrl = "SubmitUrl?apikey="
                 + _apiKey;
 
             JsonClient client = new JsonClient(_bingWebmasterUrl);
-            HttpStatusCode statusCode = client.SendRequest(
+            HttpStatusCode statusCode = await client.SendRequest(
                 HttpMethod.Post, 
                 postUrl, 
                 new { siteUrl = siteUrl.Clean(), url = submitUrl.Clean() }

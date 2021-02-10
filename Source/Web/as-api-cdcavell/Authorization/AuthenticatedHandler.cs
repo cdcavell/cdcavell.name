@@ -1,6 +1,5 @@
 ﻿using as_api_cdcavell.Data;
 using as_api_cdcavell.Models.AppSettings;
-using CDCavell.ClassLibrary.Web.Mvc.Models.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq;
 using System.Security.Claims;
@@ -16,6 +15,7 @@ namespace as_api_cdcavell.Authorization
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 01/30/2020 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/08/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class AuthenticatedHandler : AuthorizationHandler<AuthenticatedRequirement>
     {

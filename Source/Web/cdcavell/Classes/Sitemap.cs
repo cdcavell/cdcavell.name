@@ -30,6 +30,7 @@ namespace cdcavell.Classes
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/03/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/21/2020 | Ping Google with the location of sitemap |~ 
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/08/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class Sitemap
     {
@@ -113,21 +114,21 @@ namespace cdcavell.Classes
             new SitemapDocument().CreateSitemapXML(list, _webHostEnvironment.ContentRootPath);
 
             BingWebmaster bingWebmaster = new BingWebmaster(_appSettings.Authentication.BingWebmaster.ApiKey);
-            UrlSubmissionQuota quota = bingWebmaster.GetUrlSubmission(url);
+            UrlSubmissionQuota quota = bingWebmaster.GetUrlSubmission(url).Result;
 
             var siteMaps = SiteMap.GetNotSubmittedSiteMap(dbContext);
             foreach (SiteMap siteMap in siteMaps)
             {
                 if (quota.DailyQuota > 0 && quota.MonthlyQuota > 0)
                 {
-                    HttpStatusCode statusCode = bingWebmaster.SubmitUrl(url, url + "/" + siteMap.Controller + "/" + siteMap.Action);
+                    HttpStatusCode statusCode = bingWebmaster.SubmitUrl(url, url + "/" + siteMap.Controller + "/" + siteMap.Action).Result;
                     if (statusCode == HttpStatusCode.OK)
                     {
                         siteMap.LastSubmitDate = DateTime.Now;
                         siteMap.AddUpdate(dbContext);
                     }
 
-                    quota = bingWebmaster.GetUrlSubmission(url);
+                    quota = bingWebmaster.GetUrlSubmission(url).Result;
                 }
             }
 

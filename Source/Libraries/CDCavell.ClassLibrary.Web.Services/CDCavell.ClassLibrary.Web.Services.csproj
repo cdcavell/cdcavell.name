@@ -1,0 +1,55 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+	  <Version>1.0.3.1</Version>
+	  <DocumentationFile>../../../Documentation/Source/$(AssemblyName).xml</DocumentationFile>
+	  <Copyright>2021 - Christopher D. Cavell</Copyright>
+	  <PackageProjectUrl>https://cdcavell.name</PackageProjectUrl>
+	  <PackageLicenseFile>LICENSE</PackageLicenseFile>
+	  <PackageIcon>icon.png</PackageIcon>
+	  <RepositoryUrl>https://github.com/cdcavell/cdcavell.name</RepositoryUrl>
+	  <RepositoryType>Git</RepositoryType>
+	  <NeutralLanguage>en-US</NeutralLanguage>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\..\LICENSE">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+		<None Include="..\..\Web\cdcavell\wwwroot\img\icon.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\CDCavell.ClassLibrary.Web\CDCavell.ClassLibrary.Web.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<_findDllFile Include="../../../Documentation/Source/XmlToMarkdown.dll" />
+		<_findJsonFile Include="../../../Documentation/Source/XmlToMarkdown.runtimeconfig.json" />
+		<_findLibraryFile Include="../../../Documentation/Source/CDCavell.ClassLibrary.Commons.dll" />
+	</ItemGroup>
+
+	<Target Name="BuildXmlToMarkdown" AfterTargets="AfterBuild" DependsOnTargets="AfterBuild" Condition="Exists('@(_findDllFile)') AND Exists('@(_findJsonFile)') AND Exists('@(_findLibraryFile)')">
+		<Exec Command="cd ../../../Documentation/Source/" />
+		<Exec Command="dotnet XmlToMarkdown.dll Transform.xsl" WorkingDirectory="../../../Documentation/Source/" />
+	</Target>
+
+	<Target Name="UpdateWiki" AfterTargets="BuildXmlToMarkdown" DependsOnTargets="BuildXmlToMarkdown" Condition="Exists('@(_findDllFile)')&#xD;&#xA;                 AND Exists('@(_findJsonFile)') &#xD;&#xA;                 AND Exists('@(_findLibraryFile)')">
+		<Exec Command="cd ../../../Documentation/Source/wiki/" />
+		<Exec Command="git add ." WorkingDirectory="../../../Documentation/Source/wiki/" />
+		<Exec Command="git commit -m &quot;Update wiki submodule&quot;" WorkingDirectory="../../../Documentation/Source/wiki/" ContinueOnError="true">
+			<Output TaskParameter="ExitCode" ItemName="ErrorCode" />
+		</Exec>
+		<Exec Command="git push origin master" WorkingDirectory="../../../Documentation/Source/wiki/" Condition="'@(ErrorCode)'=='0'" />
+	</Target>
+
+</Project>
