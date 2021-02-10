@@ -22,29 +22,22 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.1 | 02/08/2021 | User Authorization Web Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/09/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class UserAuthorizationService : IUserAuthorizationService
     {
+        private readonly string _authorizationServiceAPI;
+
         private Logger _logger;
         private UserAuthorizationModel _userAuthorization;
         private string _guid;
         private string _accessToken;
 
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly string _authorizationServiceAPI;
+        /// <value>string</value>
+        public string Guid { get { return _guid; } }
 
         /// <value>string</value>
-        public string Guid
-        {
-            get { return _guid; }
-        }
-
-        /// <value>string</value>
-        public string AccessToken
-        {
-            get { return _accessToken; }
-        }
+        public string AccessToken { get { return _accessToken; } }
 
         /// <value>List&lt;Claim&gt;</value>
         public List<Claim> AdditionalClaims
@@ -63,12 +56,10 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
         /// Constructor
         /// </summary>
         /// <param name="logger">ILogger&lt;UserAuthorizationService&gt;</param>
-        /// <param name="httpContextAccessor">IHttpContextAccessor</param>
         /// <param name="options">IOptions&lt;UserAuthorizationServiceOptionss&gt;</param>
-        /// <method>UserAuthorizationService(ILogger&lt;UserAuthorizationService&gt; logger, IHttpContextAccessor httpContextAccessor, IOptions&lt;UserAuthorizationServiceOptions&gt; options)</method>
-        public UserAuthorizationService(ILogger<UserAuthorizationService> logger, IHttpContextAccessor httpContextAccessor, IOptions<UserAuthorizationServiceOptions> options)
+        /// <method>UserAuthorizationService(ILogger&lt;UserAuthorizationService&gt; logger, IOptions&lt;UserAuthorizationServiceOptions&gt; options)</method>
+        public UserAuthorizationService(ILogger<UserAuthorizationService> logger, IOptions<UserAuthorizationServiceOptions> options)
         {
-            _httpContextAccessor = httpContextAccessor;
             _logger = new Logger(logger);
             _authorizationServiceAPI = options.Value.AuthorizationServiceAPI;
             _userAuthorization = new UserAuthorizationModel();

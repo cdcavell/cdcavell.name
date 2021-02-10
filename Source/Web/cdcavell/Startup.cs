@@ -53,7 +53,7 @@ namespace cdcavell
     /// | Christopher D. Cavell | 1.0.2.2 | 01/18/2021 | Convert GrantType from Implicit to Pkce |~ 
     /// | Christopher D. Cavell | 1.0.3.0 | 02/06/2021 | Initial build Authorization Service |~ 
     /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | Utilize Redis Cache - Not implemented |~
-    /// | Christopher D. Cavell | 1.0.3.1 | 02/08/2021 | User Authorization Web Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/09/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class Startup
     {
