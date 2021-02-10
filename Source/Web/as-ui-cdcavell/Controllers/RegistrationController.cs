@@ -2,8 +2,8 @@
 using as_ui_cdcavell.Models.AppSettings;
 using as_ui_cdcavell.Models.Registration;
 using CDCavell.ClassLibrary.Web.Http;
-using CDCavell.ClassLibrary.Web.Mvc.Models.Authorization;
 using CDCavell.ClassLibrary.Web.Security;
+using CDCavell.ClassLibrary.Web.Services.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +14,7 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace as_ui_cdcavell.Controllers
 {
@@ -25,6 +26,7 @@ namespace as_ui_cdcavell.Controllers
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/08/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class RegistrationController : ApplicationBaseController<RegistrationController>
     {
@@ -88,12 +90,12 @@ namespace as_ui_cdcavell.Controllers
         /// <summary>
         /// New Registration HttpPost method
         /// </summary>
-        /// <returns>IActionResult</returns>
+        /// <returns>Task&lt;IActionResult&gt;</returns>
         /// <method>Index(RegistrationIndexModel model)</method>
         [Authorize(Policy = "Authenticated")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Index(RegistrationIndexModel model)
+        public async Task<IActionResult> Index(RegistrationIndexModel model)
         {
             if (ModelState.IsValid)
             {
@@ -109,7 +111,7 @@ namespace as_ui_cdcavell.Controllers
                 if (authorization.UserAuthorization.Registration.IsRegistered)
                     return RedirectToAction("Status", "Registration");
 
-                UserAuthorization userAuthorization = new UserAuthorization();
+                UserAuthorizationModel userAuthorization = new UserAuthorizationModel();
                 userAuthorization.Registration.Email = model.Email.Clean();
                 userAuthorization.Registration.FirstName = model.FirstName.Clean();
                 userAuthorization.Registration.LastName = model.LastName.Clean();
@@ -118,15 +120,15 @@ namespace as_ui_cdcavell.Controllers
                 string encryptString = AESGCM.Encrypt(jsonString, authorization.AccessToken);
 
                 JsonClient jsonClient = new JsonClient(_appSettings.Authorization.AuthorizationService.API, authorization.AccessToken);
-                HttpStatusCode statusCode = jsonClient.SendRequest(HttpMethod.Put, "Registration", encryptString);
+                HttpStatusCode statusCode = await jsonClient.SendRequest(HttpMethod.Put, "Registration", encryptString);
                 if (!jsonClient.IsResponseSuccess)
                 {
                     _logger.Exception(new Exception(jsonClient.GetResponseString()));
-                    return Error(7004);
+                    return Error(400);
                 }
 
                 jsonString = AESGCM.Decrypt(jsonClient.GetResponseObject<string>(), authorization.AccessToken);
-                userAuthorization = JsonConvert.DeserializeObject<UserAuthorization>(jsonString);
+                userAuthorization = JsonConvert.DeserializeObject<UserAuthorizationModel>(jsonString);
 
                 authorization.UserAuthorization = userAuthorization;
                 authorization.AddUpdate(_dbContext);
@@ -158,7 +160,7 @@ namespace as_ui_cdcavell.Controllers
             if (!authClaim.Equals(authorization.Guid))
                 return Error(400);
 
-            UserAuthorization userAuthorization = authorization.UserAuthorization;
+            UserAuthorizationModel userAuthorization = authorization.UserAuthorization;
             if (!userAuthorization.Registration.IsRegistered)
                 return RedirectToAction("Index", "Registration");
 
@@ -179,12 +181,12 @@ namespace as_ui_cdcavell.Controllers
         /// Delete Account
         /// </summary>
         /// <param name="model">RegistrationIndexModel</param>
-        /// <returns>IActionResult</returns>
+        /// <returns>Task&lt;IActionResult&gt;</returns>
         /// <method>Delete(RegistrationIndexModel model)</method>
         [Authorize(Policy = "Authenticated")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(RegistrationIndexModel model)
+        public async Task<IActionResult> Delete(RegistrationIndexModel model)
         {
             if (ModelState.IsValid)
             {
@@ -202,16 +204,16 @@ namespace as_ui_cdcavell.Controllers
                 Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
                 if (authorization.UserAuthorization.Registration.IsRegistered)
                 {
-                    UserAuthorization userAuthorization = authorization.UserAuthorization;
+                    UserAuthorizationModel userAuthorization = authorization.UserAuthorization;
                     string jsonString = JsonConvert.SerializeObject(userAuthorization);
                     string encryptString = AESGCM.Encrypt(jsonString, authorization.AccessToken);
 
                     JsonClient jsonClient = new JsonClient(_appSettings.Authorization.AuthorizationService.API, authorization.AccessToken);
-                    HttpStatusCode statusCode = jsonClient.SendRequest(HttpMethod.Delete, "Registration", encryptString);
+                    HttpStatusCode statusCode = await jsonClient.SendRequest(HttpMethod.Delete, "Registration", encryptString);
                     if (!jsonClient.IsResponseSuccess)
                     {
                         _logger.Exception(new Exception(jsonClient.GetResponseString()));
-                        return Error(7005);
+                        return Error(500);
                     }
                 }
 

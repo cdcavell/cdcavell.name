@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace CDCavell.ClassLibrary.Web.Utilities
 {
@@ -17,6 +18,7 @@ namespace CDCavell.ClassLibrary.Web.Utilities
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.8 | 11/01/2020 | Bing Search APIs will transition from Azure Cognitive Services to Azure Marketplace on 31 October 2023 [#152](https://github.com/cdcavell/cdcavell.name/issues/152) |~ 
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class BingWebSearch
     {
@@ -54,10 +56,10 @@ namespace CDCavell.ClassLibrary.Web.Utilities
         /// </summary>
         /// <param name="searchType">string</param>
         /// <param name="query">string</param>
-        /// <returns>ResultModel</returns>
+        /// <returns>Task&lt;ResultModel&gt;</returns>
         /// <exception cref="Exception">searchType - excepted (Web, Image or Video)</exception>
         /// <method>Search(string searchType, string query)</method>
-        public ResultModel Search(string searchType, string query)
+        public async Task<ResultModel> Search(string searchType, string query)
         {
             ResultModel results = new ResultModel(searchType.Trim().Clean());
 
@@ -85,7 +87,7 @@ namespace CDCavell.ClassLibrary.Web.Utilities
 
             JsonClient client = new JsonClient(_baseUri);
             client.AddRequestHeader("Ocp-Apim-Subscription-Key", _subscriptionKey);
-            results.StatusCode = client.SendRequest(HttpMethod.Get, queryString, string.Empty);
+            results.StatusCode = await client.SendRequest(HttpMethod.Get, queryString, string.Empty);
 
             // wait 1 second to prevent throttling
             Thread.Sleep(1000);

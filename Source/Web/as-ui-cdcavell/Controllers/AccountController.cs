@@ -2,7 +2,6 @@
 using as_ui_cdcavell.Models.Account;
 using as_ui_cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Web.Http;
-using CDCavell.ClassLibrary.Web.Mvc.Models.Authorization;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -12,10 +11,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace as_ui_cdcavell.Controllers
@@ -28,7 +25,8 @@ namespace as_ui_cdcavell.Controllers
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/04/2021 | Initial build Authorization Service |~ 
-    /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | Utilize Redis Cache |~ 
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | Utilize Redis Cache - Not implemented |~ 
+    /// | Christopher D. Cavell | 1.0.3.1 | 02/08/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class AccountController : ApplicationBaseController<AccountController>
     {
@@ -90,12 +88,12 @@ namespace as_ui_cdcavell.Controllers
         /// Validate returned captcha token
         /// </summary>
         /// <param name="captchaToken">string</param>
-        /// <returns>IActionResult</returns>
+        /// <returns>Task&lt;IActionResult&gt;</returns>
         /// <method>ValidateCaptchaToken(string captchaToken)</method>
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult ValidateCaptchaToken(string captchaToken)
+        public async Task<IActionResult> ValidateCaptchaToken(string captchaToken)
         {
             if (ModelState.IsValid)
             {
@@ -105,7 +103,7 @@ namespace as_ui_cdcavell.Controllers
                 request += "&remoteip=" + _httpContextAccessor.HttpContext.GetRemoteAddress().MapToIPv4().ToString();
 
                 JsonClient client = new JsonClient(" https://www.google.com/recaptcha/api/");
-                HttpStatusCode statusCode = client.SendRequest(HttpMethod.Post, request, string.Empty);
+                HttpStatusCode statusCode = await client.SendRequest(HttpMethod.Post, request, string.Empty);
                 if (client.IsResponseSuccess)
                 {
                     CaptchaResponse response = client.GetResponseObject<CaptchaResponse>();
