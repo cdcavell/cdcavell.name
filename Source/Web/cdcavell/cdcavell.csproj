@@ -1,9 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
 	  <RootNamespace>cdcavell</RootNamespace>
-	  <Version>1.0.3.1</Version>
+	  <Version>1.0.3.2</Version>
 	  <DocumentationFile>../../../Documentation/Source/$(AssemblyName).xml</DocumentationFile>
 	  <UserSecretsId>7e0ff3e4-a0a2-4cb5-985c-85156cc56a57</UserSecretsId>
 	  <Authors>Christopher D. Cavell</Authors>
@@ -17,8 +17,8 @@
 	  <RepositoryUrl>https://github.com/cdcavell/cdcavell.name</RepositoryUrl>
 	  <NeutralLanguage>en-US</NeutralLanguage>
 	  <AssemblyName>CDCavell</AssemblyName>
-	  <AssemblyVersion>1.0.3.1</AssemblyVersion>
-	  <FileVersion>1.0.3.1</FileVersion>
+	  <AssemblyVersion>1.0.3.2</AssemblyVersion>
+	  <FileVersion>1.0.3.2</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -44,7 +44,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Logging.ApplicationInsights" Version="2.16.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.ApplicationInsights" Version="2.17.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.8.0" />
   </ItemGroup>

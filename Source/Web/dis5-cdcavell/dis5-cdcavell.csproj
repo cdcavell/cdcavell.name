@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>dis5_cdcavell</RootNamespace>
-    <Version>1.0.3.1</Version>
+    <Version>1.0.3.2</Version>
     <Authors>Christopher D. Cavell</Authors>
     <Product>Website</Product>
     <Description>Duende IdentityServer5 OAuth 2.0 framework authentication</Description>
@@ -16,6 +16,8 @@
     <NeutralLanguage>English (United States)</NeutralLanguage>
 	  <DocumentationFile>../../../Documentation/Source/$(AssemblyName).xml</DocumentationFile>
 	  <UserSecretsId>a3382f09-63bb-406b-a65b-e86a61508ea0</UserSecretsId>
+	  <AssemblyVersion>1.0.3.2</AssemblyVersion>
+	  <FileVersion>1.0.3.2</FileVersion>
   </PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -42,8 +44,8 @@
 
 	<ItemGroup>
 	  <PackageReference Include="AspNet.Security.OAuth.GitHub" Version="5.0.1" />
-	  <PackageReference Include="Duende.IdentityServer" Version="5.0.3" />
-	  <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="5.0.3" />
+	  <PackageReference Include="Duende.IdentityServer" Version="5.0.4" />
+	  <PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="5.0.4" />
 	  <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="5.0.3" />
 	  <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.3" />
 	  <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="5.0.3" />
@@ -55,7 +57,7 @@
 	    <PrivateAssets>all</PrivateAssets>
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>
-	  <PackageReference Include="Microsoft.Extensions.Logging.ApplicationInsights" Version="2.16.0" />
+	  <PackageReference Include="Microsoft.Extensions.Logging.ApplicationInsights" Version="2.17.0" />
 	</ItemGroup>
 
 	<ItemGroup>
