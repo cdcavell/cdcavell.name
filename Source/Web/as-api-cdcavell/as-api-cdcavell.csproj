@@ -4,7 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>as_api_cdcavell</RootNamespace>
 	  <DocumentationFile>../../../Documentation/Source/$(AssemblyName).xml</DocumentationFile>
-	  <Version>1.0.3.1</Version>
+	  <Version>1.0.3.2</Version>
 	  <Authors>Christopher D. Cavell</Authors>
 	  <Product>API</Product>
 	  <Description>Authorization Service</Description>
@@ -16,6 +16,8 @@
 	  <RepositoryType>Git</RepositoryType>
 	  <NeutralLanguage>English (United States)</NeutralLanguage>
 	  <UserSecretsId>f6bb3cfa-27fa-40c7-ab86-8a817b6650fc</UserSecretsId>
+	  <AssemblyVersion>1.0.3.2</AssemblyVersion>
+	  <FileVersion>1.0.3.2</FileVersion>
   </PropertyGroup>
 
 	<ItemGroup>
@@ -38,7 +40,7 @@
 	    <PrivateAssets>all</PrivateAssets>
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>
-	  <PackageReference Include="Microsoft.Extensions.Logging.ApplicationInsights" Version="2.16.0" />
+	  <PackageReference Include="Microsoft.Extensions.Logging.ApplicationInsights" Version="2.17.0" />
 	</ItemGroup>
 
   <ItemGroup>

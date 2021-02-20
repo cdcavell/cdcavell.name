@@ -38,6 +38,7 @@ $ git flow init -d
 
 | Build | Date | Description |
 |-------|------|-------------|
+| 1.0.3.2 | 02/20/2021 | __Update:__ Dependency update <br />&nbsp;&nbsp;&nbsp;&nbsp;_Microsoft.Extensions.Logging.ApplicationInsights v2.17.0_ <br />&nbsp;&nbsp;&nbsp;&nbsp;_Duende.IdentityServer v5.0.4_ <br />&nbsp;&nbsp;&nbsp;&nbsp;_Duende.IdentityServer.AspNetIdentity v5.0.4_ |
 | 1.0.3.1 | 02/09/2021 | __Update:__ User Authorization Web Service |
 | 1.0.3.0 | 02/06/2021 | __Add:__ Initial build Authorization Service |
 | 1.0.2.3 | 01/21/2021 | __Update:__ Update Duende software libraries v5.0.1 |
