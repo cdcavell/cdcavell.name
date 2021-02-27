@@ -4,7 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>as_ui_cdcavell</RootNamespace>
 	  <DocumentationFile>../../../Documentation/Source/$(AssemblyName).xml</DocumentationFile>
-	  <Version>1.0.3.2</Version>
+	  <Version>1.0.3.3</Version>
 	  <Authors>Christopher D. Cavell</Authors>
 	  <Product>UI</Product>
 	  <Description>Authorization Service</Description>
@@ -16,8 +16,8 @@
 	  <RepositoryType>Git</RepositoryType>
 	  <NeutralLanguage>English (United States)</NeutralLanguage>
 	  <UserSecretsId>868f97e2-6d0c-40b4-8f5e-b06322c3ecaf</UserSecretsId>
-	  <AssemblyVersion>1.0.3.2</AssemblyVersion>
-	  <FileVersion>1.0.3.2</FileVersion>
+	  <AssemblyVersion>1.0.3.3</AssemblyVersion>
+	  <FileVersion>1.0.3.3</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
