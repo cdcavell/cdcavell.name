@@ -21,7 +21,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{A8AF2C8D-6A42-403D-9D45-ED2C198B62FC}"
 	ProjectSection(SolutionItems) = preProject
 		Source\Data\AspIdUsers.db = Source\Data\AspIdUsers.db
-		Source\Data\CDCavell.db = Source\Data\CDCavell.db
+		Source\Data\Authorization.Service.db = Source\Data\Authorization.Service.db
+		Source\Data\Authorization.Service.UI.db = Source\Data\Authorization.Service.UI.db
+		Source\Data\cdcavell.name.db = Source\Data\cdcavell.name.db
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{18959B80-0AA9-4D72-A934-5AAD89FCF1E4}"
@@ -45,7 +47,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AzureParameters", "AzurePar
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "as-ui-cdcavell", "Source\Web\as-ui-cdcavell\as-ui-cdcavell.csproj", "{9D2B3BFC-6185-4699-8DE7-1E5872EF4D54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDCavell.ClassLibrary.Web.Services", "Source\Libraries\CDCavell.ClassLibrary.Web.Services\CDCavell.ClassLibrary.Web.Services.csproj", "{920D297C-0667-4993-A379-D0C31CE5612F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDCavell.ClassLibrary.Web.Services", "Source\Libraries\CDCavell.ClassLibrary.Web.Services\CDCavell.ClassLibrary.Web.Services.csproj", "{920D297C-0667-4993-A379-D0C31CE5612F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
