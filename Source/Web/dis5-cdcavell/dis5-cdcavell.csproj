@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>dis5_cdcavell</RootNamespace>
-    <Version>1.0.3.2</Version>
+    <Version>1.0.3.3</Version>
     <Authors>Christopher D. Cavell</Authors>
     <Product>Website</Product>
     <Description>Duende IdentityServer5 OAuth 2.0 framework authentication</Description>
@@ -16,8 +16,8 @@
     <NeutralLanguage>English (United States)</NeutralLanguage>
 	  <DocumentationFile>../../../Documentation/Source/$(AssemblyName).xml</DocumentationFile>
 	  <UserSecretsId>a3382f09-63bb-406b-a65b-e86a61508ea0</UserSecretsId>
-	  <AssemblyVersion>1.0.3.2</AssemblyVersion>
-	  <FileVersion>1.0.3.2</FileVersion>
+	  <AssemblyVersion>1.0.3.3</AssemblyVersion>
+	  <FileVersion>1.0.3.3</FileVersion>
   </PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

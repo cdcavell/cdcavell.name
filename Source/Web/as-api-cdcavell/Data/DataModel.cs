@@ -12,6 +12,7 @@ namespace as_api_cdcavell.Data
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 01/20/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 02/27/2021 | User Authorization Service |~ 
     /// </revision>
     public abstract partial class DataModel<T> : IDataModel<DataModel<T>> where T : DataModel<T>
     {
@@ -39,7 +40,7 @@ namespace as_api_cdcavell.Data
         /// Add/Update record
         /// </summary>
         /// <method>AddUpdate(CDCavellDbContext dbContext)</method>
-        public void AddUpdate(AuthorizationServiceDbContext dbContext)
+        public virtual void AddUpdate(AuthorizationServiceDbContext dbContext)
         {
             if (this.IsNew)
                 dbContext.Add<DataModel<T>>(this);

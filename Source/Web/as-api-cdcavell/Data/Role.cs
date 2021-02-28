@@ -12,6 +12,7 @@ namespace as_api_cdcavell.Data
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 01/20/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 02/27/2021 | User Authorization Service |~ 
     /// </revision>
     [Table("Role")]
     public class Role : DataModel<Role>
@@ -24,9 +25,9 @@ namespace as_api_cdcavell.Data
         /// <value>long</value>
         [Required]
         public long ResourceId { get; set; }
-        /// <value>Registration</value>
+        /// <value>Resource</value>
         [ForeignKey("ResourceId")]
-        public Registration Resource { get; set; }
+        public Resource Resource { get; set; }
 
 
         /// <value>List&lt;Permission&gt;</value>

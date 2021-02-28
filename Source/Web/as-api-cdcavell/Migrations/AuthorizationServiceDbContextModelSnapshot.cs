@@ -14,7 +14,7 @@ namespace as_api_cdcavell.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "5.0.2");
+                .HasAnnotation("ProductVersion", "5.0.3");
 
             modelBuilder.Entity("as_api_cdcavell.Data.AuditHistory", b =>
                 {
@@ -187,14 +187,9 @@ namespace as_api_cdcavell.Migrations
                     b.Property<long>("ResourceId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long?>("ResourceId1")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ResourceId");
-
-                    b.HasIndex("ResourceId1");
 
                     b.HasIndex("Description", "ResourceId")
                         .IsUnique();
@@ -307,15 +302,11 @@ namespace as_api_cdcavell.Migrations
 
             modelBuilder.Entity("as_api_cdcavell.Data.Role", b =>
                 {
-                    b.HasOne("as_api_cdcavell.Data.Registration", "Resource")
-                        .WithMany()
+                    b.HasOne("as_api_cdcavell.Data.Resource", "Resource")
+                        .WithMany("Roles")
                         .HasForeignKey("ResourceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("as_api_cdcavell.Data.Resource", null)
-                        .WithMany("Roles")
-                        .HasForeignKey("ResourceId1");
 
                     b.Navigation("Resource");
                 });

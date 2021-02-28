@@ -40,6 +40,7 @@ namespace as_api_cdcavell
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/06/2021 | Initial build Authorization Service |~ 
     /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | Utilize Redis Cache - Not implemented |~
+    /// | Christopher D. Cavell | 1.0.3.3 | 02/27/2021 | User Authorization Service |~ 
     /// </revision>
     public class Startup
     {
@@ -235,7 +236,7 @@ namespace as_api_cdcavell
             _logger.Trace($"Configure(IApplicationBuilder: {app}, IWebHostEnvironment: {env}, ILogger<Startup> {logger}, IHostApplicationLifetime: {lifetime})");
 
             AESGCM.Seed(_configuration);
-            DbInitializer.Initialize(dbContext);
+            DbInitializer.Initialize(dbContext, _appSettings.Application.SiteAdministrator);
 
             lifetime.ApplicationStarted.Register(OnAppStarted);
             lifetime.ApplicationStopping.Register(OnAppStopping);
