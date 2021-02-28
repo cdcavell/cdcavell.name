@@ -6,6 +6,7 @@
   * | Contributor           | Build   | Revison Date | Description 
   * |-----------------------|---------|--------------|-----------------------------------------------------
   * | Christopher D. Cavell | 1.0.3.0 | 01/30/2021   | Initial build Authorization Service
+  * | Christopher D. Cavell | 1.0.3.3 | 02/28/2021   | User Authorization Service
   *
   */
 
@@ -43,7 +44,17 @@ $(function() {
             alert('Form submission suppressed while in development');
             console.info('-- form submit suppressed');
         } else {
-            $('#processing').modal('show');
+            if ($('#form').attr('showWarning') != 'true') {
+                $('#processing').modal('show');
+            } else {
+                console.info('-- warning notice');
+                if (confirm('Warning, this action can not be undone. Continue?') != true) {
+                    console.info('-- form submit suppressed');
+                    e.preventDefault();
+                } else {
+                    $('#processing').modal('show');
+                }
+            }
         }
     });
 
