@@ -4,7 +4,7 @@
     Account Information
 </h1>
 
-@using (Html.BeginForm("Delete", "Registration", FormMethod.Post, new { id = "form", suppressSubmit = "false" }))
+@using (Html.BeginForm("Delete", "Registration", FormMethod.Post, new { id = "form", suppressSubmit = "false", showWarning = "true" }))
 {
     <div class="card shadow-sm pl-0">
         <div class="card-body rounded-top bg-white">
@@ -47,6 +47,10 @@
                     @Html.TextBoxFor(model => model.LastName, new { @readonly = "readonly", @class = "form-control form-control-sm m-0" })
                 </div>
             </div>
+            <br />
+            <p class="font-small text-muted">
+                Role Permissions
+            </p>
         </div>
         <div class="card-footer rounded-bottom bg-white border-top-0 m-0 p-0">
             <button id="deleteAccount"
@@ -59,9 +63,8 @@
             </button>
         </div>
     </div>       
-
 }
 
-@section scripts {
 
+@section scripts {
 }

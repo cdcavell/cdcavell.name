@@ -172,7 +172,7 @@ namespace as_ui_cdcavell.Controllers
             string encryptString = AESGCM.Encrypt(jsonString, authorization.AccessToken);
 
             JsonClient jsonClient = new JsonClient(_appSettings.Authorization.AuthorizationService.API, authorization.AccessToken);
-            HttpStatusCode statusCode = await jsonClient.SendRequest(HttpMethod.Put, "AllPermissions", encryptString);
+            HttpStatusCode statusCode = await jsonClient.SendRequest(HttpMethod.Get, "AllPermissions", encryptString);
             if (!jsonClient.IsResponseSuccess)
             {
                 _logger.Exception(new Exception(jsonClient.GetResponseString()));
