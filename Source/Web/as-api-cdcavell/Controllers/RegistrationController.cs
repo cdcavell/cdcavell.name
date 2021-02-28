@@ -169,14 +169,13 @@ namespace as_api_cdcavell.Controllers
             Data.Registration registration = Data.Registration
                 .Get(userAuthorization.Email.Clean(), _dbContext);
 
-            List<Data.RolePermission> rolePermissions = Data.RolePermission
-                .GetByRegistrationId(registration.Id, _dbContext)
-                .ToList();
-
-            foreach (Data.RolePermission rolePermission in rolePermissions)
-                rolePermission.Delete(_dbContext);
-
-            registration.Delete(_dbContext);
+            registration.ApprovedById = null;
+            registration.ApprovedBy = null;
+            registration.ApprovedDate = DateTime.MinValue;
+            registration.RevokedById = registration.Id;
+            registration.RevokedBy = registration;
+            registration.RevokedDate = DateTime.Now;
+            registration.AddUpdate(_dbContext);
 
             return Ok();
         }
