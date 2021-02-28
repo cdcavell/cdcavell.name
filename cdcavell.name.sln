@@ -19,12 +19,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Root Files", "Root Files", 
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{A8AF2C8D-6A42-403D-9D45-ED2C198B62FC}"
-	ProjectSection(SolutionItems) = preProject
-		Source\Data\AspIdUsers.db = Source\Data\AspIdUsers.db
-		Source\Data\Authorization.Service.db = Source\Data\Authorization.Service.db
-		Source\Data\Authorization.Service.UI.db = Source\Data\Authorization.Service.UI.db
-		Source\Data\cdcavell.name.db = Source\Data\cdcavell.name.db
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{18959B80-0AA9-4D72-A934-5AAD89FCF1E4}"
 	ProjectSection(SolutionItems) = preProject
