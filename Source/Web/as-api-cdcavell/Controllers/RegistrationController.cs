@@ -13,9 +13,9 @@ using System.Linq;
 
 namespace as_api_cdcavell.Controllers
 {
-    /// <class>AuthorizationController</class>
+    /// <class>RegistrationController</class>
     /// <summary>
-    /// User authorization controller class
+    /// User registration controller class
     /// </summary>
     /// <revision>
     /// __Revisions:__~~

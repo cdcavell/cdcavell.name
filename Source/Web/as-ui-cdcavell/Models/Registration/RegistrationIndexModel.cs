@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CDCavell.ClassLibrary.Web.Services.Authorization;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
@@ -12,6 +14,7 @@ namespace as_ui_cdcavell.Models.Registration
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 01/31/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 02/28/2021 | User Authorization Web Service |~ 
     /// </revision>    
     public class RegistrationIndexModel
     {
@@ -43,5 +46,7 @@ namespace as_ui_cdcavell.Models.Registration
         [Display(Name = "Status")]
         public string Status { get; set; }
 
+        /// <value>List&lt;RolePermissionModel&gt;</value>
+        public List<RolePermissionModel> RolePermissions { get; set; }
     }
 }

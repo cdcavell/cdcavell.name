@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CDCavell.ClassLibrary.Web.Services.Authorization
 {
@@ -10,6 +11,7 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.1 | 02/08/2021 | User Authorization Web Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 02/27/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class UserAuthorizationModel
     {
@@ -26,6 +28,8 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
         }
         /// <value>RegistrationModel</value>
         public RegistrationModel Registration { get; set; }
+        /// <value>List&lt;RolePermission&gt;</value>
+        public List<RolePermissionModel> RolePermissions { get; set; }
 
         /// <summary>
         /// Constructor method
@@ -34,6 +38,7 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
         public UserAuthorizationModel()
         {
             this.Registration = new RegistrationModel();
+            this.RolePermissions = new List<RolePermissionModel>();
         }
     }
 }
