@@ -53,14 +53,17 @@
             </p>
         </div>
         <div class="card-footer rounded-bottom bg-white border-top-0 m-0 p-0">
-            <button id="deleteAccount"
-                    class="btn btn-dark text-light border shadow-sm text-decoration-none m-3 mr-4 p-1 px-2 float-right g-recaptcha"
-                    data-sitekey="@ViewBag.reCAPTCHA_SiteKey"
-                    data-callback='onCaptchaSubmit'
-                    data-action='submit'>
-                <i class="fas fa-trash-alt text-grey" aria-hidden="true"></i>
-                Delete Account
-            </button>
+            @if (Model.Status == "Account Active")
+            {
+                <button id="deleteAccount"
+                        class="btn btn-dark text-light border shadow-sm text-decoration-none m-3 mr-4 p-1 px-2 float-right g-recaptcha"
+                        data-sitekey="@ViewBag.reCAPTCHA_SiteKey"
+                        data-callback='onCaptchaSubmit'
+                        data-action='submit'>
+                    <i class="fas fa-trash-alt text-grey" aria-hidden="true"></i>
+                    Delete Account
+                </button>
+            }
         </div>
     </div>       
 }

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace as_api_cdcavell.Controllers
@@ -165,12 +166,16 @@ namespace as_api_cdcavell.Controllers
             string jsonString = AESGCM.Decrypt(encryptObject.ToString(), accessToken);
             UserAuthorizationModel userAuthorization = JsonConvert.DeserializeObject<UserAuthorizationModel>(jsonString);
 
-            Data.Registration registration = Data.Registration.Get(
-                userAuthorization.Email.Clean(),
-                _dbContext
-            );
+            Data.Registration registration = Data.Registration
+                .Get(userAuthorization.Email.Clean(), _dbContext);
 
-            registration.Delete(_dbContext);
+            registration.ApprovedById = null;
+            registration.ApprovedBy = null;
+            registration.ApprovedDate = DateTime.MinValue;
+            registration.RevokedById = registration.Id;
+            registration.RevokedBy = registration;
+            registration.RevokedDate = DateTime.Now;
+            registration.AddUpdate(_dbContext);
 
             return Ok();
         }
