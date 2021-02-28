@@ -31,33 +31,25 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
         public long ActionById { get; set; }
         /// <value>Registration</value>
         [ForeignKey("ActionById")]
-        public Registration ActionBy { get; set; }
+        public RegistrationModel ActionBy { get; set; }
 
         /// <value>long</value>
         [Required]
         public long RolePermissionId { get; set; }
         /// <value>RolePermission</value>
         [ForeignKey("RolePermissionId")]
-        public RolePermission RolePermission { get; set; }
+        public RolePermissionModel RolePermission { get; set; }
 
         /// <value>long</value>
         [Required]
         public long StatusId { get; set; }
         /// <value>Permission</value>
         [ForeignKey("StatusId")]
-        public Status Status { get; set; }
+        public StatusModel Status { get; set; }
 
         /// <value>string</value>
         [Required]
         [DataType(DataType.Text)]
         public string Description { get; set; }
-
-        #region Instance Methods
-
-        #endregion
-
-        #region Static Methods
-
-        #endregion
     }
 }

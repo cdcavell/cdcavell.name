@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -49,7 +50,7 @@ namespace as_api_cdcavell.Data
         public Status Status { get; set; }
 
         /// <value>List&lt;History&gt;</value>
-        public List<History> History { get; set; }
+        public List<History> History { get; set; } = new List<History>();
 
         #region Instance Methods
 
@@ -65,13 +66,16 @@ namespace as_api_cdcavell.Data
         /// <returns></returns>
         public static List<RolePermission> GetByRegistrationId(long registrationId, AuthorizationServiceDbContext dbContext)
         {
-            return dbContext.RolePermission
+            List<RolePermission> rolePermissions = dbContext.RolePermission
+                .Include("Registration")
+                .Include("Role.Resource")
+                .Include("Permission")
+                .Include("Status")
+                .Include("History")
                 .Where(x => x.RegistrationId == registrationId)
-                .ToList()
-                .OrderBy(x => x.Role.Resource.Description)
-                .OrderBy(x => x.Role.Description)
-                .OrderBy(x => x.Permission.Description)
-                .ToList();                
+                .ToList();
+
+            return rolePermissions;
         }
 
         #endregion

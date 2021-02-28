@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace as_api_cdcavell.Controllers
@@ -79,6 +80,72 @@ namespace as_api_cdcavell.Controllers
 
             if (registration.IsNew)
                 return BadRequest("Invalid Registration");
+
+            List<Data.RolePermission> rolePermissions = Data.RolePermission.GetByRegistrationId(
+                registration.Id,
+                _dbContext
+            );
+
+            userAuthorization.RolePermissions.Clear();
+            foreach (Data.RolePermission rolePermission in rolePermissions)
+            {
+                userAuthorization.RolePermissions.Add(
+                    new RolePermissionModel()
+                    {
+                        RolePermissionId = rolePermission.Id,
+                        RegistrationId = rolePermission.RegistrationId,
+                        //Registration = new RegistrationModel()
+                        //{
+                        //    RegistrationId = rolePermission.Registration.Id,
+                        //    Email = rolePermission.Registration.Email ?? string.Empty,
+                        //    FirstName = rolePermission.Registration.FirstName,
+                        //    LastName = rolePermission.Registration.LastName,
+                        //    RequestDate = rolePermission.Registration.RequestDate,
+                        //    ApprovedDate = rolePermission.Registration.ApprovedDate,
+                        //    ApprovedBy = (rolePermission.Registration.ApprovedBy != null) ? rolePermission.Registration.ApprovedBy.Email ?? string.Empty : string.Empty,
+                        //    RevokedDate = rolePermission.Registration.RevokedDate,
+                        //    RevokedBy = (rolePermission.Registration.RevokedBy != null) ? rolePermission.Registration.RevokedBy.Email ?? string.Empty : string.Empty
+                        //},
+                        RoleId = rolePermission.RoleId,
+                        //Role = new RoleModel()
+                        //{
+                        //    RoleId = rolePermission.Role.Id,
+                        //    Description = rolePermission.Role.Description,
+                        //    ResourceId = rolePermission.Role.ResourceId,
+                        //    Resource = new ResourceModel()
+                        //    {
+                        //        ResourceId = rolePermission.Role.Resource.Id,
+                        //        ClientId = rolePermission.Role.Resource.ClientId,
+                        //        Description = rolePermission.Role.Resource.Description
+                        //    }
+                        //},
+                        PermissionId = rolePermission.PermissionId,
+                        //Permission = new PermissionModel()
+                        //{
+                        //    PermissionId = rolePermission.Permission.Id,
+                        //    Description = rolePermission.Permission.Description,
+                        //    RoleId = rolePermission.Permission.RoleId,
+                        //    Role = new RoleModel()
+                        //    {
+                        //        RoleId = rolePermission.Permission.Role.Id,
+                        //        Description = rolePermission.Permission.Role.Description,
+                        //        ResourceId = rolePermission.Permission.Role.ResourceId,
+                        //        Resource = new ResourceModel()
+                        //        {
+                        //            ResourceId = rolePermission.Permission.Role.Resource.Id,
+                        //            ClientId = rolePermission.Permission.Role.Resource.ClientId,
+                        //            Description = rolePermission.Permission.Role.Resource.Description
+                        //        }
+                        //    }
+                        //},
+                        StatusId = rolePermission.StatusId,
+                    }
+                );
+            }
+
+            jsonString = JsonConvert.SerializeObject(userAuthorization);
+            string encryptString = AESGCM.Encrypt(jsonString, accessToken);
+            return new JsonResult(encryptString);
         }
     }
 }
