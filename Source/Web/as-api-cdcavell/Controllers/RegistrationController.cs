@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace as_api_cdcavell.Controllers
@@ -165,10 +166,15 @@ namespace as_api_cdcavell.Controllers
             string jsonString = AESGCM.Decrypt(encryptObject.ToString(), accessToken);
             UserAuthorizationModel userAuthorization = JsonConvert.DeserializeObject<UserAuthorizationModel>(jsonString);
 
-            Data.Registration registration = Data.Registration.Get(
-                userAuthorization.Email.Clean(),
-                _dbContext
-            );
+            Data.Registration registration = Data.Registration
+                .Get(userAuthorization.Email.Clean(), _dbContext);
+
+            List<Data.RolePermission> rolePermissions = Data.RolePermission
+                .GetByRegistrationId(registration.Id, _dbContext)
+                .ToList();
+
+            foreach (Data.RolePermission rolePermission in rolePermissions)
+                rolePermission.Delete(_dbContext);
 
             registration.Delete(_dbContext);
 
