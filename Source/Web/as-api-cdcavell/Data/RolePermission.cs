@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace as_api_cdcavell.Data
 {
@@ -12,6 +13,7 @@ namespace as_api_cdcavell.Data
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 01/20/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 02/27/2021 | User Authorization Service |~ 
     /// </revision>
     [Table("RolePermission")]
     public class RolePermission : DataModel<RolePermission>
@@ -54,6 +56,23 @@ namespace as_api_cdcavell.Data
         #endregion
 
         #region Static Methods
+
+        /// <summary>
+        /// Get By RegistrationId
+        /// </summary>
+        /// <param name="registrationId">long</param>
+        /// <param name="dbContext">AuthorizationServiceDbContext</param>
+        /// <returns></returns>
+        public static List<RolePermission> GetByRegistrationId(long registrationId, AuthorizationServiceDbContext dbContext)
+        {
+            return dbContext.RolePermission
+                .Where(x => x.RegistrationId == registrationId)
+                .ToList()
+                .OrderBy(x => x.Role.Resource.Description)
+                .OrderBy(x => x.Role.Description)
+                .OrderBy(x => x.Permission.Description)
+                .ToList();                
+        }
 
         #endregion
     }
