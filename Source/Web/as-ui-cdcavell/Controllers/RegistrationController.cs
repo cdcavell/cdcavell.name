@@ -27,6 +27,7 @@ namespace as_ui_cdcavell.Controllers
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
     /// | Christopher D. Cavell | 1.0.3.1 | 02/08/2021 | User Authorization Web Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 02/28/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class RegistrationController : ApplicationBaseController<RegistrationController>
     {
@@ -142,11 +143,11 @@ namespace as_ui_cdcavell.Controllers
         /// <summary>
         /// Registration Status HttpGet method
         /// </summary>
-        /// <returns>IActionResult</returns>
+        /// <returns>Task&lt;IActionResult&gt;</returns>
         /// <method>Index()</method>
         [Authorize(Policy = "Authenticated")]
         [HttpGet]
-        public IActionResult Status()
+        public async Task<IActionResult> Status()
         {
             string emailClaim = User.Claims.Where(x => x.Type == "email").Select(x => x.Value).FirstOrDefault();
             if (string.IsNullOrEmpty(emailClaim))
@@ -167,12 +168,32 @@ namespace as_ui_cdcavell.Controllers
             if (!emailClaim.Equals(userAuthorization.Email))
                 return Error(400);
 
+            string jsonString = JsonConvert.SerializeObject(userAuthorization);
+            string encryptString = AESGCM.Encrypt(jsonString, authorization.AccessToken);
+
+            JsonClient jsonClient = new JsonClient(_appSettings.Authorization.AuthorizationService.API, authorization.AccessToken);
+            HttpStatusCode statusCode = await jsonClient.SendRequest(HttpMethod.Put, "AllPermissions", encryptString);
+            if (!jsonClient.IsResponseSuccess)
+            {
+                _logger.Exception(new Exception(jsonClient.GetResponseString()));
+                return Error(400);
+            }
+
+            jsonString = AESGCM.Decrypt(jsonClient.GetResponseObject<string>(), authorization.AccessToken);
+            userAuthorization = JsonConvert.DeserializeObject<UserAuthorizationModel>(jsonString);
+
             RegistrationIndexModel model = new RegistrationIndexModel();
             model.Email = userAuthorization.Registration.Email;
             model.FirstName = userAuthorization.Registration.FirstName;
             model.LastName = userAuthorization.Registration.LastName;
             model.RequestDate = userAuthorization.Registration.RequestDate;
             model.Status = userAuthorization.Registration.Status;
+
+            model.RolePermissions = userAuthorization.RolePermissions
+                .OrderBy(x => x.Role.Resource.Description)
+                .OrderBy(x => x.Role.Description)
+                .OrderBy(x => x.Permission.Description)
+                .ToList();
 
             return View(model);
         }
