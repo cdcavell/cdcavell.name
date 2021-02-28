@@ -89,58 +89,151 @@ namespace as_api_cdcavell.Controllers
             userAuthorization.RolePermissions.Clear();
             foreach (Data.RolePermission rolePermission in rolePermissions)
             {
-                userAuthorization.RolePermissions.Add(
-                    new RolePermissionModel()
+                var rolePermissionModel = new RolePermissionModel()
+                {
+                    RolePermissionId = rolePermission.Id,
+                    RegistrationId = rolePermission.RegistrationId,
+                    Registration = new RegistrationModel()
                     {
-                        RolePermissionId = rolePermission.Id,
-                        RegistrationId = rolePermission.RegistrationId,
-                        //Registration = new RegistrationModel()
-                        //{
-                        //    RegistrationId = rolePermission.Registration.Id,
-                        //    Email = rolePermission.Registration.Email ?? string.Empty,
-                        //    FirstName = rolePermission.Registration.FirstName,
-                        //    LastName = rolePermission.Registration.LastName,
-                        //    RequestDate = rolePermission.Registration.RequestDate,
-                        //    ApprovedDate = rolePermission.Registration.ApprovedDate,
-                        //    ApprovedBy = (rolePermission.Registration.ApprovedBy != null) ? rolePermission.Registration.ApprovedBy.Email ?? string.Empty : string.Empty,
-                        //    RevokedDate = rolePermission.Registration.RevokedDate,
-                        //    RevokedBy = (rolePermission.Registration.RevokedBy != null) ? rolePermission.Registration.RevokedBy.Email ?? string.Empty : string.Empty
-                        //},
-                        RoleId = rolePermission.RoleId,
-                        //Role = new RoleModel()
-                        //{
-                        //    RoleId = rolePermission.Role.Id,
-                        //    Description = rolePermission.Role.Description,
-                        //    ResourceId = rolePermission.Role.ResourceId,
-                        //    Resource = new ResourceModel()
-                        //    {
-                        //        ResourceId = rolePermission.Role.Resource.Id,
-                        //        ClientId = rolePermission.Role.Resource.ClientId,
-                        //        Description = rolePermission.Role.Resource.Description
-                        //    }
-                        //},
-                        PermissionId = rolePermission.PermissionId,
-                        //Permission = new PermissionModel()
-                        //{
-                        //    PermissionId = rolePermission.Permission.Id,
-                        //    Description = rolePermission.Permission.Description,
-                        //    RoleId = rolePermission.Permission.RoleId,
-                        //    Role = new RoleModel()
-                        //    {
-                        //        RoleId = rolePermission.Permission.Role.Id,
-                        //        Description = rolePermission.Permission.Role.Description,
-                        //        ResourceId = rolePermission.Permission.Role.ResourceId,
-                        //        Resource = new ResourceModel()
-                        //        {
-                        //            ResourceId = rolePermission.Permission.Role.Resource.Id,
-                        //            ClientId = rolePermission.Permission.Role.Resource.ClientId,
-                        //            Description = rolePermission.Permission.Role.Resource.Description
-                        //        }
-                        //    }
-                        //},
-                        StatusId = rolePermission.StatusId,
+                        RegistrationId = rolePermission.Registration.Id,
+                        Email = rolePermission.Registration.Email ?? string.Empty,
+                        FirstName = rolePermission.Registration.FirstName,
+                        LastName = rolePermission.Registration.LastName,
+                        RequestDate = rolePermission.Registration.RequestDate,
+                        ApprovedDate = rolePermission.Registration.ApprovedDate,
+                        ApprovedBy = (rolePermission.Registration.ApprovedBy != null) ? rolePermission.Registration.ApprovedBy.Email ?? string.Empty : string.Empty,
+                        RevokedDate = rolePermission.Registration.RevokedDate,
+                        RevokedBy = (rolePermission.Registration.RevokedBy != null) ? rolePermission.Registration.RevokedBy.Email ?? string.Empty : string.Empty
+                    },
+                    RoleId = rolePermission.RoleId,
+                    Role = new RoleModel()
+                    {
+                        RoleId = rolePermission.Role.Id,
+                        Description = rolePermission.Role.Description,
+                        ResourceId = rolePermission.Role.ResourceId,
+                        Resource = new ResourceModel()
+                        {
+                            ResourceId = rolePermission.Role.Resource.Id,
+                            ClientId = rolePermission.Role.Resource.ClientId,
+                            Description = rolePermission.Role.Resource.Description
+                        }
+                    },
+                    PermissionId = rolePermission.PermissionId,
+                    Permission = new PermissionModel()
+                    {
+                        PermissionId = rolePermission.Permission.Id,
+                        Description = rolePermission.Permission.Description,
+                        RoleId = rolePermission.Permission.RoleId,
+                        Role = new RoleModel()
+                        {
+                            RoleId = rolePermission.Permission.Role.Id,
+                            Description = rolePermission.Permission.Role.Description,
+                            ResourceId = rolePermission.Permission.Role.ResourceId,
+                            Resource = new ResourceModel()
+                            {
+                                ResourceId = rolePermission.Permission.Role.Resource.Id,
+                                ClientId = rolePermission.Permission.Role.Resource.ClientId,
+                                Description = rolePermission.Permission.Role.Resource.Description
+                            }
+                        }
+                    },
+                    StatusId = rolePermission.StatusId,
+                    Status = new StatusModel()
+                    {
+                        StatusId = rolePermission.Status.Id,
+                        Description = rolePermission.Status.Description
                     }
-                );
+                };
+
+                rolePermissionModel.History = new List<HistoryModel>();
+                foreach (History history in rolePermission.History)
+                {
+                    HistoryModel historyModel = new HistoryModel()
+                    {
+                        HistoryId = history.Id,
+                        ActionOn = history.ActionOn,
+                        ActionById = history.ActionById,
+                        ActionBy = new RegistrationModel()
+                        {
+                            RegistrationId = history.ActionBy.Id,
+                            Email = history.ActionBy.Email ?? string.Empty,
+                            FirstName = history.ActionBy.FirstName,
+                            LastName = history.ActionBy.LastName,
+                            RequestDate = history.ActionBy.RequestDate,
+                            ApprovedDate = history.ActionBy.ApprovedDate,
+                            ApprovedBy = (history.ActionBy.ApprovedBy != null) ? history.ActionBy.ApprovedBy.Email ?? string.Empty : string.Empty,
+                            RevokedDate = history.ActionBy.RevokedDate,
+                            RevokedBy = (history.ActionBy.RevokedBy != null) ? history.ActionBy.RevokedBy.Email ?? string.Empty : string.Empty
+                        },
+                        RolePermissionId = history.RolePermissionId,
+                        RolePermission = new RolePermissionModel()
+                        {
+                            RolePermissionId = history.RolePermission.Id,
+                            RegistrationId = history.RolePermission.RegistrationId,
+                            Registration = new RegistrationModel()
+                            {
+                                RegistrationId = history.RolePermission.Registration.Id,
+                                Email = history.RolePermission.Registration.Email ?? string.Empty,
+                                FirstName = history.RolePermission.Registration.FirstName,
+                                LastName = history.RolePermission.Registration.LastName,
+                                RequestDate = history.RolePermission.Registration.RequestDate,
+                                ApprovedDate = history.RolePermission.Registration.ApprovedDate,
+                                ApprovedBy = (history.RolePermission.Registration.ApprovedBy != null) ? history.RolePermission.Registration.ApprovedBy.Email ?? string.Empty : string.Empty,
+                                RevokedDate = history.RolePermission.Registration.RevokedDate,
+                                RevokedBy = (history.RolePermission.Registration.RevokedBy != null) ? history.RolePermission.Registration.RevokedBy.Email ?? string.Empty : string.Empty
+                            },
+                            RoleId = history.RolePermission.RoleId,
+                            Role = new RoleModel()
+                            {
+                                RoleId = history.RolePermission.Role.Id,
+                                Description = history.RolePermission.Role.Description,
+                                ResourceId = history.RolePermission.Role.ResourceId,
+                                Resource = new ResourceModel()
+                                {
+                                    ResourceId = history.RolePermission.Role.Resource.Id,
+                                    ClientId = history.RolePermission.Role.Resource.ClientId,
+                                    Description = history.RolePermission.Role.Resource.Description
+                                }
+                            },
+                            PermissionId = history.RolePermission.PermissionId,
+                            Permission = new PermissionModel()
+                            {
+                                PermissionId = history.RolePermission.Permission.Id,
+                                Description = history.RolePermission.Permission.Description,
+                                RoleId = history.RolePermission.Permission.RoleId,
+                                Role = new RoleModel()
+                                {
+                                    RoleId = history.RolePermission.Permission.Role.Id,
+                                    Description = history.RolePermission.Permission.Role.Description,
+                                    ResourceId = history.RolePermission.Permission.Role.ResourceId,
+                                    Resource = new ResourceModel()
+                                    {
+                                        ResourceId = history.RolePermission.Permission.Role.Resource.Id,
+                                        ClientId = history.RolePermission.Permission.Role.Resource.ClientId,
+                                        Description = history.RolePermission.Permission.Role.Resource.Description
+                                    }
+                                }
+                            },
+                            StatusId = history.RolePermission.StatusId,
+                            Status = new StatusModel()
+                            {
+                                StatusId = history.RolePermission.Status.Id,
+                                Description = history.RolePermission.Status.Description
+                            }
+                        },
+                        StatusId = history.StatusId,
+                        Status = new StatusModel()
+                        {
+                            StatusId = history.Status.Id,
+                            Description = history.Status.Description
+                        },
+                        Description = history.Description
+                    };
+
+                    rolePermissionModel.History.Add(historyModel);
+                }
+
+                userAuthorization.RolePermissions.Add(rolePermissionModel);
             }
 
             jsonString = JsonConvert.SerializeObject(userAuthorization);
