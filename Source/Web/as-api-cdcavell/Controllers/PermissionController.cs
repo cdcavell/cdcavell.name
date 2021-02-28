@@ -84,7 +84,8 @@ namespace as_api_cdcavell.Controllers
             List<Data.RolePermission> rolePermissions = Data.RolePermission.GetByRegistrationId(
                 registration.Id,
                 _dbContext
-            );
+            ).Where(x => x.Role.Resource.ClientId.ToLower() == userAuthorization.ClientId.ToLower().TrimEnd(".dev"))
+                .ToList();
 
             userAuthorization.RolePermissions.Clear();
             foreach (Data.RolePermission rolePermission in rolePermissions)
