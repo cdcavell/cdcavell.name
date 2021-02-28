@@ -23,6 +23,7 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.1 | 02/09/2021 | User Authorization Web Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 02/27/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class UserAuthorizationService : IUserAuthorizationService
     {
@@ -81,7 +82,7 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
 
             _accessToken = accessToken;
 
-            // Authorization Service API Get User Authorization
+            // Authorization Service API Get User Registration
             JsonClient jsonClient = new JsonClient(_authorizationServiceAPI, accessToken);
             HttpStatusCode statusCode = await jsonClient.SendRequest(HttpMethod.Get, "Authorization");
             if (!jsonClient.IsResponseSuccess)
@@ -91,6 +92,16 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
             _userAuthorization = JsonConvert.DeserializeObject<UserAuthorizationModel>(jsonString);
             if (string.IsNullOrEmpty(_userAuthorization.Email))
                 ThrowException("Email is null or empty - Remote IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress());
+
+            // Authorization Service API Get User Role Permissions
+            jsonString = JsonConvert.SerializeObject(_userAuthorization);
+            string encryptString = AESGCM.Encrypt(jsonString, accessToken);
+            statusCode = await jsonClient.SendRequest(HttpMethod.Get, "Permission", encryptString);
+            if (!jsonClient.IsResponseSuccess)
+                ThrowException(jsonClient.GetResponseString() + " - Remote IP: " + ticketReceivedContext.HttpContext.GetRemoteAddress());
+
+            jsonString = AESGCM.Decrypt(jsonClient.GetResponseObject<string>(), accessToken);
+            _userAuthorization = JsonConvert.DeserializeObject<UserAuthorizationModel>(jsonString);
 
             return _userAuthorization;
         }

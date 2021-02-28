@@ -38,21 +38,6 @@ namespace as_api_cdcavell.Data
 
         #region Static Methods
 
-        /// <summary>
-        /// Return Resource for given ClientId
-        /// </summary>
-        /// <param name="clientId"></param>
-        /// <param name="dbContext"></param>
-        /// <returns>Resource</returns>
-        public static Resource Get(string clientId, AuthorizationServiceDbContext dbContext)
-        {
-            Resource resource = dbContext.Resource
-                .Where(x => x.ClientId == clientId)
-                .FirstOrDefault();
-
-            return resource;
-        }
-
         #endregion
     }
 }
