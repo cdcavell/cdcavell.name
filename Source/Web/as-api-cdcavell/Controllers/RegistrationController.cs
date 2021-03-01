@@ -24,6 +24,7 @@ namespace as_api_cdcavell.Controllers
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
     /// | Christopher D. Cavell | 1.0.3.1 | 02/08/2021 | User Authorization Web Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 02/28/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class RegistrationController : ApplicationBaseController<RegistrationController>
     {
@@ -132,6 +133,23 @@ namespace as_api_cdcavell.Controllers
                 registration.RequestDate = DateTime.Now;
                 registration.AddUpdate(_dbContext);
             }
+
+            // Allow self revoked to register again
+            if (registration.IsRevoked)
+                if (registration.Id.Equals(registration.RevokedById))
+                {
+                    registration.Email = userAuthorization.Registration.Email.Clean();
+                    registration.FirstName = userAuthorization.Registration.FirstName.Clean();
+                    registration.LastName = userAuthorization.Registration.LastName.Clean();
+                    registration.RequestDate = DateTime.Now;
+                    registration.ApprovedById = null;
+                    registration.ApprovedBy = null;
+                    registration.ApprovedDate = DateTime.MinValue;
+                    registration.RevokedById = null;
+                    registration.RevokedBy = null;
+                    registration.RevokedDate = DateTime.MinValue;
+                    registration.AddUpdate(_dbContext);
+                }
 
             userAuthorization.Registration.RegistrationId = registration.Id;
             userAuthorization.Registration.Email = registration.Email ?? string.Empty;

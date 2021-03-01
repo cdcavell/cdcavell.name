@@ -48,20 +48,24 @@
                 </div>
             </div>
             <br />
-            <p class="font-small text-muted">
-                Role Permissions
-            </p>
+            @if (Model.RolePermissions != null && Model.RolePermissions.Count > 0)
+            {
+                <p class="font-small text-muted">
+                    Role Permissions
+                </p>
+            }
         </div>
         <div class="card-footer rounded-bottom bg-white border-top-0 m-0 p-0">
-            @if (Model.Status == "Account Active")
+            @if (Model.Status.Equals("Account Active", StringComparison.CurrentCultureIgnoreCase)
+              || Model.Status.Equals("Pending Approval", StringComparison.CurrentCultureIgnoreCase))
             {
-                <button id="deleteAccount"
+                <button id="revokeAccount"
                         class="btn btn-dark text-light border shadow-sm text-decoration-none m-3 mr-4 p-1 px-2 float-right g-recaptcha"
                         data-sitekey="@ViewBag.reCAPTCHA_SiteKey"
                         data-callback='onCaptchaSubmit'
                         data-action='submit'>
                     <i class="fas fa-trash-alt text-grey" aria-hidden="true"></i>
-                    Delete Account
+                    Revoke Account
                 </button>
             }
         </div>
