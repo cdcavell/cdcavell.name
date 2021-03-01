@@ -79,11 +79,20 @@ namespace as_ui_cdcavell.Controllers
                 return Error(400);
 
             Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
-            if (authorization.UserAuthorization.Registration.IsRegistered)
+            if (authorization.UserAuthorization.Registration.IsActive
+             || authorization.UserAuthorization.Registration.IsPending)
                 return RedirectToAction("Status", "Registration");
+
+            // Only allow self revoked to register again
+            if (authorization.UserAuthorization.Registration.IsRevoked)
+                if (!authorization.UserAuthorization.Registration.Email
+                    .Equals(authorization.UserAuthorization.Registration.RevokedBy))
+                    return RedirectToAction("Status", "Registration");
 
             RegistrationIndexModel model = new RegistrationIndexModel();
             model.Email = emailClaim;
+            model.FirstName = authorization.UserAuthorization.Registration.FirstName ?? string.Empty;
+            model.LastName = authorization.UserAuthorization.Registration.LastName ?? string.Empty;
 
             return View(model);
         }
@@ -109,8 +118,15 @@ namespace as_ui_cdcavell.Controllers
                     return Error(400);
 
                 Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
-                if (authorization.UserAuthorization.Registration.IsRegistered)
+                if (authorization.UserAuthorization.Registration.IsActive
+                 || authorization.UserAuthorization.Registration.IsPending)
                     return RedirectToAction("Status", "Registration");
+
+                // Only allow self revoked to register again
+                if (authorization.UserAuthorization.Registration.IsRevoked)
+                    if (!authorization.UserAuthorization.Registration.Email
+                        .Equals(authorization.UserAuthorization.Registration.RevokedBy))
+                        return RedirectToAction("Status", "Registration");
 
                 UserAuthorizationModel userAuthorization = new UserAuthorizationModel();
                 userAuthorization.Registration.Email = model.Email.Clean();
@@ -168,6 +184,11 @@ namespace as_ui_cdcavell.Controllers
             if (!emailClaim.Equals(userAuthorization.Email))
                 return Error(400);
 
+            // Allow self revoked to register again
+            if (userAuthorization.Registration.IsRevoked)
+                if (userAuthorization.Registration.Email == userAuthorization.Registration.RevokedBy)
+                    return RedirectToAction("Index", "Registration");
+
             string jsonString = JsonConvert.SerializeObject(userAuthorization);
             string encryptString = AESGCM.Encrypt(jsonString, authorization.AccessToken);
 
@@ -189,11 +210,12 @@ namespace as_ui_cdcavell.Controllers
             model.RequestDate = userAuthorization.Registration.RequestDate;
             model.Status = userAuthorization.Registration.Status;
 
-            model.RolePermissions = userAuthorization.RolePermissions
-                .OrderBy(x => x.Role.Resource.Description)
-                .OrderBy(x => x.Role.Description)
-                .OrderBy(x => x.Permission.Description)
-                .ToList();
+            if (userAuthorization.Registration.IsActive)
+                model.RolePermissions = userAuthorization.RolePermissions
+                    .OrderBy(x => x.Role.Resource.Description)
+                    .OrderBy(x => x.Role.Description)
+                    .OrderBy(x => x.Permission.Description)
+                    .ToList();
 
             return View(model);
         }

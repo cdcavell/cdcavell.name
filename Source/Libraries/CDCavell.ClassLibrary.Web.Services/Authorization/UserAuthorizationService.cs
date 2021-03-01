@@ -23,7 +23,7 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.1 | 02/09/2021 | User Authorization Web Service |~ 
-    /// | Christopher D. Cavell | 1.0.3.3 | 02/27/2021 | User Authorization Web Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 02/28/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class UserAuthorizationService : IUserAuthorizationService
     {
