@@ -212,7 +212,6 @@ namespace as_ui_cdcavell.Controllers
 
             if (userAuthorization.Registration.IsActive)
                 model.RolePermissions = userAuthorization.RolePermissions
-                    .Where(x => x.Status.StatusId == 2)
                     .OrderBy(x => x.Role.Resource.Description)
                     .OrderBy(x => x.Role.Description)
                     .OrderBy(x => x.Permission.Description)
