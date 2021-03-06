@@ -10,7 +10,7 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.3 | 02/27/2021 | User Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/06/2021 | User Authorization Service |~ 
     /// </revision>
     public class RolePermissionModel
     {
