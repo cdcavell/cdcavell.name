@@ -60,6 +60,7 @@
               || Model.Status.Equals("Pending Approval", StringComparison.CurrentCultureIgnoreCase))
             {
                 <button id="revokeAccount"
+                        type="submit"
                         class="btn btn-dark text-light border shadow-sm text-decoration-none m-3 mr-4 p-1 px-2 float-right g-recaptcha"
                         data-sitekey="@ViewBag.reCAPTCHA_SiteKey"
                         data-callback='onCaptchaSubmit'
@@ -67,6 +68,15 @@
                     <i class="fas fa-trash-alt text-grey" aria-hidden="true"></i>
                     Revoke Account
                 </button>
+
+                <a id="updateAccount"
+                   type="button"
+                   class="btn btn-dark text-light border shadow-sm text-decoration-none m-3 mr-0 p-1 pr-0 px-2 float-right"
+                   asp-action="Update"
+                   asp-controller="Registration">
+                    <i class="fas fa-user-edit text-grey" aria-hidden="true"></i>
+                    Update Account
+                </a>
             }
         </div>
     </div>       

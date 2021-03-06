@@ -27,7 +27,7 @@ namespace as_ui_cdcavell.Controllers
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
     /// | Christopher D. Cavell | 1.0.3.1 | 02/08/2021 | User Authorization Web Service |~ 
-    /// | Christopher D. Cavell | 1.0.3.3 | 02/28/2021 | User Authorization Web Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/06/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class RegistrationController : ApplicationBaseController<RegistrationController>
     {
@@ -261,6 +261,89 @@ namespace as_ui_cdcavell.Controllers
                 }
 
                 return RedirectToAction("Logout", "Account");
+            }
+
+            return View(model);
+        }
+
+        /// <summary>
+        /// Update Registration HttpGet method
+        /// </summary>
+        /// <returns>IActionResult</returns>
+        /// <method>Update()</method>
+        [Authorize(Policy = "Authenticated")]
+        [HttpGet]
+        public IActionResult Update()
+        {
+            string emailClaim = User.Claims.Where(x => x.Type == "email").Select(x => x.Value).FirstOrDefault();
+            if (string.IsNullOrEmpty(emailClaim))
+                return Error(400);
+
+            string authClaim = User.Claims.Where(x => x.Type == "authorization").Select(x => x.Value).FirstOrDefault();
+            if (string.IsNullOrEmpty(authClaim))
+                return Error(400);
+
+            Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
+            if (!authorization.UserAuthorization.Registration.IsActive
+             && !authorization.UserAuthorization.Registration.IsPending)
+                return RedirectToAction("Status", "Registration");
+
+            RegistrationIndexModel model = new RegistrationIndexModel();
+            model.Email = emailClaim;
+            model.FirstName = authorization.UserAuthorization.Registration.FirstName ?? string.Empty;
+            model.LastName = authorization.UserAuthorization.Registration.LastName ?? string.Empty;
+
+            return View(model);
+        }
+
+        /// <summary>
+        /// Update Registration HttpPost method
+        /// </summary>
+        /// <returns>Task&lt;IActionResult&gt;</returns>
+        /// <method>Update(RegistrationIndexModel model)</method>
+        [Authorize(Policy = "Authenticated")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(RegistrationIndexModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                string emailClaim = User.Claims.Where(x => x.Type == "email").Select(x => x.Value).FirstOrDefault();
+                if (string.IsNullOrEmpty(emailClaim))
+                    return Error(400);
+
+                string authClaim = User.Claims.Where(x => x.Type == "authorization").Select(x => x.Value).FirstOrDefault();
+                if (string.IsNullOrEmpty(authClaim))
+                    return Error(400);
+
+                Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
+                if (!authorization.UserAuthorization.Registration.IsActive
+                 && !authorization.UserAuthorization.Registration.IsPending)
+                    return RedirectToAction("Status", "Registration");
+
+                UserAuthorizationModel userAuthorization = new UserAuthorizationModel();
+                userAuthorization.Registration.Email = model.Email.Clean();
+                userAuthorization.Registration.FirstName = model.FirstName.Clean();
+                userAuthorization.Registration.LastName = model.LastName.Clean();
+
+                string jsonString = JsonConvert.SerializeObject(userAuthorization);
+                string encryptString = AESGCM.Encrypt(jsonString, authorization.AccessToken);
+
+                JsonClient jsonClient = new JsonClient(_appSettings.Authorization.AuthorizationService.API, authorization.AccessToken);
+                HttpStatusCode statusCode = await jsonClient.SendRequest(HttpMethod.Put, "Registration", encryptString);
+                if (!jsonClient.IsResponseSuccess)
+                {
+                    _logger.Exception(new Exception(jsonClient.GetResponseString()));
+                    return Error(400);
+                }
+
+                jsonString = AESGCM.Decrypt(jsonClient.GetResponseObject<string>(), authorization.AccessToken);
+                userAuthorization = JsonConvert.DeserializeObject<UserAuthorizationModel>(jsonString);
+
+                authorization.UserAuthorization = userAuthorization;
+                authorization.AddUpdate(_dbContext);
+
+                return RedirectToAction("Status", "Registration");
             }
 
             return View(model);
