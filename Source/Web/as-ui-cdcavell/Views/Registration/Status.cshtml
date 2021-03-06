@@ -53,6 +53,45 @@
                 <p class="font-small text-muted">
                     Role Permissions
                 </p>
+                <!--Accordion wrapper-->
+                <div class="accordion md-accordion" id="accordionRolePermissions" role="tablist" aria-multiselectable="true">
+
+                @{
+                    List<ResourceModel> resources = Model.RolePermissions
+                        .Select(x => x.Role.Resource)
+                        .Distinct()
+                        .ToList();
+                }
+
+                @foreach (ResourceModel resource in resources)
+                {
+                    <!-- Accordion card -->
+                    <div class="card mr-4">
+                        <!-- Card header -->
+                        <div class="card-header m-0 p-0 pt-1 pl-2" role="tab" id="heading-@resource.ResourceId">
+                            <a class="text-decoration-none" data-toggle="collapse" data-parent="#accordionRolePermissions" href="#collapse-@resource.ResourceId" aria-expanded="false" aria-controls="collapse-@resource.ResourceId">
+                                <p class="font-small mb-0">
+                                    @resource.Description
+                                </p>
+                            </a>
+                        </div>
+                        <!-- Card body -->
+                        <div id="collapse-@resource.ResourceId" class="collapse font-small m-0 p-0 pt-1 pl-4" role="tabpanel" aria-labelledby="heading-@resource.ResourceId" data-parent="#accordionRolePermissions">
+                            @{ 
+                                List<RolePermissionModel> roleolePermissions = Model.RolePermissions
+                                    .Where(x => x.Role.Resource.ResourceId == resource.ResourceId)
+                                    .ToList();
+                            }                          
+                            <ul>
+                            @foreach (RolePermissionModel rolePermission in roleolePermissions)
+                            {
+                                <li>@rolePermission.Role.Description - @rolePermission.Permission.Description</li>
+                            }
+                            </ul>
+                        </div>
+                    </div>
+                }
+                </div>
             }
         </div>
         <div class="card-footer rounded-bottom bg-white border-top-0 m-0 p-0">
