@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace as_api_cdcavell.Controllers
@@ -24,7 +23,7 @@ namespace as_api_cdcavell.Controllers
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
     /// | Christopher D. Cavell | 1.0.3.1 | 02/08/2021 | User Authorization Web Service |~ 
-    /// | Christopher D. Cavell | 1.0.3.3 | 02/28/2021 | User Authorization Web Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/06/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class RegistrationController : ApplicationBaseController<RegistrationController>
     {
@@ -134,6 +133,15 @@ namespace as_api_cdcavell.Controllers
                 registration.AddUpdate(_dbContext);
             }
 
+            if (!registration.IsNew)
+                if (!registration.IsRevoked)
+                    if (registration.IsRegistered)
+                    {
+                        registration.FirstName = userAuthorization.Registration.FirstName.Clean();
+                        registration.LastName = userAuthorization.Registration.LastName.Clean();
+                        registration.AddUpdate(_dbContext);
+                    }
+
             // Allow self revoked to register again
             if (registration.IsRevoked)
                 if (registration.Id.Equals(registration.RevokedById))
@@ -167,7 +175,7 @@ namespace as_api_cdcavell.Controllers
         }
 
         /// <summary>
-        /// Put action method
+        /// Delete action method
         /// </summary>
         /// <param name="encryptObject">object</param>
         [HttpDelete]
