@@ -18,6 +18,21 @@
     background-color: rgba(235, 235, 235, 0.3);
 }
 
+.border-readonly {
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+}
+
+.bg-readonly {
+    background-color: #e9ecef;
+    opacity: 1;
+}
+
+.text-readonly {
+    /*color: #6c757c;*/
+    color: #495057;
+}
+
 .body-container {
     margin-top: 80px;
     padding-left: 10px;
