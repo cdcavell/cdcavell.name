@@ -1,11 +1,11 @@
 using as_ui_cdcavell.Authorization;
-using as_ui_cdcavell.Data;
 using as_ui_cdcavell.Filters;
 using as_ui_cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Commons.Logging;
 using CDCavell.ClassLibrary.Web.Mvc.Filters;
 using CDCavell.ClassLibrary.Web.Security;
 using CDCavell.ClassLibrary.Web.Services.Authorization;
+using CDCavell.ClassLibrary.Web.Services.Data;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -43,7 +43,7 @@ namespace as_ui_cdcavell
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/06/2021 | Initial build Authorization Service |~ 
     /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | Utilize Redis Cache - Not implemented |~
-    /// | Christopher D. Cavell | 1.0.3.1 | 02/08/2021 | User Authorization Web Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/07/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class Startup
     {
@@ -85,8 +85,11 @@ namespace as_ui_cdcavell
                 return new DiscoveryCache(_appSettings.Authentication.IdP.Authority, () => factory.CreateClient());
             });
 
-            services.AddDbContext<AuthorizationUiDbContext>(options =>
-                options.UseSqlite(appSettings.ConnectionStrings.AuthorizationUiConnection));
+            services.AddDbContext<AuthorizationDbContext>(options =>
+                options.UseSqlite(
+                    appSettings.ConnectionStrings.AuthorizationConnection,
+                    x => x.MigrationsAssembly("as-ui-cdcavell")
+                ));
 
             // Register IHttpContextAccessor
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -165,18 +168,6 @@ namespace as_ui_cdcavell
 
                                 UserAuthorizationModel userAuthorization = userAuthorizationService.InitialAuthorization(ticketReceivedContext).Result;
                                 ticketReceivedContext.Principal.AddIdentity(new ClaimsIdentity(userAuthorizationService.AdditionalClaims));
-
-                                // Get dbContext
-                                AuthorizationUiDbContext dbContext = (AuthorizationUiDbContext)ticketReceivedContext.HttpContext
-                                    .RequestServices.GetService(typeof(AuthorizationUiDbContext));
-
-                                // Harden User Authorization
-                                Data.Authorization authorization = new Data.Authorization();
-                                authorization.Guid = userAuthorizationService.Guid;
-                                authorization.AccessToken = userAuthorizationService.AccessToken;
-                                authorization.Created = DateTime.Now;
-                                authorization.UserAuthorization = userAuthorization;
-                                authorization.AddUpdate(dbContext);
                             }
                             catch (Exception exception)
                             {
@@ -225,8 +216,8 @@ namespace as_ui_cdcavell
         /// <param name="logger">ILogger&lt;Startup&gt;</param>
         /// <param name="lifetime">IHostApplicationLifetime</param>
         /// <param name="dbContext">AuthorizationUiDbContext</param>
-        /// <method>Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger&lt;Startup&gt; logger, IHostApplicationLifetime lifetime, AuthorizationUiDbContext dbContext)</method>
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger, IHostApplicationLifetime lifetime, AuthorizationUiDbContext dbContext)
+        /// <method>Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger&lt;Startup&gt; logger, IHostApplicationLifetime lifetime, AuthorizationDbContext dbContext)</method>
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger, IHostApplicationLifetime lifetime, AuthorizationDbContext dbContext)
         {
             _logger = new Logger(logger);
             _logger.Trace($"Configure(IApplicationBuilder: {app}, IWebHostEnvironment: {env}, ILogger<Startup> {logger}, IHostApplicationLifetime: {lifetime})");

@@ -1,5 +1,4 @@
-﻿using Org.BouncyCastle.Math.EC.Rfc7748;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

@@ -8,6 +8,7 @@ using CDCavell.ClassLibrary.Commons.Logging;
 using CDCavell.ClassLibrary.Web.Mvc.Filters;
 using CDCavell.ClassLibrary.Web.Security;
 using CDCavell.ClassLibrary.Web.Services.Authorization;
+using CDCavell.ClassLibrary.Web.Services.Data;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -54,6 +55,7 @@ namespace cdcavell
     /// | Christopher D. Cavell | 1.0.3.0 | 02/06/2021 | Initial build Authorization Service |~ 
     /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | Utilize Redis Cache - Not implemented |~
     /// | Christopher D. Cavell | 1.0.3.1 | 02/09/2021 | User Authorization Web Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/07/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class Startup
     {
@@ -96,7 +98,15 @@ namespace cdcavell
             });
 
             services.AddDbContext<CDCavellDbContext>(options =>
-                options.UseSqlite(appSettings.ConnectionStrings.CDCavellConnection));
+                options.UseSqlite(appSettings.ConnectionStrings.CDCavellConnection,
+                    x => x.MigrationsAssembly("CDCavell")
+                ));
+
+            services.AddDbContext<AuthorizationDbContext>(options =>
+                options.UseSqlite(
+                    appSettings.ConnectionStrings.AuthorizationConnection,
+                    x => x.MigrationsAssembly("CDCavell")
+                ));
 
             // Register IHttpContextAccessor
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -175,18 +185,6 @@ namespace cdcavell
 
                                 UserAuthorizationModel userAuthorization = userAuthorizationService.InitialAuthorization(ticketReceivedContext).Result;
                                 ticketReceivedContext.Principal.AddIdentity(new ClaimsIdentity(userAuthorizationService.AdditionalClaims));
-
-                                // Get dbContext
-                                CDCavellDbContext dbContext = (CDCavellDbContext)ticketReceivedContext.HttpContext
-                                    .RequestServices.GetService(typeof(CDCavellDbContext));
-
-                                // Harden User Authorization
-                                Data.Authorization authorization = new Data.Authorization();
-                                authorization.Guid = userAuthorizationService.Guid;
-                                authorization.AccessToken = userAuthorizationService.AccessToken;
-                                authorization.Created = DateTime.Now;
-                                authorization.UserAuthorization = userAuthorization;
-                                authorization.AddUpdate(dbContext);
                             }
                             catch (Exception exception)
                             {
@@ -234,15 +232,17 @@ namespace cdcavell
         /// <param name="env">IWebHostEnvironment</param>
         /// <param name="logger">ILogger&lt;Startup&gt;</param>
         /// <param name="lifetime">IHostApplicationLifetime</param>
+        /// <param name="authorizationDbContext">AuthorizationDbContext</param>
         /// <param name="dbContext">CDCavellDbContext</param>
-        /// <method>Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger&lt;Startup&gt; logger, IHostApplicationLifetime lifetime, CDCavellDbContext dbContext)</method>
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger, IHostApplicationLifetime lifetime, CDCavellDbContext dbContext)
+        /// <method>Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger&lt;Startup&gt; logger, IHostApplicationLifetime lifetime, AuthorizationDbContext authorizationDbContext, CDCavellDbContext dbContext)</method>
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger, IHostApplicationLifetime lifetime, AuthorizationDbContext authorizationDbContext, CDCavellDbContext dbContext)
         {
             _logger = new Logger(logger);
             _logger.Trace($"Configure(IApplicationBuilder: {app}, IWebHostEnvironment: {env}, ILogger<Startup> {logger}, IHostApplicationLifetime: {lifetime})");
 
             AESGCM.Seed(_configuration);
-            DbInitializer.Initialize(dbContext);
+            CDCavell.ClassLibrary.Web.Services.Data.DbInitializer.Initialize(authorizationDbContext);
+            cdcavell.Data.DbInitializer.Initialize(dbContext);
             new Sitemap(_logger, _webHostEnvironment, _appSettings).Create(dbContext);
 
             lifetime.ApplicationStarted.Register(OnAppStarted);
