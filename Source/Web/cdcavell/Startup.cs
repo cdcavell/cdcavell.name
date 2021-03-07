@@ -185,19 +185,6 @@ namespace cdcavell
 
                                 UserAuthorizationModel userAuthorization = userAuthorizationService.InitialAuthorization(ticketReceivedContext).Result;
                                 ticketReceivedContext.Principal.AddIdentity(new ClaimsIdentity(userAuthorizationService.AdditionalClaims));
-
-                                // Get dbContext
-                                AuthorizationDbContext dbContext = (AuthorizationDbContext)ticketReceivedContext.HttpContext
-                                    .RequestServices.GetService(typeof(AuthorizationDbContext));
-
-                                // Harden User Authorization
-                                CDCavell.ClassLibrary.Web.Services.Data.Authorization authorization = new CDCavell.ClassLibrary.Web.Services.Data.Authorization();
-                                authorization.ClientId = userAuthorization.ClientId;
-                                authorization.Guid = userAuthorizationService.Guid;
-                                authorization.AccessToken = userAuthorizationService.AccessToken;
-                                authorization.Created = DateTime.Now;
-                                authorization.UserAuthorization = userAuthorization;
-                                authorization.AddUpdate(dbContext);
                             }
                             catch (Exception exception)
                             {

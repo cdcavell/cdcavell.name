@@ -111,6 +111,15 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
                 _userAuthorization = JsonConvert.DeserializeObject<UserAuthorizationModel>(jsonString);
             }
 
+            // Harden User Authorization
+            Data.Authorization authorization = new Data.Authorization();
+            authorization.ClientId = _userAuthorization.ClientId;
+            authorization.Guid = _guid;
+            authorization.AccessToken = _accessToken;
+            authorization.Created = DateTime.Now;
+            authorization.UserAuthorization = _userAuthorization;
+            authorization.AddUpdate(_dbContext);
+
             return _userAuthorization;
         }
 
