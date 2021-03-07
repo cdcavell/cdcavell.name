@@ -1,0 +1,150 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+	<TargetFramework>net5.0</TargetFramework>
+	<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+	<Version>1.0.3.3</Version>
+	<DocumentationFile>../../../Documentation/Source/$(AssemblyName).xml</DocumentationFile>
+	<Copyright>2021 - Christopher D. Cavell</Copyright>
+	<PackageProjectUrl>https://cdcavell.name</PackageProjectUrl>
+	<PackageLicenseFile>LICENSE</PackageLicenseFile>
+	<PackageIcon>icon.png</PackageIcon>
+	<RepositoryUrl>https://github.com/cdcavell/cdcavell.name</RepositoryUrl>
+	<RepositoryType>Git</RepositoryType>
+	<NeutralLanguage>en-US</NeutralLanguage>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\img\icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\img\PrivacyPolicy\Capture-001.JPG" />
+    <_ContentIncludedByDefault Remove="wwwroot\img\PrivacyPolicy\Capture-002.JPG" />
+    <_ContentIncludedByDefault Remove="wwwroot\img\PrivacyPolicy\Capture-003.JPG" />
+    <_ContentIncludedByDefault Remove="wwwroot\img\PrivacyPolicy\Capture-004.JPG" />
+    <_ContentIncludedByDefault Remove="wwwroot\img\PrivacyPolicy\Capture-005.JPG" />
+    <_ContentIncludedByDefault Remove="wwwroot\img\PrivacyPolicy\Capture-006.JPG" />
+    <_ContentIncludedByDefault Remove="wwwroot\img\PrivacyPolicy\Capture-007.JPG" />
+    <_ContentIncludedByDefault Remove="wwwroot\img\PrivacyPolicy\Capture-008.JPG" />
+    <_ContentIncludedByDefault Remove="wwwroot\img\PrivacyPolicy\Capture-009.JPG" />
+    <_ContentIncludedByDefault Remove="wwwroot\img\PrivacyPolicy\Capture-010.JPG" />
+    <_ContentIncludedByDefault Remove="wwwroot\img\PrivacyPolicy\Capture-011.JPG" />
+    <_ContentIncludedByDefault Remove="wwwroot\img\PrivacyPolicy\Capture-012.JPG" />
+    <_ContentIncludedByDefault Remove="wwwroot\img\PrivacyPolicy\Capture-013.JPG" />
+    <_ContentIncludedByDefault Remove="wwwroot\img\PrivacyPolicy\Capture-014.JPG" />
+    <_ContentIncludedByDefault Remove="wwwroot\img\PrivacyPolicy\Capture-015.JPG" />
+    <_ContentIncludedByDefault Remove="wwwroot\img\PrivacyPolicy\Capture-016.JPG" />
+    <_ContentIncludedByDefault Remove="wwwroot\img\PrivacyPolicy\Capture-017.JPG" />
+    <_ContentIncludedByDefault Remove="wwwroot\img\PrivacyPolicy\Capture-018.JPG" />
+    <_ContentIncludedByDefault Remove="wwwroot\img\PrivacyPolicy\Capture-019.JPG" />
+    <_ContentIncludedByDefault Remove="wwwroot\img\PrivacyPolicy\Capture-020.JPG" />
+    <_ContentIncludedByDefault Remove="wwwroot\img\PrivacyPolicy\Capture-021.JPG" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\..\LICENSE">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+		<None Include="wwwroot\img\icon.png">
+		  <PackagePath></PackagePath>
+		  <Pack>True</Pack>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\CDCavell.ClassLibrary.Web.Services\CDCavell.ClassLibrary.Web.Services.csproj" />
+	  <ProjectReference Include="..\CDCavell.ClassLibrary.Web\CDCavell.ClassLibrary.Web.csproj" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<_findDllFile Include="../../../Documentation/Source/XmlToMarkdown.dll" />
+		<_findJsonFile Include="../../../Documentation/Source/XmlToMarkdown.runtimeconfig.json" />
+		<_findLibraryFile Include="../../../Documentation/Source/CDCavell.ClassLibrary.Commons.dll" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <Content Update="wwwroot\img\ajax-loader.gif">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\img\bing-logo-black-transparent.png">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\img\cdcavell-light.png">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\img\cdcavell.png">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\img\favicon.ico">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\img\icon-light.png">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\img\icon.jpg">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\img\me.jpg">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\img\Microsoft-Azure-Logo-Small.png">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\img\Microsoft-Azure-Logo.png">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\img\Pulse-1s-184px.gif">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\img\ripple-sm.gif">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\img\thumbnail.png">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\img\twitter-thumbnail.png">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	</ItemGroup>
+
+	<Target Name="BuildXmlToMarkdown" AfterTargets="AfterBuild" DependsOnTargets="AfterBuild" Condition="Exists('@(_findDllFile)') AND Exists('@(_findJsonFile)') AND Exists('@(_findLibraryFile)')">
+		<Exec Command="cd ../../../Documentation/Source/" />
+		<Exec Command="dotnet XmlToMarkdown.dll Transform.xsl" WorkingDirectory="../../../Documentation/Source/" />
+	</Target>
+
+	<Target Name="UpdateWiki" AfterTargets="BuildXmlToMarkdown" DependsOnTargets="BuildXmlToMarkdown" Condition="Exists('@(_findDllFile)')&#xD;&#xA;                 AND Exists('@(_findJsonFile)') &#xD;&#xA;                 AND Exists('@(_findLibraryFile)')">
+		<Exec Command="cd ../../../Documentation/Source/wiki/" />
+		<Exec Command="git add ." WorkingDirectory="../../../Documentation/Source/wiki/" />
+		<Exec Command="git commit -m &quot;Update wiki submodule&quot;" WorkingDirectory="../../../Documentation/Source/wiki/" ContinueOnError="true">
+			<Output TaskParameter="ExitCode" ItemName="ErrorCode" />
+		</Exec>
+		<Exec Command="git push origin master" WorkingDirectory="../../../Documentation/Source/wiki/" Condition="'@(ErrorCode)'=='0'" />
+	</Target>
+
+</Project>

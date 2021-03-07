@@ -1,0 +1,19 @@
+﻿<script type="text/javascript" nonce="@ViewBag.ScriptNonce">
+
+    $(function () {
+
+        $('#cookieConsent').on('click', function (e) {
+            var data = $('#cookieConsent').attr('data-cookie-string');
+            document.cookie = data; 
+            location.reload();
+        });
+
+    });
+
+    $(window).on('load', function() {
+
+        $('#cookieConsent').modal('show');
+
+    });
+
+</script>

@@ -1,5 +1,4 @@
 using AspNetCore.SEOHelper;
-using cdcavell.Authorization;
 using cdcavell.Classes;
 using cdcavell.Data;
 using cdcavell.Filters;

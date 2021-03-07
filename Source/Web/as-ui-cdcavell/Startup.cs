@@ -1,4 +1,3 @@
-using as_ui_cdcavell.Authorization;
 using as_ui_cdcavell.Filters;
 using as_ui_cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Commons.Logging;
