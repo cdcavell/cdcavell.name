@@ -1,9 +1,9 @@
-﻿using as_ui_cdcavell.Data;
-using as_ui_cdcavell.Models.AppSettings;
+﻿using as_ui_cdcavell.Models.AppSettings;
 using as_ui_cdcavell.Models.Registration;
 using CDCavell.ClassLibrary.Web.Http;
 using CDCavell.ClassLibrary.Web.Security;
 using CDCavell.ClassLibrary.Web.Services.Authorization;
+using CDCavell.ClassLibrary.Web.Services.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -27,7 +27,7 @@ namespace as_ui_cdcavell.Controllers
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
     /// | Christopher D. Cavell | 1.0.3.1 | 02/08/2021 | User Authorization Web Service |~ 
-    /// | Christopher D. Cavell | 1.0.3.3 | 03/06/2021 | User Authorization Web Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/07/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class RegistrationController : ApplicationBaseController<RegistrationController>
     {
@@ -39,7 +39,7 @@ namespace as_ui_cdcavell.Controllers
         /// <param name="httpContextAccessor">IHttpContextAccessor</param>
         /// <param name="authorizationService">IAuthorizationService</param>
         /// <param name="appSettings">AppSettings</param>
-        /// <param name="dbContext">AuthorizationUiDbContext</param>
+        /// <param name="dbContext">AuthorizationDbContext</param>
         /// <method>
         /// public RegistrationController(
         ///     ILogger&lt;HomeController&gt; logger,
@@ -47,7 +47,7 @@ namespace as_ui_cdcavell.Controllers
         ///     IHttpContextAccessor httpContextAccessor,
         ///     IAuthorizationService authorizationService,
         ///     AppSettings appSettings,
-        ///     AuthorizationUiDbContext dbContext
+        ///     AuthorizationDbContext dbContext
         /// ) : base(logger, webHostEnvironment, httpContextAccessor, authorizationService, appSettings, dbContext)
         /// </method>
         public RegistrationController(
@@ -56,7 +56,7 @@ namespace as_ui_cdcavell.Controllers
             IHttpContextAccessor httpContextAccessor,
             IAuthorizationService authorizationService,
             AppSettings appSettings,
-            AuthorizationUiDbContext dbContext
+            AuthorizationDbContext dbContext
         ) : base(logger, webHostEnvironment, httpContextAccessor, authorizationService, appSettings, dbContext)
         {
         }
@@ -78,7 +78,7 @@ namespace as_ui_cdcavell.Controllers
             if (string.IsNullOrEmpty(authClaim))
                 return Error(400);
 
-            Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
+            CDCavell.ClassLibrary.Web.Services.Data.Authorization authorization = CDCavell.ClassLibrary.Web.Services.Data.Authorization.GetRecord(User.Claims, _dbContext);
             if (authorization.UserAuthorization.Registration.IsActive
              || authorization.UserAuthorization.Registration.IsPending)
                 return RedirectToAction("Status", "Registration");
@@ -117,7 +117,7 @@ namespace as_ui_cdcavell.Controllers
                 if (string.IsNullOrEmpty(authClaim))
                     return Error(400);
 
-                Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
+                CDCavell.ClassLibrary.Web.Services.Data.Authorization authorization = CDCavell.ClassLibrary.Web.Services.Data.Authorization.GetRecord(User.Claims, _dbContext);
                 if (authorization.UserAuthorization.Registration.IsActive
                  || authorization.UserAuthorization.Registration.IsPending)
                     return RedirectToAction("Status", "Registration");
@@ -173,7 +173,7 @@ namespace as_ui_cdcavell.Controllers
             if (string.IsNullOrEmpty(authClaim))
                 return Error(400);
 
-            Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
+            CDCavell.ClassLibrary.Web.Services.Data.Authorization authorization = CDCavell.ClassLibrary.Web.Services.Data.Authorization.GetRecord(User.Claims, _dbContext);
             if (!authClaim.Equals(authorization.Guid))
                 return Error(400);
 
@@ -244,7 +244,7 @@ namespace as_ui_cdcavell.Controllers
                 if (string.IsNullOrEmpty(authClaim))
                     return Error(400);
 
-                Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
+                CDCavell.ClassLibrary.Web.Services.Data.Authorization authorization = CDCavell.ClassLibrary.Web.Services.Data.Authorization.GetRecord(User.Claims, _dbContext);
                 if (authorization.UserAuthorization.Registration.IsRegistered)
                 {
                     UserAuthorizationModel userAuthorization = authorization.UserAuthorization;
@@ -283,7 +283,7 @@ namespace as_ui_cdcavell.Controllers
             if (string.IsNullOrEmpty(authClaim))
                 return Error(400);
 
-            Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
+            CDCavell.ClassLibrary.Web.Services.Data.Authorization authorization = CDCavell.ClassLibrary.Web.Services.Data.Authorization.GetRecord(User.Claims, _dbContext);
             if (!authorization.UserAuthorization.Registration.IsActive
              && !authorization.UserAuthorization.Registration.IsPending)
                 return RedirectToAction("Status", "Registration");
@@ -316,7 +316,7 @@ namespace as_ui_cdcavell.Controllers
                 if (string.IsNullOrEmpty(authClaim))
                     return Error(400);
 
-                Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
+                CDCavell.ClassLibrary.Web.Services.Data.Authorization authorization = CDCavell.ClassLibrary.Web.Services.Data.Authorization.GetRecord(User.Claims, _dbContext);
                 if (!authorization.UserAuthorization.Registration.IsActive
                  && !authorization.UserAuthorization.Registration.IsPending)
                     return RedirectToAction("Status", "Registration");

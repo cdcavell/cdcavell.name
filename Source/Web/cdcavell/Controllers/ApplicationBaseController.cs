@@ -1,7 +1,7 @@
-﻿using cdcavell.Data;
-using cdcavell.Filters;
+﻿using cdcavell.Filters;
 using cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Web.Mvc.Controllers;
+using CDCavell.ClassLibrary.Web.Services.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -24,14 +24,15 @@ namespace cdcavell.Controllers
     /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
     /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | Utilize Redis Cache - Not Implemented |~ 
     /// | Christopher D. Cavell | 1.0.3.1 | 02/08/2021 | User Authorization Web Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/07/2021 | User Authorization Web Service |~ 
     /// </revision>
     [ServiceFilter(typeof(SecurityHeadersAttribute))]
     public abstract partial class ApplicationBaseController<T> : WebBaseController<ApplicationBaseController<T>> where T : ApplicationBaseController<T>
     {
         /// <value>AppSettings</value>
         protected AppSettings _appSettings;
-        /// <value>CDCavellDbContext</value>
-        public CDCavellDbContext _dbContext;
+        /// <value>AuthorizationDbContext</value>
+        public AuthorizationDbContext _dbContext;
         /// <value>IAuthorizationService</value>
         public IAuthorizationService _authorizationService;
 
@@ -43,7 +44,7 @@ namespace cdcavell.Controllers
         /// <param name="httpContextAccessor">IHttpContextAccessor</param>
         /// <param name="authorizationService">IAuthorizationService</param>
         /// <param name="appSettings">AppSettings</param>
-        /// <param name="dbContext">CDCavellDbContext</param>
+        /// <param name="dbContext">AuthorizationDbContext</param>
         /// <method>
         /// ApplicationBaseController(
         ///     ILogger&lt;T&gt; logger, 
@@ -51,7 +52,7 @@ namespace cdcavell.Controllers
         ///     IHttpContextAccessor httpContextAccessor,
         ///     IAuthorizationService,
         ///     AppSettings appSettings,
-        ///     CDCavellDbContext dbContext
+        ///     AuthorizationDbContext dbContext
         /// )
         /// </method>
         protected ApplicationBaseController(
@@ -60,7 +61,7 @@ namespace cdcavell.Controllers
             IHttpContextAccessor httpContextAccessor,
             IAuthorizationService authorizationService,
             AppSettings appSettings,
-            CDCavellDbContext dbContext
+            AuthorizationDbContext dbContext
         ) : base(logger, webHostEnvironment, httpContextAccessor)
         {
             _appSettings = appSettings;

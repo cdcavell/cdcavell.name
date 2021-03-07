@@ -21,6 +21,7 @@ namespace cdcavell.Data
     /// | Christopher D. Cavell | 1.0.0.7 | 10/31/2020 | Integrate Bing’s Adaptive URL submission API with your website [#144](https://github.com/cdcavell/cdcavell.name/issues/144) |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/09/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// | Christopher D. Cavell | 1.0.3.0 | 10/24/2020 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/07/2021 | User Authorization Service |~ 
     /// </revision>
     public class CDCavellDbContext : DbContext
     {
@@ -62,8 +63,6 @@ namespace cdcavell.Data
         public DbSet<AuditHistory> AuditHistory { get; set; }
         /// <value>DbSet&lt;SiteMap&gt;</value>
         public DbSet<SiteMap> SiteMap { get; set; }
-        /// <value>DbSet&lt;Authorization&gt;</value>
-        public DbSet<Authorization> Authorization { get; set; }
 
         /// <summary>
         /// OnModelCreating method
@@ -72,10 +71,6 @@ namespace cdcavell.Data
         /// <method>OnModelCreating(ModelBuilder builder)</method>
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Authorization>()
-                .HasIndex(x => x.Guid)
-                .IsUnique();
-
             base.OnModelCreating(builder);
         }
 

@@ -29,6 +29,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.3" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.3">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.3" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <ProjectReference Include="..\CDCavell.ClassLibrary.Web\CDCavell.ClassLibrary.Web.csproj" />
 	</ItemGroup>
 
@@ -36,6 +45,10 @@
 		<_findDllFile Include="../../../Documentation/Source/XmlToMarkdown.dll" />
 		<_findJsonFile Include="../../../Documentation/Source/XmlToMarkdown.runtimeconfig.json" />
 		<_findLibraryFile Include="../../../Documentation/Source/CDCavell.ClassLibrary.Commons.dll" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Menu\" />
 	</ItemGroup>
 
 	<Target Name="BuildXmlToMarkdown" AfterTargets="AfterBuild" DependsOnTargets="AfterBuild" Condition="Exists('@(_findDllFile)') AND Exists('@(_findJsonFile)') AND Exists('@(_findLibraryFile)')">
