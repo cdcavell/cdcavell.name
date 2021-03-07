@@ -18,9 +18,9 @@ namespace CDCavell.ClassLibrary.Web.Services.Data
         /// <summary>
         /// Initialize method
         /// &lt;br /&gt;
-        /// To Initialize: dotnet ef migrations add InitialCreate
+        /// To Initialize: dotnet ef migrations add InitialCreate -c AuthorizationDBContext
         /// &lt;br /&gt;
-        /// To Update:     dotnet ef migrations add UpdateDatabase_&lt;&lt;YYYY-MM-DD&gt;&gt;
+        /// To Update:     dotnet ef migrations add UpdateDatabase_&lt;&lt;YYYY-MM-DD&gt;&gt;  -c AuthorizationDBContext
         /// &lt;br /&gt;
         /// To Revert:     dotnet ef database update &lt;previous migration name&gt; (Then - dotnet ef migrations remove)  
         /// </summary>

@@ -69,7 +69,7 @@ namespace CDCavell.ClassLibrary.Web.Services.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Authorization>()
-                .HasIndex(x => x.Guid)
+                .HasIndex(x => new { x.ClientId, x.Guid })
                 .IsUnique();
 
             base.OnModelCreating(builder);

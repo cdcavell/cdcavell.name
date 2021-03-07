@@ -1,7 +1,7 @@
-﻿using cdcavell.Data;
-using cdcavell.Models.AppSettings;
+﻿using cdcavell.Models.AppSettings;
 using cdcavell.Models.Home;
 using cdcavell.Models.Home.Search;
+using CDCavell.ClassLibrary.Web.Services.Data;
 using CDCavell.ClassLibrary.Web.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -30,6 +30,7 @@ namespace cdcavell.Controllers
     /// | Christopher D. Cavell | 1.0.0.8 | 11/01/2020 | Bing Search APIs will transition from Azure Cognitive Services to Azure Marketplace on 31 October 2023 [#152](https://github.com/cdcavell/cdcavell.name/issues/152) |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/04/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | User Authorization Web Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/07/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class HomeController : ApplicationBaseController<HomeController>
     {
@@ -41,7 +42,7 @@ namespace cdcavell.Controllers
         /// <param name="httpContextAccessor">IHttpContextAccessor</param>
         /// <param name="authorizationService">IAuthorizationService</param>
         /// <param name="appSettings">AppSettings</param>
-        /// <param name="dbContext">CDCavellDbContext</param>
+        /// <param name="dbContext">AuthorizationDbContext</param>
         /// <method>
         /// public HomeController(
         ///     ILogger&lt;HomeController&gt; logger,
@@ -49,7 +50,7 @@ namespace cdcavell.Controllers
         ///     IHttpContextAccessor httpContextAccessor,
         ///     IAuthorizationService authorizationService,
         ///     AppSettings appSettings,
-        ///     CDCavellDbContext dbContext
+        ///     AuthorizationDbContext dbContext
         /// ) : base(logger, webHostEnvironment, httpContextAccessor, authorizationService, appSettings, dbContext)
         /// </method>
         public HomeController(
@@ -58,7 +59,7 @@ namespace cdcavell.Controllers
             IHttpContextAccessor httpContextAccessor,
             IAuthorizationService authorizationService,
             AppSettings appSettings,
-            CDCavellDbContext dbContext
+            AuthorizationDbContext dbContext
         ) : base(logger, webHostEnvironment, httpContextAccessor, authorizationService, appSettings, dbContext)
         {
         }

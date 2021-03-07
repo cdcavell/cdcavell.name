@@ -1,6 +1,7 @@
 ﻿using CDCavell.ClassLibrary.Commons.Logging;
 using CDCavell.ClassLibrary.Web.Http;
 using CDCavell.ClassLibrary.Web.Security;
+using CDCavell.ClassLibrary.Web.Services.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -28,6 +29,7 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
     public class UserAuthorizationService : IUserAuthorizationService
     {
         private readonly string _authorizationServiceAPI;
+        private readonly AuthorizationDbContext _dbContext;
 
         private Logger _logger;
         private UserAuthorizationModel _userAuthorization;
@@ -46,6 +48,7 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
             get
             {
                 List<Claim> additionalClaims = new List<Claim>();
+                additionalClaims.Add(new Claim("clientid", _userAuthorization.ClientId));
                 additionalClaims.Add(new Claim("email", _userAuthorization.Email));
                 additionalClaims.Add(new Claim("authorization", _guid));
 
@@ -57,11 +60,13 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
         /// Constructor
         /// </summary>
         /// <param name="logger">ILogger&lt;UserAuthorizationService&gt;</param>
+        /// <param name="dbContext">AuthorizationDbContext</param>
         /// <param name="options">IOptions&lt;UserAuthorizationServiceOptionss&gt;</param>
-        /// <method>UserAuthorizationService(ILogger&lt;UserAuthorizationService&gt; logger, IOptions&lt;UserAuthorizationServiceOptions&gt; options)</method>
-        public UserAuthorizationService(ILogger<UserAuthorizationService> logger, IOptions<UserAuthorizationServiceOptions> options)
+        /// <method>UserAuthorizationService(ILogger&lt;UserAuthorizationService&gt; logger, AuthorizationDbContext dbContext, IOptions&lt;UserAuthorizationServiceOptions&gt; options)</method>
+        public UserAuthorizationService(ILogger<UserAuthorizationService> logger, AuthorizationDbContext dbContext, IOptions<UserAuthorizationServiceOptions> options)
         {
             _logger = new Logger(logger);
+            _dbContext = dbContext;
             _authorizationServiceAPI = options.Value.AuthorizationServiceAPI;
             _userAuthorization = new UserAuthorizationModel();
             _guid = System.Guid.NewGuid().ToString();

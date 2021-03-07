@@ -1,7 +1,7 @@
-﻿using as_ui_cdcavell.Data;
-using as_ui_cdcavell.Models.Account;
+﻿using as_ui_cdcavell.Models.Account;
 using as_ui_cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Web.Http;
+using CDCavell.ClassLibrary.Web.Services.Data;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -27,6 +27,7 @@ namespace as_ui_cdcavell.Controllers
     /// | Christopher D. Cavell | 1.0.3.0 | 02/04/2021 | Initial build Authorization Service |~ 
     /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | Utilize Redis Cache - Not implemented |~ 
     /// | Christopher D. Cavell | 1.0.3.1 | 02/08/2021 | User Authorization Web Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/07/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class AccountController : ApplicationBaseController<AccountController>
     {
@@ -38,7 +39,7 @@ namespace as_ui_cdcavell.Controllers
         /// <param name="httpContextAccessor">IHttpContextAccessor</param>
         /// <param name="authorizationService">IAuthorizationService</param>
         /// <param name="appSettings">AppSettings</param>
-        /// <param name="dbContext">AuthorizationUiDbContext</param>
+        /// <param name="dbContext">AuthorizationDbContext</param>
         /// <method>
         /// AccountController(
         ///     ILogger&lt;AccountController&gt; logger, 
@@ -46,7 +47,7 @@ namespace as_ui_cdcavell.Controllers
         ///     IHttpContextAccessor httpContextAccessor,
         ///     IAuthorizationService authorizationService,
         ///     AppSettings appSettings,
-        ///     AuthorizationUiDbContext dbContext
+        ///     AuthorizationDbContext dbContext
         /// ) : base(logger, webHostEnvironment, httpContextAccessor, appSettings, dbContext)
         /// </method>
         public AccountController(
@@ -55,7 +56,7 @@ namespace as_ui_cdcavell.Controllers
             IHttpContextAccessor httpContextAccessor,
             IAuthorizationService authorizationService,
             AppSettings appSettings,
-            AuthorizationUiDbContext dbContext
+            AuthorizationDbContext dbContext
         ) : base(logger, webHostEnvironment, httpContextAccessor, authorizationService, appSettings, dbContext)
         {
         }
@@ -154,7 +155,7 @@ namespace as_ui_cdcavell.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 // Remove Authorization record
-                Data.Authorization authorization = Data.Authorization.GetRecord(User.Claims, _dbContext);
+                CDCavell.ClassLibrary.Web.Services.Data.Authorization authorization = CDCavell.ClassLibrary.Web.Services.Data.Authorization.GetRecord(User.Claims, _dbContext);
                 authorization.Delete(_dbContext);
 
                 var currentSid = User.FindFirst("sid")?.Value ?? "";

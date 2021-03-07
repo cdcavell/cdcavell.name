@@ -1,6 +1,6 @@
-﻿using as_ui_cdcavell.Data;
-using as_ui_cdcavell.Models.AppSettings;
+﻿using as_ui_cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Web.Services.Authorization;
+using CDCavell.ClassLibrary.Web.Services.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
@@ -18,21 +18,22 @@ namespace as_ui_cdcavell.Authorization
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 01/31/2021 | Initial build Authorization Service |~ 
     /// | Christopher D. Cavell | 1.0.3.1 | 02/08/2021 | User Authorization Web Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/07/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class AuthenticatedHandler : AuthorizationHandler<AuthenticatedRequirement>
     {
         private AppSettings _appSettings;
-        private AuthorizationUiDbContext _dbContext;
+        private AuthorizationDbContext _dbContext;
         private IHttpContextAccessor _httpContextAccessor;
 
         /// <summary>
         /// Constructor method
         /// </summary>
         /// <param name="appSettings">AppSettings</param>
-        /// <param name="dbContext">AuthorizationUiDbContext</param>
+        /// <param name="dbContext">AuthorizationDbContext</param>
         /// <param name="httpContextAccessor">IHttpContextAccessor</param>
-        /// <method>AuthenticatedHandler(AppSettings appSettings, AuthorizationUiDbContext dbContext, IHttpContextAccessor httpContextAccessor)</method>
-        public AuthenticatedHandler(AppSettings appSettings, AuthorizationUiDbContext dbContext, IHttpContextAccessor httpContextAccessor)
+        /// <method>AuthenticatedHandler(AppSettings appSettings, AuthorizationDbContext dbContext, IHttpContextAccessor httpContextAccessor)</method>
+        public AuthenticatedHandler(AppSettings appSettings, AuthorizationDbContext dbContext, IHttpContextAccessor httpContextAccessor)
         {
             _appSettings = appSettings;
             _dbContext = dbContext;
@@ -54,7 +55,7 @@ namespace as_ui_cdcavell.Authorization
                 Claim emailClaim = user.Claims.Where(x => x.Type == "email").FirstOrDefault();
                 if (emailClaim != null)
                 {
-                    UserAuthorizationModel userAuthorization = Data.Authorization.GetUser(user.Claims, _dbContext);
+                    UserAuthorizationModel userAuthorization = CDCavell.ClassLibrary.Web.Services.Data.Authorization.GetUser(user.Claims, _dbContext);
                     if (!string.IsNullOrEmpty(userAuthorization.Email))
                         if (userAuthorization.Email == emailClaim.Value)
                             context.Succeed(requirement);

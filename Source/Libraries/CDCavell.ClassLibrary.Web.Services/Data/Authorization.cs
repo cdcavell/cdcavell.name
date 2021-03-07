@@ -108,9 +108,11 @@ namespace CDCavell.ClassLibrary.Web.Services.Data
         public static Authorization GetRecord(IEnumerable<Claim> claims, AuthorizationDbContext dbContext)
         {
             Authorization authorization = null;
+            Claim clientIdClaim = claims.Where(x => x.Type == "clientid").FirstOrDefault();
             Claim authorizationClaim = claims.Where(x => x.Type == "authorization").FirstOrDefault();
-            if (authorizationClaim != null)
+            if (clientIdClaim != null && authorizationClaim != null)
                 authorization = dbContext.Authorization
+                    .Where(x => x.ClientId == clientIdClaim.Value.ToString())
                     .Where(x => x.Guid == authorizationClaim.Value.ToString())
                     .FirstOrDefault();
 
@@ -130,10 +132,12 @@ namespace CDCavell.ClassLibrary.Web.Services.Data
         public static UserAuthorizationModel GetUser(IEnumerable<Claim> claims, AuthorizationDbContext dbContext)
         {
             UserAuthorizationModel userAuthorization = new UserAuthorizationModel();
+            Claim clientIdClaim = claims.Where(x => x.Type == "clientid").FirstOrDefault();
             Claim authorizationClaim = claims.Where(x => x.Type == "authorization").FirstOrDefault();
             if (authorizationClaim != null)
             {
                 Data.Authorization authorization = dbContext.Authorization
+                    .Where(x => x.ClientId == clientIdClaim.Value.ToString())
                     .Where(x => x.Guid == authorizationClaim.Value.ToString())
                     .FirstOrDefault();
 
