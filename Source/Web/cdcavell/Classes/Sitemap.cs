@@ -2,13 +2,10 @@
 using cdcavell.Data;
 using cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Commons.Logging;
-using CDCavell.ClassLibrary.Web.Http;
 using CDCavell.ClassLibrary.Web.Utilities;
 using CDCavell.ClassLibrary.Web.Utilities.Models.BingWebmasterModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +28,7 @@ namespace cdcavell.Classes
     /// | Christopher D. Cavell | 1.0.0.9 | 11/03/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/21/2020 | Ping Google with the location of sitemap |~ 
     /// | Christopher D. Cavell | 1.0.3.1 | 02/08/2021 | User Authorization Web Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/07/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class Sitemap
     {
@@ -113,7 +111,7 @@ namespace cdcavell.Classes
 
             new SitemapDocument().CreateSitemapXML(list, _webHostEnvironment.ContentRootPath);
 
-            BingWebmaster bingWebmaster = new BingWebmaster(_appSettings.Authentication.BingWebmaster.ApiKey);
+            BingWebmaster bingWebmaster = new BingWebmaster(_appSettings.Application.BingWebmaster.ApiKey);
             UrlSubmissionQuota quota = bingWebmaster.GetUrlSubmission(url).Result;
 
             var siteMaps = SiteMap.GetNotSubmittedSiteMap(dbContext);

@@ -50,8 +50,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\CDCavell.ClassLibrary.Web.Razor\CDCavell.ClassLibrary.Web.Razor.csproj" />
-    <ProjectReference Include="..\..\Libraries\CDCavell.ClassLibrary.Web.Services\CDCavell.ClassLibrary.Web.Services.csproj" />
-    <ProjectReference Include="..\..\Libraries\CDCavell.ClassLibrary.Web\CDCavell.ClassLibrary.Web.csproj" />
   </ItemGroup>
 
 	<ItemGroup>

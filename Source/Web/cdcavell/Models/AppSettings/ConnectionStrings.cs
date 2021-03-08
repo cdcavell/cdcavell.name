@@ -12,13 +12,9 @@
     /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | Add ApplicationInsights |~
     /// | Christopher D. Cavell | 1.0.3.3 | 03/07/2021 | User Authorization Web Service |~
     /// </revision>
-    public class ConnectionStrings
+    public class ConnectionStrings : CDCavell.ClassLibrary.Web.Mvc.Models.AppSettings.ConnectionStrings
     {
         /// <value>string</value>
         public string CDCavellConnection { get; set; }
-        /// <value>string</value>
-        public string AuthorizationConnection { get; set; }
-        /// <value>string</value>
-        public string ApplicationInsightsConnection { get; set; }
     }
 }
