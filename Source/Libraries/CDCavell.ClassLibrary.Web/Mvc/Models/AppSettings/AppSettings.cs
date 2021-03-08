@@ -11,7 +11,7 @@ namespace CDCavell.ClassLibrary.Web.Mvc.Models.AppSettings
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.3 | 03/07/2021 | User Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/08/2021 | User Authorization Service |~ 
     /// </revision>
     public abstract partial class AppSettings
     {
@@ -30,13 +30,13 @@ namespace CDCavell.ClassLibrary.Web.Mvc.Models.AppSettings
         {
             get { return File.GetLastWriteTime(Assembly.GetEntryAssembly().Location); }
         }
+        /// <value>string</value>
+        public string SecretKey { get; set; }
         /// <value>Authentication</value>
         public Authentication Authentication { get; set; }
         /// <value>Authorization</value>
         public Authorization Authorization { get; set; }
-        /// <value>Application</value>
-        public virtual Application Application { get; set; }
         /// <value>ConnectionStrings</value>
-        public virtual ConnectionStrings ConnectionStrings { get; set; }
+        public ConnectionStrings ConnectionStrings { get; set; }
     }
 }

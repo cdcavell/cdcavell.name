@@ -7,9 +7,9 @@
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.3 | 03/07/2021 | User Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/08/2021 | User Authorization Service |~ 
     /// </revision>
-    public abstract partial class ConnectionStrings
+    public class ConnectionStrings
     {
         /// <value>string</value>
         public string AuthorizationConnection { get; set; }

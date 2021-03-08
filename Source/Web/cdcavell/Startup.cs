@@ -54,7 +54,7 @@ namespace cdcavell
     /// | Christopher D. Cavell | 1.0.3.0 | 02/06/2021 | Initial build Authorization Service |~ 
     /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | Utilize Redis Cache - Not implemented |~
     /// | Christopher D. Cavell | 1.0.3.1 | 02/09/2021 | User Authorization Web Service |~ 
-    /// | Christopher D. Cavell | 1.0.3.3 | 03/07/2021 | User Authorization Web Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/08/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class Startup
     {
@@ -86,7 +86,7 @@ namespace cdcavell
             AppSettings appSettings = new AppSettings();
             _configuration.Bind("AppSettings", appSettings);
             _appSettings = appSettings;
-            services.AddSingleton(appSettings);
+            services.AddSingleton(_appSettings);
 
             // cache authority discovery and add to DI
             services.AddHttpClient();
@@ -97,14 +97,14 @@ namespace cdcavell
             });
 
             services.AddDbContext<CDCavellDbContext>(options =>
-                options.UseSqlite(appSettings.ConnectionStrings.CDCavellConnection,
-                    x => x.MigrationsAssembly("CDCavell")
+                options.UseSqlite(_appSettings.Application.ConnectionStrings.CDCavellConnection,
+                    x => x.MigrationsAssembly(_appSettings.AssemblyName)
                 ));
 
             services.AddDbContext<AuthorizationDbContext>(options =>
                 options.UseSqlite(
-                    appSettings.ConnectionStrings.AuthorizationConnection,
-                    x => x.MigrationsAssembly("CDCavell")
+                    _appSettings.ConnectionStrings.AuthorizationConnection,
+                    x => x.MigrationsAssembly(_appSettings.AssemblyName)
                 ));
 
             // Register IHttpContextAccessor
