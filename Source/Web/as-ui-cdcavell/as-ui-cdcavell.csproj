@@ -46,11 +46,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\Libraries\CDCavell.ClassLibrary.Web.Services\CDCavell.ClassLibrary.Web.Services.csproj" />
-	  <ProjectReference Include="..\..\Libraries\CDCavell.ClassLibrary.Web\CDCavell.ClassLibrary.Web.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<_findDllFile Include="../../../Documentation/Source/XmlToMarkdown.dll" />
 		<_findJsonFile Include="../../../Documentation/Source/XmlToMarkdown.runtimeconfig.json" />
 		<_findLibraryFile Include="../../../Documentation/Source/CDCavell.ClassLibrary.Commons.dll" />
@@ -60,7 +55,12 @@
 	  <Folder Include="Models\Home\" />
 	  <Folder Include="Views\Account\" />
 	  <Folder Include="Views\Home\" />
+	  <Folder Include="Views\Shared\" />
 	  <Folder Include="wwwroot\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\Libraries\CDCavell.ClassLibrary.Web.Razor\CDCavell.ClassLibrary.Web.Razor.csproj" />
 	</ItemGroup>
 
 	<Target Name="BuildXmlToMarkdown" AfterTargets="AfterBuild" DependsOnTargets="AfterBuild" Condition="Exists('@(_findDllFile)') AND Exists('@(_findJsonFile)') AND Exists('@(_findLibraryFile)')">
