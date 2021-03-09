@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-	<Version>1.0.3.1</Version>
+	<Version>1.0.3.3</Version>
 	<DocumentationFile>../../../Documentation/Source/$(AssemblyName).xml</DocumentationFile>
 	<Copyright>2021 - Christopher D. Cavell</Copyright>
 	<PackageProjectUrl>https://cdcavell.name</PackageProjectUrl>
@@ -34,14 +34,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Include="..\..\..\LICENSE">
-	    <Pack>True</Pack>
-	    <PackagePath></PackagePath>
-	  </None>
-	  <None Include="..\..\Web\cdcavell\wwwroot\img\icon.png">
-	    <Pack>True</Pack>
-	    <PackagePath></PackagePath>
-	  </None>
+		<None Include="..\..\..\LICENSE">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+		<None Include="..\..\Libraries\CDCavell.ClassLibrary.Web.Razor\wwwroot\img\icon.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
 	</ItemGroup>
 
 	<Target Name="BuildXmlToMarkdown" AfterTargets="AfterBuild" DependsOnTargets="AfterBuild" Condition="Exists('@(_findDllFile)') AND Exists('@(_findJsonFile)') AND Exists('@(_findLibraryFile)')">

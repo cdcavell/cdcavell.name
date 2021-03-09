@@ -36,12 +36,14 @@ namespace dis5_cdcavell
     /// | Christopher D. Cavell | 1.0.2.0 | 01/16/2021 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.3.0 | 02/06/2021 | Initial build Authorization Service |~ 
     /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | Utilize Redis Cache - Not implemented |~
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/08/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class Startup
     {
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private Logger _logger;
+        private AppSettings _appSettings;
 
         /// <summary>
         /// Class Constructor
@@ -65,7 +67,8 @@ namespace dis5_cdcavell
             // Register appsettings.json
             AppSettings appSettings = new AppSettings();
             _configuration.Bind("AppSettings", appSettings);
-            services.AddSingleton(appSettings);
+            _appSettings = appSettings;
+            services.AddSingleton(_appSettings);
 
             services.AddMvc();
             services.AddControllersWithViews();
@@ -185,7 +188,7 @@ namespace dis5_cdcavell
             _logger = new Logger(logger);
             _logger.Trace($"Configure(IApplicationBuilder: {app}, IWebHostEnvironment: {env}, ILogger<Startup> {logger}, IHostApplicationLifetime: {lifetime})");
 
-            AESGCM.Seed(_configuration);
+            AESGCM.Seed(_appSettings.SecretKey);
             DbInitializer.Initialize(dbContext);
 
             lifetime.ApplicationStarted.Register(OnAppStarted);

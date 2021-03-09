@@ -25,6 +25,7 @@ namespace CDCavell.ClassLibrary.Web.Security
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.0.0 | 05/16/2020 | Initial build |~ 
     /// | Christopher D. Cavell | 1.0.3.0 | 01/23/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/08/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class AESGCM
     {
@@ -386,14 +387,11 @@ namespace CDCavell.ClassLibrary.Web.Security
         /// Method to seed internal password with SecretKey from AppSettings:Application:SecretKey value in appsettings.json
         /// &lt;br /&gt;https://www.random.org/cgi-bin/randbyte?nbytes=21&amp;format=d
         /// </summary>
-        /// <param name="configuration">IConfiguration</param>
+        /// <param name="secretKey">string</param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <method>Seed(IConfiguration configuration)</method>
-        public static void Seed(IConfiguration configuration)
+        public static void Seed(string secretKey)
         {
-            if (configuration is null) throw new ArgumentNullException(nameof(configuration));
-
-            string secretKey = configuration.GetValue<string>("AppSettings:Application:SecretKey");
             if (string.IsNullOrEmpty(secretKey)) throw new ArgumentNullException(nameof(secretKey));
 
             InternalPassword = AsciiCodes.STX;
