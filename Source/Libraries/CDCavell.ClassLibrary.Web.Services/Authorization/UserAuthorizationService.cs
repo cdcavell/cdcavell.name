@@ -61,7 +61,7 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
         /// </summary>
         /// <param name="logger">ILogger&lt;UserAuthorizationService&gt;</param>
         /// <param name="dbContext">AuthorizationDbContext</param>
-        /// <param name="options">IOptions&lt;UserAuthorizationServiceOptionss&gt;</param>
+        /// <param name="options">IOptions&lt;UserAuthorizationServiceOptions&gt;</param>
         /// <method>UserAuthorizationService(ILogger&lt;UserAuthorizationService&gt; logger, AuthorizationDbContext dbContext, IOptions&lt;UserAuthorizationServiceOptions&gt; options)</method>
         public UserAuthorizationService(ILogger<UserAuthorizationService> logger, AuthorizationDbContext dbContext, IOptions<UserAuthorizationServiceOptions> options)
         {

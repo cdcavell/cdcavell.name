@@ -3,6 +3,7 @@ using as_ui_cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Commons.Logging;
 using CDCavell.ClassLibrary.Web.Mvc.Filters;
 using CDCavell.ClassLibrary.Web.Security;
+using CDCavell.ClassLibrary.Web.Services.AppSettings;
 using CDCavell.ClassLibrary.Web.Services.Authorization;
 using CDCavell.ClassLibrary.Web.Services.Data;
 using IdentityModel.Client;
@@ -42,7 +43,7 @@ namespace as_ui_cdcavell
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/06/2021 | Initial build Authorization Service |~ 
     /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | Utilize Redis Cache - Not implemented |~
-    /// | Christopher D. Cavell | 1.0.3.3 | 03/08/2021 | User Authorization Web Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/09/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class Startup
     {
@@ -103,6 +104,11 @@ namespace as_ui_cdcavell
             services.AddUserAuthorizationService(options =>
             {
                 options.AuthorizationServiceAPI = _appSettings.Authorization.AuthorizationService.API;
+            });
+
+            services.AddAppSettingsService(options =>
+            {
+                options.AppSettings = _appSettings;
             });
 
             // Register Application Authorization
