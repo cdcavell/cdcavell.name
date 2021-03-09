@@ -239,7 +239,7 @@ namespace cdcavell
             _logger = new Logger(logger);
             _logger.Trace($"Configure(IApplicationBuilder: {app}, IWebHostEnvironment: {env}, ILogger<Startup> {logger}, IHostApplicationLifetime: {lifetime})");
 
-            AESGCM.Seed(_configuration);
+            AESGCM.Seed(_appSettings.SecretKey);
             CDCavell.ClassLibrary.Web.Services.Data.DbInitializer.Initialize(authorizationDbContext);
             cdcavell.Data.DbInitializer.Initialize(dbContext);
             new Sitemap(_logger, _webHostEnvironment, _appSettings).Create(dbContext);

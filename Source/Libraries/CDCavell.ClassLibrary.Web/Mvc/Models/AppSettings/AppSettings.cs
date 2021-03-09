@@ -32,6 +32,8 @@ namespace CDCavell.ClassLibrary.Web.Mvc.Models.AppSettings
         }
         /// <value>string</value>
         public string SecretKey { get; set; }
+        /// <value>SiteAdministrator</value>
+        public SiteAdministrator SiteAdministrator { get; set; }
         /// <value>Authentication</value>
         public Authentication Authentication { get; set; }
         /// <value>Authorization</value>

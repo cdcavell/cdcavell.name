@@ -12,6 +12,7 @@ namespace dis5_cdcavell.Models.AppSettings
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.2.0 | 01/16/2021 | Initial build |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/08/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class AppSettings
     {
@@ -30,6 +31,8 @@ namespace dis5_cdcavell.Models.AppSettings
         {
             get { return File.GetLastWriteTime(Assembly.GetEntryAssembly().Location); }
         }
+        /// <value>string</value>
+        public string SecretKey { get; set; }
         /// <value>ConnectionStrings</value>
         public ConnectionStrings ConnectionStrings { get; set; }
         /// <value>Authentication</value>

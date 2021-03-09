@@ -11,8 +11,6 @@
     /// </revision>
     public class Authorization
     {
-        /// <value>string</value>
-        public string AdministratorEmail { get; set; }
         /// <value>AuthorizationService</value>
         public AuthorizationService AuthorizationService { get; set; }
     }
