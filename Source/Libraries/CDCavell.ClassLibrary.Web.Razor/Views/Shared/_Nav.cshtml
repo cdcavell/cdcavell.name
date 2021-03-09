@@ -1,6 +1,8 @@
 @using CDCavell.ClassLibrary.Web.Mvc.Models
+@using CDCavell.ClassLibrary.Web.Services.AppSettings
 @using Microsoft.AspNetCore.Authorization
 @inject IAuthorizationService AuthorizationService
+@inject IAppSettingsService AppSettings
 
 @{
     PageViewModel pageModel = (PageViewModel)ViewData["PageViewModel"];
@@ -12,7 +14,7 @@
     <nav class="navbar fixed-top navbar-expand navbar-dark bg-dark">
         <div class="container">
             <div class="navbar-header">
-                <a class="navbar-brand" href="@ViewBag.MainUrl/Home/Index">
+                <a class="navbar-brand" href="@AppSettings.MainUrl()/Home/Index">
                     <img src="_content/CDCavell.ClassLibrary.Web.Razor/img/icon-light.png" alt="logo" width="32" height="32" class="icon-banner mb-2">
                     CDCavell
                 </a>
@@ -24,20 +26,37 @@
                  {
                     @if ((await AuthorizationService.AuthorizeAsync(User, "Authenticated")).Succeeded)
                     { 
-                        <li class="dropdown">
+                        <li class="dropdown mr-2">
                             <a href="#" class="dropdown-toggle text-decoration-none text-light" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@userModel.Email <span class="caret"></span></a>
                             <ul class="dropdown-menu m-0 p-0">
-                                <li><a class="dropdown-item" href="@ViewBag.AuthorizationUrl/Registration/Status">Account Information</a></li>
+                                <li class="m-0 p-0">
+                                    <a class="dropdown-item" href="@AppSettings.AuthorizationUrl()/Registration/Status">
+                                        <div class="row flex-nowrap">
+                                            <div class="col-auto m-1 mr-2 p-0"><i class="fas fa-info" aria-hidden="true"></i></div>
+                                            <div class="col-auto text-left m-1 ml-2 p-0">Account Information</div>
+                                        </div>
+                                    </a>
+                                </li>
                                 <li class="dropdown-divider m-0 p-0"></li>
-                                <li class="m-0 p-0"><a class="dropdown-item" href="@ViewBag.MainUrl/Account/Logout">Logout</a></li>
+                                <li class="m-0 p-0">
+                                    <a class="dropdown-item" href="@AppSettings.MainUrl()/Account/Logout">
+                                        <div class="row flex-nowrap">
+                                            <div class="col-auto m-1 p-0"><i class="fas fa-sign-out-alt" aria-hidden="true"></i></div>
+                                            <div class="col-auto text-left m-1 p-0">Logout</div>
+                                        </div>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                     }
                     else
                     {
                          <li>
-                            <a class="text-light text-decoration-none" href="@ViewBag.MainUrl/Account/Logout">
-                                Logout
+                            <a class="text-light text-decoration-none" href="@AppSettings.MainUrl()/Account/Logout">
+                                <div class="row flex-nowrap mr-2">
+                                    <div class="col-auto text-right m-1 mr-0 p-0">Logout</div>
+                                    <div class="col-auto m-1 p-0"><i class="fas fa-sign-out-alt" aria-hidden="true"></i></div>
+                                </div>
                             </a>
                          </li>
                     }
@@ -45,15 +64,18 @@
                  else
                  {
                      <li>
-                        <a class="text-light text-decoration-none" href="@ViewBag.MainUrl/Account/Login">
-                            Login
+                        <a class="text-light text-decoration-none" href="@AppSettings.MainUrl()/Account/Login">
+                            <div class="row flex-nowrap mr-2">
+                                <div class="col-auto text-right m-1 mr-0 p-0">Login</div>
+                                <div class="col-auto m-1 p-0"><i class="fas fa-sign-in-alt" aria-hidden="true"></i></div>
+                            </div>
                         </a>
                      </li>
                  }
              </ul>
              <ul class="nav navbar-nav ml-1 mx-4 justify-content-end">
                 <li>
-                    <a class="text-light text-decoration-none" href="@ViewBag.MainUrl/Home/Search">
+                    <a class="text-light text-decoration-none" href="@AppSettings.MainUrl()/Home/Search">
                         <div class="row flex-nowrap">
                             <div class="col-auto text-right m-1 mr-0 p-0">Search</div>
                             <div class="col-auto m-1 p-0"><i class="fas fa-search" aria-hidden="true"></i></div>

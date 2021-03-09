@@ -24,7 +24,7 @@ namespace cdcavell.Filters
     /// | Christopher D. Cavell | 1.0.0.3 | 10/30/2020 | Issue #150 Content-Security-Policy HTTP header: Bad content security policy |~ 
     /// | Christopher D. Cavell | 1.0.0.9 | 11/12/2020 | Implement Registration/Roles/Permissions [#183](https://github.com/cdcavell/cdcavell.name/issues/183) |~ 
     /// | Christopher D. Cavell | 1.0.3.0 | 02/04/2021 | Initial build Authorization Service |~ 
-    /// | Christopher D. Cavell | 1.0.3.3 | 03/08/2021 | User Authorization Web Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/09/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class SecurityHeadersAttribute : ActionFilterAttribute
     {
@@ -160,10 +160,6 @@ namespace cdcavell.Filters
             controller.ViewBag.StyleNonce = _StyleNonce;
             controller.ViewBag.ScriptNonce = _ScriptNonce;
             controller.ViewBag.reCAPTCHA_SiteKey = _appSettings.Authentication.reCAPTCHA.SiteKey;
-            controller.ViewBag.AssemblyVersion = _appSettings.AssemblyVersion;
-            controller.ViewBag.LastModifiedDate = _appSettings.LastModifiedDate.ToString("MM/dd/yyyy");
-            controller.ViewBag.MainUrl = _appSettings.Authorization.AuthorizationService.MainTrim;
-            controller.ViewBag.AuthorizationUrl = _appSettings.Authorization.AuthorizationService.UiTrim;
             base.OnActionExecuted(context);
         }
     }
