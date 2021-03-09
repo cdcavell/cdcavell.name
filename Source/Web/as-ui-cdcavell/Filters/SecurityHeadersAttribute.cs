@@ -19,6 +19,7 @@ namespace as_ui_cdcavell.Filters
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/04/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/08/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class SecurityHeadersAttribute : ActionFilterAttribute
     {
@@ -154,6 +155,10 @@ namespace as_ui_cdcavell.Filters
             controller.ViewBag.StyleNonce = _StyleNonce;
             controller.ViewBag.ScriptNonce = _ScriptNonce;
             controller.ViewBag.reCAPTCHA_SiteKey = _appSettings.Authentication.reCAPTCHA.SiteKey;
+            controller.ViewBag.AssemblyVersion = _appSettings.AssemblyVersion;
+            controller.ViewBag.LastModifiedDate = _appSettings.LastModifiedDate.ToString("MM/dd/yyyy");
+            controller.ViewBag.MainUrl = _appSettings.Authorization.AuthorizationService.MainTrim;
+            controller.ViewBag.AuthorizationUrl = _appSettings.Authorization.AuthorizationService.UiTrim;
             base.OnActionExecuted(context);
         }
     }

@@ -1,4 +1,3 @@
-using as_ui_cdcavell.Authorization;
 using as_ui_cdcavell.Filters;
 using as_ui_cdcavell.Models.AppSettings;
 using CDCavell.ClassLibrary.Commons.Logging;
@@ -43,7 +42,7 @@ namespace as_ui_cdcavell
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/06/2021 | Initial build Authorization Service |~ 
     /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | Utilize Redis Cache - Not implemented |~
-    /// | Christopher D. Cavell | 1.0.3.3 | 03/07/2021 | User Authorization Web Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/08/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class Startup
     {
@@ -75,7 +74,7 @@ namespace as_ui_cdcavell
             AppSettings appSettings = new AppSettings();
             _configuration.Bind("AppSettings", appSettings);
             _appSettings = appSettings;
-            services.AddSingleton(appSettings);
+            services.AddSingleton(_appSettings);
 
             // cache authority discovery and add to DI
             services.AddHttpClient();
@@ -88,7 +87,7 @@ namespace as_ui_cdcavell
             services.AddDbContext<AuthorizationDbContext>(options =>
                 options.UseSqlite(
                     appSettings.ConnectionStrings.AuthorizationConnection,
-                    x => x.MigrationsAssembly("as-ui-cdcavell")
+                    x => x.MigrationsAssembly(_appSettings.AssemblyName)
                 ));
 
             // Register IHttpContextAccessor
@@ -222,7 +221,7 @@ namespace as_ui_cdcavell
             _logger = new Logger(logger);
             _logger.Trace($"Configure(IApplicationBuilder: {app}, IWebHostEnvironment: {env}, ILogger<Startup> {logger}, IHostApplicationLifetime: {lifetime})");
 
-            AESGCM.Seed(_configuration);
+            AESGCM.Seed(_appSettings.SecretKey);
             DbInitializer.Initialize(dbContext);
 
             lifetime.ApplicationStarted.Register(OnAppStarted);

@@ -12,9 +12,6 @@
     /// </revision>
     public class Application
     {
-        /// <value>string</value>
-        public string SecretKey { get; set; }
-
         private string _mainSiteUrl;
         /// <value>string</value>
         public string MainSiteUrl { get; set; }

@@ -3,7 +3,6 @@ using CDCavell.ClassLibrary.Web.Services.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace as_ui_cdcavell.Controllers
@@ -16,7 +15,7 @@ namespace as_ui_cdcavell.Controllers
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/02/2021 | Initial build Authorization Service |~ 
-    /// | Christopher D. Cavell | 1.0.3.3 | 03/07/2021 | User Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/08/2021 | User Authorization Service |~ 
     /// </revision>
     public class HomeController : ApplicationBaseController<HomeController>
     {
@@ -50,64 +49,5 @@ namespace as_ui_cdcavell.Controllers
         {
         }
 
-        /// <summary>
-        /// Index method
-        /// </summary>
-        /// <returns>IActionResult</returns>
-        /// <method>Index()</method>
-        [AllowAnonymous]
-        [HttpGet]
-        public IActionResult Index()
-        {
-            return Redirect(_appSettings.Application.MainSiteUrlTrim);
-        }
-
-        /// <summary>
-        /// Privacy policy
-        /// </summary>
-        /// <returns>IActionResult</returns>
-        /// <method>PrivacyPolicy()</method>
-        [AllowAnonymous]
-        [HttpGet]
-        public IActionResult PrivacyPolicy()
-        {
-            return Redirect(_appSettings.Application.MainSiteUrlTrim + "/Home/PrivacyPolicy");
-        }
-
-        /// <summary>
-        /// Terms of service
-        /// </summary>
-        /// <returns>IActionResult</returns>
-        /// <method>TermsOfService()</method>
-        [AllowAnonymous]
-        [HttpGet]
-        public IActionResult TermsOfService()
-        {
-            return Redirect(_appSettings.Application.MainSiteUrlTrim + "/Home/TermsOfService");
-        }
-
-        /// <summary>
-        /// Withdraw cookie consent
-        /// </summary>
-        /// <returns>IActionResult</returns>
-        /// <method>WithdrawConsent()</method>
-        [AllowAnonymous]
-        [HttpGet]
-        public IActionResult WithdrawConsent()
-        {
-            return Redirect(_appSettings.Application.MainSiteUrlTrim + "/Home/WithdrawConsent");
-        }
-
-        /// <summary>
-        /// Search get method
-        /// </summary>
-        /// <returns>IActionResult</returns>
-        /// <method>Search()</method>
-        [AllowAnonymous]
-        [HttpGet]
-        public IActionResult Search()
-        {
-            return Redirect(_appSettings.Application.MainSiteUrlTrim + "/Home/Search");
-        }
     }
 }

@@ -43,6 +43,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "as-ui-cdcavell", "Source\We
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDCavell.ClassLibrary.Web.Services", "Source\Libraries\CDCavell.ClassLibrary.Web.Services\CDCavell.ClassLibrary.Web.Services.csproj", "{920D297C-0667-4993-A379-D0C31CE5612F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDCavell.ClassLibrary.Web.Razor", "Source\Libraries\CDCavell.ClassLibrary.Web.Razor\CDCavell.ClassLibrary.Web.Razor.csproj", "{799E40D9-09A1-4D22-B38A-F4C3EB0DA984}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +79,10 @@ Global
 		{920D297C-0667-4993-A379-D0C31CE5612F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{920D297C-0667-4993-A379-D0C31CE5612F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{920D297C-0667-4993-A379-D0C31CE5612F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{799E40D9-09A1-4D22-B38A-F4C3EB0DA984}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{799E40D9-09A1-4D22-B38A-F4C3EB0DA984}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{799E40D9-09A1-4D22-B38A-F4C3EB0DA984}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{799E40D9-09A1-4D22-B38A-F4C3EB0DA984}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

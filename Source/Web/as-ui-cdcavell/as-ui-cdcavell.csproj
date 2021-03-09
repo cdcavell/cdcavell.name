@@ -20,27 +20,18 @@
 	  <FileVersion>1.0.3.3</FileVersion>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Content Remove="wwwroot\img\icon.png" />
-  </ItemGroup>
-
 	<ItemGroup>
 		<None Include="..\..\..\LICENSE">
 			<Pack>True</Pack>
 			<PackagePath></PackagePath>
 		</None>
-		<None Include="..\..\Web\cdcavell\wwwroot\img\icon.png">
+		<None Include="..\..\Libraries\CDCavell.ClassLibrary.Web.Razor\wwwroot\img\icon.png">
 			<Pack>True</Pack>
 			<PackagePath></PackagePath>
-		</None>
-		<None Include="wwwroot\img\icon.png">
-		  <PackagePath></PackagePath>
-		  <Pack>True</Pack>
 		</None>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
 	  <PackageReference Include="IdentityModel" Version="5.0.1" />
 	  <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.3" />
 	  <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
@@ -69,6 +60,7 @@
 	  <Folder Include="Models\Home\" />
 	  <Folder Include="Views\Account\" />
 	  <Folder Include="Views\Home\" />
+	  <Folder Include="wwwroot\" />
 	</ItemGroup>
 
 	<Target Name="BuildXmlToMarkdown" AfterTargets="AfterBuild" DependsOnTargets="AfterBuild" Condition="Exists('@(_findDllFile)') AND Exists('@(_findJsonFile)') AND Exists('@(_findLibraryFile)')">

@@ -184,8 +184,8 @@ namespace cdcavell.Controllers
                     if (!string.IsNullOrEmpty(model.SearchRequest.Trim()))
                     {
                         BingWebSearch bingWebSearch = new BingWebSearch(
-                            _appSettings.Authentication.BingWebSearch.SubscriptionKey,
-                            _appSettings.Authentication.BingWebSearch.CustomConfigId
+                            _appSettings.Application.BingWebSearch.SubscriptionKey,
+                            _appSettings.Application.BingWebSearch.CustomConfigId
                         );
 
                         model.WebResult = await bingWebSearch.Search("Web", model.SearchRequest);
