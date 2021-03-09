@@ -13,6 +13,7 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | User Authorization Web Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/09/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class RegistrationModel
     {
@@ -23,6 +24,16 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
         [DataType(DataType.EmailAddress)]
         [Display(Name = "Email")]
         public string Email { get; set; }
+        /// <value>DateTime?</value>
+        [AllowNull]
+        [DataType(DataType.DateTime)]
+        [Display(Name = "Validation Date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        public DateTime? ValidationDate { get; set; } = DateTime.MinValue;
+        /// <value>string</value>
+        [DataType(DataType.Text)]
+        [Display(Name = "Validation Token")]
+        public string ValidationToken { get; set; } = Guid.NewGuid().ToString();
         /// <value>string</value>
         [DataType(DataType.Text)]
         [Display(Name = "First Name")]
@@ -65,7 +76,7 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
         {
             get 
             {
-                if (IsActive || IsPending || IsRevoked)
+                if (IsValidated || IsActive || IsPending || IsRevoked)
                     return true;
 
                 return false;
@@ -77,10 +88,11 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
         {
             get
             {
-                if (ApprovedDate != DateTime.MinValue)
-                    if (RevokedDate == DateTime.MinValue)
-                        if (!string.IsNullOrEmpty(Email))
-                            return true;
+                if (ValidationDate != DateTime.MinValue)
+                    if (ApprovedDate != DateTime.MinValue)
+                        if (RevokedDate == DateTime.MinValue)
+                            if (!string.IsNullOrEmpty(Email))
+                                return true;
 
                 return false;
             }
@@ -91,7 +103,23 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
         {
             get
             {
-                if (ApprovedDate == DateTime.MinValue)
+                if (ValidationDate != DateTime.MinValue)
+                    if (ApprovedDate == DateTime.MinValue)
+                        if (RevokedDate == DateTime.MinValue)
+                            if (RequestDate > DateTime.MinValue)
+                                if (!string.IsNullOrEmpty(Email))
+                                    return true;
+
+                return false;
+            }
+        }
+        /// <value>bool</value>
+        [NotMapped]
+        public bool IsValidated
+        {
+            get
+            {
+                if (ValidationDate != DateTime.MinValue)
                     if (RevokedDate == DateTime.MinValue)
                         if (RequestDate > DateTime.MinValue)
                             if (!string.IsNullOrEmpty(Email))
@@ -126,6 +154,10 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
 
                 if (IsPending)
                     return "Pending Approval";
+
+                if (!IsValidated)
+                    if (IsRegistered)
+                        return "Pending Validation";
 
                 return "Not Registered";
             }
