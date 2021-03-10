@@ -142,6 +142,22 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
                 return false;
             }
         }
+        /// <value>bool</value>
+        [NotMapped]
+        public bool PendingValidation
+        {
+            get
+            {
+                if (RequestDate > (DateTime?)DateTime.MinValue)
+                    if (ValidationDate == (DateTime?)DateTime.MinValue)
+                        if (ApprovedDate == (DateTime?)DateTime.MinValue)
+                            if (RevokedDate == (DateTime?)DateTime.MinValue)
+                                if (!string.IsNullOrEmpty(Email))
+                                    return true;
+
+                return false;
+            }
+        }
         /// <value>string</value>
         [NotMapped]
         public string Status
@@ -157,9 +173,8 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
                 if (IsPending)
                     return "Pending Approval";
 
-                if (!IsValidated)
-                    if (IsRegistered)
-                        return "Pending Validation";
+                if (PendingValidation)
+                    return "Pending Validation";
 
                 return "Not Registered";
             }
