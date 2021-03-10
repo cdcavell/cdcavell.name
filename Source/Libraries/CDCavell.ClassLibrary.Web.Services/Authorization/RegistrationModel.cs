@@ -76,8 +76,9 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
         {
             get 
             {
-                if (IsValidated || IsActive || IsPending || IsRevoked)
-                    return true;
+                if (RequestDate > (DateTime?)DateTime.MinValue)
+                    if (!string.IsNullOrEmpty(Email))
+                        return true;
 
                 return false;
             }
@@ -88,11 +89,12 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
         {
             get
             {
-                if (ValidationDate != DateTime.MinValue)
-                    if (ApprovedDate != DateTime.MinValue)
-                        if (RevokedDate == DateTime.MinValue)
-                            if (!string.IsNullOrEmpty(Email))
-                                return true;
+                if (RequestDate > (DateTime?)DateTime.MinValue)
+                    if (ValidationDate > (DateTime?)DateTime.MinValue)
+                        if (ApprovedDate > (DateTime?)DateTime.MinValue)
+                            if (RevokedDate == (DateTime?)DateTime.MinValue)
+                                if (!string.IsNullOrEmpty(Email))
+                                    return true;
 
                 return false;
             }
@@ -103,10 +105,10 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
         {
             get
             {
-                if (ValidationDate != DateTime.MinValue)
-                    if (ApprovedDate == DateTime.MinValue)
-                        if (RevokedDate == DateTime.MinValue)
-                            if (RequestDate > DateTime.MinValue)
+                if (RequestDate > (DateTime?)DateTime.MinValue)
+                    if (ValidationDate > (DateTime?)DateTime.MinValue)
+                        if (ApprovedDate == (DateTime?)DateTime.MinValue)
+                            if (RevokedDate == (DateTime?)DateTime.MinValue)
                                 if (!string.IsNullOrEmpty(Email))
                                     return true;
 
@@ -119,11 +121,10 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
         {
             get
             {
-                if (ValidationDate != DateTime.MinValue)
-                    if (RevokedDate == DateTime.MinValue)
-                        if (RequestDate > DateTime.MinValue)
-                            if (!string.IsNullOrEmpty(Email))
-                                return true;
+                if (RequestDate > (DateTime?)DateTime.MinValue)
+                    if (ValidationDate > (DateTime?)DateTime.MinValue)
+                        if (!string.IsNullOrEmpty(Email))
+                            return true;
 
                 return false;
             }
@@ -134,8 +135,9 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
         {
             get
             {
-                if (RevokedDate != DateTime.MinValue)
-                    return true;
+                if (RevokedDate > (DateTime?)DateTime.MinValue)
+                    if (!string.IsNullOrEmpty(Email))
+                        return true;
 
                 return false;
             }
