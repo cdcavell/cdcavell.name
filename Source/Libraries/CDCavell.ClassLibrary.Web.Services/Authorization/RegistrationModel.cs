@@ -150,10 +150,9 @@ namespace CDCavell.ClassLibrary.Web.Services.Authorization
             {
                 if (RequestDate > (DateTime?)DateTime.MinValue)
                     if (ValidationDate == (DateTime?)DateTime.MinValue)
-                        if (ApprovedDate == (DateTime?)DateTime.MinValue)
-                            if (RevokedDate == (DateTime?)DateTime.MinValue)
-                                if (!string.IsNullOrEmpty(Email))
-                                    return true;
+                        if (RevokedDate == (DateTime?)DateTime.MinValue)
+                            if (!string.IsNullOrEmpty(Email))
+                                return true;
 
                 return false;
             }

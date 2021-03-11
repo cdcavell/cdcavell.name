@@ -97,6 +97,8 @@ namespace as_api_cdcavell.Controllers
                     {
                         RegistrationId = rolePermission.Registration.Id,
                         Email = rolePermission.Registration.Email ?? string.Empty,
+                        ValidationDate = rolePermission.Registration.ValidationDate,
+                        ValidationToken = rolePermission.Registration.ValidationToken,
                         FirstName = rolePermission.Registration.FirstName,
                         LastName = rolePermission.Registration.LastName,
                         RequestDate = rolePermission.Registration.RequestDate,
@@ -157,6 +159,8 @@ namespace as_api_cdcavell.Controllers
                         {
                             RegistrationId = history.ActionBy.Id,
                             Email = history.ActionBy.Email ?? string.Empty,
+                            ValidationDate = history.ActionBy.ValidationDate,
+                            ValidationToken = history.ActionBy.ValidationToken,
                             FirstName = history.ActionBy.FirstName,
                             LastName = history.ActionBy.LastName,
                             RequestDate = history.ActionBy.RequestDate,
@@ -175,6 +179,8 @@ namespace as_api_cdcavell.Controllers
                                 RegistrationId = history.RolePermission.Registration.Id,
                                 Email = history.RolePermission.Registration.Email ?? string.Empty,
                                 FirstName = history.RolePermission.Registration.FirstName,
+                                ValidationDate = history.RolePermission.Registration.ValidationDate,
+                                ValidationToken = history.RolePermission.Registration.ValidationToken,
                                 LastName = history.RolePermission.Registration.LastName,
                                 RequestDate = history.RolePermission.Registration.RequestDate,
                                 ApprovedDate = history.RolePermission.Registration.ApprovedDate,

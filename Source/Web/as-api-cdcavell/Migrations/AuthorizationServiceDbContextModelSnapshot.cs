@@ -140,6 +140,12 @@ namespace as_api_cdcavell.Migrations
                     b.Property<DateTime?>("RevokedDate")
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("ValidationDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ValidationToken")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ApprovedById");

@@ -40,7 +40,7 @@ namespace as_api_cdcavell
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/06/2021 | Initial build Authorization Service |~ 
     /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | Utilize Redis Cache - Not implemented |~
-    /// | Christopher D. Cavell | 1.0.3.3 | 03/08/2021 | User Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/09/2021 | User Authorization Service |~ 
     /// </revision>
     public class Startup
     {
@@ -86,7 +86,7 @@ namespace as_api_cdcavell
             services.AddDbContext<AuthorizationServiceDbContext>(options =>
                 options.UseSqlite(
                     _appSettings.ConnectionStrings.AuthorizationConnection,
-                    x => x.MigrationsAssembly(_appSettings.AssemblyName)
+                    x => x.MigrationsAssembly("as-api-cdcavell")
                 ));
 
             // Register IHttpContextAccessor

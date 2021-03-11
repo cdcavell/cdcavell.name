@@ -99,13 +99,13 @@ namespace cdcavell
 
             services.AddDbContext<CDCavellDbContext>(options =>
                 options.UseSqlite(_appSettings.Application.ConnectionStrings.CDCavellConnection,
-                    x => x.MigrationsAssembly(_appSettings.AssemblyName)
+                    x => x.MigrationsAssembly("CDCavell")
                 ));
 
             services.AddDbContext<AuthorizationDbContext>(options =>
                 options.UseSqlite(
                     _appSettings.ConnectionStrings.AuthorizationConnection,
-                    x => x.MigrationsAssembly(_appSettings.AssemblyName)
+                    x => x.MigrationsAssembly("CDCavell")
                 ));
 
             // Register IHttpContextAccessor
