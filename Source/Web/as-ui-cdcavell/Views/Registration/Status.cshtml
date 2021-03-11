@@ -14,16 +14,16 @@
                     @if (Model.PendingValidation)
                     { 
                         <span class="ml-4 pl-2 text-center text-danger small font-weight-bold font-italic">
-                            An email notification has been issued. Email address validation is required before approving registration.
-                       </span>
-                            <a id="resendNotification"
-                               type="button"
-                               class="btn btn-dark btn-sm small ml-4 text-light"
-                               asp-action="Update"
-                               asp-controller="Registration">
-                               Resend Notification
-                               <i class="fas fa-envelope-open-text text-grey ml-2" aria-hidden="true"></i>
-                            </a>
+                            An email notification has been issued. Email address validation is required before approval of registration.
+                        </span>
+                        <a id="resendNotification"
+                            type="button"
+                            class="btn btn-dark btn-sm small ml-4 text-light"
+                            asp-action="Update"
+                            asp-controller="Registration">
+                            Resend Notification
+                            <i class="fas fa-envelope-open-text text-grey ml-2" aria-hidden="true"></i>
+                        </a>
                     }
                 </p>
             </div>
