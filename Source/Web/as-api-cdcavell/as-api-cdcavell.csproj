@@ -16,6 +16,7 @@
 	  <RepositoryType>Git</RepositoryType>
 	  <NeutralLanguage>English (United States)</NeutralLanguage>
 	  <UserSecretsId>f6bb3cfa-27fa-40c7-ab86-8a817b6650fc</UserSecretsId>
+	  <AssemblyName>as-api-cdcavell</AssemblyName>
 	  <AssemblyVersion>1.0.3.3</AssemblyVersion>
 	  <FileVersion>1.0.3.3</FileVersion>
   </PropertyGroup>

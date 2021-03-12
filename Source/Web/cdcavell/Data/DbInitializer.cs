@@ -20,9 +20,9 @@ namespace cdcavell.Data
         /// <summary>
         /// Initialize method
         /// &lt;br /&gt;
-        /// To Initialize: dotnet ef migrations add InitialCreate -c cdcavell
+        /// To Initialize: dotnet ef migrations add InitialCreate --context CDCavellDbContext
         /// &lt;br /&gt;
-        /// To Update:     dotnet ef migrations add UpdateDatabase_&lt;&lt;YYYY-MM-DD&gt;&gt; -c cdcavell
+        /// To Update:     dotnet ef migrations add UpdateDatabase_&lt;&lt;YYYY-MM-DD&gt;&gt; --context CDCavellDbContext
         /// &lt;br /&gt;
         /// To Revert:     dotnet ef database update &lt;previous migration name&gt; (Then - dotnet ef migrations remove)  
         /// </summary>

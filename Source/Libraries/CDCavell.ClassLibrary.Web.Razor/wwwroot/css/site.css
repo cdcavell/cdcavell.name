@@ -99,6 +99,14 @@ label:focus,
     border-color: #c1c7c9 !important;
 }
 
+.paypal-donation {
+    position: absolute;
+    bottom: 40px;
+    left: 20%;
+    right: 20%;
+    align-content: center;
+}
+
 .grecaptcha-badge {
     z-index: 1 !important;
 }

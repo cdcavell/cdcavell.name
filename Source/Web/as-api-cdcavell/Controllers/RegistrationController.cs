@@ -23,7 +23,7 @@ namespace as_api_cdcavell.Controllers
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
     /// | Christopher D. Cavell | 1.0.3.1 | 02/08/2021 | User Authorization Web Service |~ 
-    /// | Christopher D. Cavell | 1.0.3.3 | 03/06/2021 | User Authorization Web Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/09/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class RegistrationController : ApplicationBaseController<RegistrationController>
     {
@@ -83,6 +83,8 @@ namespace as_api_cdcavell.Controllers
 
                 userAuthorization.Registration.RegistrationId = registration.Id;
                 userAuthorization.Registration.Email = registration.Email ?? registration.Email;
+                userAuthorization.Registration.ValidationDate = registration.ValidationDate;
+                userAuthorization.Registration.ValidationToken = registration.ValidationToken;
                 userAuthorization.Registration.FirstName = registration.FirstName;
                 userAuthorization.Registration.LastName = registration.LastName;
                 userAuthorization.Registration.RequestDate = registration.RequestDate;
@@ -130,6 +132,8 @@ namespace as_api_cdcavell.Controllers
                 registration.FirstName = userAuthorization.Registration.FirstName.Clean();
                 registration.LastName = userAuthorization.Registration.LastName.Clean();
                 registration.RequestDate = DateTime.Now;
+                registration.ValidationDate = DateTime.MinValue;
+                registration.ValidationToken = Guid.NewGuid().ToString();
                 registration.AddUpdate(_dbContext);
             }
 
@@ -147,6 +151,8 @@ namespace as_api_cdcavell.Controllers
                 if (registration.Id.Equals(registration.RevokedById))
                 {
                     registration.Email = userAuthorization.Registration.Email.Clean();
+                    registration.ValidationDate = DateTime.MinValue;
+                    registration.ValidationToken = Guid.NewGuid().ToString();
                     registration.FirstName = userAuthorization.Registration.FirstName.Clean();
                     registration.LastName = userAuthorization.Registration.LastName.Clean();
                     registration.RequestDate = DateTime.Now;
@@ -161,6 +167,8 @@ namespace as_api_cdcavell.Controllers
 
             userAuthorization.Registration.RegistrationId = registration.Id;
             userAuthorization.Registration.Email = registration.Email ?? string.Empty;
+            userAuthorization.Registration.ValidationDate = registration.ValidationDate;
+            userAuthorization.Registration.ValidationToken = registration.ValidationToken;
             userAuthorization.Registration.FirstName = registration.FirstName;
             userAuthorization.Registration.LastName = registration.LastName;
             userAuthorization.Registration.RequestDate = registration.RequestDate;
@@ -201,6 +209,8 @@ namespace as_api_cdcavell.Controllers
             registration.RevokedById = registration.Id;
             registration.RevokedBy = registration;
             registration.RevokedDate = DateTime.Now;
+            registration.ValidationDate = DateTime.MinValue;
+            registration.ValidationToken = null;
             registration.AddUpdate(_dbContext);
 
             return Ok();
