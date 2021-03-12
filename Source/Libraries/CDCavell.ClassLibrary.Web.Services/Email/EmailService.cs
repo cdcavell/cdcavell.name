@@ -1,9 +1,10 @@
 ﻿using CDCavell.ClassLibrary.Commons.Logging;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System.Collections.Generic;
+using System;
 using System.Net;
 using System.Net.Mail;
+using System.Threading.Tasks;
 
 namespace CDCavell.ClassLibrary.Web.Services.Email
 {
@@ -25,24 +26,9 @@ namespace CDCavell.ClassLibrary.Web.Services.Email
         private readonly bool _enableSsl;
 
         private MailMessage _mailMessage;
-        private List<MailAddress> _toAddresses;
-        private List<MailAddress> _fromAddresses;
-        private string _body;
-        private bool _isBodyHtml;
-        private string _subject;
 
         /// <value>MailMessage</value>
         public MailMessage MailMessage { get; set; }
-        /// <value>List&lt;MailAddress&gt;</value>
-        public List<MailAddress> ToAddresses { get; set; }
-        /// <value>List&lt;MailAddress&gt;</value>
-        public List<MailAddress> FromAddresses { get; set; }
-        /// <value>string</value>
-        public string Body { get; set; }
-        /// <value>bool</value>
-        public bool IsBodyHtml { get; set; }
-        /// <value>string</value>
-        public string Subject { get; set; }
 
         /// <summary>
         /// Constructor
@@ -57,6 +43,36 @@ namespace CDCavell.ClassLibrary.Web.Services.Email
             _port = options.Value.Port;
             _credentials = options.Value.Credentials;
             _enableSsl = options.Value.EnableSsl;
+
+            _mailMessage = new MailMessage();
+        }
+
+        /// <summary>
+        /// Send mail message
+        /// </summary>
+        /// <returns>Task</returns>
+        /// <exception cref="Exception">Invalid Property</exception>
+        public Task Send()
+        {
+            if (_mailMessage.To.Count == 0)
+                throw new Exception("Invalid Property", new Exception("MailMessage.To required"));
+
+            if (string.IsNullOrEmpty(_mailMessage.From.Address))
+                throw new Exception("Invalid Property", new Exception("MailMessage.From.Address required"));
+
+            if (string.IsNullOrEmpty(_mailMessage.Subject))
+                throw new Exception("Invalid Property", new Exception("MailMessage.Subject required"));
+
+            if (string.IsNullOrEmpty(_mailMessage.Body))
+                throw new Exception("Invalid options", new Exception("MailMessage.Body required"));
+
+            SmtpClient smcl = new SmtpClient();
+            smcl.Host = _host;
+            smcl.Port = _port;
+            smcl.Credentials = _credentials;
+            smcl.EnableSsl = _enableSsl;
+
+            return smcl.SendMailAsync(_mailMessage);
         }
     }
 }
