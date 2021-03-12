@@ -32,13 +32,18 @@ $ git flow init -d
 
 <hr />
 
+## Donation ##
+You can show your support to this project by making a donation via PayPal
 
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate?hosted_button_id=96LQH846TE2E2)
+
+<hr />
 
 [__Website__](https://cdcavell.name) deployment 
 
 | Build | Date | Description |
 |-------|------|-------------|
-| 1.0.3.3 | 03/11/2021 | __Update:__ User Authorization Web Service <br /> Dependency update <br />&nbsp;&nbsp;&nbsp;&nbsp;_Duende.IdentityServer v5.0.5_ <br />&nbsp;&nbsp;&nbsp;&nbsp;_Duende.IdentityServer.Storage v5.0.5_ <br />&nbsp;&nbsp;&nbsp;&nbsp;_Duende.IdentityServer.AspNetIdentity v5.0.5_ |
+| 1.0.3.3 | 03/12/2021 | __Update:__ User Authorization Web Service <br /> Dependency update <br />&nbsp;&nbsp;&nbsp;&nbsp;_Duende.IdentityServer v5.0.5_ <br />&nbsp;&nbsp;&nbsp;&nbsp;_Duende.IdentityServer.Storage v5.0.5_ <br />&nbsp;&nbsp;&nbsp;&nbsp;_Duende.IdentityServer.AspNetIdentity v5.0.5_ |
 | 1.0.3.2 | 02/20/2021 | __Update:__ Dependency update <br />&nbsp;&nbsp;&nbsp;&nbsp;_Microsoft.Extensions.Logging.ApplicationInsights v2.17.0_ <br />&nbsp;&nbsp;&nbsp;&nbsp;_Duende.IdentityServer v5.0.4_ <br />&nbsp;&nbsp;&nbsp;&nbsp;_Duende.IdentityServer.AspNetIdentity v5.0.4_ |
 | 1.0.3.1 | 02/09/2021 | __Update:__ User Authorization Web Service |
 | 1.0.3.0 | 02/06/2021 | __Add:__ Initial build Authorization Service |
