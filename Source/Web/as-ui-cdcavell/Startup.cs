@@ -88,7 +88,7 @@ namespace as_ui_cdcavell
             services.AddDbContext<AuthorizationDbContext>(options =>
                 options.UseSqlite(
                     appSettings.ConnectionStrings.AuthorizationConnection,
-                    x => x.MigrationsAssembly(_appSettings.AssemblyName)
+                    x => x.MigrationsAssembly("as-ui-cdcavell")
                 ));
 
             // Register IHttpContextAccessor

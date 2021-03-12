@@ -1,12 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Asn1.Esf;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace as_api_cdcavell.Data
 {
@@ -18,6 +15,7 @@ namespace as_api_cdcavell.Data
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/09/2021 | User Authorization Service |~ 
     /// </revision>
     [Table("Registration")]
     public class Registration : DataModel<Registration>
@@ -27,6 +25,17 @@ namespace as_api_cdcavell.Data
         [DataType(DataType.EmailAddress)]
         [Display(Name = "Email")]
         public string Email { get; set; }
+        /// <value>DateTime?</value>
+        [AllowNull]
+        [DataType(DataType.DateTime)]
+        [Display(Name = "Validation Date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        public DateTime? ValidationDate { get; set; } = DateTime.MinValue;
+        /// <value>string</value>
+        [AllowNull]
+        [DataType(DataType.Text)]
+        [Display(Name = "Validation Token")]
+        public string ValidationToken { get; set; } = Guid.NewGuid().ToString();
         /// <value>string</value>
         [Required]
         [DataType(DataType.Text)]
@@ -77,8 +86,9 @@ namespace as_api_cdcavell.Data
         {
             get
             {
-                if (IsActive || IsPending || IsRevoked)
-                    return true;
+                if (RequestDate > (DateTime?)DateTime.MinValue)
+                    if (!string.IsNullOrEmpty(Email))
+                        return true;
 
                 return false;
             }
@@ -89,10 +99,12 @@ namespace as_api_cdcavell.Data
         {
             get
             {
-                if (ApprovedDate != DateTime.MinValue)
-                    if (RevokedDate == DateTime.MinValue)
-                        if (!string.IsNullOrEmpty(Email))
-                            return true;
+                if (RequestDate > (DateTime?)DateTime.MinValue)
+                    if (ValidationDate > (DateTime?)DateTime.MinValue)
+                        if (ApprovedDate > (DateTime?)DateTime.MinValue)
+                            if (RevokedDate == (DateTime?)DateTime.MinValue)
+                                if (!string.IsNullOrEmpty(Email))
+                                    return true;
 
                 return false;
             }
@@ -103,11 +115,26 @@ namespace as_api_cdcavell.Data
         {
             get
             {
-                if (ApprovedDate == DateTime.MinValue)
-                    if (RevokedDate == DateTime.MinValue)
-                        if (RequestDate > DateTime.MinValue)
-                            if (!string.IsNullOrEmpty(Email))
-                                return true;
+                if (RequestDate > (DateTime?)DateTime.MinValue)
+                    if (ValidationDate > (DateTime?)DateTime.MinValue)
+                        if (ApprovedDate == (DateTime?)DateTime.MinValue)
+                            if (RevokedDate == (DateTime?)DateTime.MinValue)
+                                if (!string.IsNullOrEmpty(Email))
+                                    return true;
+
+                return false;
+            }
+        }
+        /// <value>bool</value>
+        [NotMapped]
+        public bool IsValidated
+        {
+            get
+            {
+                if (RequestDate > (DateTime?)DateTime.MinValue)
+                    if (ValidationDate > (DateTime?)DateTime.MinValue)
+                        if (!string.IsNullOrEmpty(Email))
+                            return true;
 
                 return false;
             }
@@ -118,8 +145,24 @@ namespace as_api_cdcavell.Data
         {
             get
             {
-                if (RevokedDate != DateTime.MinValue)
-                    return true;
+                if (RevokedDate > (DateTime?)DateTime.MinValue)
+                    if (!string.IsNullOrEmpty(Email))
+                        return true;
+
+                return false;
+            }
+        }
+        /// <value>bool</value>
+        [NotMapped]
+        public bool PendingValidation
+        {
+            get
+            {
+                if (RequestDate > (DateTime?)DateTime.MinValue)
+                    if (ValidationDate == (DateTime?)DateTime.MinValue)
+                        if (RevokedDate == (DateTime?)DateTime.MinValue)
+                            if (!string.IsNullOrEmpty(Email))
+                                return true;
 
                 return false;
             }
@@ -139,6 +182,9 @@ namespace as_api_cdcavell.Data
                 if (IsPending)
                     return "Pending Approval";
 
+                if (PendingValidation)
+                    return "Pending Validation";
+                            
                 return "Not Registered";
             }
         }

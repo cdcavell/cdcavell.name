@@ -27,7 +27,7 @@ namespace as_ui_cdcavell.Controllers
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
     /// | Christopher D. Cavell | 1.0.3.1 | 02/08/2021 | User Authorization Web Service |~ 
-    /// | Christopher D. Cavell | 1.0.3.3 | 03/07/2021 | User Authorization Web Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/09/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class RegistrationController : ApplicationBaseController<RegistrationController>
     {
@@ -209,6 +209,7 @@ namespace as_ui_cdcavell.Controllers
             model.LastName = userAuthorization.Registration.LastName;
             model.RequestDate = userAuthorization.Registration.RequestDate;
             model.Status = userAuthorization.Registration.Status;
+            model.PendingValidation = userAuthorization.Registration.PendingValidation;
 
             if (userAuthorization.Registration.IsActive)
                 model.RolePermissions = userAuthorization.RolePermissions

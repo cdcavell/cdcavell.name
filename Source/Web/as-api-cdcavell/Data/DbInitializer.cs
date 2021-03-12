@@ -14,16 +14,16 @@ namespace as_api_cdcavell.Data
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 01/21/2021 | Initial build Authorization Service |~ 
-    /// | Christopher D. Cavell | 1.0.3.3 | 03/08/2021 | User Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/09/2021 | User Authorization Service |~ 
     /// </revision>
     public static class DbInitializer
     {
         /// <summary>
         /// Initialize method
         /// &lt;br /&gt;
-        /// To Initialize: dotnet ef migrations add InitialCreate --project as-api-cdcavell.csproj --context AuthorizationServiceDbContext
+        /// To Initialize: dotnet ef migrations add InitialCreate --context AuthorizationServiceDbContext
         /// &lt;br /&gt;
-        /// To Update:     dotnet ef migrations add UpdateDatabase_&lt;&lt;YYYY-MM-DD&gt;&gt;  --project as-api-cdcavell.csproj --context AuthorizationServiceDbContext
+        /// To Update:     dotnet ef migrations add UpdateDatabase_&lt;&lt;YYYY-MM-DD&gt;&gt;  --context AuthorizationServiceDbContext
         /// </summary>
         /// <param name="context">AuthorizationServiceDbContext</param>
         /// <param name="siteAdministrator">SiteAdministrator</param>

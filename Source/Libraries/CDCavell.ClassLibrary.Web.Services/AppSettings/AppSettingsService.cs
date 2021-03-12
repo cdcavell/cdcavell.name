@@ -1,7 +1,6 @@
 ﻿using CDCavell.ClassLibrary.Commons.Logging;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
 
 namespace CDCavell.ClassLibrary.Web.Services.AppSettings
 {
