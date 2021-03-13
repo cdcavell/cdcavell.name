@@ -6,6 +6,7 @@ using CDCavell.ClassLibrary.Web.Security;
 using CDCavell.ClassLibrary.Web.Services.AppSettings;
 using CDCavell.ClassLibrary.Web.Services.Authorization;
 using CDCavell.ClassLibrary.Web.Services.Data;
+using CDCavell.ClassLibrary.Web.Services.Email;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -43,7 +44,7 @@ namespace as_ui_cdcavell
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/06/2021 | Initial build Authorization Service |~ 
     /// | Christopher D. Cavell | 1.0.3.1 | 02/07/2021 | Utilize Redis Cache - Not implemented |~
-    /// | Christopher D. Cavell | 1.0.3.3 | 03/09/2021 | User Authorization Web Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/13/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class Startup
     {
@@ -109,6 +110,16 @@ namespace as_ui_cdcavell
             services.AddAppSettingsService(options =>
             {
                 options.AppSettings = _appSettings;
+            });
+
+            services.AddEmailService(options =>
+            {
+                options.Host = _appSettings.EmailService.Host;
+                options.Port = _appSettings.EmailService.Port;
+                options.EnableSsl = _appSettings.EmailService.EnableSsl;
+                options.Credentials = new NetworkCredential(
+                    _appSettings.EmailService.UserId, 
+                    _appSettings.EmailService.Password);
             });
 
             // Register Application Authorization

@@ -1,9 +1,11 @@
 ﻿using as_ui_cdcavell.Models.AppSettings;
 using as_ui_cdcavell.Models.Registration;
+using CDCavell.ClassLibrary.Commons;
 using CDCavell.ClassLibrary.Web.Http;
 using CDCavell.ClassLibrary.Web.Security;
 using CDCavell.ClassLibrary.Web.Services.Authorization;
 using CDCavell.ClassLibrary.Web.Services.Data;
+using CDCavell.ClassLibrary.Web.Services.Email;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -14,7 +16,10 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Mail;
+using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace as_ui_cdcavell.Controllers
 {
@@ -27,10 +32,12 @@ namespace as_ui_cdcavell.Controllers
     /// |-------------|-------|--------------|-------------|~
     /// | Christopher D. Cavell | 1.0.3.0 | 02/01/2021 | Initial build Authorization Service |~ 
     /// | Christopher D. Cavell | 1.0.3.1 | 02/08/2021 | User Authorization Web Service |~ 
-    /// | Christopher D. Cavell | 1.0.3.3 | 03/09/2021 | User Authorization Web Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/13/2021 | User Authorization Web Service |~ 
     /// </revision>
     public class RegistrationController : ApplicationBaseController<RegistrationController>
     {
+        private IEmailService _emailService;
+
         /// <summary>
         /// Constructor method
         /// </summary>
@@ -40,6 +47,7 @@ namespace as_ui_cdcavell.Controllers
         /// <param name="authorizationService">IAuthorizationService</param>
         /// <param name="appSettings">AppSettings</param>
         /// <param name="dbContext">AuthorizationDbContext</param>
+        /// <param name="emailService">EmailService</param>
         /// <method>
         /// public RegistrationController(
         ///     ILogger&lt;HomeController&gt; logger,
@@ -47,7 +55,8 @@ namespace as_ui_cdcavell.Controllers
         ///     IHttpContextAccessor httpContextAccessor,
         ///     IAuthorizationService authorizationService,
         ///     AppSettings appSettings,
-        ///     AuthorizationDbContext dbContext
+        ///     AuthorizationDbContext dbContext,
+        ///     IEmailService emailService
         /// ) : base(logger, webHostEnvironment, httpContextAccessor, authorizationService, appSettings, dbContext)
         /// </method>
         public RegistrationController(
@@ -56,9 +65,11 @@ namespace as_ui_cdcavell.Controllers
             IHttpContextAccessor httpContextAccessor,
             IAuthorizationService authorizationService,
             AppSettings appSettings,
-            AuthorizationDbContext dbContext
+            AuthorizationDbContext dbContext,
+            IEmailService emailService
         ) : base(logger, webHostEnvironment, httpContextAccessor, authorizationService, appSettings, dbContext)
         {
+            _emailService = emailService;
         }
 
         /// <summary>
@@ -150,10 +161,91 @@ namespace as_ui_cdcavell.Controllers
                 authorization.UserAuthorization = userAuthorization;
                 authorization.AddUpdate(_dbContext);
 
-                return RedirectToAction("Status", "Registration");
+                return RedirectToAction("EmailValidation", "Registration");
             }
 
             return View(model);
+        }
+
+        /// <summary>
+        /// Send email verification HttpGet method
+        /// </summary>
+        /// <returns>Task&lt;IActionResult&gt;</returns>
+        /// <method>EmailValidation()</method>
+        [Authorize(Policy = "Authenticated")]
+        [HttpGet]
+        public async Task<IActionResult> EmailValidation()
+        {
+            string emailClaim = User.Claims.Where(x => x.Type == "email").Select(x => x.Value).FirstOrDefault();
+            if (string.IsNullOrEmpty(emailClaim))
+                return Error(400);
+
+            string authClaim = User.Claims.Where(x => x.Type == "authorization").Select(x => x.Value).FirstOrDefault();
+            if (string.IsNullOrEmpty(authClaim))
+                return Error(400);
+
+            CDCavell.ClassLibrary.Web.Services.Data.Authorization authorization = CDCavell.ClassLibrary.Web.Services.Data.Authorization.GetRecord(User.Claims, _dbContext);
+            if (authorization.UserAuthorization.Registration.IsRegistered)
+                if (authorization.UserAuthorization.Registration.PendingValidation)
+                {
+                    MailMessage mailMessage = new MailMessage(
+                        _appSettings.EmailService.Email,
+                        authorization.UserAuthorization.Email
+                        );
+
+                    string validateString =
+                          authorization.UserAuthorization.Registration.RegistrationId.ToString()
+                        + ";"
+                        + authorization.UserAuthorization.Registration.Email
+                        + ";"
+                        + authorization.UserAuthorization.Registration.ValidationToken;
+                    string encryptString = AESGCM.Encrypt(validateString);
+                    byte[] byteArray = UTF8Encoding.UTF8.GetBytes(encryptString);
+
+                    string url = _appSettings.Authorization.AuthorizationService.UiTrim
+                        + "/Registration/EmailValidate?Request="
+                        + HttpUtility.HtmlEncode(Convert.ToBase64String(byteArray));
+
+                    mailMessage.Subject = "Email Validation";
+                    mailMessage.IsBodyHtml = false;
+                    mailMessage.Body = AsciiCodes.CRLF
+                        + "Please submit following link in your web browser for email validation:"
+                        + AsciiCodes.CRLF + url;
+                        
+                    await _emailService.Send(mailMessage);
+                }
+
+            return RedirectToAction("Status", "Registration");
+        }
+
+        /// <summary>
+        /// Send email verification HttpGet method
+        /// </summary>
+        /// <returns>IActionResult</returns>
+        /// <method>EmailValidation(string Request)</method>
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult EmailValidate(string Request)
+        {
+            try
+            {
+                byte[] byteArray = Convert.FromBase64String(HttpUtility.HtmlDecode(Request.Clean()));
+                string encryptString = UTF8Encoding.UTF8.GetString(byteArray);
+                string decryptString = AESGCM.Decrypt(encryptString);
+
+                string[] items = decryptString.Split(';');
+                long registrationId = long.Parse(items[0].ToString());
+                string email = items[1].ToString();
+                string guid = items[2].ToString();
+
+               return RedirectToAction("Status", "Registration");
+            }
+            catch (Exception exception)
+            {
+                _logger.Exception(exception);
+            }
+
+            return BadRequest();
         }
 
         /// <summary>

@@ -1,5 +1,4 @@
 ﻿using CDCavell.ClassLibrary.Commons;
-using Microsoft.Extensions.Configuration;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Generators;

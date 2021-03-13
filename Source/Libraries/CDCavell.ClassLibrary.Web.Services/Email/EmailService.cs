@@ -25,8 +25,6 @@ namespace CDCavell.ClassLibrary.Web.Services.Email
         private readonly NetworkCredential _credentials;
         private readonly bool _enableSsl;
 
-        private MailMessage _mailMessage;
-
         /// <value>MailMessage</value>
         public MailMessage MailMessage { get; set; }
 
@@ -43,36 +41,35 @@ namespace CDCavell.ClassLibrary.Web.Services.Email
             _port = options.Value.Port;
             _credentials = options.Value.Credentials;
             _enableSsl = options.Value.EnableSsl;
-
-            _mailMessage = new MailMessage();
         }
 
         /// <summary>
         /// Send mail message
         /// </summary>
+        /// <param name="mailMessage">MailMessage</param>
         /// <returns>Task</returns>
         /// <exception cref="Exception">Invalid Property</exception>
-        public Task Send()
+        public Task Send(MailMessage mailMessage)
         {
-            if (_mailMessage.To.Count == 0)
+            if (mailMessage.To.Count == 0)
                 throw new Exception("Invalid Property", new Exception("MailMessage.To required"));
 
-            if (string.IsNullOrEmpty(_mailMessage.From.Address))
+            if (string.IsNullOrEmpty(mailMessage.From.Address))
                 throw new Exception("Invalid Property", new Exception("MailMessage.From.Address required"));
 
-            if (string.IsNullOrEmpty(_mailMessage.Subject))
+            if (string.IsNullOrEmpty(mailMessage.Subject))
                 throw new Exception("Invalid Property", new Exception("MailMessage.Subject required"));
 
-            if (string.IsNullOrEmpty(_mailMessage.Body))
+            if (string.IsNullOrEmpty(mailMessage.Body))
                 throw new Exception("Invalid options", new Exception("MailMessage.Body required"));
 
-            SmtpClient smcl = new SmtpClient();
-            smcl.Host = _host;
-            smcl.Port = _port;
-            smcl.Credentials = _credentials;
-            smcl.EnableSsl = _enableSsl;
+            SmtpClient smtpClient = new SmtpClient();
+            smtpClient.Host = _host;
+            smtpClient.Port = _port;
+            smtpClient.Credentials = _credentials;
+            smtpClient.EnableSsl = _enableSsl;
 
-            return smcl.SendMailAsync(_mailMessage);
+            return smtpClient.SendMailAsync(mailMessage);
         }
     }
 }

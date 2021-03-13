@@ -10,7 +10,7 @@ namespace CDCavell.ClassLibrary.Web.Services.Email
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.3 | 03/11/2021 | User Authorization Web Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/12/2021 | User Authorization Web Service |~ 
     /// </revision>
     public static class EmailServiceOptionsExtention
     {
@@ -20,7 +20,7 @@ namespace CDCavell.ClassLibrary.Web.Services.Email
         /// <param name="serviceCollection">IServiceCollection</param>
         /// <param name="options">Action&lt;UserAuthorizationServiceOptions&gt;</param>
         /// <method>AddAppSettingsService(this IServiceCollection serviceCollection, Action&lt;UserAuthorizationServiceOptions&gt; options)</method>
-        public static IServiceCollection AddAppSettingsService(this IServiceCollection serviceCollection, Action<EmailServiceOptions> options)
+        public static IServiceCollection AddEmailService(this IServiceCollection serviceCollection, Action<EmailServiceOptions> options)
         {
             serviceCollection.AddScoped<IEmailService, EmailService>();
             if (options == null)

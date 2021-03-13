@@ -18,7 +18,7 @@ namespace CDCavell.ClassLibrary.Web.Services.Data
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.3 | 03/07/2021 | User Authorization Web Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/13/2021 | User Authorization Web Service |~ 
     /// </revision>
     [Table("Authorization")]
     public class Authorization : DataModel<Authorization>

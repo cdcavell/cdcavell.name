@@ -11,7 +11,7 @@ namespace CDCavell.ClassLibrary.Web.Mvc.Models.AppSettings
     /// __Revisions:__~~
     /// | Contributor | Build | Revison Date | Description |~
     /// |-------------|-------|--------------|-------------|~
-    /// | Christopher D. Cavell | 1.0.3.3 | 03/08/2021 | User Authorization Service |~ 
+    /// | Christopher D. Cavell | 1.0.3.3 | 03/13/2021 | User Authorization Service |~ 
     /// </revision>
     public abstract partial class AppSettings
     {
@@ -40,5 +40,8 @@ namespace CDCavell.ClassLibrary.Web.Mvc.Models.AppSettings
         public Authorization Authorization { get; set; }
         /// <value>ConnectionStrings</value>
         public ConnectionStrings ConnectionStrings { get; set; }
+        /// <value>EmailService</value>
+        public EmailService EmailService { get; set; }
+
     }
 }
